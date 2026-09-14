@@ -1,0 +1,640 @@
+/* Pediatric Chic Financial Sanctuary - Design System & Styles */
+
+:root {
+  /* Prompt Exact Tokens */
+  --primary-pink: #F48FB1;
+  --primary-pink-dark: #EC407A;
+  --lilac-light: #F3E5F5;
+  --lilac-medium: #CE93D8;
+  --lilac-dark: #AB47BC;
+  --mint-income: #26A69A;
+  --mint-income-bg: #E0F2F1;
+  --coral-expense: #FF7043;
+  --coral-expense-bg: #FBE9E7;
+  --bg-app: #FBF8FD;
+  --card-bg: #FFFFFF;
+  --text-main: #2D3142;
+  --text-muted: #7A7E91;
+  --border-radius-card: 24px;
+  --border-radius-pill: 50px;
+  --safe-top: env(safe-area-inset-top, 59px);
+  --safe-bottom: env(safe-area-inset-bottom, 34px);
+  --shadow-soft: 0 8px 24px rgba(171, 71, 188, 0.08);
+
+  /* Complementary Stitch Design Tokens */
+  --surface: #faf8ff;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f3f2ff;
+  --surface-container: #ebedff;
+  --surface-container-high: #e4e7fe;
+  --surface-container-highest: #dee1f8;
+  --on-surface: #171b2b;
+  --on-surface-variant: #4d444d;
+  --primary: #7e4a8a;
+  --primary-container: #ce93d8;
+  --secondary: #b80f55;
+  --secondary-container: #fd4e87;
+  --tertiary: #006a62;
+  --tertiary-fixed: #84f5e8;
+  --on-tertiary-fixed: #00201d;
+  --error: #ba1a1a;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+  --outline-variant: #d0c2ce;
+  --shadow-lifted: 0 12px 32px rgba(171, 71, 188, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overscroll-behavior-y: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .font-display, .font-headline {
+  font-family: 'Bricolage Grotesque', sans-serif;
+}
+
+.pt-safe {
+  padding-top: var(--safe-top);
+}
+
+.pb-safe {
+  padding-bottom: var(--safe-bottom);
+}
+
+/* ==========================================================================
+   Structural Layout Fallbacks (Prevents "caixas fora de parâmetro" if CDN is offline)
+   ========================================================================== */
+.hidden { display: none !important; }
+.flex { display: flex; }
+.inline-flex { display: inline-flex; }
+.flex-col { flex-direction: column; }
+.flex-row { flex-direction: row; }
+.items-center { align-items: center; }
+.items-start { align-items: flex-start; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.flex-1 { flex: 1 1 0%; }
+.shrink-0 { flex-shrink: 0; }
+.w-full { width: 100%; }
+.h-full { height: 100%; }
+.min-h-screen { min-height: 100vh; }
+.relative { position: relative; }
+.absolute { position: absolute; }
+.fixed { position: fixed; }
+.sticky { position: sticky; }
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Material Symbols Outlined & Vector Icon Protection Engine
+   ========================================================================== */
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  display: inline-block;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+  font-feature-settings: 'liga';
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  vertical-align: middle;
+  user-select: none;
+  flex-shrink: 0;
+
+  /* Anti-Blowout Protection:
+     If the CDN font fails to load or ligatures break,
+     this prevents multi-character icon names (e.g. 'account_balance_wallet')
+     from expanding across dozens of pixels and displacing layouts. */
+  max-width: 1.5em;
+  max-height: 1.5em;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+.material-symbols-outlined svg,
+.app-icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.material-symbols-outlined svg {
+  width: 1em;
+  height: 1em;
+  pointer-events: none;
+}
+
+/* App Container (iPhone 16 Plus frame support on desktop) */
+.app-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: linear-gradient(135deg, #f5edf7 0%, #e8e2f2 100%);
+}
+
+.device-frame {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100vh;
+  background-color: var(--bg-app);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(126, 74, 138, 0.15);
+  overflow-x: hidden;
+  margin: 0 auto;
+  transition: max-width 0.3s ease;
+}
+
+.device-frame.expanded {
+  max-width: 720px;
+}
+
+@media (max-width: 480px) {
+  .app-wrapper {
+    background: var(--bg-app);
+  }
+  .device-frame {
+    box-shadow: none;
+    max-width: 100% !important;
+  }
+}
+
+/* Glassmorphic Elements */
+.glass-header {
+  background: rgba(251, 248, 253, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.90);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: var(--shadow-lifted);
+}
+
+/* Floating Cards */
+.card-floating {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius-card);
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.card-floating:active {
+  transform: scale(0.985);
+}
+
+/* Pill buttons */
+.pill-btn {
+  border-radius: var(--border-radius-pill);
+  transition: all 0.2s ease;
+}
+
+.pill-btn:active {
+  transform: scale(0.95);
+}
+
+/* Badges */
+.badge-status {
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.badge-delayed {
+  background-color: var(--coral-expense-bg);
+  color: var(--coral-expense);
+  border: 1px solid rgba(255, 112, 67, 0.2);
+}
+
+.badge-pending {
+  background-color: var(--lilac-light);
+  color: var(--lilac-dark);
+}
+
+.badge-received {
+  background-color: var(--mint-income-bg);
+  color: var(--mint-income);
+}
+
+/* Hide scrollbars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Bottom Sheet Modal */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(23, 27, 43, 0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 105%);
+  width: 100%;
+  max-width: 430px;
+  max-height: 90vh;
+  background-color: #ffffff;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+  box-shadow: 0 -16px 48px rgba(126, 74, 138, 0.22);
+  z-index: 101;
+  transition: transform 0.38s cubic-bezier(0.32, 0.72, 0, 1);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.device-frame.expanded ~ .modal-overlay .bottom-sheet,
+.device-frame.expanded .bottom-sheet {
+  max-width: 580px;
+}
+
+.bottom-sheet.active {
+  transform: translate(-50%, 0);
+}
+
+/* Drag Handle */
+.sheet-handle {
+  width: 44px;
+  height: 5px;
+  background-color: #d0c2ce;
+  border-radius: 9999px;
+  margin: 12px auto 6px;
+  cursor: grab;
+}
+
+/* FAB central button */
+.fab-btn {
+  background: linear-gradient(135deg, var(--primary-pink-dark) 0%, var(--lilac-dark) 100%);
+  box-shadow: 0 8px 24px rgba(236, 64, 122, 0.38);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.fab-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 28px rgba(236, 64, 122, 0.48);
+}
+
+.fab-btn:active {
+  transform: translateY(0) scale(0.95);
+}
+
+/* Toast */
+.toast-container {
+  position: fixed;
+  bottom: calc(var(--safe-bottom) + 76px);
+  left: 50%;
+  transform: translate(-50%, 20px);
+  background-color: #2c3041;
+  color: #ffffff;
+  padding: 12px 20px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 120;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+  max-width: 90%;
+  white-space: nowrap;
+}
+
+.toast-container.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Progress bar animated glow */
+@keyframes progressPulse {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
+}
+
+.progress-glow {
+  animation: progressPulse 3s ease-in-out infinite;
+}
+
+/* Touch feedback ripple emulation */
+.touch-active:active {
+  transform: scale(0.97);
+  transition: transform 0.12s ease;
+}
+
+/* Dialog Overlay & Box (iOS-style modal alert & sheet) */
+.dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(23, 27, 43, 0.48);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.dialog-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dialog-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -46%) scale(0.94);
+  width: calc(100% - 32px);
+  max-width: 390px;
+  background-color: #ffffff;
+  border-radius: 28px;
+  box-shadow: 0 24px 64px rgba(126, 74, 138, 0.28);
+  z-index: 151;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+  overflow: hidden;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-box.active {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Context Submenu Popover */
+.submenu-popover {
+  position: absolute;
+  right: 12px;
+  top: 44px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 12px 36px rgba(126, 74, 138, 0.22);
+  border: 1px solid rgba(206, 147, 216, 0.25);
+  z-index: 30;
+  min-width: 210px;
+  overflow: hidden;
+  opacity: 0;
+  transform: scale(0.92) translateY(-6px);
+  transform-origin: top right;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.submenu-popover.active {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+
+/* Badge dot for notifications */
+.notif-badge-dot {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 9999px;
+  background-color: var(--secondary);
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(184, 15, 85, 0.4);
+}
+
+/* ==========================================================================
+   Interactive Shift Calendar View Styles
+   ========================================================================== */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.calendar-day-header {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 4px 0;
+  text-transform: uppercase;
+}
+
+.calendar-day-cell {
+  min-height: 56px;
+  background-color: #ffffff;
+  border-radius: 14px;
+  padding: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+  transition: all 0.15s ease;
+  border: 1px solid rgba(206, 147, 216, 0.15);
+  cursor: pointer;
+}
+
+.calendar-day-cell:hover {
+  background-color: var(--surface-container-low);
+  transform: translateY(-1px);
+}
+
+.calendar-day-cell.other-month {
+  opacity: 0.35;
+  background-color: transparent;
+  cursor: default;
+}
+
+.calendar-day-cell.today {
+  border: 1.5px solid var(--secondary);
+  box-shadow: 0 2px 8px rgba(184, 15, 85, 0.15);
+}
+
+.calendar-day-cell.today .day-num {
+  background-color: var(--secondary);
+  color: #ffffff;
+  border-radius: 9999px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.calendar-day-cell.selected {
+  border: 2px solid var(--secondary) !important;
+  background: linear-gradient(135deg, rgba(253, 214, 255, 0.45) 0%, rgba(255, 217, 223, 0.55) 100%) !important;
+  box-shadow: 0 4px 14px rgba(184, 15, 85, 0.22);
+  transform: scale(1.02);
+  z-index: 5;
+}
+
+.calendar-day-cell.selected .day-num {
+  color: var(--secondary);
+  font-weight: 800;
+}
+
+.calendar-day-cell.has-shift {
+  border-color: rgba(184, 15, 85, 0.35);
+  background-color: #ffffff;
+}
+
+.day-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.calendar-shift-badge {
+  width: 100%;
+  padding: 1.5px 3px;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 1px;
+}
+
+/* Privacy Mode (Nubank / Mobills Inspired Masking) */
+.privacy-active .privacy-blur {
+  filter: blur(6px);
+  user-select: none;
+  transition: filter 0.2s ease;
+}
+
+.privacy-masked-text {
+  letter-spacing: 2px;
+}
+
+/* Micro-animations */
+@keyframes gentle-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+.pulse-celebration {
+  animation: gentle-pulse 2.2s infinite ease-in-out;
+}
+
+/* Hourly rate badges */
+.badge-rate-gold {
+  background: linear-gradient(135deg, #FFF8E1 0%, #FFECB3 100%);
+  color: #B78103;
+  border: 1px solid rgba(245, 127, 23, 0.25);
+}
+
+.badge-rate-mint {
+  background: var(--mint-income-bg);
+  color: var(--mint-income);
+  border: 1px solid rgba(38, 166, 154, 0.2);
+}
+
+/* Print Styles for Extrato Médico Timbrado */
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+  .app-wrapper {
+    background: #ffffff !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .device-frame {
+    box-shadow: none !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    border: none !important;
+  }
+  header, nav, #main-content, #btn-notifications, #btn-toggle-frame, #btn-install-app, .fab-btn, .no-print, .toast-container, .dialog-overlay, .modal-overlay, .bottom-sheet {
+    display: none !important;
+  }
+  .dialog-box {
+    position: static !important;
+    transform: none !important;
+    max-width: 100% !important;
+    max-height: none !important;
+    box-shadow: none !important;
+    border: none !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+  }
+  .dialog-box * {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+}
+
+

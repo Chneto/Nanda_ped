@@ -1,0 +1,30 @@
+{
+  "name": "Pediatria Chic - Gestão Financeira",
+  "short_name": "Pediatria Chic",
+  "description": "Controle financeiro para médicas pediatras - Salário fixo, plantões D+90 e despesas",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#FBF8FD",
+  "theme_color": "#EC407A",
+  "orientation": "portrait-primary",
+  "categories": [
+    "finance",
+    "medical",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
