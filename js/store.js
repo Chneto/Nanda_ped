@@ -1,10 +1,41 @@
 /**
- * Pediatric Financial Sanctuary - Data Store & Calculation Engine
- * Designed for Dra. Fernanda Ch. (Pediatra)
+ * Finanças Pediatria - Data Store & Calculation Engine
+ * Criado por FChNeto
  */
+
+export const APP_CREATOR = Object.freeze({
+  name: "FChNeto",
+  signature: "Criado por FChNeto",
+  role: "Criador e Desenvolvedor",
+  app: "Finanças Pediatria",
+  immutable: true
+});
 
 export const DEFAULT_DOCTOR_NAME = "Dra. Pediatra";
 export const DEFAULT_DOCTOR_TITLE = "Pediatria & Neonatologia 🩺✨";
+
+export const EXPENSE_CATEGORIES_PF = [
+  "Lazer",
+  "Educação",
+  "Alimentação",
+  "Transporte",
+  "Presentes",
+  "Lar",
+  "Beleza",
+  "Saúde",
+  "Viagens",
+  "Outros (Pessoal)"
+];
+
+export const EXPENSE_CATEGORIES_PJ = [
+  "Consultório/Sublocação",
+  "CRM/RQE/SBP",
+  "Congresso & Atualização",
+  "Brinquedos/Materiais Lúdicos",
+  "Combustível/Plantão",
+  "Impostos & Contabilidade",
+  "Outros (PJ)"
+];
 
 export const EXPENSE_CATEGORIES = [
   "Consultório/Sublocação",
@@ -12,16 +43,83 @@ export const EXPENSE_CATEGORIES = [
   "Congresso & Atualização",
   "Brinquedos/Materiais Lúdicos",
   "Combustível/Plantão",
+  "Lazer",
+  "Educação",
+  "Alimentação",
+  "Transporte",
+  "Presentes",
+  "Lar",
+  "Beleza",
+  "Saúde",
+  "Viagens",
+  "Impostos & Contabilidade",
   "Outros"
 ];
 
+export function getCategoryScope(category, customCategories = null) {
+  if (!category || typeof category !== "string") return "pf";
+  const trimmed = category.trim();
+
+  const customs = customCategories || (typeof window !== "undefined" && window.pediatricStoreInstance ? window.pediatricStoreInstance.getCustomExpenseCategories() : null);
+  if (Array.isArray(customs)) {
+    const found = customs.find(c => {
+      const cName = typeof c === "string" ? c : (c.name || "");
+      return cName.toLowerCase() === trimmed.toLowerCase();
+    });
+    if (found) {
+      return typeof found === "object" && found.scope ? found.scope : "pf";
+    }
+  }
+
+  if (EXPENSE_CATEGORIES_PF.includes(trimmed)) return "pf";
+  if (EXPENSE_CATEGORIES_PJ.includes(trimmed)) return "pj";
+
+  const lower = trimmed.toLowerCase();
+  if (
+    lower.includes("pj") ||
+    lower.includes("crm") ||
+    lower.includes("sbp") ||
+    lower.includes("rqe") ||
+    lower.includes("contador") ||
+    lower.includes("contabil") ||
+    lower.includes("consultório") ||
+    lower.includes("consultorio") ||
+    lower.includes("subloca") ||
+    lower.includes("plantão") ||
+    lower.includes("plantao") ||
+    lower.includes("imposto") ||
+    lower.includes("congresso") ||
+    lower.includes("lúdico") ||
+    lower.includes("ludico")
+  ) {
+    return "pj";
+  }
+
+  return "pf";
+}
+
 export const CATEGORY_COLORS = {
-  "Consultório/Sublocação": "#EC407A", // Secondary Pink Dark
-  "CRM/RQE/SBP": "#26A69A",           // Mint Income
-  "Congresso & Atualização": "#AB47BC", // Lilac Dark
-  "Brinquedos/Materiais Lúdicos": "#FF7043", // Coral
-  "Combustível/Plantão": "#CE93D8",   // Lilac Medium
-  "Outros": "#7A7E91"                 // Text Muted Slate
+  "Consultório/Sublocação": "#EC407A",
+  "CRM/RQE/SBP": "#26A69A",
+  "Congresso & Atualização": "#AB47BC",
+  "Brinquedos/Materiais Lúdicos": "#FF7043",
+  "Combustível/Plantão": "#CE93D8",
+  "Lazer": "#FF4081",
+  "Educação": "#7C4DFF",
+  "Alimentação": "#FF5252",
+  "Transporte": "#448AFF",
+  "Presentes": "#E040FB",
+  "Lar": "#FFAB40",
+  "Beleza": "#F06292",
+  "Saúde": "#00BFA5",
+  "Viagens": "#00E5FF",
+  "Impostos & Contabilidade": "#7E57C2",
+  "Contador": "#7E57C2",
+  "Mercantil/Mercado": "#FF5252",
+  "Lanches": "#FF7043",
+  "Outros (Pessoal)": "#9C27B0",
+  "Outros (PJ)": "#607D8B",
+  "Outros": "#7A7E91"
 };
 
 export const CATEGORY_ICONS = {
@@ -30,16 +128,47 @@ export const CATEGORY_ICONS = {
   "Congresso & Atualização": "school",
   "Brinquedos/Materiais Lúdicos": "toys",
   "Combustível/Plantão": "local_gas_station",
+  "Lazer": "attractions",
+  "Educação": "school",
+  "Alimentação": "restaurant",
+  "Transporte": "directions_car",
+  "Presentes": "card_giftcard",
+  "Lar": "home",
+  "Beleza": "spa",
+  "Saúde": "health_and_safety",
+  "Viagens": "flight",
+  "Impostos & Contabilidade": "calculate",
+  "Contador": "calculate",
+  "Mercantil/Mercado": "shopping_cart",
+  "Lanches": "restaurant",
+  "Outros (Pessoal)": "receipt_long",
+  "Outros (PJ)": "business",
   "Outros": "receipt_long"
 };
 
-export const SHIFT_HOSPITAL_SUGGESTIONS = [
+export const DEFAULT_WORK_LOCATIONS = [
+  "Maternidade Araken",
+  "Maternidade Leide Morais",
+  "MEJEC",
   "Hospital Infantil Sabará",
   "Maternidade Pro Matre",
   "Hospital Infantil São Lucas",
   "PS Infantil Menino Jesus",
   "Maternidade Santa Joana",
   "Do meu Coração"
+];
+
+export const SHIFT_HOSPITAL_SUGGESTIONS = DEFAULT_WORK_LOCATIONS;
+
+export const DEFAULT_WORK_TYPES = [
+  "Plantão em Maternidade",
+  "Plantão em Hospital",
+  "Serviço Público",
+  "Clínica",
+  "Consultório Particular",
+  "Home Care / Domiciliar",
+  "Telemedicina",
+  "Sobreaviso"
 ];
 
 export const SHIFT_TYPES = [
@@ -131,6 +260,53 @@ export function calculateExpectedPaymentDate(shiftDate, lagMonths = 3, customPay
 }
 
 /**
+ * Calculates installments according to pediatric rule:
+ * 80% in 60 days (D+60), remaining 20% in 30 days after that (D+90). Total 100% in 90 days.
+ * @param {string} shiftDate 'YYYY-MM-DD'
+ * @param {number} netValue
+ * @param {string|null} customPaymentDate
+ * @returns {Array<{number: number, percent: number, dueDate: string, value: number, status: string, paidDate: string|null}>}
+ */
+export function calculateShiftInstallments(shiftDate, netValue, customPaymentDate = null) {
+  const numNet = Number(netValue) || 0;
+  if (customPaymentDate && typeof customPaymentDate === "string" && customPaymentDate.trim() !== "") {
+    return [
+      {
+        number: 1,
+        percent: 100,
+        dueDate: customPaymentDate.trim(),
+        value: numNet,
+        status: "pending",
+        paidDate: null
+      }
+    ];
+  }
+  const d60 = addMonths(shiftDate, 2);
+  const d90 = addMonths(shiftDate, 3);
+  const part1 = Math.round(numNet * 0.80 * 100) / 100;
+  const part2 = Math.round((numNet - part1) * 100) / 100;
+
+  return [
+    {
+      number: 1,
+      percent: 80,
+      dueDate: d60,
+      value: part1,
+      status: "pending",
+      paidDate: null
+    },
+    {
+      number: 2,
+      percent: 20,
+      dueDate: d90,
+      value: part2,
+      status: "pending",
+      paidDate: null
+    }
+  ];
+}
+
+/**
  * Formats a Date object to YYYY-MM-DD in local time
  * @param {Date|string} referenceDate
  * @returns {string} YYYY-MM-DD
@@ -154,6 +330,44 @@ export function getLocalDateString(referenceDate = new Date()) {
  * @returns {{status: 'pending'|'received'|'delayed', label: string, delayDays: number, isDelayed: boolean}}
  */
 export function evaluateShiftStatus(shift, referenceDate = new Date()) {
+  const refDateStr = getLocalDateString(referenceDate);
+
+  // If this item is a specific installment (e.g. from cash flow radar)
+  if (shift.isInstallment) {
+    if (shift.installmentStatus === "received" || shift.status === "received") {
+      const paidLabel = shift.paidDate ? `Recebido em ${formatDateBR(shift.paidDate)}` : "Recebido";
+      return {
+        status: "received",
+        label: paidLabel,
+        delayDays: 0,
+        isDelayed: false
+      };
+    }
+    const dueDateStr = shift.installmentDueDate || shift.expectedPaymentDate;
+    if (refDateStr > dueDateStr) {
+      const [y1, m1, d1] = refDateStr.split("-").map(Number);
+      const [y2, m2, d2] = dueDateStr.split("-").map(Number);
+      const utc1 = Date.UTC(y1, m1 - 1, d1);
+      const utc2 = Date.UTC(y2, m2 - 1, d2);
+      const delayDays = Math.max(1, Math.round((utc1 - utc2) / (1000 * 60 * 60 * 24)));
+      return {
+        status: "delayed",
+        label: `Atrasado (+${delayDays}d)`,
+        delayDays,
+        isDelayed: true
+      };
+    }
+    const percent = shift.installmentPercent || (shift.installmentNumber === 1 ? 80 : 20);
+    const daysLabel = shift.installmentNumber === 1 ? '60 dias' : '90 dias';
+    return {
+      status: "pending",
+      label: `Previsão: ${formatDateBR(dueDateStr)} (${percent}% em ${daysLabel})`,
+      delayDays: 0,
+      isDelayed: false
+    };
+  }
+
+  // Full shift evaluation
   if (shift.status === "received" || shift.isPaid === true) {
     const paidLabel = shift.paidDate ? `Recebido em ${formatDateBR(shift.paidDate)}` : "Recebido";
     return {
@@ -164,11 +378,51 @@ export function evaluateShiftStatus(shift, referenceDate = new Date()) {
     };
   }
 
-  const refDateStr = getLocalDateString(referenceDate);
-  const expectedStr = shift.expectedPaymentDate;
+  // Check if shift has split installments with pending delay
+  if (shift.splitPayment && Array.isArray(shift.installments) && shift.installments.length > 0) {
+    const allRecv = shift.installments.every(i => i.status === "received");
+    if (allRecv) {
+      const paidLabel = shift.paidDate ? `Recebido em ${formatDateBR(shift.paidDate)}` : "Recebido";
+      return { status: "received", label: paidLabel, delayDays: 0, isDelayed: false };
+    }
 
+    // Find earliest overdue pending installment
+    const overdueInst = shift.installments.find(i => i.status !== "received" && refDateStr > i.dueDate);
+    if (overdueInst) {
+      const [y1, m1, d1] = refDateStr.split("-").map(Number);
+      const [y2, m2, d2] = overdueInst.dueDate.split("-").map(Number);
+      const utc1 = Date.UTC(y1, m1 - 1, d1);
+      const utc2 = Date.UTC(y2, m2 - 1, d2);
+      const delayDays = Math.max(1, Math.round((utc1 - utc2) / (1000 * 60 * 60 * 24)));
+      return {
+        status: "delayed",
+        label: `Atrasado (+${delayDays}d)`,
+        delayDays,
+        isDelayed: true
+      };
+    }
+
+    const anyRecv = shift.installments.some(i => i.status === "received");
+    if (anyRecv) {
+      const pendingInst = shift.installments.find(i => i.status !== "received");
+      return {
+        status: "partial",
+        label: pendingInst ? `Parcial (restante em ${formatDateBR(pendingInst.dueDate)})` : "Parcial",
+        delayDays: 0,
+        isDelayed: false
+      };
+    }
+
+    return {
+      status: "pending",
+      label: `Previsão: 80% D+60 • 20% D+90`,
+      delayDays: 0,
+      isDelayed: false
+    };
+  }
+
+  const expectedStr = shift.expectedPaymentDate;
   if (refDateStr > expectedStr) {
-    // Calculate calendar days delayed using UTC timestamps to prevent DST anomalies
     const [y1, m1, d1] = refDateStr.split("-").map(Number);
     const [y2, m2, d2] = expectedStr.split("-").map(Number);
     const utc1 = Date.UTC(y1, m1 - 1, d1);
@@ -225,9 +479,15 @@ export function getInitialData() {
     doctorCrm: "CRM-SP • Pediatria",
     monthlyBudgetLimit: 10000,
     monthlyIncomeGoal: 25000,
+    workLocations: [...DEFAULT_WORK_LOCATIONS],
+    workTypes: [...DEFAULT_WORK_TYPES],
+    activeWorkTypes: ["Plantão em Maternidade", "Plantão em Hospital", "Serviço Público"],
+    customExpenseCategories: [],
+    defaultTaxRate: 15,
     fixedSalaries: [],
     shifts: [],
-    expenses: []
+    expenses: [],
+    trash: []
   };
 }
 
@@ -241,6 +501,15 @@ export function getDemoData() {
     doctorCrm: "CRM-SP 214.890 • RQE 98.412",
     monthlyBudgetLimit: 12000,
     monthlyIncomeGoal: 25000,
+    workLocations: [...DEFAULT_WORK_LOCATIONS],
+    workTypes: [...DEFAULT_WORK_TYPES],
+    activeWorkTypes: ["Plantão em Maternidade", "Plantão em Hospital", "Serviço Público"],
+    customExpenseCategories: [
+      { id: "cat_demo_1", name: "Contador", scope: "pj", color: "#7E57C2", icon: "calculate" },
+      { id: "cat_demo_2", name: "Mercantil/Mercado", scope: "pf", color: "#FF5252", icon: "restaurant" }
+    ],
+    defaultTaxRate: 15,
+    trash: [],
     fixedSalaries: [
       { id: "s1", description: "Pediatra Consultório", value: 8500, dayOfMonth: 5 }
     ],
@@ -501,7 +770,7 @@ export class PediatricStore {
     );
 
     const grossValue = Number(shift.grossValue) || 0;
-    const taxRegime = shift.taxRegime || "pj_presumido";
+    const taxRegime = shift.taxRegime || "Simples Nacional (6%)";
     const regLower = String(taxRegime).toLowerCase();
     let defaultRate = 0.15;
     if (regLower.includes("simples")) defaultRate = 0.06;
@@ -511,21 +780,31 @@ export class PediatricStore {
     let taxRateVal = shift.taxRate !== undefined ? Number(shift.taxRate) : defaultRate;
     const effectiveDecimalRate = taxRateVal > 1 ? (taxRateVal / 100) : taxRateVal;
     const defaultNet = grossValue * (1 - effectiveDecimalRate);
+    const netValue = shift.netValue !== undefined ? Number(shift.netValue) : defaultNet;
+
+    // Pediatric standard formula: 80% in 60 days (D+60) and 20% in 90 days (D+90)
+    const isSplit = shift.splitPayment !== false && !shift.customPaymentDate && (!shift.paymentLagMonths || Number(shift.paymentLagMonths) === 3);
+    const installments = isSplit
+      ? calculateShiftInstallments(shift.shiftDate, netValue, shift.customPaymentDate)
+      : (shift.installments || null);
 
     const newShift = {
       id: shift.id || "sh_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
       hospital: shift.hospital.trim(),
       shiftDate: shift.shiftDate,
       shiftType: shift.shiftType || "12h Diurno",
+      workType: shift.workType || "Plantão em Maternidade",
       sector: shift.sector || "UTI Neonatal",
       grossValue,
-      netValue: shift.netValue !== undefined ? Number(shift.netValue) : defaultNet,
+      netValue,
       taxRegime,
       taxRate: taxRateVal,
       notes: shift.notes ? String(shift.notes).trim() : "",
       paymentLagMonths: lagMonths,
       customPaymentDate: shift.customPaymentDate || null,
       expectedPaymentDate,
+      splitPayment: isSplit,
+      installments,
       status: shift.status || "pending",
       paidDate: shift.paidDate || null
     };
@@ -550,13 +829,25 @@ export class PediatricStore {
       : current.customPaymentDate;
 
     const expectedPaymentDate = calculateExpectedPaymentDate(shiftDate, lagMonths, customDate);
+    const netValue = updates.netValue !== undefined ? Number(updates.netValue) : current.netValue;
+
+    const isSplit = updates.splitPayment !== undefined
+      ? Boolean(updates.splitPayment)
+      : (current.splitPayment !== false && !customDate && (!lagMonths || Number(lagMonths) === 3));
+
+    const installments = isSplit
+      ? calculateShiftInstallments(shiftDate, netValue, customDate)
+      : (updates.installments || null);
 
     this.data.shifts[index] = {
       ...current,
       ...updates,
+      netValue,
       paymentLagMonths: lagMonths,
       customPaymentDate: customDate,
-      expectedPaymentDate
+      expectedPaymentDate,
+      splitPayment: isSplit,
+      installments: updates.installments || installments
     };
 
     this.save();
@@ -564,10 +855,24 @@ export class PediatricStore {
   }
 
   deleteShift(id) {
-    const prevLen = this.data.shifts.length;
+    const shift = this.data.shifts.find(s => s.id === id);
+    if (!shift) return false;
+
+    if (!Array.isArray(this.data.trash)) this.data.trash = [];
+    this.saveBackup();
+    this.data.trash.unshift({
+      id: "trash_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+      originalId: shift.id,
+      itemType: "shift",
+      item: JSON.parse(JSON.stringify(shift)),
+      deletedAt: new Date().toISOString(),
+      label: `Plantão: ${shift.hospital} (${formatDateBR(shift.shiftDate)}) - ${formatCurrency(shift.netValue)}`
+    });
+    if (this.data.trash.length > 50) this.data.trash.pop();
+
     this.data.shifts = this.data.shifts.filter(s => s.id !== id);
     this.save();
-    return this.data.shifts.length < prevLen;
+    return true;
   }
 
   markShiftAsReceived(id, paidDate = null) {
@@ -577,6 +882,45 @@ export class PediatricStore {
     let dateToday = paidDate || getLocalDateString(new Date());
     shift.status = "received";
     shift.paidDate = dateToday;
+    if (Array.isArray(shift.installments)) {
+      shift.installments.forEach(inst => {
+        inst.status = "received";
+        inst.paidDate = inst.paidDate || dateToday;
+      });
+    }
+    this.save();
+    return shift;
+  }
+
+  toggleShiftInstallment(shiftId, installmentNumber, paidDate = null) {
+    const shift = this.data.shifts.find(s => s.id === shiftId);
+    if (!shift || !Array.isArray(shift.installments)) return null;
+
+    const inst = shift.installments.find(i => i.number === installmentNumber);
+    if (!inst) return null;
+
+    const dateToday = paidDate || getLocalDateString(new Date());
+    if (inst.status === "received") {
+      inst.status = "pending";
+      inst.paidDate = null;
+    } else {
+      inst.status = "received";
+      inst.paidDate = dateToday;
+    }
+
+    const allReceived = shift.installments.every(i => i.status === "received");
+    const anyReceived = shift.installments.some(i => i.status === "received");
+    if (allReceived) {
+      shift.status = "received";
+      shift.paidDate = dateToday;
+    } else if (anyReceived) {
+      shift.status = "partial";
+      shift.paidDate = null;
+    } else {
+      shift.status = "pending";
+      shift.paidDate = null;
+    }
+
     this.save();
     return shift;
   }
@@ -587,6 +931,12 @@ export class PediatricStore {
 
     shift.status = "pending";
     shift.paidDate = null;
+    if (Array.isArray(shift.installments)) {
+      shift.installments.forEach(inst => {
+        inst.status = "pending";
+        inst.paidDate = null;
+      });
+    }
     this.save();
     return shift;
   }
@@ -594,10 +944,19 @@ export class PediatricStore {
   // --- Expenses Operations ---
 
   addExpense(expense) {
+    const category = (expense.category || "Outros").trim();
+    const scope = expense.scope || this.getCategoryScope(category);
+
+    // Auto-register custom category if not in standard PF or PJ list
+    if (category && !EXPENSE_CATEGORIES_PF.includes(category) && !EXPENSE_CATEGORIES_PJ.includes(category) && category !== "Outros") {
+      this.addExpenseCategory({ name: category, scope });
+    }
+
     const newExpense = {
       id: expense.id || "e_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
       description: expense.description.trim(),
-      category: expense.category || "Outros",
+      category,
+      scope, // "pf" (vida pessoal) | "pj" (trabalho/consultório)
       type: expense.type || "variable", // "fixed" | "variable"
       value: Number(expense.value) || 0,
       dueDate: expense.dueDate,
@@ -613,9 +972,19 @@ export class PediatricStore {
     const index = this.data.expenses.findIndex(e => e.id === id);
     if (index === -1) return null;
 
+    const cat = updates.category !== undefined ? String(updates.category).trim() : this.data.expenses[index].category;
+    const scope = updates.scope !== undefined ? updates.scope : (this.data.expenses[index].scope || this.getCategoryScope(cat));
+
+    // Auto-register custom category if not in standard PF or PJ list
+    if (cat && !EXPENSE_CATEGORIES_PF.includes(cat) && !EXPENSE_CATEGORIES_PJ.includes(cat) && cat !== "Outros") {
+      this.addExpenseCategory({ name: cat, scope });
+    }
+
     this.data.expenses[index] = {
       ...this.data.expenses[index],
       ...updates,
+      category: cat,
+      scope,
       value: updates.value !== undefined ? Number(updates.value) : this.data.expenses[index].value
     };
 
@@ -624,10 +993,318 @@ export class PediatricStore {
   }
 
   deleteExpense(id) {
-    const prevLen = this.data.expenses.length;
+    const expense = this.data.expenses.find(e => e.id === id);
+    if (!expense) return false;
+
+    if (!Array.isArray(this.data.trash)) this.data.trash = [];
+    this.saveBackup();
+    this.data.trash.unshift({
+      id: "trash_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+      originalId: expense.id,
+      itemType: "expense",
+      item: JSON.parse(JSON.stringify(expense)),
+      deletedAt: new Date().toISOString(),
+      label: `Despesa: ${expense.description} (${formatDateBR(expense.dueDate)}) - ${formatCurrency(expense.value)}`
+    });
+    if (this.data.trash.length > 50) this.data.trash.pop();
+
     this.data.expenses = this.data.expenses.filter(e => e.id !== id);
     this.save();
-    return this.data.expenses.length < prevLen;
+    return true;
+  }
+
+  // --- Trash, History & Safety Database Operations ---
+
+  getTrash() {
+    return Array.isArray(this.data.trash) ? this.data.trash : [];
+  }
+
+  restoreFromTrash(trashId) {
+    if (!Array.isArray(this.data.trash) || this.data.trash.length === 0) return null;
+    const index = this.data.trash.findIndex(t => t.id === trashId || t.originalId === trashId);
+    if (index === -1) return null;
+
+    const entry = this.data.trash.splice(index, 1)[0];
+    if (entry.itemType === "shift") {
+      this.data.shifts.unshift(entry.item);
+    } else if (entry.itemType === "expense") {
+      this.data.expenses.unshift(entry.item);
+    } else if (entry.itemType === "salary") {
+      this.data.fixedSalaries.push(entry.item);
+    }
+    this.save();
+    return entry.item;
+  }
+
+  undoLastDelete() {
+    if (!Array.isArray(this.data.trash) || this.data.trash.length === 0) return null;
+    return this.restoreFromTrash(this.data.trash[0].id);
+  }
+
+  emptyTrash() {
+    this.data.trash = [];
+    this.save();
+    return true;
+  }
+
+  saveBackup() {
+    if (typeof localStorage !== "undefined") {
+      try {
+        localStorage.setItem(this.storageKey + "_backup", JSON.stringify(this.data));
+      } catch (e) {}
+    }
+  }
+
+  restoreBackup() {
+    if (typeof localStorage !== "undefined") {
+      try {
+        const backupStr = localStorage.getItem(this.storageKey + "_backup");
+        if (backupStr) {
+          const parsed = JSON.parse(backupStr);
+          if (parsed && Array.isArray(parsed.shifts)) {
+            this.data = parsed;
+            this.save();
+            return true;
+          }
+        }
+      } catch (e) {}
+    }
+    return false;
+  }
+
+  // --- Work Locations Operations ---
+
+  getWorkLocations() {
+    const custom = Array.isArray(this.data.workLocations) ? this.data.workLocations : [];
+    return Array.from(new Set([...DEFAULT_WORK_LOCATIONS, ...custom]));
+  }
+
+  addWorkLocation(name) {
+    if (!name || typeof name !== "string" || !name.trim()) return null;
+    const trimmed = name.trim();
+    if (!Array.isArray(this.data.workLocations)) {
+      this.data.workLocations = [...DEFAULT_WORK_LOCATIONS];
+    }
+    if (!this.data.workLocations.includes(trimmed)) {
+      this.data.workLocations.push(trimmed);
+      this.save();
+    }
+    return trimmed;
+  }
+
+  deleteWorkLocation(name) {
+    if (!Array.isArray(this.data.workLocations)) return false;
+    this.data.workLocations = this.data.workLocations.filter(loc => loc !== name);
+    this.save();
+    return true;
+  }
+
+  // --- Work Types Operations ---
+
+  getWorkTypes() {
+    const custom = Array.isArray(this.data.workTypes) ? this.data.workTypes : [];
+    return Array.from(new Set([...DEFAULT_WORK_TYPES, ...custom]));
+  }
+
+  getActiveWorkTypes() {
+    if (Array.isArray(this.data.activeWorkTypes) && this.data.activeWorkTypes.length > 0) {
+      return this.data.activeWorkTypes;
+    }
+    return ["Plantão em Maternidade", "Plantão em Hospital", "Serviço Público"];
+  }
+
+  toggleActiveWorkType(type) {
+    if (!Array.isArray(this.data.activeWorkTypes)) {
+      this.data.activeWorkTypes = ["Plantão em Maternidade", "Plantão em Hospital", "Serviço Público"];
+    }
+    const idx = this.data.activeWorkTypes.indexOf(type);
+    if (idx > -1) {
+      this.data.activeWorkTypes.splice(idx, 1);
+    } else {
+      this.data.activeWorkTypes.push(type);
+    }
+    this.save();
+    return this.data.activeWorkTypes;
+  }
+
+  // --- Expense Categories Operations ---
+
+  getCustomExpenseCategories() {
+    return Array.isArray(this.data.customExpenseCategories) ? this.data.customExpenseCategories : [];
+  }
+
+  getExpenseCategories(scope = null) {
+    const customs = this.getCustomExpenseCategories();
+    let baseList = [];
+    if (scope === "pf") {
+      baseList = [...EXPENSE_CATEGORIES_PF];
+      customs.forEach(c => {
+        if (c.scope === "pf" && !baseList.includes(c.name)) baseList.push(c.name);
+      });
+    } else if (scope === "pj") {
+      baseList = [...EXPENSE_CATEGORIES_PJ];
+      customs.forEach(c => {
+        if (c.scope === "pj" && !baseList.includes(c.name)) baseList.push(c.name);
+      });
+    } else {
+      baseList = [...EXPENSE_CATEGORIES];
+      customs.forEach(c => {
+        if (!baseList.includes(c.name)) baseList.push(c.name);
+      });
+    }
+    return baseList;
+  }
+
+  addExpenseCategory(catOrName, maybeScope = "pf", maybeColor = null, maybeIcon = null) {
+    let name = "";
+    let scope = "pf";
+    let color = null;
+    let icon = null;
+
+    if (typeof catOrName === "object" && catOrName !== null) {
+      name = catOrName.name || "";
+      scope = catOrName.scope || "pf";
+      color = catOrName.color || null;
+      icon = catOrName.icon || null;
+    } else if (typeof catOrName === "string") {
+      name = catOrName;
+      scope = maybeScope || "pf";
+      color = maybeColor;
+      icon = maybeIcon;
+    }
+
+    if (!name || typeof name !== "string" || !name.trim()) return null;
+    const trimmedName = name.trim();
+    const normalizedScope = String(scope).toLowerCase() === "pj" ? "pj" : "pf";
+
+    if (!Array.isArray(this.data.customExpenseCategories)) {
+      this.data.customExpenseCategories = [];
+    }
+
+    const existing = this.data.customExpenseCategories.find(
+      c => c.name.toLowerCase() === trimmedName.toLowerCase()
+    );
+
+    if (existing) {
+      existing.scope = normalizedScope;
+      if (color) existing.color = color;
+      if (icon) existing.icon = icon;
+      this.save();
+      return existing;
+    }
+
+    const newCategory = {
+      id: "cat_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+      name: trimmedName,
+      scope: normalizedScope,
+      color: color || (normalizedScope === "pj" ? "#006A62" : "#B80F55"),
+      icon: icon || (normalizedScope === "pj" ? "business" : "sell")
+    };
+
+    this.data.customExpenseCategories.push(newCategory);
+    this.save();
+    return newCategory;
+  }
+
+  updateExpenseCategory(idOrName, updates) {
+    if (!idOrName || !updates) return null;
+    if (!Array.isArray(this.data.customExpenseCategories)) {
+      this.data.customExpenseCategories = [];
+    }
+    let target = this.data.customExpenseCategories.find(
+      c => c.id === idOrName || c.name.toLowerCase() === String(idOrName).toLowerCase()
+    );
+
+    // If target not yet in custom categories (e.g. was standard), register it as custom
+    if (!target) {
+      const scope = updates.scope || this.getCategoryScope(idOrName);
+      target = this.addExpenseCategory({ name: String(idOrName).trim(), scope });
+    }
+    if (!target) return null;
+
+    const oldName = target.name;
+    if (updates.name && typeof updates.name === "string" && updates.name.trim()) {
+      target.name = updates.name.trim();
+    }
+    if (updates.scope) {
+      target.scope = String(updates.scope).toLowerCase() === "pj" ? "pj" : "pf";
+    }
+    if (updates.color) target.color = updates.color;
+    if (updates.icon) target.icon = updates.icon;
+
+    // Cascade rename to existing expenses
+    if (Array.isArray(this.data.expenses) && oldName !== target.name) {
+      this.data.expenses.forEach(exp => {
+        if (exp.category && exp.category.toLowerCase() === oldName.toLowerCase()) {
+          exp.category = target.name;
+          if (updates.scope) exp.scope = target.scope;
+        }
+      });
+    }
+
+    this.save();
+    return target;
+  }
+
+  deleteExpenseCategory(idOrName) {
+    if (!Array.isArray(this.data.customExpenseCategories) || !idOrName) return false;
+    const initialLen = this.data.customExpenseCategories.length;
+    this.data.customExpenseCategories = this.data.customExpenseCategories.filter(
+      c => c.id !== idOrName && c.name.toLowerCase() !== String(idOrName).toLowerCase()
+    );
+    const removed = this.data.customExpenseCategories.length < initialLen;
+    if (removed) {
+      this.save();
+    }
+    return removed;
+  }
+
+  getCategoryScope(category) {
+    if (!category) return "pf";
+    const customs = this.getCustomExpenseCategories();
+    const found = customs.find(c => c.name.toLowerCase() === String(category).trim().toLowerCase());
+    if (found) return found.scope;
+    return getCategoryScope(category, customs);
+  }
+
+  getCategoryColor(category) {
+    if (!category) return "#7A7E91";
+    if (CATEGORY_COLORS[category]) return CATEGORY_COLORS[category];
+    const customs = this.getCustomExpenseCategories();
+    const found = customs.find(c => c.name.toLowerCase() === String(category).trim().toLowerCase());
+    if (found && found.color) return found.color;
+    const lower = String(category).toLowerCase();
+    if (lower.includes("mercado") || lower.includes("mercantil") || lower.includes("compras") || lower.includes("supermercado")) return "#FF5252";
+    if (lower.includes("lanche") || lower.includes("comida") || lower.includes("restaurante")) return "#FF7043";
+    if (lower.includes("contador") || lower.includes("contabil")) return "#7E57C2";
+    if (lower.includes("farmacia") || lower.includes("farmácia") || lower.includes("remédio") || lower.includes("medicamento")) return "#00BFA5";
+    if (lower.includes("carro") || lower.includes("uber") || lower.includes("combustivel") || lower.includes("combustível")) return "#448AFF";
+    if (lower.includes("consultorio") || lower.includes("consultório") || lower.includes("sublocacao") || lower.includes("aluguel")) return "#EC407A";
+    const palette = ["#B80F55", "#7E4A8A", "#006A62", "#EC407A", "#26A69A", "#AB47BC", "#FF7043", "#7C4DFF"];
+    let hash = 0;
+    for (let i = 0; i < category.length; i++) hash = (hash << 5) - hash + category.charCodeAt(i);
+    return palette[Math.abs(hash) % palette.length];
+  }
+
+  getCategoryIcon(category) {
+    if (!category) return "receipt_long";
+    if (CATEGORY_ICONS[category]) return CATEGORY_ICONS[category];
+    const customs = this.getCustomExpenseCategories();
+    const found = customs.find(c => c.name.toLowerCase() === String(category).trim().toLowerCase());
+    if (found && found.icon) return found.icon;
+    const lower = String(category).toLowerCase();
+    if (lower.includes("mercado") || lower.includes("mercantil") || lower.includes("compras") || lower.includes("supermercado")) return "shopping_cart";
+    if (lower.includes("lanche") || lower.includes("comida") || lower.includes("restaurante") || lower.includes("alimentacao") || lower.includes("alimentação")) return "restaurant";
+    if (lower.includes("contador") || lower.includes("contabil") || lower.includes("imposto")) return "calculate";
+    if (lower.includes("farmacia") || lower.includes("farmácia") || lower.includes("remédio") || lower.includes("medicamento")) return "medication";
+    if (lower.includes("carro") || lower.includes("uber") || lower.includes("combustivel") || lower.includes("combustível")) return "directions_car";
+    if (lower.includes("consultorio") || lower.includes("consultório") || lower.includes("clinica") || lower.includes("clínica")) return "domain";
+    if (lower.includes("viagem") || lower.includes("passagem") || lower.includes("hotel")) return "flight";
+    if (lower.includes("educacao") || lower.includes("educação") || lower.includes("curso") || lower.includes("congresso")) return "school";
+    if (lower.includes("lazer") || lower.includes("cinema") || lower.includes("show")) return "attractions";
+    if (lower.includes("presente")) return "card_giftcard";
+    if (lower.includes("beleza") || lower.includes("cabelo") || lower.includes("estetica")) return "spa";
+    return this.getCategoryScope(category) === "pj" ? "business" : "sell";
   }
 
   toggleExpensePaid(id) {
@@ -666,8 +1343,24 @@ export class PediatricStore {
   }
 
   deleteFixedSalary(id) {
+    const salary = this.data.fixedSalaries.find(s => s.id === id);
+    if (!salary) return false;
+
+    if (!Array.isArray(this.data.trash)) this.data.trash = [];
+    this.saveBackup();
+    this.data.trash.unshift({
+      id: "trash_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+      originalId: salary.id,
+      itemType: "salary",
+      item: JSON.parse(JSON.stringify(salary)),
+      deletedAt: new Date().toISOString(),
+      label: `Salário: ${salary.description} - ${formatCurrency(salary.value)}`
+    });
+    if (this.data.trash.length > 50) this.data.trash.pop();
+
     this.data.fixedSalaries = this.data.fixedSalaries.filter(s => s.id !== id);
     this.save();
+    return true;
   }
 
   upsertFixedSalary(salary) {
@@ -713,26 +1406,66 @@ export class PediatricStore {
 
     // 1. REGIME DE CAIXA
     // Inflow: Fixed salary for this month + shifts realized in cash during this month.
-    // If a shift has been received, it belongs strictly to paidDate's month.
-    // If pending or delayed, it is expected in expectedPaymentDate's month.
-    // This strictly prevents duplicate counting across different months!
-    const cashShifts = evaluatedShifts.filter(s => {
-      const cashMonth = (s.currentStatus === "received" && s.paidDate)
-        ? s.paidDate.slice(0, 7)
-        : s.expectedPaymentDate.slice(0, 7);
-      return cashMonth === monthStr;
-    });
+    // If a shift uses the 80/20 formula, installments are attributed to D+60 and D+90 respectively!
+    const cashShifts = [];
+    let cashShiftsTotalNet = 0;
+    let cashShiftsReceivedNet = 0;
+    let cashShiftsPendingNet = 0;
+    let cashShiftsDelayedNet = 0;
+    const refDateStr = getLocalDateString(refDate);
 
-    const cashShiftsTotalNet = cashShifts.reduce((acc, s) => acc + (Number(s.netValue) || 0), 0);
-    const cashShiftsReceivedNet = cashShifts
-      .filter(s => s.currentStatus === "received")
-      .reduce((acc, s) => acc + (Number(s.netValue) || 0), 0);
-    const cashShiftsPendingNet = cashShifts
-      .filter(s => s.currentStatus !== "received")
-      .reduce((acc, s) => acc + (Number(s.netValue) || 0), 0);
-    const cashShiftsDelayedNet = cashShifts
-      .filter(s => s.currentStatus === "delayed")
-      .reduce((acc, s) => acc + (Number(s.netValue) || 0), 0);
+    evaluatedShifts.forEach(s => {
+      if (s.splitPayment && Array.isArray(s.installments) && s.installments.length > 0) {
+        s.installments.forEach(inst => {
+          const instCashMonth = (inst.status === "received" && inst.paidDate)
+            ? inst.paidDate.slice(0, 7)
+            : inst.dueDate.slice(0, 7);
+
+          if (instCashMonth === monthStr) {
+            const isInstDelayed = inst.status !== "received" && refDateStr > inst.dueDate;
+            const instVal = Number(inst.value) || 0;
+            cashShiftsTotalNet += instVal;
+            if (inst.status === "received") {
+              cashShiftsReceivedNet += instVal;
+            } else if (isInstDelayed) {
+              cashShiftsDelayedNet += instVal;
+              cashShiftsPendingNet += instVal;
+            } else {
+              cashShiftsPendingNet += instVal;
+            }
+            cashShifts.push({
+              ...s,
+              isInstallment: true,
+              installmentNumber: inst.number,
+              installmentPercent: inst.percent,
+              installmentValue: instVal,
+              installmentDueDate: inst.dueDate,
+              installmentStatus: inst.status,
+              isDelayed: isInstDelayed,
+              netValue: instVal
+            });
+          }
+        });
+      } else {
+        const cashMonth = (s.currentStatus === "received" && s.paidDate)
+          ? s.paidDate.slice(0, 7)
+          : s.expectedPaymentDate.slice(0, 7);
+
+        if (cashMonth === monthStr) {
+          const sVal = Number(s.netValue) || 0;
+          cashShiftsTotalNet += sVal;
+          if (s.currentStatus === "received") {
+            cashShiftsReceivedNet += sVal;
+          } else if (s.currentStatus === "delayed") {
+            cashShiftsDelayedNet += sVal;
+            cashShiftsPendingNet += sVal;
+          } else {
+            cashShiftsPendingNet += sVal;
+          }
+          cashShifts.push(s);
+        }
+      }
+    });
 
     const cashTotalInflow = fixedSalariesTotal + cashShiftsTotalNet;
     const cashRealizedInflow = fixedSalariesTotal + cashShiftsReceivedNet;
@@ -764,22 +1497,33 @@ export class PediatricStore {
 
     // Expense breakdown by category for this month
     const expensesByCategory = {};
-    EXPENSE_CATEGORIES.forEach(cat => {
+    const availableCategories = this.getExpenseCategories();
+    availableCategories.forEach(cat => {
       expensesByCategory[cat] = 0;
     });
     cashExpenses.forEach(e => {
-      const cat = expensesByCategory[e.category] !== undefined ? e.category : "Outros";
+      const cat = e.category || "Outros";
       expensesByCategory[cat] = (expensesByCategory[cat] || 0) + (Number(e.value) || 0);
+    });
+
+    let cashExpensesPF = 0;
+    let cashExpensesPJ = 0;
+    cashExpenses.forEach(e => {
+      const scope = e.scope || this.getCategoryScope(e.category);
+      if (scope === "pf") cashExpensesPF += (Number(e.value) || 0);
+      else cashExpensesPJ += (Number(e.value) || 0);
     });
 
     const categoryBreakdown = Object.entries(expensesByCategory).map(([category, amount]) => {
       const percentage = cashExpensesTotal > 0 ? (amount / cashExpensesTotal) * 100 : 0;
+      const scope = this.getCategoryScope(category);
       return {
         category,
+        scope,
         amount,
         percentage: Number(percentage.toFixed(1)),
-        color: CATEGORY_COLORS[category] || "#CE93D8",
-        icon: CATEGORY_ICONS[category] || "receipt_long"
+        color: this.getCategoryColor(category),
+        icon: this.getCategoryIcon(category)
       };
     }).filter(c => c.amount > 0);
 
@@ -841,6 +1585,10 @@ export class PediatricStore {
         total: cashExpensesTotal,
         paid: cashExpensesPaid,
         pending: cashExpensesPending,
+        totalPF: cashExpensesPF,
+        totalPJ: cashExpensesPJ,
+        pfPercent: cashExpensesTotal > 0 ? Number(((cashExpensesPF / cashExpensesTotal) * 100).toFixed(1)) : 0,
+        pjPercent: cashExpensesTotal > 0 ? Number(((cashExpensesPJ / cashExpensesTotal) * 100).toFixed(1)) : 0,
         categoryBreakdown,
         budgetLimit: this.data.monthlyBudgetLimit || 12000,
         budgetUsagePercent: cashExpensesTotal > 0
@@ -874,17 +1622,35 @@ export class PediatricStore {
       let pendingAmount = 0;
 
       this.data.shifts.forEach(s => {
-        const payMonth = (s.status === "received" && s.paidDate)
-          ? s.paidDate.slice(0, 7)
-          : s.expectedPaymentDate.slice(0, 7);
+        if (s.splitPayment && Array.isArray(s.installments) && s.installments.length > 0) {
+          s.installments.forEach(inst => {
+            const payMonth = (inst.status === "received" && inst.paidDate)
+              ? inst.paidDate.slice(0, 7)
+              : inst.dueDate.slice(0, 7);
 
-        if (payMonth === mStr) {
-          const val = Number(s.netValue) || 0;
-          shiftInflow += val;
-          if (s.status === "received") {
-            receivedAmount += val;
-          } else {
-            pendingAmount += val;
+            if (payMonth === mStr) {
+              const val = Number(inst.value) || 0;
+              shiftInflow += val;
+              if (inst.status === "received") {
+                receivedAmount += val;
+              } else {
+                pendingAmount += val;
+              }
+            }
+          });
+        } else {
+          const payMonth = (s.status === "received" && s.paidDate)
+            ? s.paidDate.slice(0, 7)
+            : s.expectedPaymentDate.slice(0, 7);
+
+          if (payMonth === mStr) {
+            const val = Number(s.netValue) || 0;
+            shiftInflow += val;
+            if (s.status === "received") {
+              receivedAmount += val;
+            } else {
+              pendingAmount += val;
+            }
           }
         }
       });
@@ -913,6 +1679,7 @@ export class PediatricStore {
     const refDate = referenceDate instanceof Date
       ? referenceDate
       : new Date(String(referenceDate) + "T00:00:00");
+    const refDateStr = getLocalDateString(refDate);
 
     let totalPending = 0;
     let totalDelayed = 0;
@@ -922,22 +1689,35 @@ export class PediatricStore {
     let d60Sum = 0;
     let d90Sum = 0;
 
-    const evaluated = this.data.shifts.map(s => {
-      const evaluation = evaluateShiftStatus(s, refDate);
-      return { ...s, ...evaluation };
-    });
-
-    evaluated.forEach(s => {
-      if (s.status === "delayed") {
-        totalDelayed += Number(s.netValue) || 0;
-        countDelayed++;
-      } else if (s.status === "pending") {
-        const val = Number(s.netValue) || 0;
-        totalPending += val;
-        countPending++;
-        if (s.paymentLagMonths === 1) d30Sum += val;
-        else if (s.paymentLagMonths === 2) d60Sum += val;
-        else d90Sum += val;
+    this.data.shifts.forEach(s => {
+      if (s.splitPayment && Array.isArray(s.installments) && s.installments.length > 0) {
+        s.installments.forEach(inst => {
+          const val = Number(inst.value) || 0;
+          if (inst.status !== "received") {
+            if (refDateStr > inst.dueDate) {
+              totalDelayed += val;
+              countDelayed++;
+            } else {
+              totalPending += val;
+              countPending++;
+              if (inst.percent === 80) d60Sum += val;
+              else d90Sum += val;
+            }
+          }
+        });
+      } else {
+        const ev = evaluateShiftStatus(s, refDate);
+        if (ev.status === "delayed") {
+          totalDelayed += Number(s.netValue) || 0;
+          countDelayed++;
+        } else if (ev.status === "pending") {
+          const val = Number(s.netValue) || 0;
+          totalPending += val;
+          countPending++;
+          if (s.paymentLagMonths === 1) d30Sum += val;
+          else if (s.paymentLagMonths === 2) d60Sum += val;
+          else d90Sum += val;
+        }
       }
     });
 
@@ -951,6 +1731,114 @@ export class PediatricStore {
       d90Sum,
       totalToReceive: totalPending + totalDelayed,
       totalCount: countPending + countDelayed
+    };
+  }
+
+  /**
+   * Calculates Month-over-Month (MoM) expense variation comparing current month to previous month.
+   * @param {string} monthStr 'YYYY-MM'
+   * @param {string|null} scopeFilter 'pf' | 'pj' | 'fixa' | 'variavel' | null
+   * @returns {object}
+   */
+  getMonthOverMonthExpenseVariation(monthStr, scopeFilter = null) {
+    const [y, m] = monthStr.split("-").map(Number);
+    const prevMonthDate = new Date(y, m - 2, 1);
+    const prevYear = prevMonthDate.getFullYear();
+    const prevMonthNum = prevMonthDate.getMonth() + 1;
+    const prevMonthStr = `${prevYear}-${String(prevMonthNum).padStart(2, "0")}`;
+
+    let currentExpenses = this.data.expenses.filter(e => e.dueDate.startsWith(monthStr));
+    let prevExpenses = this.data.expenses.filter(e => e.dueDate.startsWith(prevMonthStr));
+
+    if (scopeFilter && scopeFilter !== "all") {
+      if (scopeFilter === "pf" || scopeFilter === "pj") {
+        currentExpenses = currentExpenses.filter(e => (e.scope || getCategoryScope(e.category)) === scopeFilter);
+        prevExpenses = prevExpenses.filter(e => (e.scope || getCategoryScope(e.category)) === scopeFilter);
+      } else if (scopeFilter === "fixa") {
+        currentExpenses = currentExpenses.filter(e => e.type === "fixed");
+        prevExpenses = prevExpenses.filter(e => e.type === "fixed");
+      } else if (scopeFilter === "variavel") {
+        currentExpenses = currentExpenses.filter(e => e.type === "variable");
+        prevExpenses = prevExpenses.filter(e => e.type === "variable");
+      }
+    }
+
+    const currentTotal = currentExpenses.reduce((sum, e) => sum + (Number(e.value) || 0), 0);
+    const prevTotal = prevExpenses.reduce((sum, e) => sum + (Number(e.value) || 0), 0);
+
+    const diffValue = currentTotal - prevTotal;
+    const diffPercent = prevTotal > 0
+      ? Number(((diffValue / prevTotal) * 100).toFixed(1))
+      : (currentTotal > 0 ? 100 : 0);
+
+    let currentPF = 0;
+    let currentPJ = 0;
+    currentExpenses.forEach(e => {
+      const scope = e.scope || this.getCategoryScope(e.category);
+      if (scope === "pf") currentPF += (Number(e.value) || 0);
+      else currentPJ += (Number(e.value) || 0);
+    });
+
+    let prevPF = 0;
+    let prevPJ = 0;
+    prevExpenses.forEach(e => {
+      const scope = e.scope || this.getCategoryScope(e.category);
+      if (scope === "pf") prevPF += (Number(e.value) || 0);
+      else prevPJ += (Number(e.value) || 0);
+    });
+
+    let categoriesList = this.getExpenseCategories(scopeFilter);
+    const catSet = new Set(categoriesList);
+    currentExpenses.forEach(e => {
+      const s = e.scope || this.getCategoryScope(e.category);
+      if (!scopeFilter || scopeFilter === "all" || s === scopeFilter) {
+        if (e.category) catSet.add(e.category);
+      }
+    });
+    prevExpenses.forEach(e => {
+      const s = e.scope || this.getCategoryScope(e.category);
+      if (!scopeFilter || scopeFilter === "all" || s === scopeFilter) {
+        if (e.category) catSet.add(e.category);
+      }
+    });
+    categoriesList = Array.from(catSet);
+
+    const categoryComparison = categoriesList.map(cat => {
+      const curCat = currentExpenses.filter(e => e.category === cat).reduce((s, e) => s + (Number(e.value) || 0), 0);
+      const prevCat = prevExpenses.filter(e => e.category === cat).reduce((s, e) => s + (Number(e.value) || 0), 0);
+      const catDiff = curCat - prevCat;
+      const catPercent = prevCat > 0
+        ? Number(((catDiff / prevCat) * 100).toFixed(1))
+        : (curCat > 0 ? 100 : 0);
+      const scope = this.getCategoryScope(cat);
+
+      return {
+        category: cat,
+        scope,
+        currentAmount: curCat,
+        previousAmount: prevCat,
+        diffValue: catDiff,
+        diffPercent: catPercent,
+        color: this.getCategoryColor(cat),
+        icon: this.getCategoryIcon(cat)
+      };
+    }).filter(c => c.currentAmount > 0 || c.previousAmount > 0);
+
+    return {
+      currentMonthStr: monthStr,
+      prevMonthStr,
+      currentTotal,
+      prevTotal,
+      diffValue,
+      diffPercent,
+      isIncrease: diffValue > 0,
+      currentPF,
+      currentPJ,
+      prevPF,
+      prevPJ,
+      pfPercent: currentTotal > 0 ? Number(((currentPF / currentTotal) * 100).toFixed(1)) : 0,
+      pjPercent: currentTotal > 0 ? Number(((currentPJ / currentTotal) * 100).toFixed(1)) : 0,
+      categoryComparison
     };
   }
 
@@ -1231,7 +2119,8 @@ export class PediatricStore {
     const lines = [];
 
     // Header metadata
-    lines.push(`"EXTRATO FINANCEIRO & PRODUCAO MEDICA - PEDIATRIA CHIC"`);
+    lines.push(`"EXTRATO FINANCEIRO & PRODUCAO MEDICA - FINANÇAS PEDIATRIA"`);
+    lines.push(`"Desenvolvedor:";"${APP_CREATOR.signature}"`);
     lines.push(`"Medica:";"${this.data.doctorName}"`);
     lines.push(`"Especialidade:";"${this.data.doctorTitle}"`);
     lines.push(`"CRM / Registro:";"${this.data.doctorCrm || 'CRM-SP'}"`);
@@ -1239,7 +2128,7 @@ export class PediatricStore {
     lines.push("");
 
     // Financial Summary (Cleaned semicolons inside quotes)
-    lines.push(`"RESUMO FINANCEIRO (REGIME DE CAIXA D+90)"`);
+    lines.push(`"RESUMO FINANCEIRO (REGIME DE CAIXA D+60 / D+90)"`);
     lines.push(`"Total Entradas em Caixa (R$)";"${report.caixa.totalInflow.toFixed(2).replace('.', ',')}"`);
     lines.push(`"Entradas Efetivamente Recebidas (R$)";"${report.caixa.realizedInflow.toFixed(2).replace('.', ',')}"`);
     lines.push(`"Despesas do Mes (R$)";"${report.expenses.total.toFixed(2).replace('.', ',')}"`);
@@ -1248,7 +2137,17 @@ export class PediatricStore {
     lines.push("");
 
     const targetShifts = options.onlyMonth
-      ? this.data.shifts.filter(s => s.shiftDate.startsWith(mStr) || s.expectedPaymentDate.startsWith(mStr) || (s.paidDate && s.paidDate.startsWith(mStr)))
+      ? this.data.shifts.filter(s => {
+          if (s.shiftDate.startsWith(mStr)) return true;
+          if (s.expectedPaymentDate && s.expectedPaymentDate.startsWith(mStr)) return true;
+          if (s.paidDate && s.paidDate.startsWith(mStr)) return true;
+          if (s.splitPayment && Array.isArray(s.installments)) {
+            return s.installments.some(inst =>
+              inst.dueDate.startsWith(mStr) || (inst.paidDate && inst.paidDate.startsWith(mStr))
+            );
+          }
+          return false;
+        })
       : this.data.shifts;
 
     const targetExpenses = options.onlyMonth
@@ -1257,10 +2156,26 @@ export class PediatricStore {
 
     // Shifts
     lines.push(`"PLANTOES E ESCALAS"`);
-    lines.push(`"Data Trabalhada";"Hospital";"Setor";"Escala";"Bruto (R$)";"Liquido (R$)";"Prazo";"Data Vencimento D+90";"Status";"Data Pagamento";"Observacoes"`);
+    lines.push(`"Data Trabalhada";"Hospital";"Setor";"Escala";"Bruto (R$)";"Liquido (R$)";"Prazo";"Data Vencimento Prevista";"Status";"Data Pagamento";"Observacoes"`);
     const refDate = options.referenceDate || new Date();
     targetShifts.forEach(s => {
       const ev = evaluateShiftStatus(s, refDate);
+      let statusLabel = ev.status === 'received' ? 'Recebido' : ev.status === 'delayed' ? 'Em Atraso' : ev.status === 'partial' ? 'Parcial' : 'Pendente';
+      let dueLabel = formatDateBR(s.expectedPaymentDate);
+      if (s.splitPayment && Array.isArray(s.installments) && options.onlyMonth) {
+        const instInMonth = s.installments.find(i => i.dueDate.startsWith(mStr));
+        if (instInMonth) {
+          const instEv = evaluateShiftStatus({
+            ...s,
+            isInstallment: true,
+            installmentDueDate: instInMonth.dueDate,
+            installmentStatus: instInMonth.status,
+            paidDate: instInMonth.paidDate
+          }, refDate);
+          dueLabel = `${formatDateBR(instInMonth.dueDate)} (${instInMonth.percent}%)`;
+          statusLabel = instEv.status === 'received' ? 'Recebido' : instEv.status === 'delayed' ? 'Em Atraso' : 'Pendente';
+        }
+      }
       lines.push([
         `"${formatDateBR(s.shiftDate)}"`,
         `"${s.hospital}"`,
@@ -1268,9 +2183,9 @@ export class PediatricStore {
         `"${s.shiftType}"`,
         `"${Number(s.grossValue || 0).toFixed(2).replace('.', ',')}"`,
         `"${Number(s.netValue || 0).toFixed(2).replace('.', ',')}"`,
-        `"D+${(s.paymentLagMonths || 3) * 30}"`,
-        `"${formatDateBR(s.expectedPaymentDate)}"`,
-        `"${ev.status === 'received' ? 'Recebido' : ev.status === 'delayed' ? 'Em Atraso' : 'Pendente'}"`,
+        `"${s.splitPayment ? 'D+60 (80%) / D+90 (20%)' : `D+${(s.paymentLagMonths || 3) * 30}`}"`,
+        `"${dueLabel}"`,
+        `"${statusLabel}"`,
         `"${s.paidDate ? formatDateBR(s.paidDate) : '-'}"`,
         `"${(s.notes || '').replace(/"/g, '""')}"`
       ].join(";"));
@@ -1303,21 +2218,44 @@ export class PediatricStore {
     const refDateStr = getLocalDateString(referenceDate);
     const notifications = [];
 
-    // 1. Check Delayed Shifts
+    // 1. Check Delayed Shifts & Split Installments
     this.data.shifts.forEach(s => {
-      const ev = evaluateShiftStatus(s, referenceDate);
-      if (ev.status === "delayed") {
-        notifications.push({
-          id: `delayed_${s.id}`,
-          type: "delayed_shift",
-          priority: "high",
-          icon: "warning",
-          color: "#FF7043",
-          title: `Repasse Atrasado: ${s.hospital}`,
-          message: `O valor de ${formatCurrency(s.netValue)} venceu em ${formatDateBR(s.expectedPaymentDate)} (${ev.label}).`,
-          actionLabel: "Cobrar Faturamento",
-          data: s
+      if (s.splitPayment && Array.isArray(s.installments) && s.installments.length > 0) {
+        s.installments.forEach(inst => {
+          if (inst.status !== "received" && refDateStr > inst.dueDate) {
+            const [y1, m1, d1] = refDateStr.split("-").map(Number);
+            const [y2, m2, d2] = inst.dueDate.split("-").map(Number);
+            const utc1 = Date.UTC(y1, m1 - 1, d1);
+            const utc2 = Date.UTC(y2, m2 - 1, d2);
+            const delayDays = Math.max(1, Math.round((utc1 - utc2) / (1000 * 60 * 60 * 24)));
+            notifications.push({
+              id: `delayed_${s.id}_inst_${inst.number}`,
+              type: "delayed_shift",
+              priority: "high",
+              icon: "warning",
+              color: "#FF7043",
+              title: `Repasse Atrasado: ${s.hospital} (${inst.number}ª Parcela - ${inst.percent}%)`,
+              message: `O valor de ${formatCurrency(inst.value)} venceu em ${formatDateBR(inst.dueDate)} (Atrasado +${delayDays}d).`,
+              actionLabel: "Cobrar Faturamento",
+              data: { ...s, installment: inst }
+            });
+          }
         });
+      } else {
+        const ev = evaluateShiftStatus(s, referenceDate);
+        if (ev.status === "delayed") {
+          notifications.push({
+            id: `delayed_${s.id}`,
+            type: "delayed_shift",
+            priority: "high",
+            icon: "warning",
+            color: "#FF7043",
+            title: `Repasse Atrasado: ${s.hospital}`,
+            message: `O valor de ${formatCurrency(s.netValue)} venceu em ${formatDateBR(s.expectedPaymentDate)} (${ev.label}).`,
+            actionLabel: "Cobrar Faturamento",
+            data: s
+          });
+        }
       }
     });
 
@@ -1327,18 +2265,36 @@ export class PediatricStore {
     const in7DaysStr = getLocalDateString(in7Days);
 
     this.data.shifts.forEach(s => {
-      if (s.status === "pending" && s.expectedPaymentDate >= refDateStr && s.expectedPaymentDate <= in7DaysStr) {
-        notifications.push({
-          id: `upcoming_${s.id}`,
-          type: "upcoming_shift",
-          priority: "normal",
-          icon: "schedule",
-          color: "#7e4a8a",
-          title: `Previsão de Depósito: ${s.hospital}`,
-          message: `${formatCurrency(s.netValue)} com depósito previsto para ${formatDateBR(s.expectedPaymentDate)}.`,
-          actionLabel: "Ver Detalhes",
-          data: s
+      if (s.splitPayment && Array.isArray(s.installments) && s.installments.length > 0) {
+        s.installments.forEach(inst => {
+          if (inst.status === "pending" && inst.dueDate >= refDateStr && inst.dueDate <= in7DaysStr) {
+            notifications.push({
+              id: `upcoming_${s.id}_inst_${inst.number}`,
+              type: "upcoming_shift",
+              priority: "normal",
+              icon: "schedule",
+              color: "#7e4a8a",
+              title: `Previsão de Depósito: ${s.hospital} (${inst.number}ª Parcela - ${inst.percent}%)`,
+              message: `${formatCurrency(inst.value)} com depósito previsto para ${formatDateBR(inst.dueDate)}.`,
+              actionLabel: "Ver Detalhes",
+              data: { ...s, installment: inst }
+            });
+          }
         });
+      } else {
+        if (s.status === "pending" && s.expectedPaymentDate >= refDateStr && s.expectedPaymentDate <= in7DaysStr) {
+          notifications.push({
+            id: `upcoming_${s.id}`,
+            type: "upcoming_shift",
+            priority: "normal",
+            icon: "schedule",
+            color: "#7e4a8a",
+            title: `Previsão de Depósito: ${s.hospital}`,
+            message: `${formatCurrency(s.netValue)} com depósito previsto para ${formatDateBR(s.expectedPaymentDate)}.`,
+            actionLabel: "Ver Detalhes",
+            data: s
+          });
+        }
       }
     });
 

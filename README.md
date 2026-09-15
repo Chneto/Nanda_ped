@@ -1,6 +1,6 @@
-# 🌸 Pediatria Chic — Gestão Financeira Pediátrica (PWA)
+# 🌸 Finanças Pediatria — Gestão Financeira Pediátrica (PWA)
 
-![Pediatria Chic Showcase](./assets/images/showcase.png)
+![Finanças Pediatria Showcase](./assets/images/showcase.png)
 
 > **Aplicação Web Mobile-First (PWA) de Controle Financeiro de Alta Performance criada sob medida para Médicas Pediatras.**  
 > Gerenciamento inteligente de **Salário Fixo**, **Plantões Médicos (D+90 / Prazos Customizados)**, **Regime de Caixa vs. Competência**, **Previsão Orçamentária**, **Simulador Tributário PJ**, **Monitor de Fadiga Médica (CFM)** e **Despesas Especializadas**.
@@ -38,7 +38,7 @@ A aplicação foi desenvolvida no padrão **PWA (Progressive Web App)**, permiti
 2. Toque no botão de **Compartilhar** (o ícone de quadrado com a seta para cima `⎋` na barra inferior).
 3. Role as opções para baixo e toque em **"Adicionar à Tela de Início"** (ícone de `➕`).
 4. Toque em **"Adicionar"** no canto superior direito.
-5. Pronto! O ícone do **Pediatria Chic** aparecerá na sua tela de início e abrirá em tela cheia como um aplicativo nativo.
+5. Pronto! O ícone do **Finanças Pediatria** aparecerá na sua tela de início e abrirá em tela cheia como um aplicativo nativo.
 
 ### 🤖 No Android (Google Chrome)
 1. Abra o link da aplicação no navegador **Chrome**.
@@ -90,7 +90,7 @@ git init
 git add .
 
 # 3. Crie o commit inicial
-git commit -m "feat: Pediatria Chic PWA para médica pediatra"
+git commit -m "feat: Finanças Pediatria PWA para médica pediatra"
 
 # 4. Vincule ao seu repositório do GitHub
 git branch -M main

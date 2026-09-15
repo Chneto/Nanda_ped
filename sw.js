@@ -1,5 +1,5 @@
-// Pediatria Chic Service Worker - Offline & PWA Support
-const CACHE_NAME = 'pediatria-chic-v2';
+// Finanças Pediatria Service Worker - Offline & PWA Support - Criado por FChNeto
+const CACHE_NAME = 'financas-pediatria-v3';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -9,7 +9,9 @@ const STATIC_ASSETS = [
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
   './assets/icons/apple-touch-icon.png',
-  './assets/icons/favicon.png'
+  './assets/icons/favicon.png',
+  './assets/images/baby_happy.jpg',
+  './assets/images/baby_crying.jpg'
 ];
 
 // Install: cache core shell
