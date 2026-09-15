@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Pediatria Chic | Gestão Financeira Pediátrica</title>
-  <meta name="description" content="Controle financeiro para médicas pediatras - Salário fixo, plantões D+90 e despesas" />
+  <title>Finanças Pediatria</title>
+  <meta name="description" content="Controle financeiro para médicas pediatras - Criado por FChNeto" />
   <meta name="theme-color" content="#EC407A" />
 
   <!-- PWA & Mobile Web App Meta Tags -->
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Pediatria Chic" />
-  <meta name="application-name" content="Pediatria Chic" />
+  <meta name="apple-mobile-web-app-title" content="Finanças Pediatria" />
+  <meta name="application-name" content="Finanças Pediatria" />
   <meta name="format-detection" content="telephone=no" />
 
   <!-- Favicons and App Icons -->
@@ -104,14 +104,14 @@
     <div class="device-frame flex flex-col min-h-screen relative">
 
       <!-- Top Glassmorphism App Header (Stitch Aligned) -->
-      <header class="sticky top-0 w-full z-40 pt-safe glass-header px-4 py-2 flex flex-col gap-2">
+      <header class="sticky top-0 w-full z-40 pt-safe glass-header px-4 pb-2.5 flex flex-col gap-2">
         <div class="h-12 flex items-center justify-between">
           <!-- Logo & Brand & Active Tab Indicator -->
           <div class="flex items-center gap-2">
             <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-secondary to-primary flex items-center justify-center text-white shadow-sm overflow-hidden flex-shrink-0">
               <img
                 src="./assets/icons/icon-192.png"
-                alt="Pediatria Chic Logo"
+                alt="Finanças Pediatria Logo"
                 class="w-full h-full object-cover"
                 onerror="this.style.display='none'; if (this.nextElementSibling) { this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.style.display='inline-flex'; }"
               />
@@ -121,7 +121,7 @@
             </div>
             <div class="flex flex-col leading-tight">
               <div class="flex items-center gap-1.5">
-                <span class="font-headline text-[15px] font-bold text-on-surface">Pediatria Chic</span>
+                <span class="font-headline text-[15px] font-bold text-on-surface">Finanças Pediatria</span>
                 <span class="text-on-surface-variant/40">•</span>
                 <span id="header-active-tab" class="font-headline text-[14px] font-bold text-secondary">Início</span>
               </div>
@@ -336,6 +336,11 @@
         <span id="toast-message">Plantão salvo com sucesso! 🌸</span>
       </div>
 
+      <!-- Baby Reaction Overlay Modal (Cute Pediatric UI) -->
+      <div id="baby-reaction-overlay" class="baby-reaction-backdrop" role="dialog" aria-modal="true">
+        <div id="baby-reaction-content" class="baby-reaction-card"></div>
+      </div>
+
     </div>
   </div>
 
@@ -347,7 +352,7 @@
     if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
-          .then((reg) => console.log('Pediatria Chic Service Worker registrado:', reg.scope))
+          .then((reg) => console.log('Finanças Pediatria Service Worker registrado:', reg.scope))
           .catch((err) => console.warn('Falha no registro do Service Worker:', err));
       });
     }

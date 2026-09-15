@@ -1,5 +1,5 @@
 /**
- * Pediatric Chic Financial Sanctuary - Unified Standalone Bundle
+ * Finanças Pediatria - Unified Standalone Bundle
  * Self-contained for zero-CORS file:// protocol and offline execution
  */
 (function() {
@@ -7,7 +7,7 @@
 
   // --- ICONS SYSTEM ---
   /**
- * Pediatric Chic - Vector Icon System & Fallback Engine
+ * Finanças Pediatria - Vector Icon System & Fallback Engine
  * Provides pixel-perfect SVG fallbacks for Material Symbols Outlined,
  * ensuring icons never degrade to raw text ligatures even if Google Fonts CDN fails,
  * network is offline, or CORS restricts external fonts.
@@ -113,7 +113,20 @@ const ICON_PATHS = {
   health_and_safety: "M10.5 13H8v-3h2.5V7.5h3V10H16v3h-2.5v2.5h-3V13zM12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3z",
   favorite_border: "M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z",
   content_paste: "M19 2h-4.18C14.4.84 13.3 0 12 0c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm7 18H5V4h2v3h10V4h2v16z",
-  apple: "M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.54c.66-.82 1.11-1.96.99-3.1-.99.04-2.19.66-2.89 1.48-.61.71-1.14 1.87-1 2.98 1.11.09 2.24-.55 2.9-1.36z"
+  apple: "M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.54c.66-.82 1.11-1.96.99-3.1-.99.04-2.19.66-2.89 1.48-.61.71-1.14 1.87-1 2.98 1.11.09 2.24-.55 2.9-1.36z",
+
+  // New Category & Feature Icons
+  attractions: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z",
+  restaurant: "M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z",
+  directions_car: "M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.77l.11.34V17z",
+  card_giftcard: "M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76V14h2V8.76L15.38 12 17 10.83 14.92 8H20v6z",
+  home: "M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z",
+  flight: "M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z",
+  restore_from_trash: "M19 4h-3.5l-1-1h-5l-1 1H5v2h14zM6 7v12c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6zm8 7v4h-4v-4H8l4-4 4 4h-2z",
+  celebration: "M2 22l14-5-9-9zM14.59 2.41c-.78-.78-2.05-.78-2.83 0l-1.06 1.06 3.89 3.89 1.06-1.06c.78-.78.78-2.05 0-2.83zM21.5 11.5l-1.06-1.06-3.89 3.89 1.06 1.06c.78.78 2.05.78 2.83 0l1.06-1.06c.78-.78.78-2.05 0-2.83z",
+  baby_changing_station: "M14 6.5c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm5 1.5h-5.46l-1.08-2.15C12.13 5.3 11.4 5 10.63 5c-.75 0-1.46.29-1.98.81L5.59 8.87C5.22 9.24 5 9.75 5 10.28V15h2v-4.14l2.25-2.25L10 13v7h2v-7.86l-1.12-3.37 1.12-1.12V10h7V8z",
+  person: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z",
+  business: "M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
 };
 
 /**
@@ -221,12 +234,43 @@ if (typeof window !== "undefined") {
 
   // --- STORE ENGINE ---
   /**
- * Pediatric Financial Sanctuary - Data Store & Calculation Engine
- * Designed for Dra. Fernanda Ch. (Pediatra)
+ * Finanças Pediatria - Data Store & Calculation Engine
+ * Criado por FChNeto
  */
+
+const APP_CREATOR = Object.freeze({
+  name: "FChNeto",
+  signature: "Criado por FChNeto",
+  role: "Criador e Desenvolvedor",
+  app: "Finanças Pediatria",
+  immutable: true
+});
 
 const DEFAULT_DOCTOR_NAME = "Dra. Pediatra";
 const DEFAULT_DOCTOR_TITLE = "Pediatria & Neonatologia 🩺✨";
+
+const EXPENSE_CATEGORIES_PF = [
+  "Lazer",
+  "Educação",
+  "Alimentação",
+  "Transporte",
+  "Presentes",
+  "Lar",
+  "Beleza",
+  "Saúde",
+  "Viagens",
+  "Outros (Pessoal)"
+];
+
+const EXPENSE_CATEGORIES_PJ = [
+  "Consultório/Sublocação",
+  "CRM/RQE/SBP",
+  "Congresso & Atualização",
+  "Brinquedos/Materiais Lúdicos",
+  "Combustível/Plantão",
+  "Impostos & Contabilidade",
+  "Outros (PJ)"
+];
 
 const EXPENSE_CATEGORIES = [
   "Consultório/Sublocação",
@@ -234,16 +278,80 @@ const EXPENSE_CATEGORIES = [
   "Congresso & Atualização",
   "Brinquedos/Materiais Lúdicos",
   "Combustível/Plantão",
+  "Lazer",
+  "Educação",
+  "Alimentação",
+  "Transporte",
+  "Presentes",
+  "Lar",
+  "Beleza",
+  "Saúde",
+  "Viagens",
+  "Impostos & Contabilidade",
   "Outros"
 ];
 
+function getCategoryScope(category, customCategories = null) {
+  if (!category || typeof category !== "string") return "pf";
+  const trimmed = category.trim();
+
+  const customs = customCategories || (typeof window !== "undefined" && window.pediatricStoreInstance ? window.pediatricStoreInstance.getCustomExpenseCategories() : null);
+  if (Array.isArray(customs)) {
+    const found = customs.find(c => {
+      const cName = typeof c === "string" ? c : (c.name || "");
+      return cName.toLowerCase() === trimmed.toLowerCase();
+    });
+    if (found) {
+      return typeof found === "object" && found.scope ? found.scope : "pf";
+    }
+  }
+
+  if (EXPENSE_CATEGORIES_PF.includes(trimmed)) return "pf";
+  if (EXPENSE_CATEGORIES_PJ.includes(trimmed)) return "pj";
+
+  const lower = trimmed.toLowerCase();
+  if (
+    lower.includes("pj") ||
+    lower.includes("crm") ||
+    lower.includes("sbp") ||
+    lower.includes("rqe") ||
+    lower.includes("contador") ||
+    lower.includes("contabil") ||
+    lower.includes("consultório") ||
+    lower.includes("consultorio") ||
+    lower.includes("subloca") ||
+    lower.includes("plantão") ||
+    lower.includes("plantao") ||
+    lower.includes("imposto") ||
+    lower.includes("congresso") ||
+    lower.includes("lúdico") ||
+    lower.includes("ludico")
+  ) {
+    return "pj";
+  }
+
+  return "pf";
+}
+
 const CATEGORY_COLORS = {
-  "Consultório/Sublocação": "#EC407A", // Secondary Pink Dark
-  "CRM/RQE/SBP": "#26A69A",           // Mint Income
-  "Congresso & Atualização": "#AB47BC", // Lilac Dark
-  "Brinquedos/Materiais Lúdicos": "#FF7043", // Coral
-  "Combustível/Plantão": "#CE93D8",   // Lilac Medium
-  "Outros": "#7A7E91"                 // Text Muted Slate
+  "Consultório/Sublocação": "#EC407A",
+  "CRM/RQE/SBP": "#26A69A",
+  "Congresso & Atualização": "#AB47BC",
+  "Brinquedos/Materiais Lúdicos": "#FF7043",
+  "Combustível/Plantão": "#CE93D8",
+  "Lazer": "#FF4081",
+  "Educação": "#7C4DFF",
+  "Alimentação": "#FF5252",
+  "Transporte": "#448AFF",
+  "Presentes": "#E040FB",
+  "Lar": "#FFAB40",
+  "Beleza": "#F06292",
+  "Saúde": "#00BFA5",
+  "Viagens": "#00E5FF",
+  "Impostos & Contabilidade": "#7E57C2",
+  "Outros (Pessoal)": "#9C27B0",
+  "Outros (PJ)": "#607D8B",
+  "Outros": "#7A7E91"
 };
 
 const CATEGORY_ICONS = {
@@ -252,16 +360,44 @@ const CATEGORY_ICONS = {
   "Congresso & Atualização": "school",
   "Brinquedos/Materiais Lúdicos": "toys",
   "Combustível/Plantão": "local_gas_station",
+  "Lazer": "attractions",
+  "Educação": "school",
+  "Alimentação": "restaurant",
+  "Transporte": "directions_car",
+  "Presentes": "card_giftcard",
+  "Lar": "home",
+  "Beleza": "spa",
+  "Saúde": "health_and_safety",
+  "Viagens": "flight",
+  "Impostos & Contabilidade": "calculate",
+  "Outros (Pessoal)": "receipt_long",
+  "Outros (PJ)": "business",
   "Outros": "receipt_long"
 };
 
-const SHIFT_HOSPITAL_SUGGESTIONS = [
+const DEFAULT_WORK_LOCATIONS = [
+  "Maternidade Araken",
+  "Maternidade Leide Morais",
+  "MEJEC",
   "Hospital Infantil Sabará",
   "Maternidade Pro Matre",
   "Hospital Infantil São Lucas",
   "PS Infantil Menino Jesus",
   "Maternidade Santa Joana",
   "Do meu Coração"
+];
+
+const SHIFT_HOSPITAL_SUGGESTIONS = DEFAULT_WORK_LOCATIONS;
+
+const DEFAULT_WORK_TYPES = [
+  "Plantão em Maternidade",
+  "Plantão em Hospital",
+  "Serviço Público",
+  "Clínica",
+  "Consultório Particular",
+  "Home Care / Domiciliar",
+  "Telemedicina",
+  "Sobreaviso"
 ];
 
 const SHIFT_TYPES = [
@@ -353,6 +489,53 @@ function calculateExpectedPaymentDate(shiftDate, lagMonths = 3, customPaymentDat
 }
 
 /**
+ * Calculates installments according to pediatric rule:
+ * 80% in 60 days (D+60), remaining 20% in 30 days after that (D+90). Total 100% in 90 days.
+ * @param {string} shiftDate 'YYYY-MM-DD'
+ * @param {number} netValue
+ * @param {string|null} customPaymentDate
+ * @returns {Array<{number: number, percent: number, dueDate: string, value: number, status: string, paidDate: string|null}>}
+ */
+function calculateShiftInstallments(shiftDate, netValue, customPaymentDate = null) {
+  const numNet = Number(netValue) || 0;
+  if (customPaymentDate && typeof customPaymentDate === "string" && customPaymentDate.trim() !== "") {
+    return [
+      {
+        number: 1,
+        percent: 100,
+        dueDate: customPaymentDate.trim(),
+        value: numNet,
+        status: "pending",
+        paidDate: null
+      }
+    ];
+  }
+  const d60 = addMonths(shiftDate, 2);
+  const d90 = addMonths(shiftDate, 3);
+  const part1 = Math.round(numNet * 0.80 * 100) / 100;
+  const part2 = Math.round((numNet - part1) * 100) / 100;
+
+  return [
+    {
+      number: 1,
+      percent: 80,
+      dueDate: d60,
+      value: part1,
+      status: "pending",
+      paidDate: null
+    },
+    {
+      number: 2,
+      percent: 20,
+      dueDate: d90,
+      value: part2,
+      status: "pending",
+      paidDate: null
+    }
+  ];
+}
+
+/**
  * Formats a Date object to YYYY-MM-DD in local time
  * @param {Date|string} referenceDate
  * @returns {string} YYYY-MM-DD
@@ -376,6 +559,44 @@ function getLocalDateString(referenceDate = new Date()) {
  * @returns {{status: 'pending'|'received'|'delayed', label: string, delayDays: number, isDelayed: boolean}}
  */
 function evaluateShiftStatus(shift, referenceDate = new Date()) {
+  const refDateStr = getLocalDateString(referenceDate);
+
+  // If this item is a specific installment (e.g. from cash flow radar)
+  if (shift.isInstallment) {
+    if (shift.installmentStatus === "received" || shift.status === "received") {
+      const paidLabel = shift.paidDate ? `Recebido em ${formatDateBR(shift.paidDate)}` : "Recebido";
+      return {
+        status: "received",
+        label: paidLabel,
+        delayDays: 0,
+        isDelayed: false
+      };
+    }
+    const dueDateStr = shift.installmentDueDate || shift.expectedPaymentDate;
+    if (refDateStr > dueDateStr) {
+      const [y1, m1, d1] = refDateStr.split("-").map(Number);
+      const [y2, m2, d2] = dueDateStr.split("-").map(Number);
+      const utc1 = Date.UTC(y1, m1 - 1, d1);
+      const utc2 = Date.UTC(y2, m2 - 1, d2);
+      const delayDays = Math.max(1, Math.round((utc1 - utc2) / (1000 * 60 * 60 * 24)));
+      return {
+        status: "delayed",
+        label: `Atrasado (+${delayDays}d)`,
+        delayDays,
+        isDelayed: true
+      };
+    }
+    const percent = shift.installmentPercent || (shift.installmentNumber === 1 ? 80 : 20);
+    const daysLabel = shift.installmentNumber === 1 ? '60 dias' : '90 dias';
+    return {
+      status: "pending",
+      label: `Previsão: ${formatDateBR(dueDateStr)} (${percent}% em ${daysLabel})`,
+      delayDays: 0,
+      isDelayed: false
+    };
+  }
+
+  // Full shift evaluation
   if (shift.status === "received" || shift.isPaid === true) {
     const paidLabel = shift.paidDate ? `Recebido em ${formatDateBR(shift.paidDate)}` : "Recebido";
     return {
@@ -386,11 +607,51 @@ function evaluateShiftStatus(shift, referenceDate = new Date()) {
     };
   }
 
-  const refDateStr = getLocalDateString(referenceDate);
-  const expectedStr = shift.expectedPaymentDate;
+  // Check if shift has split installments with pending delay
+  if (shift.splitPayment && Array.isArray(shift.installments) && shift.installments.length > 0) {
+    const allRecv = shift.installments.every(i => i.status === "received");
+    if (allRecv) {
+      const paidLabel = shift.paidDate ? `Recebido em ${formatDateBR(shift.paidDate)}` : "Recebido";
+      return { status: "received", label: paidLabel, delayDays: 0, isDelayed: false };
+    }
 
+    // Find earliest overdue pending installment
+    const overdueInst = shift.installments.find(i => i.status !== "received" && refDateStr > i.dueDate);
+    if (overdueInst) {
+      const [y1, m1, d1] = refDateStr.split("-").map(Number);
+      const [y2, m2, d2] = overdueInst.dueDate.split("-").map(Number);
+      const utc1 = Date.UTC(y1, m1 - 1, d1);
+      const utc2 = Date.UTC(y2, m2 - 1, d2);
+      const delayDays = Math.max(1, Math.round((utc1 - utc2) / (1000 * 60 * 60 * 24)));
+      return {
+        status: "delayed",
+        label: `Atrasado (+${delayDays}d)`,
+        delayDays,
+        isDelayed: true
+      };
+    }
+
+    const anyRecv = shift.installments.some(i => i.status === "received");
+    if (anyRecv) {
+      const pendingInst = shift.installments.find(i => i.status !== "received");
+      return {
+        status: "partial",
+        label: pendingInst ? `Parcial (restante em ${formatDateBR(pendingInst.dueDate)})` : "Parcial",
+        delayDays: 0,
+        isDelayed: false
+      };
+    }
+
+    return {
+      status: "pending",
+      label: `Previsão: 80% D+60 • 20% D+90`,
+      delayDays: 0,
+      isDelayed: false
+    };
+  }
+
+  const expectedStr = shift.expectedPaymentDate;
   if (refDateStr > expectedStr) {
-    // Calculate calendar days delayed using UTC timestamps to prevent DST anomalies
     const [y1, m1, d1] = refDateStr.split("-").map(Number);
     const [y2, m2, d2] = expectedStr.split("-").map(Number);
     const utc1 = Date.UTC(y1, m1 - 1, d1);
@@ -447,9 +708,15 @@ function getInitialData() {
     doctorCrm: "CRM-SP • Pediatria",
     monthlyBudgetLimit: 10000,
     monthlyIncomeGoal: 25000,
+    workLocations: [...DEFAULT_WORK_LOCATIONS],
+    workTypes: [...DEFAULT_WORK_TYPES],
+    activeWorkTypes: ["Plantão em Maternidade", "Plantão em Hospital", "Serviço Público"],
+    customExpenseCategories: [],
+    defaultTaxRate: 15,
     fixedSalaries: [],
     shifts: [],
-    expenses: []
+    expenses: [],
+    trash: []
   };
 }
 
@@ -463,6 +730,15 @@ function getDemoData() {
     doctorCrm: "CRM-SP 214.890 • RQE 98.412",
     monthlyBudgetLimit: 12000,
     monthlyIncomeGoal: 25000,
+    workLocations: [...DEFAULT_WORK_LOCATIONS],
+    workTypes: [...DEFAULT_WORK_TYPES],
+    activeWorkTypes: ["Plantão em Maternidade", "Plantão em Hospital", "Serviço Público"],
+    customExpenseCategories: [
+      { id: "cat_demo_1", name: "Contador", scope: "pj", color: "#7E57C2", icon: "calculate" },
+      { id: "cat_demo_2", name: "Mercantil/Mercado", scope: "pf", color: "#FF5252", icon: "restaurant" }
+    ],
+    defaultTaxRate: 15,
+    trash: [],
     fixedSalaries: [
       { id: "s1", description: "Pediatra Consultório", value: 8500, dayOfMonth: 5 }
     ],
@@ -723,7 +999,7 @@ class PediatricStore {
     );
 
     const grossValue = Number(shift.grossValue) || 0;
-    const taxRegime = shift.taxRegime || "pj_presumido";
+    const taxRegime = shift.taxRegime || "Simples Nacional (6%)";
     const regLower = String(taxRegime).toLowerCase();
     let defaultRate = 0.15;
     if (regLower.includes("simples")) defaultRate = 0.06;
@@ -733,21 +1009,31 @@ class PediatricStore {
     let taxRateVal = shift.taxRate !== undefined ? Number(shift.taxRate) : defaultRate;
     const effectiveDecimalRate = taxRateVal > 1 ? (taxRateVal / 100) : taxRateVal;
     const defaultNet = grossValue * (1 - effectiveDecimalRate);
+    const netValue = shift.netValue !== undefined ? Number(shift.netValue) : defaultNet;
+
+    // Pediatric standard formula: 80% in 60 days (D+60) and 20% in 90 days (D+90)
+    const isSplit = shift.splitPayment !== false && !shift.customPaymentDate && (!shift.paymentLagMonths || Number(shift.paymentLagMonths) === 3);
+    const installments = isSplit
+      ? calculateShiftInstallments(shift.shiftDate, netValue, shift.customPaymentDate)
+      : (shift.installments || null);
 
     const newShift = {
       id: shift.id || "sh_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
       hospital: shift.hospital.trim(),
       shiftDate: shift.shiftDate,
       shiftType: shift.shiftType || "12h Diurno",
+      workType: shift.workType || "Plantão em Maternidade",
       sector: shift.sector || "UTI Neonatal",
       grossValue,
-      netValue: shift.netValue !== undefined ? Number(shift.netValue) : defaultNet,
+      netValue,
       taxRegime,
       taxRate: taxRateVal,
       notes: shift.notes ? String(shift.notes).trim() : "",
       paymentLagMonths: lagMonths,
       customPaymentDate: shift.customPaymentDate || null,
       expectedPaymentDate,
+      splitPayment: isSplit,
+      installments,
       status: shift.status || "pending",
       paidDate: shift.paidDate || null
     };
@@ -772,13 +1058,25 @@ class PediatricStore {
       : current.customPaymentDate;
 
     const expectedPaymentDate = calculateExpectedPaymentDate(shiftDate, lagMonths, customDate);
+    const netValue = updates.netValue !== undefined ? Number(updates.netValue) : current.netValue;
+
+    const isSplit = updates.splitPayment !== undefined
+      ? Boolean(updates.splitPayment)
+      : (current.splitPayment !== false && !customDate && (!lagMonths || Number(lagMonths) === 3));
+
+    const installments = isSplit
+      ? calculateShiftInstallments(shiftDate, netValue, customDate)
+      : (updates.installments || null);
 
     this.data.shifts[index] = {
       ...current,
       ...updates,
+      netValue,
       paymentLagMonths: lagMonths,
       customPaymentDate: customDate,
-      expectedPaymentDate
+      expectedPaymentDate,
+      splitPayment: isSplit,
+      installments: updates.installments || installments
     };
 
     this.save();
@@ -786,10 +1084,24 @@ class PediatricStore {
   }
 
   deleteShift(id) {
-    const prevLen = this.data.shifts.length;
+    const shift = this.data.shifts.find(s => s.id === id);
+    if (!shift) return false;
+
+    if (!Array.isArray(this.data.trash)) this.data.trash = [];
+    this.saveBackup();
+    this.data.trash.unshift({
+      id: "trash_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+      originalId: shift.id,
+      itemType: "shift",
+      item: JSON.parse(JSON.stringify(shift)),
+      deletedAt: new Date().toISOString(),
+      label: `Plantão: ${shift.hospital} (${formatDateBR(shift.shiftDate)}) - ${formatCurrency(shift.netValue)}`
+    });
+    if (this.data.trash.length > 50) this.data.trash.pop();
+
     this.data.shifts = this.data.shifts.filter(s => s.id !== id);
     this.save();
-    return this.data.shifts.length < prevLen;
+    return true;
   }
 
   markShiftAsReceived(id, paidDate = null) {
@@ -799,6 +1111,45 @@ class PediatricStore {
     let dateToday = paidDate || getLocalDateString(new Date());
     shift.status = "received";
     shift.paidDate = dateToday;
+    if (Array.isArray(shift.installments)) {
+      shift.installments.forEach(inst => {
+        inst.status = "received";
+        inst.paidDate = inst.paidDate || dateToday;
+      });
+    }
+    this.save();
+    return shift;
+  }
+
+  toggleShiftInstallment(shiftId, installmentNumber, paidDate = null) {
+    const shift = this.data.shifts.find(s => s.id === shiftId);
+    if (!shift || !Array.isArray(shift.installments)) return null;
+
+    const inst = shift.installments.find(i => i.number === installmentNumber);
+    if (!inst) return null;
+
+    const dateToday = paidDate || getLocalDateString(new Date());
+    if (inst.status === "received") {
+      inst.status = "pending";
+      inst.paidDate = null;
+    } else {
+      inst.status = "received";
+      inst.paidDate = dateToday;
+    }
+
+    const allReceived = shift.installments.every(i => i.status === "received");
+    const anyReceived = shift.installments.some(i => i.status === "received");
+    if (allReceived) {
+      shift.status = "received";
+      shift.paidDate = dateToday;
+    } else if (anyReceived) {
+      shift.status = "partial";
+      shift.paidDate = null;
+    } else {
+      shift.status = "pending";
+      shift.paidDate = null;
+    }
+
     this.save();
     return shift;
   }
@@ -809,6 +1160,12 @@ class PediatricStore {
 
     shift.status = "pending";
     shift.paidDate = null;
+    if (Array.isArray(shift.installments)) {
+      shift.installments.forEach(inst => {
+        inst.status = "pending";
+        inst.paidDate = null;
+      });
+    }
     this.save();
     return shift;
   }
@@ -816,10 +1173,14 @@ class PediatricStore {
   // --- Expenses Operations ---
 
   addExpense(expense) {
+    const category = expense.category || "Outros";
+    const scope = expense.scope || this.getCategoryScope(category);
+
     const newExpense = {
       id: expense.id || "e_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
       description: expense.description.trim(),
-      category: expense.category || "Outros",
+      category,
+      scope, // "pf" (vida pessoal) | "pj" (trabalho/consultório)
       type: expense.type || "variable", // "fixed" | "variable"
       value: Number(expense.value) || 0,
       dueDate: expense.dueDate,
@@ -835,9 +1196,14 @@ class PediatricStore {
     const index = this.data.expenses.findIndex(e => e.id === id);
     if (index === -1) return null;
 
+    const cat = updates.category !== undefined ? updates.category : this.data.expenses[index].category;
+    const scope = updates.scope !== undefined ? updates.scope : (this.data.expenses[index].scope || this.getCategoryScope(cat));
+
     this.data.expenses[index] = {
       ...this.data.expenses[index],
       ...updates,
+      category: cat,
+      scope,
       value: updates.value !== undefined ? Number(updates.value) : this.data.expenses[index].value
     };
 
@@ -846,10 +1212,293 @@ class PediatricStore {
   }
 
   deleteExpense(id) {
-    const prevLen = this.data.expenses.length;
+    const expense = this.data.expenses.find(e => e.id === id);
+    if (!expense) return false;
+
+    if (!Array.isArray(this.data.trash)) this.data.trash = [];
+    this.saveBackup();
+    this.data.trash.unshift({
+      id: "trash_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+      originalId: expense.id,
+      itemType: "expense",
+      item: JSON.parse(JSON.stringify(expense)),
+      deletedAt: new Date().toISOString(),
+      label: `Despesa: ${expense.description} (${formatDateBR(expense.dueDate)}) - ${formatCurrency(expense.value)}`
+    });
+    if (this.data.trash.length > 50) this.data.trash.pop();
+
     this.data.expenses = this.data.expenses.filter(e => e.id !== id);
     this.save();
-    return this.data.expenses.length < prevLen;
+    return true;
+  }
+
+  // --- Trash, History & Safety Database Operations ---
+
+  getTrash() {
+    return Array.isArray(this.data.trash) ? this.data.trash : [];
+  }
+
+  restoreFromTrash(trashId) {
+    if (!Array.isArray(this.data.trash) || this.data.trash.length === 0) return null;
+    const index = this.data.trash.findIndex(t => t.id === trashId || t.originalId === trashId);
+    if (index === -1) return null;
+
+    const entry = this.data.trash.splice(index, 1)[0];
+    if (entry.itemType === "shift") {
+      this.data.shifts.unshift(entry.item);
+    } else if (entry.itemType === "expense") {
+      this.data.expenses.unshift(entry.item);
+    } else if (entry.itemType === "salary") {
+      this.data.fixedSalaries.push(entry.item);
+    }
+    this.save();
+    return entry.item;
+  }
+
+  undoLastDelete() {
+    if (!Array.isArray(this.data.trash) || this.data.trash.length === 0) return null;
+    return this.restoreFromTrash(this.data.trash[0].id);
+  }
+
+  emptyTrash() {
+    this.data.trash = [];
+    this.save();
+    return true;
+  }
+
+  saveBackup() {
+    if (typeof localStorage !== "undefined") {
+      try {
+        localStorage.setItem(this.storageKey + "_backup", JSON.stringify(this.data));
+      } catch (e) {}
+    }
+  }
+
+  restoreBackup() {
+    if (typeof localStorage !== "undefined") {
+      try {
+        const backupStr = localStorage.getItem(this.storageKey + "_backup");
+        if (backupStr) {
+          const parsed = JSON.parse(backupStr);
+          if (parsed && Array.isArray(parsed.shifts)) {
+            this.data = parsed;
+            this.save();
+            return true;
+          }
+        }
+      } catch (e) {}
+    }
+    return false;
+  }
+
+  // --- Work Locations Operations ---
+
+  getWorkLocations() {
+    const custom = Array.isArray(this.data.workLocations) ? this.data.workLocations : [];
+    return Array.from(new Set([...DEFAULT_WORK_LOCATIONS, ...custom]));
+  }
+
+  addWorkLocation(name) {
+    if (!name || typeof name !== "string" || !name.trim()) return null;
+    const trimmed = name.trim();
+    if (!Array.isArray(this.data.workLocations)) {
+      this.data.workLocations = [...DEFAULT_WORK_LOCATIONS];
+    }
+    if (!this.data.workLocations.includes(trimmed)) {
+      this.data.workLocations.push(trimmed);
+      this.save();
+    }
+    return trimmed;
+  }
+
+  deleteWorkLocation(name) {
+    if (!Array.isArray(this.data.workLocations)) return false;
+    this.data.workLocations = this.data.workLocations.filter(loc => loc !== name);
+    this.save();
+    return true;
+  }
+
+  // --- Work Types Operations ---
+
+  getWorkTypes() {
+    const custom = Array.isArray(this.data.workTypes) ? this.data.workTypes : [];
+    return Array.from(new Set([...DEFAULT_WORK_TYPES, ...custom]));
+  }
+
+  getActiveWorkTypes() {
+    if (Array.isArray(this.data.activeWorkTypes) && this.data.activeWorkTypes.length > 0) {
+      return this.data.activeWorkTypes;
+    }
+    return ["Plantão em Maternidade", "Plantão em Hospital", "Serviço Público"];
+  }
+
+  toggleActiveWorkType(type) {
+    if (!Array.isArray(this.data.activeWorkTypes)) {
+      this.data.activeWorkTypes = ["Plantão em Maternidade", "Plantão em Hospital", "Serviço Público"];
+    }
+    const idx = this.data.activeWorkTypes.indexOf(type);
+    if (idx > -1) {
+      this.data.activeWorkTypes.splice(idx, 1);
+    } else {
+      this.data.activeWorkTypes.push(type);
+    }
+    this.save();
+    return this.data.activeWorkTypes;
+  }
+
+  // --- Expense Categories Operations ---
+
+  getCustomExpenseCategories() {
+    return Array.isArray(this.data.customExpenseCategories) ? this.data.customExpenseCategories : [];
+  }
+
+  getExpenseCategories(scope = null) {
+    const customs = this.getCustomExpenseCategories();
+    let baseList = [];
+    if (scope === "pf") {
+      baseList = [...EXPENSE_CATEGORIES_PF];
+      customs.forEach(c => {
+        if (c.scope === "pf" && !baseList.includes(c.name)) baseList.push(c.name);
+      });
+    } else if (scope === "pj") {
+      baseList = [...EXPENSE_CATEGORIES_PJ];
+      customs.forEach(c => {
+        if (c.scope === "pj" && !baseList.includes(c.name)) baseList.push(c.name);
+      });
+    } else {
+      baseList = [...EXPENSE_CATEGORIES];
+      customs.forEach(c => {
+        if (!baseList.includes(c.name)) baseList.push(c.name);
+      });
+    }
+    return baseList;
+  }
+
+  addExpenseCategory(catOrName, maybeScope = "pf", maybeColor = null, maybeIcon = null) {
+    let name = "";
+    let scope = "pf";
+    let color = null;
+    let icon = null;
+
+    if (typeof catOrName === "object" && catOrName !== null) {
+      name = catOrName.name || "";
+      scope = catOrName.scope || "pf";
+      color = catOrName.color || null;
+      icon = catOrName.icon || null;
+    } else if (typeof catOrName === "string") {
+      name = catOrName;
+      scope = maybeScope || "pf";
+      color = maybeColor;
+      icon = maybeIcon;
+    }
+
+    if (!name || typeof name !== "string" || !name.trim()) return null;
+    const trimmedName = name.trim();
+    const normalizedScope = String(scope).toLowerCase() === "pj" ? "pj" : "pf";
+
+    if (!Array.isArray(this.data.customExpenseCategories)) {
+      this.data.customExpenseCategories = [];
+    }
+
+    const existing = this.data.customExpenseCategories.find(
+      c => c.name.toLowerCase() === trimmedName.toLowerCase()
+    );
+
+    if (existing) {
+      existing.scope = normalizedScope;
+      if (color) existing.color = color;
+      if (icon) existing.icon = icon;
+      this.save();
+      return existing;
+    }
+
+    const newCategory = {
+      id: "cat_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+      name: trimmedName,
+      scope: normalizedScope,
+      color: color || (normalizedScope === "pj" ? "#006A62" : "#B80F55"),
+      icon: icon || (normalizedScope === "pj" ? "business" : "sell")
+    };
+
+    this.data.customExpenseCategories.push(newCategory);
+    this.save();
+    return newCategory;
+  }
+
+  updateExpenseCategory(idOrName, updates) {
+    if (!Array.isArray(this.data.customExpenseCategories) || !idOrName || !updates) return null;
+    const target = this.data.customExpenseCategories.find(
+      c => c.id === idOrName || c.name.toLowerCase() === String(idOrName).toLowerCase()
+    );
+    if (!target) return null;
+
+    const oldName = target.name;
+    if (updates.name && typeof updates.name === "string" && updates.name.trim()) {
+      target.name = updates.name.trim();
+    }
+    if (updates.scope) {
+      target.scope = String(updates.scope).toLowerCase() === "pj" ? "pj" : "pf";
+    }
+    if (updates.color) target.color = updates.color;
+    if (updates.icon) target.icon = updates.icon;
+
+    // Cascade rename to existing expenses
+    if (Array.isArray(this.data.expenses) && oldName !== target.name) {
+      this.data.expenses.forEach(exp => {
+        if (exp.category && exp.category.toLowerCase() === oldName.toLowerCase()) {
+          exp.category = target.name;
+          if (updates.scope) exp.scope = target.scope;
+        }
+      });
+    }
+
+    this.save();
+    return target;
+  }
+
+  deleteExpenseCategory(idOrName) {
+    if (!Array.isArray(this.data.customExpenseCategories) || !idOrName) return false;
+    const initialLen = this.data.customExpenseCategories.length;
+    this.data.customExpenseCategories = this.data.customExpenseCategories.filter(
+      c => c.id !== idOrName && c.name.toLowerCase() !== String(idOrName).toLowerCase()
+    );
+    const removed = this.data.customExpenseCategories.length < initialLen;
+    if (removed) {
+      this.save();
+    }
+    return removed;
+  }
+
+  getCategoryScope(category) {
+    if (!category) return "pf";
+    const customs = this.getCustomExpenseCategories();
+    const found = customs.find(c => c.name.toLowerCase() === String(category).trim().toLowerCase());
+    if (found) return found.scope;
+    return getCategoryScope(category, customs);
+  }
+
+  getCategoryColor(category) {
+    if (!category) return "#7A7E91";
+    if (CATEGORY_COLORS[category]) return CATEGORY_COLORS[category];
+    const customs = this.getCustomExpenseCategories();
+    const found = customs.find(c => c.name.toLowerCase() === String(category).trim().toLowerCase());
+    if (found && found.color) return found.color;
+    return "#B80F55";
+  }
+
+  getCategoryIcon(category) {
+    if (!category) return "receipt_long";
+    if (CATEGORY_ICONS[category]) return CATEGORY_ICONS[category];
+    const customs = this.getCustomExpenseCategories();
+    const found = customs.find(c => c.name.toLowerCase() === String(category).trim().toLowerCase());
+    if (found && found.icon) return found.icon;
+    const lower = String(category).toLowerCase();
+    if (lower.includes("mercado") || lower.includes("mercantil") || lower.includes("compras")) return "shopping_cart";
+    if (lower.includes("lanche") || lower.includes("comida") || lower.includes("restaurante")) return "restaurant";
+    if (lower.includes("contador") || lower.includes("contabil")) return "calculate";
+    if (lower.includes("farmacia") || lower.includes("remédio") || lower.includes("medicamento")) return "medication";
+    if (lower.includes("carro") || lower.includes("uber") || lower.includes("combustivel")) return "directions_car";
+    return "receipt_long";
   }
 
   toggleExpensePaid(id) {
@@ -888,8 +1537,24 @@ class PediatricStore {
   }
 
   deleteFixedSalary(id) {
+    const salary = this.data.fixedSalaries.find(s => s.id === id);
+    if (!salary) return false;
+
+    if (!Array.isArray(this.data.trash)) this.data.trash = [];
+    this.saveBackup();
+    this.data.trash.unshift({
+      id: "trash_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+      originalId: salary.id,
+      itemType: "salary",
+      item: JSON.parse(JSON.stringify(salary)),
+      deletedAt: new Date().toISOString(),
+      label: `Salário: ${salary.description} - ${formatCurrency(salary.value)}`
+    });
+    if (this.data.trash.length > 50) this.data.trash.pop();
+
     this.data.fixedSalaries = this.data.fixedSalaries.filter(s => s.id !== id);
     this.save();
+    return true;
   }
 
   upsertFixedSalary(salary) {
@@ -935,26 +1600,66 @@ class PediatricStore {
 
     // 1. REGIME DE CAIXA
     // Inflow: Fixed salary for this month + shifts realized in cash during this month.
-    // If a shift has been received, it belongs strictly to paidDate's month.
-    // If pending or delayed, it is expected in expectedPaymentDate's month.
-    // This strictly prevents duplicate counting across different months!
-    const cashShifts = evaluatedShifts.filter(s => {
-      const cashMonth = (s.currentStatus === "received" && s.paidDate)
-        ? s.paidDate.slice(0, 7)
-        : s.expectedPaymentDate.slice(0, 7);
-      return cashMonth === monthStr;
-    });
+    // If a shift uses the 80/20 formula, installments are attributed to D+60 and D+90 respectively!
+    const cashShifts = [];
+    let cashShiftsTotalNet = 0;
+    let cashShiftsReceivedNet = 0;
+    let cashShiftsPendingNet = 0;
+    let cashShiftsDelayedNet = 0;
+    const refDateStr = getLocalDateString(refDate);
 
-    const cashShiftsTotalNet = cashShifts.reduce((acc, s) => acc + (Number(s.netValue) || 0), 0);
-    const cashShiftsReceivedNet = cashShifts
-      .filter(s => s.currentStatus === "received")
-      .reduce((acc, s) => acc + (Number(s.netValue) || 0), 0);
-    const cashShiftsPendingNet = cashShifts
-      .filter(s => s.currentStatus !== "received")
-      .reduce((acc, s) => acc + (Number(s.netValue) || 0), 0);
-    const cashShiftsDelayedNet = cashShifts
-      .filter(s => s.currentStatus === "delayed")
-      .reduce((acc, s) => acc + (Number(s.netValue) || 0), 0);
+    evaluatedShifts.forEach(s => {
+      if (s.splitPayment && Array.isArray(s.installments) && s.installments.length > 0) {
+        s.installments.forEach(inst => {
+          const instCashMonth = (inst.status === "received" && inst.paidDate)
+            ? inst.paidDate.slice(0, 7)
+            : inst.dueDate.slice(0, 7);
+
+          if (instCashMonth === monthStr) {
+            const isInstDelayed = inst.status !== "received" && refDateStr > inst.dueDate;
+            const instVal = Number(inst.value) || 0;
+            cashShiftsTotalNet += instVal;
+            if (inst.status === "received") {
+              cashShiftsReceivedNet += instVal;
+            } else if (isInstDelayed) {
+              cashShiftsDelayedNet += instVal;
+              cashShiftsPendingNet += instVal;
+            } else {
+              cashShiftsPendingNet += instVal;
+            }
+            cashShifts.push({
+              ...s,
+              isInstallment: true,
+              installmentNumber: inst.number,
+              installmentPercent: inst.percent,
+              installmentValue: instVal,
+              installmentDueDate: inst.dueDate,
+              installmentStatus: inst.status,
+              isDelayed: isInstDelayed,
+              netValue: instVal
+            });
+          }
+        });
+      } else {
+        const cashMonth = (s.currentStatus === "received" && s.paidDate)
+          ? s.paidDate.slice(0, 7)
+          : s.expectedPaymentDate.slice(0, 7);
+
+        if (cashMonth === monthStr) {
+          const sVal = Number(s.netValue) || 0;
+          cashShiftsTotalNet += sVal;
+          if (s.currentStatus === "received") {
+            cashShiftsReceivedNet += sVal;
+          } else if (s.currentStatus === "delayed") {
+            cashShiftsDelayedNet += sVal;
+            cashShiftsPendingNet += sVal;
+          } else {
+            cashShiftsPendingNet += sVal;
+          }
+          cashShifts.push(s);
+        }
+      }
+    });
 
     const cashTotalInflow = fixedSalariesTotal + cashShiftsTotalNet;
     const cashRealizedInflow = fixedSalariesTotal + cashShiftsReceivedNet;
@@ -986,22 +1691,33 @@ class PediatricStore {
 
     // Expense breakdown by category for this month
     const expensesByCategory = {};
-    EXPENSE_CATEGORIES.forEach(cat => {
+    const availableCategories = this.getExpenseCategories();
+    availableCategories.forEach(cat => {
       expensesByCategory[cat] = 0;
     });
     cashExpenses.forEach(e => {
-      const cat = expensesByCategory[e.category] !== undefined ? e.category : "Outros";
+      const cat = e.category || "Outros";
       expensesByCategory[cat] = (expensesByCategory[cat] || 0) + (Number(e.value) || 0);
+    });
+
+    let cashExpensesPF = 0;
+    let cashExpensesPJ = 0;
+    cashExpenses.forEach(e => {
+      const scope = e.scope || this.getCategoryScope(e.category);
+      if (scope === "pf") cashExpensesPF += (Number(e.value) || 0);
+      else cashExpensesPJ += (Number(e.value) || 0);
     });
 
     const categoryBreakdown = Object.entries(expensesByCategory).map(([category, amount]) => {
       const percentage = cashExpensesTotal > 0 ? (amount / cashExpensesTotal) * 100 : 0;
+      const scope = this.getCategoryScope(category);
       return {
         category,
+        scope,
         amount,
         percentage: Number(percentage.toFixed(1)),
-        color: CATEGORY_COLORS[category] || "#CE93D8",
-        icon: CATEGORY_ICONS[category] || "receipt_long"
+        color: this.getCategoryColor(category),
+        icon: this.getCategoryIcon(category)
       };
     }).filter(c => c.amount > 0);
 
@@ -1063,6 +1779,10 @@ class PediatricStore {
         total: cashExpensesTotal,
         paid: cashExpensesPaid,
         pending: cashExpensesPending,
+        totalPF: cashExpensesPF,
+        totalPJ: cashExpensesPJ,
+        pfPercent: cashExpensesTotal > 0 ? Number(((cashExpensesPF / cashExpensesTotal) * 100).toFixed(1)) : 0,
+        pjPercent: cashExpensesTotal > 0 ? Number(((cashExpensesPJ / cashExpensesTotal) * 100).toFixed(1)) : 0,
         categoryBreakdown,
         budgetLimit: this.data.monthlyBudgetLimit || 12000,
         budgetUsagePercent: cashExpensesTotal > 0
@@ -1096,17 +1816,35 @@ class PediatricStore {
       let pendingAmount = 0;
 
       this.data.shifts.forEach(s => {
-        const payMonth = (s.status === "received" && s.paidDate)
-          ? s.paidDate.slice(0, 7)
-          : s.expectedPaymentDate.slice(0, 7);
+        if (s.splitPayment && Array.isArray(s.installments) && s.installments.length > 0) {
+          s.installments.forEach(inst => {
+            const payMonth = (inst.status === "received" && inst.paidDate)
+              ? inst.paidDate.slice(0, 7)
+              : inst.dueDate.slice(0, 7);
 
-        if (payMonth === mStr) {
-          const val = Number(s.netValue) || 0;
-          shiftInflow += val;
-          if (s.status === "received") {
-            receivedAmount += val;
-          } else {
-            pendingAmount += val;
+            if (payMonth === mStr) {
+              const val = Number(inst.value) || 0;
+              shiftInflow += val;
+              if (inst.status === "received") {
+                receivedAmount += val;
+              } else {
+                pendingAmount += val;
+              }
+            }
+          });
+        } else {
+          const payMonth = (s.status === "received" && s.paidDate)
+            ? s.paidDate.slice(0, 7)
+            : s.expectedPaymentDate.slice(0, 7);
+
+          if (payMonth === mStr) {
+            const val = Number(s.netValue) || 0;
+            shiftInflow += val;
+            if (s.status === "received") {
+              receivedAmount += val;
+            } else {
+              pendingAmount += val;
+            }
           }
         }
       });
@@ -1135,6 +1873,7 @@ class PediatricStore {
     const refDate = referenceDate instanceof Date
       ? referenceDate
       : new Date(String(referenceDate) + "T00:00:00");
+    const refDateStr = getLocalDateString(refDate);
 
     let totalPending = 0;
     let totalDelayed = 0;
@@ -1144,22 +1883,35 @@ class PediatricStore {
     let d60Sum = 0;
     let d90Sum = 0;
 
-    const evaluated = this.data.shifts.map(s => {
-      const evaluation = evaluateShiftStatus(s, refDate);
-      return { ...s, ...evaluation };
-    });
-
-    evaluated.forEach(s => {
-      if (s.status === "delayed") {
-        totalDelayed += Number(s.netValue) || 0;
-        countDelayed++;
-      } else if (s.status === "pending") {
-        const val = Number(s.netValue) || 0;
-        totalPending += val;
-        countPending++;
-        if (s.paymentLagMonths === 1) d30Sum += val;
-        else if (s.paymentLagMonths === 2) d60Sum += val;
-        else d90Sum += val;
+    this.data.shifts.forEach(s => {
+      if (s.splitPayment && Array.isArray(s.installments) && s.installments.length > 0) {
+        s.installments.forEach(inst => {
+          const val = Number(inst.value) || 0;
+          if (inst.status !== "received") {
+            if (refDateStr > inst.dueDate) {
+              totalDelayed += val;
+              countDelayed++;
+            } else {
+              totalPending += val;
+              countPending++;
+              if (inst.percent === 80) d60Sum += val;
+              else d90Sum += val;
+            }
+          }
+        });
+      } else {
+        const ev = evaluateShiftStatus(s, refDate);
+        if (ev.status === "delayed") {
+          totalDelayed += Number(s.netValue) || 0;
+          countDelayed++;
+        } else if (ev.status === "pending") {
+          const val = Number(s.netValue) || 0;
+          totalPending += val;
+          countPending++;
+          if (s.paymentLagMonths === 1) d30Sum += val;
+          else if (s.paymentLagMonths === 2) d60Sum += val;
+          else d90Sum += val;
+        }
       }
     });
 
@@ -1173,6 +1925,114 @@ class PediatricStore {
       d90Sum,
       totalToReceive: totalPending + totalDelayed,
       totalCount: countPending + countDelayed
+    };
+  }
+
+  /**
+   * Calculates Month-over-Month (MoM) expense variation comparing current month to previous month.
+   * @param {string} monthStr 'YYYY-MM'
+   * @param {string|null} scopeFilter 'pf' | 'pj' | 'fixa' | 'variavel' | null
+   * @returns {object}
+   */
+  getMonthOverMonthExpenseVariation(monthStr, scopeFilter = null) {
+    const [y, m] = monthStr.split("-").map(Number);
+    const prevMonthDate = new Date(y, m - 2, 1);
+    const prevYear = prevMonthDate.getFullYear();
+    const prevMonthNum = prevMonthDate.getMonth() + 1;
+    const prevMonthStr = `${prevYear}-${String(prevMonthNum).padStart(2, "0")}`;
+
+    let currentExpenses = this.data.expenses.filter(e => e.dueDate.startsWith(monthStr));
+    let prevExpenses = this.data.expenses.filter(e => e.dueDate.startsWith(prevMonthStr));
+
+    if (scopeFilter && scopeFilter !== "all") {
+      if (scopeFilter === "pf" || scopeFilter === "pj") {
+        currentExpenses = currentExpenses.filter(e => (e.scope || getCategoryScope(e.category)) === scopeFilter);
+        prevExpenses = prevExpenses.filter(e => (e.scope || getCategoryScope(e.category)) === scopeFilter);
+      } else if (scopeFilter === "fixa") {
+        currentExpenses = currentExpenses.filter(e => e.type === "fixed");
+        prevExpenses = prevExpenses.filter(e => e.type === "fixed");
+      } else if (scopeFilter === "variavel") {
+        currentExpenses = currentExpenses.filter(e => e.type === "variable");
+        prevExpenses = prevExpenses.filter(e => e.type === "variable");
+      }
+    }
+
+    const currentTotal = currentExpenses.reduce((sum, e) => sum + (Number(e.value) || 0), 0);
+    const prevTotal = prevExpenses.reduce((sum, e) => sum + (Number(e.value) || 0), 0);
+
+    const diffValue = currentTotal - prevTotal;
+    const diffPercent = prevTotal > 0
+      ? Number(((diffValue / prevTotal) * 100).toFixed(1))
+      : (currentTotal > 0 ? 100 : 0);
+
+    let currentPF = 0;
+    let currentPJ = 0;
+    currentExpenses.forEach(e => {
+      const scope = e.scope || this.getCategoryScope(e.category);
+      if (scope === "pf") currentPF += (Number(e.value) || 0);
+      else currentPJ += (Number(e.value) || 0);
+    });
+
+    let prevPF = 0;
+    let prevPJ = 0;
+    prevExpenses.forEach(e => {
+      const scope = e.scope || this.getCategoryScope(e.category);
+      if (scope === "pf") prevPF += (Number(e.value) || 0);
+      else prevPJ += (Number(e.value) || 0);
+    });
+
+    let categoriesList = this.getExpenseCategories(scopeFilter);
+    const catSet = new Set(categoriesList);
+    currentExpenses.forEach(e => {
+      const s = e.scope || this.getCategoryScope(e.category);
+      if (!scopeFilter || scopeFilter === "all" || s === scopeFilter) {
+        if (e.category) catSet.add(e.category);
+      }
+    });
+    prevExpenses.forEach(e => {
+      const s = e.scope || this.getCategoryScope(e.category);
+      if (!scopeFilter || scopeFilter === "all" || s === scopeFilter) {
+        if (e.category) catSet.add(e.category);
+      }
+    });
+    categoriesList = Array.from(catSet);
+
+    const categoryComparison = categoriesList.map(cat => {
+      const curCat = currentExpenses.filter(e => e.category === cat).reduce((s, e) => s + (Number(e.value) || 0), 0);
+      const prevCat = prevExpenses.filter(e => e.category === cat).reduce((s, e) => s + (Number(e.value) || 0), 0);
+      const catDiff = curCat - prevCat;
+      const catPercent = prevCat > 0
+        ? Number(((catDiff / prevCat) * 100).toFixed(1))
+        : (curCat > 0 ? 100 : 0);
+      const scope = this.getCategoryScope(cat);
+
+      return {
+        category: cat,
+        scope,
+        currentAmount: curCat,
+        previousAmount: prevCat,
+        diffValue: catDiff,
+        diffPercent: catPercent,
+        color: this.getCategoryColor(cat),
+        icon: this.getCategoryIcon(cat)
+      };
+    }).filter(c => c.currentAmount > 0 || c.previousAmount > 0);
+
+    return {
+      currentMonthStr: monthStr,
+      prevMonthStr,
+      currentTotal,
+      prevTotal,
+      diffValue,
+      diffPercent,
+      isIncrease: diffValue > 0,
+      currentPF,
+      currentPJ,
+      prevPF,
+      prevPJ,
+      pfPercent: currentTotal > 0 ? Number(((currentPF / currentTotal) * 100).toFixed(1)) : 0,
+      pjPercent: currentTotal > 0 ? Number(((currentPJ / currentTotal) * 100).toFixed(1)) : 0,
+      categoryComparison
     };
   }
 
@@ -1453,7 +2313,8 @@ class PediatricStore {
     const lines = [];
 
     // Header metadata
-    lines.push(`"EXTRATO FINANCEIRO & PRODUCAO MEDICA - PEDIATRIA CHIC"`);
+    lines.push(`"EXTRATO FINANCEIRO & PRODUCAO MEDICA - FINANÇAS PEDIATRIA"`);
+    lines.push(`"Desenvolvedor:";"${APP_CREATOR.signature}"`);
     lines.push(`"Medica:";"${this.data.doctorName}"`);
     lines.push(`"Especialidade:";"${this.data.doctorTitle}"`);
     lines.push(`"CRM / Registro:";"${this.data.doctorCrm || 'CRM-SP'}"`);
@@ -1461,7 +2322,7 @@ class PediatricStore {
     lines.push("");
 
     // Financial Summary (Cleaned semicolons inside quotes)
-    lines.push(`"RESUMO FINANCEIRO (REGIME DE CAIXA D+90)"`);
+    lines.push(`"RESUMO FINANCEIRO (REGIME DE CAIXA D+60 / D+90)"`);
     lines.push(`"Total Entradas em Caixa (R$)";"${report.caixa.totalInflow.toFixed(2).replace('.', ',')}"`);
     lines.push(`"Entradas Efetivamente Recebidas (R$)";"${report.caixa.realizedInflow.toFixed(2).replace('.', ',')}"`);
     lines.push(`"Despesas do Mes (R$)";"${report.expenses.total.toFixed(2).replace('.', ',')}"`);
@@ -1470,7 +2331,17 @@ class PediatricStore {
     lines.push("");
 
     const targetShifts = options.onlyMonth
-      ? this.data.shifts.filter(s => s.shiftDate.startsWith(mStr) || s.expectedPaymentDate.startsWith(mStr) || (s.paidDate && s.paidDate.startsWith(mStr)))
+      ? this.data.shifts.filter(s => {
+          if (s.shiftDate.startsWith(mStr)) return true;
+          if (s.expectedPaymentDate && s.expectedPaymentDate.startsWith(mStr)) return true;
+          if (s.paidDate && s.paidDate.startsWith(mStr)) return true;
+          if (s.splitPayment && Array.isArray(s.installments)) {
+            return s.installments.some(inst =>
+              inst.dueDate.startsWith(mStr) || (inst.paidDate && inst.paidDate.startsWith(mStr))
+            );
+          }
+          return false;
+        })
       : this.data.shifts;
 
     const targetExpenses = options.onlyMonth
@@ -1479,10 +2350,26 @@ class PediatricStore {
 
     // Shifts
     lines.push(`"PLANTOES E ESCALAS"`);
-    lines.push(`"Data Trabalhada";"Hospital";"Setor";"Escala";"Bruto (R$)";"Liquido (R$)";"Prazo";"Data Vencimento D+90";"Status";"Data Pagamento";"Observacoes"`);
+    lines.push(`"Data Trabalhada";"Hospital";"Setor";"Escala";"Bruto (R$)";"Liquido (R$)";"Prazo";"Data Vencimento Prevista";"Status";"Data Pagamento";"Observacoes"`);
     const refDate = options.referenceDate || new Date();
     targetShifts.forEach(s => {
       const ev = evaluateShiftStatus(s, refDate);
+      let statusLabel = ev.status === 'received' ? 'Recebido' : ev.status === 'delayed' ? 'Em Atraso' : ev.status === 'partial' ? 'Parcial' : 'Pendente';
+      let dueLabel = formatDateBR(s.expectedPaymentDate);
+      if (s.splitPayment && Array.isArray(s.installments) && options.onlyMonth) {
+        const instInMonth = s.installments.find(i => i.dueDate.startsWith(mStr));
+        if (instInMonth) {
+          const instEv = evaluateShiftStatus({
+            ...s,
+            isInstallment: true,
+            installmentDueDate: instInMonth.dueDate,
+            installmentStatus: instInMonth.status,
+            paidDate: instInMonth.paidDate
+          }, refDate);
+          dueLabel = `${formatDateBR(instInMonth.dueDate)} (${instInMonth.percent}%)`;
+          statusLabel = instEv.status === 'received' ? 'Recebido' : instEv.status === 'delayed' ? 'Em Atraso' : 'Pendente';
+        }
+      }
       lines.push([
         `"${formatDateBR(s.shiftDate)}"`,
         `"${s.hospital}"`,
@@ -1490,9 +2377,9 @@ class PediatricStore {
         `"${s.shiftType}"`,
         `"${Number(s.grossValue || 0).toFixed(2).replace('.', ',')}"`,
         `"${Number(s.netValue || 0).toFixed(2).replace('.', ',')}"`,
-        `"D+${(s.paymentLagMonths || 3) * 30}"`,
-        `"${formatDateBR(s.expectedPaymentDate)}"`,
-        `"${ev.status === 'received' ? 'Recebido' : ev.status === 'delayed' ? 'Em Atraso' : 'Pendente'}"`,
+        `"${s.splitPayment ? 'D+60 (80%) / D+90 (20%)' : `D+${(s.paymentLagMonths || 3) * 30}`}"`,
+        `"${dueLabel}"`,
+        `"${statusLabel}"`,
         `"${s.paidDate ? formatDateBR(s.paidDate) : '-'}"`,
         `"${(s.notes || '').replace(/"/g, '""')}"`
       ].join(";"));
@@ -1525,21 +2412,44 @@ class PediatricStore {
     const refDateStr = getLocalDateString(referenceDate);
     const notifications = [];
 
-    // 1. Check Delayed Shifts
+    // 1. Check Delayed Shifts & Split Installments
     this.data.shifts.forEach(s => {
-      const ev = evaluateShiftStatus(s, referenceDate);
-      if (ev.status === "delayed") {
-        notifications.push({
-          id: `delayed_${s.id}`,
-          type: "delayed_shift",
-          priority: "high",
-          icon: "warning",
-          color: "#FF7043",
-          title: `Repasse Atrasado: ${s.hospital}`,
-          message: `O valor de ${formatCurrency(s.netValue)} venceu em ${formatDateBR(s.expectedPaymentDate)} (${ev.label}).`,
-          actionLabel: "Cobrar Faturamento",
-          data: s
+      if (s.splitPayment && Array.isArray(s.installments) && s.installments.length > 0) {
+        s.installments.forEach(inst => {
+          if (inst.status !== "received" && refDateStr > inst.dueDate) {
+            const [y1, m1, d1] = refDateStr.split("-").map(Number);
+            const [y2, m2, d2] = inst.dueDate.split("-").map(Number);
+            const utc1 = Date.UTC(y1, m1 - 1, d1);
+            const utc2 = Date.UTC(y2, m2 - 1, d2);
+            const delayDays = Math.max(1, Math.round((utc1 - utc2) / (1000 * 60 * 60 * 24)));
+            notifications.push({
+              id: `delayed_${s.id}_inst_${inst.number}`,
+              type: "delayed_shift",
+              priority: "high",
+              icon: "warning",
+              color: "#FF7043",
+              title: `Repasse Atrasado: ${s.hospital} (${inst.number}ª Parcela - ${inst.percent}%)`,
+              message: `O valor de ${formatCurrency(inst.value)} venceu em ${formatDateBR(inst.dueDate)} (Atrasado +${delayDays}d).`,
+              actionLabel: "Cobrar Faturamento",
+              data: { ...s, installment: inst }
+            });
+          }
         });
+      } else {
+        const ev = evaluateShiftStatus(s, referenceDate);
+        if (ev.status === "delayed") {
+          notifications.push({
+            id: `delayed_${s.id}`,
+            type: "delayed_shift",
+            priority: "high",
+            icon: "warning",
+            color: "#FF7043",
+            title: `Repasse Atrasado: ${s.hospital}`,
+            message: `O valor de ${formatCurrency(s.netValue)} venceu em ${formatDateBR(s.expectedPaymentDate)} (${ev.label}).`,
+            actionLabel: "Cobrar Faturamento",
+            data: s
+          });
+        }
       }
     });
 
@@ -1549,18 +2459,36 @@ class PediatricStore {
     const in7DaysStr = getLocalDateString(in7Days);
 
     this.data.shifts.forEach(s => {
-      if (s.status === "pending" && s.expectedPaymentDate >= refDateStr && s.expectedPaymentDate <= in7DaysStr) {
-        notifications.push({
-          id: `upcoming_${s.id}`,
-          type: "upcoming_shift",
-          priority: "normal",
-          icon: "schedule",
-          color: "#7e4a8a",
-          title: `Previsão de Depósito: ${s.hospital}`,
-          message: `${formatCurrency(s.netValue)} com depósito previsto para ${formatDateBR(s.expectedPaymentDate)}.`,
-          actionLabel: "Ver Detalhes",
-          data: s
+      if (s.splitPayment && Array.isArray(s.installments) && s.installments.length > 0) {
+        s.installments.forEach(inst => {
+          if (inst.status === "pending" && inst.dueDate >= refDateStr && inst.dueDate <= in7DaysStr) {
+            notifications.push({
+              id: `upcoming_${s.id}_inst_${inst.number}`,
+              type: "upcoming_shift",
+              priority: "normal",
+              icon: "schedule",
+              color: "#7e4a8a",
+              title: `Previsão de Depósito: ${s.hospital} (${inst.number}ª Parcela - ${inst.percent}%)`,
+              message: `${formatCurrency(inst.value)} com depósito previsto para ${formatDateBR(inst.dueDate)}.`,
+              actionLabel: "Ver Detalhes",
+              data: { ...s, installment: inst }
+            });
+          }
         });
+      } else {
+        if (s.status === "pending" && s.expectedPaymentDate >= refDateStr && s.expectedPaymentDate <= in7DaysStr) {
+          notifications.push({
+            id: `upcoming_${s.id}`,
+            type: "upcoming_shift",
+            priority: "normal",
+            icon: "schedule",
+            color: "#7e4a8a",
+            title: `Previsão de Depósito: ${s.hospital}`,
+            message: `${formatCurrency(s.netValue)} com depósito previsto para ${formatDateBR(s.expectedPaymentDate)}.`,
+            actionLabel: "Ver Detalhes",
+            data: s
+          });
+        }
       }
     });
 
@@ -1839,11 +2767,61 @@ function renderDonutChartSVG(categoriesData, totalExpenses) {
   return { svg, legend };
 }
 
+/**
+ * Generates an SVG bar chart comparing expenses between current and previous month.
+ * @param {object} momData result of store.getMonthOverMonthExpenseVariation(monthStr)
+ * @returns {string} SVG HTML string
+ */
+function renderMonthOverMonthChartSVG(momData) {
+  if (!momData || (!momData.currentTotal && !momData.prevTotal)) {
+    return `
+      <div class="p-4 text-center text-on-surface-variant text-[12px]">
+        Dados insuficientes para comparação mês a mês.
+      </div>
+    `;
+  }
+
+  const max = Math.max(momData.currentTotal, momData.prevTotal, 1000);
+  const curH = Math.max(8, Math.round((momData.currentTotal / max) * 100));
+  const prevH = Math.max(8, Math.round((momData.prevTotal / max) * 100));
+
+  const diffBadge = momData.isIncrease
+    ? `<span class="text-error font-bold text-[11px] flex items-center gap-0.5">▲ +${momData.diffPercent}% (+${formatCurrency(momData.diffValue)})</span>`
+    : `<span class="text-tertiary font-bold text-[11px] flex items-center gap-0.5">▼ ${momData.diffPercent}% (${formatCurrency(momData.diffValue)})</span>`;
+
+  return `
+    <div class="flex flex-col gap-3 p-4 bg-surface-container-low rounded-2xl">
+      <div class="flex items-center justify-between">
+        <span class="text-[12px] font-bold text-on-surface">Evolução Mês a Mês</span>
+        ${diffBadge}
+      </div>
+      <div class="flex items-end justify-around h-32 pt-4 px-4 border-b border-outline-variant/30">
+        <!-- Mês Anterior -->
+        <div class="flex flex-col items-center gap-1.5 flex-1 max-w-[80px]">
+          <span class="text-[10px] font-bold text-on-surface-variant">${formatCurrency(momData.prevTotal)}</span>
+          <div class="w-12 bg-surface-container-high rounded-t-xl transition-all duration-500" style="height: ${prevH}px;"></div>
+          <span class="text-[11px] font-semibold text-on-surface-variant">${momData.prevMonthStr.slice(5)}/${momData.prevMonthStr.slice(2, 4)}</span>
+        </div>
+        <!-- Mês Atual -->
+        <div class="flex flex-col items-center gap-1.5 flex-1 max-w-[80px]">
+          <span class="text-[10px] font-bold text-secondary">${formatCurrency(momData.currentTotal)}</span>
+          <div class="w-12 bg-gradient-to-t from-secondary to-primary rounded-t-xl transition-all duration-500 shadow-sm" style="height: ${curH}px;"></div>
+          <span class="text-[11px] font-bold text-secondary">${momData.currentMonthStr.slice(5)}/${momData.currentMonthStr.slice(2, 4)}</span>
+        </div>
+      </div>
+      <div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-1 px-1">
+        <span>Pessoal (PF): <strong class="text-on-surface font-semibold">${momData.pfPercent}%</strong> (${formatCurrency(momData.currentPF)})</span>
+        <span>PJ (Trabalho): <strong class="text-on-surface font-semibold">${momData.pjPercent}%</strong> (${formatCurrency(momData.currentPJ)})</span>
+      </div>
+    </div>
+  `;
+}
+
 
   // --- APPLICATION LOGIC ---
   /**
- * Pediatric Chic Financial Sanctuary - Single Page Application Engine
- * Vanilla JavaScript (ES6+ modular)
+ * Finanças Pediatria - Single Page Application Engine
+ * Mobile-First Clinical & Financial Control Architecture for Pediatricians
  */
 
 
@@ -1869,6 +2847,7 @@ class AppState {
     this.calendarSelectedDate = null;
     this.shiftSearchQuery = "";
     this.expenseFilter = "all"; // "all" | "fixa" | "variavel"
+    this.expenseScopeFilter = "all"; // "all" | "pf" | "pj"
     this.activeModalTab = "plantao"; // "plantao" | "salario" | "despesa"
     this.editingItem = null; // { type: 'shift'|'expense', id: '...' }
     this.isExpandedView = false;
@@ -1911,6 +2890,8 @@ function initDOM() {
   dom.btnTogglePrivacy = document.getElementById("btn-toggle-privacy");
   dom.headerActiveTab = document.getElementById("header-active-tab");
   dom.headerDoctorTitle = document.getElementById("header-doctor-title");
+  dom.babyOverlay = document.getElementById("baby-reaction-overlay");
+  dom.babyContent = document.getElementById("baby-reaction-content");
 }
 
 /**
@@ -1978,11 +2959,28 @@ function updatePrivacyButtonUI() {
 }
 
 /**
- * Toast notification manager
+ * Toast notification manager with optional 1-tap Undo callback
  */
-function showToast(message, icon = "favorite") {
+function showToast(message, icon = "favorite", undoCallback = null) {
   if (!dom.toast || !dom.toastMsg) return;
   dom.toastMsg.textContent = message;
+
+  const oldUndo = dom.toast.querySelector(".toast-undo-btn");
+  if (oldUndo) oldUndo.remove();
+
+  if (undoCallback && typeof undoCallback === "function") {
+    const undoBtn = document.createElement("button");
+    undoBtn.type = "button";
+    undoBtn.className = "toast-undo-btn ml-2.5 px-2.5 py-0.5 rounded-full bg-white/25 hover:bg-white/40 text-white font-bold text-[11px] underline cursor-pointer transition-all active:scale-95";
+    undoBtn.textContent = "Desfazer";
+    undoBtn.onclick = (e) => {
+      e.stopPropagation();
+      undoCallback();
+      dom.toast.classList.remove("show");
+    };
+    dom.toast.appendChild(undoBtn);
+  }
+
   const iconSpan = dom.toast.querySelector(".material-symbols-outlined");
   if (iconSpan) {
     iconSpan.setAttribute("data-icon", icon);
@@ -1995,7 +2993,92 @@ function showToast(message, icon = "favorite") {
   if (dom.toastTimeout) clearTimeout(dom.toastTimeout);
   dom.toastTimeout = setTimeout(() => {
     dom.toast.classList.remove("show");
-  }, 3200);
+    const u = dom.toast.querySelector(".toast-undo-btn");
+    if (u) u.remove();
+  }, undoCallback ? 5500 : 3200);
+}
+
+/**
+ * Delightful pediatric visual reaction for entries (baby smiling + floating hearts)
+ * or expenses (baby crying gently + caring encouragement).
+ * @param {object} params { type: 'income'|'expense', title: string, message: string, amount: number }
+ */
+function showBabyReaction({ type = 'income', title = '', message = '', amount = null } = {}) {
+  if (!dom.babyOverlay || !dom.babyContent) return;
+
+  const isIncome = type === 'income';
+  const imgSrc = isIncome ? './assets/images/baby_happy.jpg' : './assets/images/baby_crying.jpg';
+  const animClass = isIncome ? 'baby-joy-bounce' : 'baby-crying-shake';
+  const defaultTitle = isIncome ? 'Uhull! Entrada Registrada! 👶💖' : 'Despesa Registrada! 🍼🥺';
+  const defaultMsg = isIncome
+    ? 'Bebê sorridente com corações! Seu faturamento pediátrico crescendo com saúde e amor.'
+    : 'O bebê chora com a saída, mas tudo fica organizado e sob controle no seu orçamento!';
+
+  const formattedAmount = amount !== null ? formatCurrency(amount) : '';
+
+  dom.babyContent.innerHTML = `
+    <!-- Floating Hearts or Droplets -->
+    ${isIncome ? `
+      <span class="floating-heart text-[24px]" style="left: 10%; top: 15%; animation-delay: 0s;">💖</span>
+      <span class="floating-heart text-[28px]" style="left: 75%; top: 12%; animation-delay: 0.4s;">💕</span>
+      <span class="floating-heart text-[20px]" style="left: 45%; top: 8%; animation-delay: 0.8s;">✨</span>
+      <span class="floating-heart text-[22px]" style="left: 85%; top: 35%; animation-delay: 1.2s;">👶</span>
+    ` : `
+      <span class="floating-heart text-[22px]" style="left: 12%; top: 25%; animation-delay: 0s;">💧</span>
+      <span class="floating-heart text-[26px]" style="left: 78%; top: 20%; animation-delay: 0.5s;">🍼</span>
+      <span class="floating-heart text-[20px]" style="left: 50%; top: 10%; animation-delay: 1s;">🥺</span>
+    `}
+
+    <div class="w-28 h-28 mx-auto rounded-full overflow-hidden shadow-lg border-4 ${isIncome ? 'border-primary-pink' : 'border-lilac-medium'} ${animClass} relative mb-3 bg-primary-fixed flex items-center justify-center">
+      <img
+        src="${imgSrc}"
+        alt="${isIncome ? 'Bebê feliz sorrindo' : 'Bebê chorando dengoso'}"
+        class="w-full h-full object-cover"
+        onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.classList.remove('hidden');"
+      />
+      <div class="w-full h-full hidden flex items-center justify-center text-[44px]">
+        ${isIncome ? '👶💖' : '🥺🍼'}
+      </div>
+    </div>
+
+    <h3 class="font-headline text-[17px] font-bold ${isIncome ? 'text-secondary' : 'text-primary'} mb-1">
+      ${title || defaultTitle}
+    </h3>
+
+    ${formattedAmount ? `
+      <div class="text-[17px] font-extrabold text-on-surface font-display mb-1.5">
+        ${formattedAmount}
+      </div>
+    ` : ''}
+
+    <p class="text-[12px] text-on-surface-variant leading-relaxed mb-4 px-2">
+      ${message || defaultMsg}
+    </p>
+
+    <button
+      type="button"
+      id="btn-close-baby-reaction"
+      class="h-10 px-6 rounded-full bg-gradient-to-r ${isIncome ? 'from-secondary to-primary' : 'from-primary to-secondary'} text-white font-bold text-[13px] shadow-sm transition-all active:scale-95 mx-auto"
+    >
+      Continuar ✨
+    </button>
+  `;
+
+  dom.babyOverlay.classList.add("active");
+  triggerHaptic(20);
+
+  const closeReaction = () => {
+    if (dom.babyOverlay) dom.babyOverlay.classList.remove("active");
+  };
+
+  const closeBtn = document.getElementById("btn-close-baby-reaction");
+  if (closeBtn) closeBtn.onclick = closeReaction;
+  dom.babyOverlay.onclick = (e) => {
+    if (e.target === dom.babyOverlay) closeReaction();
+  };
+
+  if (dom.babyTimeout) clearTimeout(dom.babyTimeout);
+  dom.babyTimeout = setTimeout(closeReaction, 2800);
 }
 
 /**
@@ -2056,6 +3139,137 @@ function showConfirmDialog({ title, message, icon = "warning", confirmText = "Co
   document.getElementById("btn-dialog-confirm")?.addEventListener("click", () => {
     closeDialog();
     if (typeof onConfirm === "function") onConfirm();
+  });
+}
+
+/**
+ * Interactive Modal to Create or Edit Expense Category (PF / PJ)
+ */
+function openCategoryModal({ mode = "add", initialData = null, onSave, onCancel } = {}) {
+  const isEdit = mode === "edit";
+  const initName = initialData && initialData.name ? initialData.name : "";
+  const initScope = initialData && initialData.scope ? initialData.scope : "pf";
+
+  const html = `
+    <div class="p-5 flex flex-col gap-4">
+      <div class="flex items-center justify-between border-b border-purple-100 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-10 h-10 rounded-2xl bg-secondary-fixed text-secondary flex items-center justify-center font-bold">
+            ${renderIcon('category', 'text-[22px]')}
+          </div>
+          <div>
+            <h3 class="font-headline text-[16px] font-bold text-on-surface">
+              ${isEdit ? 'Editar Categoria' : 'Nova Categoria de Despesa'}
+            </h3>
+            <span class="text-[11px] text-on-surface-variant font-medium">
+              ${isEdit ? 'Atualize o nome ou escopo da categoria' : 'Ex: Contador, Mercantil/Mercado, Lanches...'}
+            </span>
+          </div>
+        </div>
+        <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container cursor-pointer" id="btn-close-cat-modal">
+          ${renderIcon('close', 'text-[18px]')}
+        </button>
+      </div>
+
+      <form id="form-category-modal" class="flex flex-col gap-3.5">
+        <div class="flex flex-col gap-1">
+          <label class="text-[12px] font-bold text-on-surface-variant">Nome da Categoria</label>
+          <div class="h-11 bg-surface-container-low rounded-2xl px-3.5 flex items-center gap-2 shadow-sm border border-transparent focus-within:border-primary focus-within:bg-white transition-all">
+            ${renderIcon('label', 'text-[18px] text-secondary')}
+            <input
+              type="text"
+              id="input-modal-cat-name"
+              class="w-full bg-transparent text-[13px] font-semibold text-on-surface focus:outline-none placeholder:text-outline"
+              placeholder="Ex: Contador, Mercantil/Mercado, Lanches..."
+              value="${initName}"
+              required
+              autofocus
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[12px] font-bold text-on-surface-variant">Escopo da Despesa</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button
+              type="button"
+              class="modal-cat-scope-btn py-2 px-3 rounded-2xl text-[12px] font-bold text-center transition-all cursor-pointer ${initScope === 'pf' ? 'bg-secondary text-white shadow-sm' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
+              data-scope="pf"
+            >
+              ${renderIcon('person', 'text-[15px] inline mr-1')} Pessoa Física (PF)
+            </button>
+            <button
+              type="button"
+              class="modal-cat-scope-btn py-2 px-3 rounded-2xl text-[12px] font-bold text-center transition-all cursor-pointer ${initScope === 'pj' ? 'bg-secondary text-white shadow-sm' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
+              data-scope="pj"
+            >
+              ${renderIcon('business', 'text-[15px] inline mr-1')} Pessoa Jurídica (PJ)
+            </button>
+          </div>
+          <input type="hidden" id="input-modal-cat-scope" value="${initScope}" />
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5 pt-2 border-t border-purple-100">
+          <button
+            type="button"
+            id="btn-cancel-cat-modal"
+            class="h-11 rounded-full bg-surface-container-low text-on-surface-variant hover:bg-surface-container font-bold text-[13px] transition-all active:scale-95 cursor-pointer"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="h-11 rounded-full bg-gradient-to-r from-secondary to-primary text-white font-bold text-[13px] flex items-center justify-center gap-1.5 shadow-sm active:scale-95 transition-all cursor-pointer"
+          >
+            ${renderIcon('check', 'text-[18px]')}
+            <span>${isEdit ? 'Salvar Alteração' : 'Criar Categoria'}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  `;
+
+  openDialog(html);
+
+  setTimeout(() => {
+    document.getElementById("input-modal-cat-name")?.focus();
+  }, 80);
+
+  const scopeBtns = document.querySelectorAll(".modal-cat-scope-btn");
+  scopeBtns.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const scope = btn.getAttribute("data-scope");
+      const hiddenInput = document.getElementById("input-modal-cat-scope");
+      if (hiddenInput) hiddenInput.value = scope;
+      scopeBtns.forEach(b => {
+        b.classList.remove("bg-secondary", "text-white", "shadow-sm");
+        b.classList.add("bg-surface-container-low", "text-on-surface-variant");
+      });
+      btn.classList.add("bg-secondary", "text-white", "shadow-sm");
+      btn.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+    });
+  });
+
+  const handleClose = () => {
+    closeDialog();
+    if (typeof onCancel === "function") onCancel();
+  };
+
+  document.getElementById("btn-close-cat-modal")?.addEventListener("click", handleClose);
+  document.getElementById("btn-cancel-cat-modal")?.addEventListener("click", handleClose);
+
+  document.getElementById("form-category-modal")?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("input-modal-cat-name")?.value.trim();
+    const scope = document.getElementById("input-modal-cat-scope")?.value || "pf";
+    if (!name) {
+      showToast("Informe o nome da categoria.", "warning");
+      return;
+    }
+    closeDialog();
+    if (typeof onSave === "function") {
+      onSave({ id: initialData?.id, name, scope });
+    }
   });
 }
 
@@ -2499,7 +3713,7 @@ function openShiftVoucherDialog(shiftId) {
       <!-- Receipt Paper Style -->
       <div class="relative bg-surface-container-low/90 p-4 rounded-3xl border border-purple-100 flex flex-col gap-3 shadow-sm">
         <div class="flex items-center justify-between">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-primary">Pediatria Chic • Recibo</span>
+          <span class="text-[11px] font-bold uppercase tracking-wider text-primary">Finanças Pediatria • Recibo</span>
           <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isPaid ? 'bg-tertiary-fixed text-on-tertiary-fixed' : 'bg-primary-fixed text-on-primary-fixed'}">
             ${isPaid ? 'COMPENSADO EM CONTA' : 'AGUARDANDO DEPÓSITO'}
           </span>
@@ -2723,6 +3937,10 @@ function openPrintableStatementDialog() {
 function openDoctorProfileDialog() {
   const storeData = state.store.data;
   const initials = (storeData.doctorName || 'Dra').replace(/^(dra?\.\s*)/i, '').trim().slice(0, 2).toUpperCase() || 'DR';
+  const allWorkTypes = state.store.getWorkTypes();
+  const activeWorkTypes = state.store.getActiveWorkTypes();
+  const workLocations = state.store.getWorkLocations();
+  const customCategories = state.store.getCustomExpenseCategories ? state.store.getCustomExpenseCategories() : [];
 
   const html = `
     <div class="p-5 flex flex-col gap-4 max-h-[85vh] overflow-y-auto">
@@ -2732,11 +3950,11 @@ function openDoctorProfileDialog() {
             ${initials}
           </div>
           <div>
-            <h3 class="font-headline text-[16px] font-bold text-on-surface">Perfil da Médica & Metas</h3>
-            <span class="text-[11px] text-primary font-semibold">Configurações Personalizadas</span>
+            <h3 class="font-headline text-[16px] font-bold text-on-surface">Perfil da Médica & Configurações</h3>
+            <span class="text-[11px] text-primary font-semibold">Atuação, Metas & Segurança</span>
           </div>
         </div>
-        <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container" id="btn-close-dialog">
+        <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container cursor-pointer" id="btn-close-dialog">
           ${renderIcon('close', 'text-[18px]')}
         </button>
       </div>
@@ -2777,6 +3995,108 @@ function openDoctorProfileDialog() {
           />
         </div>
 
+        <!-- Tipos de Atuação da Médica (Personalização - ex: ainda não atua em clínica) -->
+        <div class="flex flex-col gap-1.5 p-3 rounded-2xl bg-surface-container-low border border-purple-100">
+          <div class="flex items-center justify-between">
+            <label class="text-[12px] font-bold text-on-surface flex items-center gap-1">
+              ${renderIcon('work', 'text-[15px] text-secondary')}
+              <span>Tipos de Atuação Pediátrica</span>
+            </label>
+            <span class="text-[10px] text-on-surface-variant">Selecione suas áreas ativas</span>
+          </div>
+          <p class="text-[11px] text-on-surface-variant leading-relaxed">
+            Se você ainda não atua em clínica ou consultório, mantenha apenas as áreas em que atende hoje:
+          </p>
+          <div class="flex flex-wrap gap-1.5 pt-1">
+            ${allWorkTypes.map(type => {
+              const isActive = activeWorkTypes.includes(type);
+              return `
+                <button
+                  type="button"
+                  class="btn-toggle-work-type px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all active:scale-95 cursor-pointer ${isActive ? 'bg-secondary text-white shadow-sm' : 'bg-white text-on-surface-variant border border-outline-variant/40'}"
+                  data-work-type="${type}"
+                >
+                  ${type} ${isActive ? '✓' : ''}
+                </button>
+              `;
+            }).join('')}
+          </div>
+        </div>
+
+        <!-- Locais de Trabalho Pré-determinados -->
+        <div class="flex flex-col gap-1.5 p-3 rounded-2xl bg-surface-container-low border border-purple-100">
+          <div class="flex items-center justify-between">
+            <label class="text-[12px] font-bold text-on-surface flex items-center gap-1">
+              ${renderIcon('local_hospital', 'text-[15px] text-primary')}
+              <span>Locais de Trabalho & Maternidades</span>
+            </label>
+            <button type="button" id="btn-add-profile-location" class="text-[11px] font-bold text-primary hover:underline flex items-center gap-0.5 cursor-pointer">
+              ${renderIcon('add', 'text-[13px]')} + Novo Local
+            </button>
+          </div>
+          <div class="flex flex-wrap gap-1.5 pt-1 max-h-24 overflow-y-auto" id="profile-locations-container">
+            ${workLocations.map(loc => `
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white text-on-surface border border-outline-variant/40 flex items-center gap-1">
+                ${loc}
+              </span>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Categorias de Despesas Personalizadas (PF & PJ) -->
+        <div class="flex flex-col gap-2 p-3 rounded-2xl bg-surface-container-low border border-purple-100">
+          <div class="flex items-center justify-between">
+            <label class="text-[12px] font-bold text-on-surface flex items-center gap-1">
+              ${renderIcon('category', 'text-[15px] text-secondary')}
+              <span>Categorias de Despesas Personalizadas</span>
+            </label>
+            <button type="button" id="btn-add-profile-category" class="text-[11px] font-bold text-primary hover:underline flex items-center gap-0.5 cursor-pointer">
+              ${renderIcon('add', 'text-[13px]')} + Nova Categoria
+            </button>
+          </div>
+          <p class="text-[11px] text-on-surface-variant leading-relaxed">
+            Adicione ou edite suas próprias categorias (ex: Contador, Mercantil/Mercado, Lanches):
+          </p>
+          <div class="flex flex-col gap-1.5 pt-0.5 max-h-36 overflow-y-auto no-scrollbar" id="profile-custom-categories-container">
+            ${customCategories.length === 0 ? `
+              <div class="text-[11px] text-on-surface-variant/70 italic py-2 px-3 rounded-xl bg-white/70 border border-purple-100/60 text-center">
+                Nenhuma categoria personalizada criada ainda.<br />
+                <span class="text-primary font-semibold">Toque em "+ Nova Categoria" acima para acrescentar.</span>
+              </div>
+            ` : customCategories.map(cat => `
+              <div class="flex items-center justify-between bg-white px-3 py-2 rounded-xl border border-outline-variant/30 text-[12px] shadow-2xs">
+                <div class="flex items-center gap-2">
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-black ${cat.scope === 'pj' ? 'bg-mint-income-bg text-mint-income' : 'bg-lilac-light text-lilac-dark'}">
+                    ${cat.scope === 'pj' ? 'PJ' : 'PF'}
+                  </span>
+                  <span class="font-bold text-on-surface text-[12px]">${cat.name}</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <button
+                    type="button"
+                    class="btn-edit-profile-category p-1.5 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container transition-colors cursor-pointer"
+                    data-cat-id="${cat.id}"
+                    data-cat-name="${cat.name}"
+                    data-cat-scope="${cat.scope}"
+                    title="Editar categoria"
+                  >
+                    ${renderIcon('edit', 'text-[14px]')}
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-delete-profile-category p-1.5 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/40 transition-colors cursor-pointer"
+                    data-cat-id="${cat.id}"
+                    data-cat-name="${cat.name}"
+                    title="Excluir categoria"
+                  >
+                    ${renderIcon('delete', 'text-[14px]')}
+                  </button>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
         <div class="grid grid-cols-2 gap-3">
           <div class="flex flex-col gap-1">
             <label class="text-[12px] font-bold text-on-surface-variant">Meta Mensal (R$)</label>
@@ -2812,8 +4132,17 @@ function openDoctorProfileDialog() {
         </button>
       </form>
 
-      <!-- App Installation & Data Management -->
+      <!-- Safety, Trash & Recovery Hub -->
       <div class="pt-2 border-t border-purple-100 flex flex-col gap-2">
+        <button
+          type="button"
+          id="btn-dialog-open-trash"
+          class="h-10 w-full rounded-full bg-purple-50 hover:bg-purple-100 text-secondary font-bold text-[12px] flex items-center justify-center gap-1.5 transition-colors shadow-sm border border-secondary/20"
+        >
+          ${renderIcon('restore_from_trash', 'text-[16px]')}
+          <span>Lixeira & Restauração de Dados em 1 Toque</span>
+        </button>
+
         <button
           type="button"
           id="btn-dialog-install-pwa"
@@ -2841,11 +4170,106 @@ function openDoctorProfileDialog() {
           <span>Limpar Todos os Meus Dados</span>
         </button>
       </div>
+
+      <!-- Immutable Creator Signature Badge -->
+      <div class="p-3 rounded-2xl bg-gradient-to-r from-secondary-fixed/40 to-primary-fixed/40 border border-purple-100 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="text-[20px]">🩺💖</span>
+          <div class="flex flex-col">
+            <span class="text-[12px] font-bold text-on-surface">${APP_CREATOR.signature}</span>
+            <span class="text-[10px] text-on-surface-variant font-medium">Finanças Pediatria • Tecnologia & Cuidado</span>
+          </div>
+        </div>
+        <span class="px-2 py-0.5 rounded-full bg-secondary text-white text-[10px] font-bold">Oficial</span>
+      </div>
     </div>
   `;
   openDialog(html);
 
   document.getElementById("btn-close-dialog")?.addEventListener("click", closeDialog);
+
+  document.getElementById("btn-dialog-open-trash")?.addEventListener("click", () => {
+    closeDialog();
+    openTrashDialog();
+  });
+
+  document.querySelectorAll(".btn-toggle-work-type").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const type = btn.getAttribute("data-work-type");
+      const activeList = state.store.toggleActiveWorkType(type);
+      const isActive = activeList.includes(type);
+      if (isActive) {
+        btn.className = "btn-toggle-work-type px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all active:scale-95 bg-secondary text-white shadow-sm";
+        btn.innerHTML = `${type} ✓`;
+        showToast(`Atuação em '${type}' ativada!`);
+      } else {
+        btn.className = "btn-toggle-work-type px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all active:scale-95 bg-white text-on-surface-variant border border-outline-variant/40";
+        btn.innerHTML = type;
+        showToast(`Atuação em '${type}' desativada.`);
+      }
+    });
+  });
+
+  document.getElementById("btn-add-profile-location")?.addEventListener("click", () => {
+    const locName = prompt("Digite o nome da maternidade ou local de trabalho:");
+    if (locName && locName.trim()) {
+      state.store.addWorkLocation(locName.trim());
+      showToast(`Local '${locName.trim()}' adicionado! 🏥`);
+      openDoctorProfileDialog();
+    }
+  });
+
+  document.getElementById("btn-add-profile-category")?.addEventListener("click", () => {
+    openCategoryModal({
+      mode: "add",
+      onSave: ({ name, scope }) => {
+        state.store.addExpenseCategory({ name, scope });
+        showToast(`Categoria '${name}' adicionada com sucesso! ✨`);
+        openDoctorProfileDialog();
+      },
+      onCancel: () => {
+        openDoctorProfileDialog();
+      }
+    });
+  });
+
+  document.querySelectorAll(".btn-edit-profile-category").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const catId = btn.getAttribute("data-cat-id");
+      const catName = btn.getAttribute("data-cat-name");
+      const catScope = btn.getAttribute("data-cat-scope");
+      openCategoryModal({
+        mode: "edit",
+        initialData: { id: catId, name: catName, scope: catScope },
+        onSave: ({ id, name, scope }) => {
+          state.store.updateExpenseCategory(id, { name, scope });
+          showToast(`Categoria atualizada para '${name}'! ✨`);
+          openDoctorProfileDialog();
+        },
+        onCancel: () => {
+          openDoctorProfileDialog();
+        }
+      });
+    });
+  });
+
+  document.querySelectorAll(".btn-delete-profile-category").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const catId = btn.getAttribute("data-cat-id");
+      const catName = btn.getAttribute("data-cat-name");
+      showConfirmDialog({
+        title: "Excluir Categoria?",
+        message: `Deseja remover a categoria '${catName}'? Suas despesas existentes continuarão registradas.`,
+        isDanger: true,
+        confirmText: "Excluir",
+        onConfirm: () => {
+          state.store.deleteExpenseCategory(catId);
+          showToast(`Categoria '${catName}' removida.`);
+          openDoctorProfileDialog();
+        }
+      });
+    });
+  });
 
   document.getElementById("btn-dialog-install-pwa")?.addEventListener("click", () => {
     closeDialog();
@@ -2889,6 +4313,145 @@ function openDoctorProfileDialog() {
 }
 
 /**
+ * Trash & Safety Data Recovery Dialog (Lixeira & Histórico)
+ */
+function openTrashDialog() {
+  const trashItems = state.store.getTrash();
+
+  const html = `
+    <div class="p-5 flex flex-col gap-4 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-purple-100 pb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-9 h-9 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center">
+            ${renderIcon('restore_from_trash', 'text-[20px]')}
+          </div>
+          <div>
+            <h3 class="font-headline text-[16px] font-bold text-on-surface">Lixeira & Restauração</h3>
+            <span class="text-[11px] text-primary font-semibold">Recupere plantões e despesas com 1 toque</span>
+          </div>
+        </div>
+        <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container" id="btn-close-dialog">
+          ${renderIcon('close', 'text-[18px]')}
+        </button>
+      </div>
+
+      <!-- Quick Backup & Safety Controls -->
+      <div class="p-3 bg-surface-container-low rounded-2xl flex items-center justify-between gap-2 border border-purple-100">
+        <div class="flex flex-col">
+          <span class="text-[12px] font-bold text-on-surface">Backup de Segurança</span>
+          <span class="text-[10px] text-on-surface-variant">Proteja seus dados localmente no aparelho</span>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <button type="button" id="btn-save-backup-now" class="px-2.5 py-1 rounded-full bg-primary text-white text-[11px] font-bold shadow-sm active:scale-95 transition-all">
+            Salvar Cópia
+          </button>
+          <button type="button" id="btn-restore-backup-now" class="px-2.5 py-1 rounded-full bg-white text-secondary border border-secondary/30 text-[11px] font-bold active:scale-95 transition-all">
+            Restaurar
+          </button>
+        </div>
+      </div>
+
+      <!-- Trash Items List -->
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[12px] font-bold text-on-surface-variant">Itens Excluídos Recentemente (${trashItems.length})</span>
+          ${trashItems.length > 0 ? `
+            <button type="button" id="btn-empty-trash" class="text-[11px] font-bold text-error hover:underline">
+              Esvaziar Lixeira
+            </button>
+          ` : ''}
+        </div>
+
+        ${trashItems.length === 0 ? `
+          <div class="py-8 px-4 text-center rounded-2xl bg-surface-container-low border border-dashed border-outline-variant/50 flex flex-col items-center gap-2">
+            ${renderIcon('delete_sweep', 'text-[32px] text-outline')}
+            <span class="text-[13px] font-semibold text-on-surface">Sua lixeira está vazia!</span>
+            <span class="text-[11px] text-on-surface-variant">Quando você excluir algum plantão ou despesa, ele ficará guardado aqui para restauração imediata.</span>
+          </div>
+        ` : `
+          <div class="flex flex-col gap-2 max-h-[40vh] overflow-y-auto pr-1">
+            ${trashItems.map(item => `
+              <div class="p-3 rounded-2xl bg-surface-container-low border border-purple-100 flex items-center justify-between gap-2 shadow-sm">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-8 h-8 rounded-full ${item.itemType === 'shift' ? 'bg-secondary-fixed text-secondary' : 'bg-primary-fixed text-primary'} flex items-center justify-center shrink-0">
+                    ${renderIcon(item.itemType === 'shift' ? 'stethoscope' : 'receipt', 'text-[16px]')}
+                  </div>
+                  <div class="flex flex-col min-w-0">
+                    <span class="text-[12px] font-bold text-on-surface truncate">${item.label || (item.itemType === 'shift' ? item.item.hospital : item.item.description)}</span>
+                    <span class="text-[10px] text-on-surface-variant">Excluído em ${new Date(item.deletedAt).toLocaleDateString('pt-BR')} às ${new Date(item.deletedAt).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  class="btn-restore-item shrink-0 px-3 py-1.5 rounded-full bg-gradient-to-r from-secondary to-primary text-white font-bold text-[11px] shadow-sm active:scale-95 transition-all flex items-center gap-1"
+                  data-trash-id="${item.id}"
+                >
+                  ${renderIcon('restore_from_trash', 'text-[14px]')}
+                  <span>Restaurar</span>
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        `}
+      </div>
+    </div>
+  `;
+
+  openDialog(html);
+
+  document.getElementById("btn-close-dialog")?.addEventListener("click", closeDialog);
+
+  document.querySelectorAll(".btn-restore-item").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const trashId = btn.getAttribute("data-trash-id");
+      const restored = state.store.restoreFromTrash(trashId);
+      if (restored) {
+        showToast("Item restaurado com sucesso! 🌸", "restore_from_trash");
+        closeDialog();
+        renderCurrentView();
+      }
+    });
+  });
+
+  document.getElementById("btn-empty-trash")?.addEventListener("click", () => {
+    showConfirmDialog({
+      title: "Esvaziar Lixeira?",
+      message: "Tem certeza de que deseja esvaziar permanentemente todos os itens da lixeira?",
+      isDanger: true,
+      confirmText: "Sim, Esvaziar",
+      onConfirm: () => {
+        state.store.emptyTrash();
+        showToast("Lixeira esvaziada! 🗑️");
+        closeDialog();
+      }
+    });
+  });
+
+  document.getElementById("btn-save-backup-now")?.addEventListener("click", () => {
+    state.store.saveBackup();
+    showToast("Backup local salvo no aparelho com sucesso! 🛡️");
+  });
+
+  document.getElementById("btn-restore-backup-now")?.addEventListener("click", () => {
+    showConfirmDialog({
+      title: "Restaurar Cópia de Segurança?",
+      message: "Deseja restaurar a última cópia salva do seu banco de dados local?",
+      confirmText: "Sim, Restaurar",
+      onConfirm: () => {
+        const ok = state.store.restoreBackup();
+        if (ok) {
+          showToast("Cópia de segurança restaurada! 🌸");
+          closeDialog();
+          renderCurrentView();
+        } else {
+          showToast("Nenhum backup encontrado.", "warning");
+        }
+      }
+    });
+  });
+}
+
+/**
  * PWA Installation Guide Dialog (iOS & Android)
  */
 function openPwaInstallDialog() {
@@ -2912,9 +4475,9 @@ function openPwaInstallDialog() {
       </div>
 
       <div class="flex items-center gap-3 p-3 bg-gradient-to-r from-secondary-fixed/40 to-primary-fixed/40 rounded-2xl border border-purple-100">
-        <img src="./assets/icons/icon-192.png" alt="Pediatria Chic" class="w-12 h-12 rounded-2xl shadow-sm border border-white" />
+        <img src="./assets/icons/icon-192.png" alt="Finanças Pediatria" class="w-12 h-12 rounded-2xl shadow-sm border border-white" />
         <div class="flex flex-col">
-          <span class="font-headline text-[14px] font-bold text-on-surface">Pediatria Chic</span>
+          <span class="font-headline text-[14px] font-bold text-on-surface">Finanças Pediatria</span>
           <span class="text-[11px] text-on-surface-variant">Funciona como App Nativo • 100% Seguro</span>
         </div>
       </div>
@@ -3526,6 +5089,11 @@ function renderDashboardView() {
           <span class="text-[12px] text-on-surface-variant">Seus repasses D+90 estão organizados com precisão.</span>
         </div>
       </div>
+
+      <!-- Creator Signature Footer -->
+      <div class="text-center py-2 text-[11px] text-on-surface-variant font-medium">
+        Finanças Pediatria • ${APP_CREATOR.signature} 🩺💖
+      </div>
     </div>
   `;
 
@@ -3813,6 +5381,11 @@ function renderShiftsView() {
           `}
         </div>
       `}
+
+      <!-- Creator Signature Footer -->
+      <div class="text-center py-2 text-[11px] text-on-surface-variant font-medium">
+        Finanças Pediatria • ${APP_CREATOR.signature} 🩺💖
+      </div>
     </div>
   `;
 
@@ -3994,9 +5567,10 @@ function renderShiftCalendarView(filteredShifts, scopedShifts) {
  * Renders an individual Shift card with 1-touch confirmation and actions
  */
 function renderShiftCard(shift, isCompact = false) {
+  const isInstallment = Boolean(shift.isInstallment);
   const ev = evaluateShiftStatus(shift, state.referenceDate);
   const isDelayed = ev.status === "delayed";
-  const isReceived = ev.status === "received";
+  const isReceived = ev.status === "received" || (isInstallment && shift.installmentStatus === "received");
 
   let statusBadgeClass = "badge-pending";
   let statusIcon = "schedule";
@@ -4006,6 +5580,9 @@ function renderShiftCard(shift, isCompact = false) {
   } else if (isReceived) {
     statusBadgeClass = "badge-received";
     statusIcon = "check_circle";
+  } else if (ev.status === "partial") {
+    statusBadgeClass = "badge-pending";
+    statusIcon = "payments";
   }
 
   const hourlyRate = calculateHourlyRate(shift.netValue, shift.shiftType);
@@ -4024,6 +5601,11 @@ function renderShiftCard(shift, isCompact = false) {
             <div class="flex items-center gap-1.5 flex-wrap">
               <h2 class="text-[15px] font-bold text-on-surface truncate">${shift.hospital}</h2>
               ${shift.sector ? `<span class="px-2 py-0.5 rounded-full bg-primary-fixed/60 text-primary text-[10px] font-bold">${shift.sector}</span>` : ''}
+              ${isInstallment ? `
+                <span class="px-2 py-0.5 rounded-full ${shift.installmentNumber === 1 ? 'bg-secondary-fixed text-on-secondary-fixed-variant' : 'bg-primary-fixed text-on-primary-fixed'} text-[10px] font-extrabold shadow-xs">
+                  ${shift.installmentNumber}ª Parcela (${shift.installmentPercent}%)
+                </span>
+              ` : ''}
             </div>
             <p class="text-[12px] text-on-surface-variant truncate">
               ${formatDateBR(shift.shiftDate)} • ${shift.shiftType}
@@ -4050,10 +5632,10 @@ function renderShiftCard(shift, isCompact = false) {
       <!-- Financial Information Row -->
       <div class="my-3 p-3 rounded-[16px] ${isDelayed ? 'bg-error-container/20' : 'bg-surface-container-low/60'} flex items-center justify-between">
         <div>
-          <span class="text-[11px] text-on-surface-variant block">Valor Líquido</span>
+          <span class="text-[11px] text-on-surface-variant block">${isInstallment ? `Valor da ${shift.installmentNumber}ª Parcela (${shift.installmentPercent}%)` : 'Valor Líquido'}</span>
           <div class="flex items-baseline gap-1.5">
             <span class="text-[16px] font-bold ${isDelayed ? 'text-error' : 'text-on-surface'} ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(shift.netValue)}</span>
-            ${hourlyRate > 0 ? `
+            ${hourlyRate > 0 && !isInstallment ? `
               <span class="${hourlyRate >= 150 ? 'badge-rate-gold' : 'badge-rate-mint'}">
                 R$ ${hourlyRate}/h
               </span>
@@ -4061,8 +5643,10 @@ function renderShiftCard(shift, isCompact = false) {
           </div>
         </div>
         <div class="text-right">
-          <span class="text-[11px] text-outline block">Valor Bruto</span>
-          <span class="text-[13px] text-on-surface-variant font-medium ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(shift.grossValue)}</span>
+          <span class="text-[11px] text-outline block">${isInstallment ? 'Vencimento Previsto' : 'Valor Bruto'}</span>
+          <span class="text-[13px] text-on-surface-variant font-medium ${state.privacyMode ? 'privacy-masked-text' : ''}">
+            ${isInstallment ? formatDateBR(shift.installmentDueDate) : formatMoney(shift.grossValue)}
+          </span>
         </div>
       </div>
 
@@ -4070,6 +5654,38 @@ function renderShiftCard(shift, isCompact = false) {
         <div class="mb-2.5 px-2.5 py-1.5 rounded-xl bg-surface-container-low/50 text-[11px] text-on-surface-variant flex items-center gap-1.5">
           ${renderIcon("sticky_note_2", "text-[14px] text-secondary shrink-0")}
           <span class="truncate italic">${shift.notes}</span>
+        </div>
+      ` : ''}
+
+      <!-- Detailed 80% D+60 and 20% D+90 Installment Pills (for full shift cards) -->
+      ${!isInstallment && shift.splitPayment && Array.isArray(shift.installments) && shift.installments.length === 2 ? `
+        <div class="mb-3 p-2.5 rounded-2xl bg-surface-container-low border border-purple-100 flex flex-col gap-1.5 text-[11px]">
+          <div class="flex items-center justify-between text-[10px] text-on-surface-variant font-bold pb-0.5">
+            <span class="flex items-center gap-1 text-primary">
+              ${renderIcon("payments", "text-[14px]")} Repasses do Plantão (80% D+60 / 20% D+90)
+            </span>
+          </div>
+          <div class="grid grid-cols-2 gap-1.5">
+            ${shift.installments.map(inst => `
+              <div class="bg-white p-2 rounded-xl border border-purple-50 shadow-2xs flex flex-col justify-between gap-1">
+                <div class="flex items-center justify-between">
+                  <span class="font-bold text-on-surface text-[10px]">${inst.number}ª Parc. (${inst.percent}%)</span>
+                  <span class="w-2 h-2 rounded-full ${inst.status === 'received' ? 'bg-tertiary' : 'bg-secondary'}"></span>
+                </div>
+                <span class="font-extrabold text-on-surface text-[12px] font-display ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(inst.value)}</span>
+                <span class="text-[9px] text-on-surface-variant">${formatDateBR(inst.dueDate)}</span>
+                <button
+                  type="button"
+                  class="btn-toggle-shift w-full py-1 mt-0.5 rounded-full text-[10px] font-bold transition-all active:scale-95 ${inst.status === 'received' ? 'bg-tertiary-fixed text-on-tertiary-fixed' : 'bg-secondary text-white shadow-2xs'}"
+                  data-id="${shift.id}"
+                  data-action="toggle-installment"
+                  data-installment-number="${inst.number}"
+                >
+                  ${inst.status === 'received' ? '✓ Recebido' : 'Receber'}
+                </button>
+              </div>
+            `).join('')}
+          </div>
         </div>
       ` : ''}
 
@@ -4081,7 +5697,18 @@ function renderShiftCard(shift, isCompact = false) {
         </span>
 
         <div class="flex items-center gap-1.5">
-          ${isReceived ? `
+          ${isInstallment ? `
+            <button
+              type="button"
+              class="btn-toggle-shift inline-flex items-center gap-1 ${isReceived ? 'bg-surface-container-highest text-on-surface-variant' : 'bg-tertiary text-white'} px-3 py-1.5 rounded-full text-[11px] font-bold shadow-sm active:scale-95 transition-all shrink-0"
+              data-id="${shift.id}"
+              data-action="toggle-installment"
+              data-installment-number="${shift.installmentNumber}"
+            >
+              ${renderIcon(isReceived ? "undo" : "check", "text-[15px]")}
+              ${isReceived ? 'Desfazer' : `Receber ${shift.installmentNumber}ª Parc.`}
+            </button>
+          ` : isReceived ? `
             <button
               type="button"
               class="btn-view-voucher inline-flex items-center gap-1 bg-surface-container-low text-primary hover:bg-primary hover:text-white px-2.5 py-1.5 rounded-full text-[11px] font-bold active:scale-95 transition-all"
@@ -4142,16 +5769,41 @@ function renderExpensesView() {
   const spent = report.expenses.total;
   const usagePercent = report.expenses.budgetUsagePercent;
   const remaining = Math.max(0, budget - spent);
+  const momData = state.store.getMonthOverMonthExpenseVariation(state.activeMonth, state.expenseFilter);
 
-  // Apply filter
+  // Apply scope and cost type filter
   let filtered = expenses;
   if (state.expenseFilter === "fixa") {
     filtered = filtered.filter(e => e.type === "fixed");
   } else if (state.expenseFilter === "variavel") {
     filtered = filtered.filter(e => e.type === "variable");
+  } else if (state.expenseFilter === "pf") {
+    filtered = filtered.filter(e => (e.scope || getCategoryScope(e.category)) === "pf");
+  } else if (state.expenseFilter === "pj") {
+    filtered = filtered.filter(e => (e.scope || getCategoryScope(e.category)) === "pj");
   }
 
+  // Monthly category distribution for active filter
+  const filteredSpent = filtered.reduce((acc, e) => acc + (Number(e.value) || 0), 0);
+  const catMap = {};
+  filtered.forEach(e => {
+    catMap[e.category] = (catMap[e.category] || 0) + (Number(e.value) || 0);
+  });
+  const filteredCategoryData = Object.entries(catMap).map(([category, amount]) => {
+    const pct = filteredSpent > 0 ? Math.round((amount / filteredSpent) * 100) : 0;
+    return {
+      category,
+      amount,
+      percentage: pct,
+      color: CATEGORY_COLORS[category] || "#7A7E91",
+      icon: CATEGORY_ICONS[category] || "receipt_long"
+    };
+  }).sort((a, b) => b.amount - a.amount);
+  const donutMonthly = renderDonutChartSVG(filteredCategoryData, filteredSpent);
+
   const countAll = expenses.length;
+  const countPF = expenses.filter(e => (e.scope || getCategoryScope(e.category)) === "pf").length;
+  const countPJ = expenses.filter(e => (e.scope || getCategoryScope(e.category)) === "pj").length;
   const countFixas = expenses.filter(e => e.type === "fixed").length;
   const countVars = expenses.filter(e => e.type === "variable").length;
 
@@ -4161,10 +5813,10 @@ function renderExpensesView() {
       <div class="flex items-center justify-between">
         <div class="flex flex-col">
           <div class="flex items-center gap-1.5">
-            <h1 class="font-headline text-[22px] font-bold text-on-surface">Despesas & Rotina</h1>
+            <h1 class="font-headline text-[22px] font-bold text-on-surface">Despesas & Vida Financeira</h1>
             <span class="text-[20px]">🧾</span>
           </div>
-          <p class="text-[12px] text-on-surface-variant">Gestão dos custos pediátricos em ${formatMonthYear(state.activeMonth)}</p>
+          <p class="text-[12px] text-on-surface-variant">Gestão integrada: Pessoa Física (PF) e Pessoa Jurídica (PJ)</p>
         </div>
         <button
           type="button"
@@ -4173,6 +5825,45 @@ function renderExpensesView() {
         >
           ${renderIcon("add", "text-[16px]")}
           Nova Despesa
+        </button>
+      </div>
+
+      <!-- Scope & Cost Type Filter Pills -->
+      <div class="flex items-center gap-2 overflow-x-auto pb-1 -mx-4 px-4 no-scrollbar">
+        <button
+          type="button"
+          class="filter-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all active:scale-95 ${state.expenseFilter === 'all' ? 'bg-primary text-white shadow-sm' : 'bg-surface-container text-on-surface-variant'}"
+          data-filter="all"
+        >
+          Todas (${countAll})
+        </button>
+        <button
+          type="button"
+          class="filter-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all active:scale-95 ${state.expenseFilter === 'pf' ? 'bg-secondary text-white shadow-sm' : 'bg-surface-container text-on-surface-variant'}"
+          data-filter="pf"
+        >
+          Pessoal (PF) (${countPF})
+        </button>
+        <button
+          type="button"
+          class="filter-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all active:scale-95 ${state.expenseFilter === 'pj' ? 'bg-primary text-white shadow-sm' : 'bg-surface-container text-on-surface-variant'}"
+          data-filter="pj"
+        >
+          Trabalho (PJ) (${countPJ})
+        </button>
+        <button
+          type="button"
+          class="filter-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all active:scale-95 ${state.expenseFilter === 'fixa' ? 'bg-primary text-white shadow-sm' : 'bg-surface-container text-on-surface-variant'}"
+          data-filter="fixa"
+        >
+          Fixas (${countFixas})
+        </button>
+        <button
+          type="button"
+          class="filter-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all active:scale-95 ${state.expenseFilter === 'variavel' ? 'bg-primary text-white shadow-sm' : 'bg-surface-container text-on-surface-variant'}"
+          data-filter="variavel"
+        >
+          Variáveis (${countVars})
         </button>
       </div>
 
@@ -4217,30 +5908,64 @@ function renderExpensesView() {
         </div>
       </div>
 
-      <!-- Filter Pills -->
-      <div class="flex items-center gap-2 overflow-x-auto pb-1 -mx-4 px-4 no-scrollbar">
-        <button
-          type="button"
-          class="filter-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all active:scale-95 ${state.expenseFilter === 'all' ? 'bg-primary text-white shadow-sm' : 'bg-surface-container text-on-surface-variant'}"
-          data-filter="all"
-        >
-          Todas (${countAll})
-        </button>
-        <button
-          type="button"
-          class="filter-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all active:scale-95 ${state.expenseFilter === 'fixa' ? 'bg-primary text-white shadow-sm' : 'bg-surface-container text-on-surface-variant'}"
-          data-filter="fixa"
-        >
-          Fixas (${countFixas})
-        </button>
-        <button
-          type="button"
-          class="filter-pill whitespace-nowrap px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-all active:scale-95 ${state.expenseFilter === 'variavel' ? 'bg-primary text-white shadow-sm' : 'bg-surface-container text-on-surface-variant'}"
-          data-filter="variavel"
-        >
-          Variáveis (${countVars})
-        </button>
-      </div>
+      <!-- Gráfico Mensal de Despesas (Donut SVG com Legenda) -->
+      <section class="bg-white p-4 rounded-[24px] shadow-[0_8px_24px_rgba(171,71,188,0.06)] flex flex-col gap-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center">
+              ${renderIcon("donut_large", "text-[18px]")}
+            </div>
+            <div>
+              <h2 class="text-[15px] font-bold text-on-surface">Gráfico Mensal de Despesas</h2>
+              <p class="text-[11px] text-on-surface-variant">Distribuição por categoria em ${formatMonthYear(state.activeMonth)}</p>
+            </div>
+          </div>
+          <span class="text-[13px] font-extrabold text-secondary font-display ${state.privacyMode ? 'privacy-masked-text' : ''}">
+            ${formatMoney(filteredSpent)}
+          </span>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center gap-4 pt-1">
+          ${donutMonthly.svg}
+          ${donutMonthly.legend}
+        </div>
+      </section>
+
+      <!-- Month-over-Month Evolution Chart (Evolução Mês a Mês & PF vs PJ) -->
+      ${renderMonthOverMonthChartSVG(momData)}
+
+      <!-- Category Breakdown Grid (Quantidade Gasta em Cada Categoria & Alteração Mês a Mês) -->
+      ${momData && momData.categoryComparison && momData.categoryComparison.length > 0 ? `
+        <div class="flex flex-col gap-2.5">
+          <div class="flex items-center justify-between px-1">
+            <span class="font-headline text-[15px] font-bold text-on-surface">Gastos por Categoria (${momData.categoryComparison.length})</span>
+            <span class="text-[11px] text-on-surface-variant">Variação vs Mês Anterior</span>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            ${momData.categoryComparison.map(c => `
+              <div class="p-3 bg-white rounded-2xl border border-purple-50 shadow-sm flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5 min-w-0">
+                  <div class="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style="background-color: ${c.color}20; color: ${c.color};">
+                    ${renderIcon(c.icon, "text-[18px]")}
+                  </div>
+                  <div class="flex flex-col min-w-0">
+                    <span class="text-[13px] font-bold text-on-surface truncate">${c.category}</span>
+                    <div class="flex items-center gap-1.5 text-[10px]">
+                      <span class="px-1.5 py-0.2 rounded-full font-bold ${c.scope === 'pf' ? 'bg-pink-100 text-pink-700' : 'bg-purple-100 text-purple-700'}">${c.scope.toUpperCase()}</span>
+                      <span class="text-on-surface-variant">Anterior: ${formatMoney(c.previousAmount)}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="flex flex-col items-end shrink-0">
+                  <span class="text-[14px] font-bold text-on-surface font-display ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(c.currentAmount)}</span>
+                  <span class="text-[10px] font-bold ${c.diffValue > 0 ? 'text-error' : c.diffValue < 0 ? 'text-tertiary' : 'text-outline'}">
+                    ${c.diffValue > 0 ? `▲ +${c.diffPercent}%` : c.diffValue < 0 ? `▼ ${c.diffPercent}%` : '0%'}
+                  </span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : ''}
 
       <!-- Expense List -->
       <div class="flex flex-col gap-2.5">
@@ -4275,6 +6000,11 @@ function renderExpensesView() {
           </button>
         </div>
       </div>
+
+      <!-- Creator Signature Footer -->
+      <div class="text-center py-2 text-[11px] text-on-surface-variant font-medium">
+        Finanças Pediatria • ${APP_CREATOR.signature} 🩺💖
+      </div>
     </div>
   `;
 
@@ -4288,6 +6018,7 @@ function renderExpensesView() {
 function renderExpenseCard(expense) {
   const color = CATEGORY_COLORS[expense.category] || "#CE93D8";
   const icon = CATEGORY_ICONS[expense.category] || "receipt_long";
+  const scope = expense.scope || getCategoryScope(expense.category);
 
   // Calculate due status
   const refDate = state.referenceDate ? getLocalDateString(state.referenceDate) : getLocalDateString(new Date());
@@ -4314,7 +6045,10 @@ function renderExpenseCard(expense) {
           ${renderIcon(icon, "text-[20px]")}
         </div>
         <div class="flex flex-col min-w-0 flex-1">
-          <span class="text-[14px] font-semibold text-on-surface truncate">${expense.description}</span>
+          <div class="flex items-center gap-1.5">
+            <span class="text-[14px] font-semibold text-on-surface truncate">${expense.description}</span>
+            <span class="px-1.5 py-0.2 rounded-full font-bold text-[9px] ${scope === 'pf' ? 'bg-pink-100 text-pink-700' : 'bg-purple-100 text-purple-700'}">${scope.toUpperCase()}</span>
+          </div>
           <div class="flex items-center gap-2 mt-0.5 text-[11px] ${dueBadgeClass}">
             <span class="capitalize text-on-surface-variant">${expense.type === 'fixed' ? 'Fixa' : 'Variável'}</span>
             <span class="text-on-surface-variant">•</span>
@@ -4612,6 +6346,11 @@ function renderReportsView() {
           </button>
         </div>
       </div>
+
+      <!-- Creator Signature Footer -->
+      <div class="text-center py-2 text-[11px] text-on-surface-variant font-medium">
+        Finanças Pediatria • ${APP_CREATOR.signature} 🩺💖
+      </div>
     </div>
   `;
 
@@ -4896,10 +6635,33 @@ function attachCardActionEvents() {
       const id = btn.getAttribute("data-id");
       const action = btn.getAttribute("data-action");
 
-      if (action === "receive") {
+      if (action === "toggle-installment") {
+        const instNum = parseInt(btn.getAttribute("data-installment-number"), 10) || 1;
+        const updated = state.store.toggleShiftInstallment(id, instNum);
+        if (updated) {
+          const inst = Array.isArray(updated.installments) ? updated.installments.find(i => i.number === instNum) : null;
+          if (inst && inst.status === "received") {
+            showToast(`${instNum}ª parcela de ${formatMoney(inst.value)} confirmada em conta! 💖`, "check_circle");
+            showBabyReaction({
+              type: 'income',
+              title: `${instNum}ª Parcela Confirmada! 👶💖`,
+              message: `Recebimento de ${formatCurrency(inst.value)} (${inst.percent}%) do plantão no ${updated.hospital} creditado em conta!`,
+              amount: inst.value
+            });
+          } else {
+            showToast("Parcela marcada como pendente.", "schedule");
+          }
+        }
+      } else if (action === "receive") {
         const updated = state.store.markShiftAsReceived(id);
         if (updated) {
           showToast(`Repasse de ${formatMoney(updated.netValue)} confirmado em conta! 💖`, "check_circle");
+          showBabyReaction({
+            type: 'income',
+            title: 'Repasse Confirmado! 👶💖',
+            message: `Repasse integral do plantão no ${updated.hospital} registrado em conta!`,
+            amount: updated.netValue
+          });
         }
       } else {
         state.store.unmarkShiftAsReceived(id);
@@ -4952,12 +6714,16 @@ function attachCardActionEvents() {
       const shift = state.store.data.shifts.find(s => s.id === id);
       showConfirmDialog({
         title: "Excluir Plantão?",
-        message: `Deseja remover o plantão de ${shift ? shift.hospital : 'hospital'} (${shift ? formatDateBR(shift.shiftDate) : ''}) do radar financeiro?`,
+        message: `Deseja mover o plantão de ${shift ? shift.hospital : 'hospital'} (${shift ? formatDateBR(shift.shiftDate) : ''}) para a lixeira?`,
         confirmText: "Sim, Excluir",
         isDanger: true,
         onConfirm: () => {
           state.store.deleteShift(id);
-          showToast("Plantão removido com sucesso.", "delete");
+          showToast("Plantão movido para a lixeira.", "delete", () => {
+            state.store.undoLastDelete();
+            renderCurrentView();
+            showToast("Plantão restaurado! 🌸", "restore_from_trash");
+          });
           renderCurrentView();
         }
       });
@@ -5030,12 +6796,16 @@ function attachCardActionEvents() {
       const exp = state.store.data.expenses.find(x => x.id === id);
       showConfirmDialog({
         title: "Excluir Despesa?",
-        message: `Deseja remover a despesa '${exp ? exp.description : ''}' (${exp ? formatMoney(exp.value) : ''})?`,
+        message: `Deseja mover a despesa '${exp ? exp.description : ''}' (${exp ? formatMoney(exp.value) : ''}) para a lixeira?`,
         confirmText: "Sim, Excluir",
         isDanger: true,
         onConfirm: () => {
           state.store.deleteExpense(id);
-          showToast("Despesa removida com sucesso.", "delete");
+          showToast("Despesa movida para a lixeira.", "delete", () => {
+            state.store.undoLastDelete();
+            renderCurrentView();
+            showToast("Despesa restaurada! 🌸", "restore_from_trash");
+          });
           renderCurrentView();
         }
       });
@@ -5169,6 +6939,10 @@ function renderShiftForm(data = null) {
   const shiftDate = data ? (data.shiftDate || getLocalDateString(state.referenceDate || new Date())) : getLocalDateString(state.referenceDate || new Date());
   const shiftType = data ? (data.shiftType || "12h Diurno") : "12h Diurno";
   const sector = data ? (data.sector || "UTI Neonatal") : "UTI Neonatal";
+  const workLocations = state.store.getWorkLocations();
+  const allWorkTypes = state.store.getWorkTypes();
+  const activeWorkTypes = state.store.getActiveWorkTypes();
+  const workType = data ? (data.workType || "Plantão em Maternidade") : (activeWorkTypes[0] || "Plantão em Maternidade");
   const taxRegime = data ? (data.taxRegime || "Simples Nacional (6%)") : "Simples Nacional (6%)";
   const taxRate = (data && data.taxRate !== undefined) ? data.taxRate : 6;
   const notes = data ? (data.notes || "") : "";
@@ -5181,12 +6955,12 @@ function renderShiftForm(data = null) {
 
   return `
     <form id="form-shift" class="flex flex-col gap-4">
-      <!-- Hospital -->
+      <!-- Hospital / Maternidade -->
       <div class="flex flex-col gap-1.5">
         <label class="text-[12px] font-bold text-on-surface-variant flex items-center justify-between">
-          <span>Hospital ou Instituição</span>
+          <span>Hospital ou Maternidade</span>
           <span class="text-secondary text-[11px] flex items-center gap-0.5">
-            ${renderIcon('auto_awesome', 'text-[13px]')} Sugestão
+            ${renderIcon('auto_awesome', 'text-[13px]')} Locais Cadastrados
           </span>
         </label>
         <div class="h-11 bg-surface-container-low rounded-2xl px-3.5 flex items-center gap-2 shadow-sm border border-transparent focus-within:border-primary focus-within:bg-white">
@@ -5195,34 +6969,55 @@ function renderShiftForm(data = null) {
             type="text"
             id="input-shift-hospital"
             class="w-full bg-transparent text-[14px] text-on-surface focus:outline-none placeholder:text-outline"
-            placeholder="Ex: Hospital Infantil Sabará"
+            placeholder="Ex: Maternidade Araken"
             value="${hospital}"
             required
           />
         </div>
-        <!-- Quick pills -->
+        <!-- Quick pills with default & custom locations -->
         <div class="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 -mx-1 px-1 no-scrollbar">
-          ${SHIFT_HOSPITAL_SUGGESTIONS.map(h => `
+          ${workLocations.map(h => `
             <button
               type="button"
-              class="quick-hospital-pill py-1 px-2.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all ${hospital === h ? 'bg-secondary-fixed text-on-secondary-fixed-variant' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
+              class="quick-hospital-pill py-1 px-2.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all ${hospital === h ? 'bg-secondary-fixed text-on-secondary-fixed-variant shadow-sm' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
               data-hospital="${h}"
             >
-              ${h.split(" ")[h.split(" ").length - 1]}
+              ${h.length > 20 ? h.slice(0, 18) + '...' : h}
             </button>
           `).join("")}
+          <button
+            type="button"
+            class="quick-add-hospital-pill py-1 px-2.5 rounded-full text-[11px] font-bold whitespace-nowrap bg-primary-fixed/50 text-primary hover:bg-primary-fixed flex items-center gap-0.5 transition-all active:scale-95"
+          >
+            ${renderIcon('add', 'text-[13px]')} Outro Local
+          </button>
         </div>
       </div>
 
-      <!-- Setor Pediátrico & Tipo de Escala -->
+      <!-- Tipo de Atuação & Setor Clínico -->
       <div class="grid grid-cols-2 gap-3">
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[12px] font-bold text-on-surface-variant">Atuação Pediátrica</label>
+          <div class="h-11 bg-surface-container-low rounded-2xl px-3 flex items-center gap-2 shadow-sm">
+            ${renderIcon('work', 'text-[18px] text-secondary')}
+            <select
+              id="input-shift-work-type"
+              class="w-full bg-transparent text-[12px] text-on-surface font-medium focus:outline-none"
+            >
+              ${allWorkTypes.map(wt => `
+                <option value="${wt}" ${workType === wt ? 'selected' : ''}>${wt}</option>
+              `).join("")}
+            </select>
+          </div>
+        </div>
+
         <div class="flex flex-col gap-1.5">
           <label class="text-[12px] font-bold text-on-surface-variant">Setor Clínico</label>
           <div class="h-11 bg-surface-container-low rounded-2xl px-3 flex items-center gap-2 shadow-sm">
             ${renderIcon('stethoscope', 'text-[18px] text-secondary')}
             <select
               id="input-shift-sector"
-              class="w-full bg-transparent text-[13px] text-on-surface font-medium focus:outline-none"
+              class="w-full bg-transparent text-[12px] text-on-surface font-medium focus:outline-none"
             >
               ${CLINICAL_SECTORS.map(s => `
                 <option value="${s}" ${sector === s ? 'selected' : ''}>${s}</option>
@@ -5230,66 +7025,69 @@ function renderShiftForm(data = null) {
             </select>
           </div>
         </div>
+      </div>
 
+      <!-- Tipo de Escala & Data Trabalhada -->
+      <div class="grid grid-cols-2 gap-3">
         <div class="flex flex-col gap-1.5">
           <label class="text-[12px] font-bold text-on-surface-variant">Tipo de Escala</label>
           <select
             id="input-shift-type"
-            class="h-11 bg-surface-container-low rounded-2xl px-3 text-[13px] text-on-surface font-medium focus:outline-none shadow-sm"
+            class="h-11 bg-surface-container-low rounded-2xl px-3 text-[12px] text-on-surface font-medium focus:outline-none shadow-sm"
           >
             ${SHIFT_TYPES.map(t => `
               <option value="${t.id}" ${shiftType === t.id ? 'selected' : ''}>${t.label}</option>
             `).join("")}
           </select>
         </div>
-      </div>
 
-      <!-- Data Trabalhada -->
-      <div class="flex flex-col gap-1.5">
-        <label class="text-[12px] font-bold text-on-surface-variant">Data Trabalhada</label>
-        <div class="h-11 bg-surface-container-low rounded-2xl px-3 flex items-center gap-2 shadow-sm">
-          ${renderIcon('calendar_today', 'text-[18px] text-primary')}
-          <input
-            type="date"
-            id="input-shift-date"
-            class="w-full bg-transparent text-[13px] text-on-surface focus:outline-none font-medium"
-            value="${shiftDate}"
-            required
-          />
+        <div class="flex flex-col gap-1.5">
+          <label class="text-[12px] font-bold text-on-surface-variant">Data Trabalhada</label>
+          <div class="h-11 bg-surface-container-low rounded-2xl px-3 flex items-center gap-2 shadow-sm">
+            ${renderIcon('calendar_today', 'text-[18px] text-primary')}
+            <input
+              type="date"
+              id="input-shift-date"
+              class="w-full bg-transparent text-[12px] text-on-surface focus:outline-none font-medium"
+              value="${shiftDate}"
+              required
+            />
+          </div>
         </div>
       </div>
 
-      <!-- Regime Tributário PJ / PF -->
-      <div class="flex flex-col gap-1.5">
+      <!-- Alíquota de Imposto: Slider Estilo Volume (6% a 20%) -->
+      <div class="flex flex-col gap-2 p-3 bg-surface-container-low rounded-2xl border border-purple-100 shadow-sm">
         <div class="flex items-center justify-between">
-          <label class="text-[12px] font-bold text-on-surface-variant">Regime Tributário do Plantão</label>
-          <span id="label-tax-rate-display" class="text-[11px] font-bold text-primary">${taxRate}% de imposto</span>
+          <label class="text-[12px] font-bold text-on-surface flex items-center gap-1">
+            ${renderIcon("tune", "text-[16px] text-secondary")}
+            <span>Alíquota de Imposto (6% a 20%)</span>
+          </label>
+          <span id="label-tax-slider-display" class="text-[14px] font-extrabold text-secondary font-display">${Number(taxRate).toFixed(1)}%</span>
         </div>
-        <div class="grid grid-cols-2 gap-2">
-          ${TAX_REGIMES.map(reg => {
-            const name = reg.name || reg.label || "Personalizado";
-            const ratePct = (reg.percentage !== null && reg.percentage !== undefined)
-              ? reg.percentage
-              : (reg.rate ? reg.rate * 100 : 0);
-            const isSelected = taxRegime === name || taxRegime === reg.id || taxRegime === reg.label;
-            return `
-              <button
-                type="button"
-                class="tax-regime-btn p-2 rounded-2xl text-[11px] font-bold text-left transition-all ${isSelected ? 'bg-secondary-fixed text-on-secondary-fixed-variant ring-2 ring-secondary shadow-sm' : 'bg-surface-container-low text-on-surface hover:bg-surface-container'}"
-                data-name="${name}"
-                data-rate="${ratePct}"
-              >
-                <div class="truncate">${name.split(" ")[0]}</div>
-                <div class="text-[10px] opacity-80">${reg.percentage !== null && reg.percentage !== undefined ? `${reg.percentage}% imposto` : 'Personalizado'}</div>
-              </button>
-            `;
-          }).join("")}
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] font-bold text-outline">6%</span>
+          <input
+            type="range"
+            min="6"
+            max="20"
+            step="0.5"
+            id="input-shift-tax-slider"
+            class="tax-slider w-full cursor-pointer"
+            value="${taxRate}"
+          />
+          <span class="text-[10px] font-bold text-outline">20%</span>
         </div>
-        <input type="hidden" id="input-shift-tax-regime" value="${taxRegime}" />
-        <input type="hidden" id="input-shift-tax-rate" value="${taxRate}" />
+        <div class="flex items-center justify-between text-[10px] text-on-surface-variant">
+          <span>Simples Nacional (6%)</span>
+          <span>Intermediário (13%)</span>
+          <span>Presumido (20%)</span>
+        </div>
       </div>
+      <input type="hidden" id="input-shift-tax-regime" value="${taxRegime}" />
+      <input type="hidden" id="input-shift-tax-rate" value="${taxRate}" />
 
-      <!-- Gross vs Net Values + Live Hourly Rate -->
+      <!-- Gross vs Net Values (Valor informado livremente pela médica) -->
       <div class="grid grid-cols-2 gap-3">
         <div class="flex flex-col gap-1 bg-surface-container-low p-3 rounded-2xl shadow-sm">
           <span class="text-[11px] font-semibold text-on-surface-variant">Valor Bruto (R$)</span>
@@ -5302,7 +7100,7 @@ function renderShiftForm(data = null) {
             value="${grossVal}"
             required
           />
-          <span class="text-[10px] text-outline">Entrada faturada</span>
+          <span class="text-[10px] text-outline">Valor do plantão informado</span>
         </div>
 
         <div class="flex flex-col gap-1 bg-surface-container p-3 rounded-2xl shadow-sm">
@@ -5323,39 +7121,50 @@ function renderShiftForm(data = null) {
         </div>
       </div>
 
-      <!-- Medical Reimbursement Rule (D+30, D+60, D+90 padrão, D+120) with Custom Date Override -->
+      <!-- Previsão das Parcelas (80% D+60 e 20% D+90) -->
+      <div class="bg-gradient-to-br from-primary-fixed/40 via-surface-container-low to-secondary-fixed/40 p-3.5 rounded-2xl shadow-[0_4px_16px_rgba(126,74,138,0.06)] flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-bold text-primary flex items-center gap-1">
+            ${renderIcon("payments", "text-[16px]")} Previsão das Parcelas (Regra Pediátrica):
+          </span>
+          <span class="text-[10px] text-on-surface-variant font-semibold">80% D+60 • 20% D+90</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 pt-0.5">
+          <div class="bg-white/90 p-2.5 rounded-xl flex flex-col border border-purple-100 shadow-sm">
+            <span class="text-[10px] font-bold text-on-surface-variant">1ª Parcela (80% em 60 dias)</span>
+            <span class="text-[14px] font-extrabold text-secondary font-display" id="label-install-1-val">R$ 0,00</span>
+            <span class="text-[10px] text-on-surface-variant truncate" id="label-install-1-date">Previsão: --/--/----</span>
+          </div>
+          <div class="bg-white/90 p-2.5 rounded-xl flex flex-col border border-purple-100 shadow-sm">
+            <span class="text-[10px] font-bold text-on-surface-variant">2ª Parcela (20% em 90 dias)</span>
+            <span class="text-[14px] font-extrabold text-primary font-display" id="label-install-2-val">R$ 0,00</span>
+            <span class="text-[10px] text-on-surface-variant truncate" id="label-install-2-date">Previsão: --/--/----</span>
+          </div>
+        </div>
+        <div class="text-[10px] text-on-surface-variant flex items-center justify-between pt-0.5 px-0.5">
+          <span>100% recebido em 90 dias no Regime de Caixa</span>
+          <span class="font-bold text-secondary" id="label-expected-date">${formatDateBR(expectedDate)}</span>
+        </div>
+      </div>
+
+      <!-- Prazo Manual ou D+X Alternativo -->
       <div class="flex flex-col gap-1.5">
         <div class="flex items-center justify-between">
-          <label class="text-[12px] font-bold text-on-surface-variant">Prazo de Recebimento</label>
+          <label class="text-[12px] font-bold text-on-surface-variant">Regra Especial de Prazo</label>
           <button
             type="button"
             id="btn-toggle-custom-date"
             class="text-[11px] font-bold text-secondary hover:underline flex items-center gap-0.5"
           >
             ${renderIcon("tune", "text-[14px]")}
-            <span>${hasCustomDate ? 'Usar Regra D+X' : 'Data Manual Específica'}</span>
+            <span>${hasCustomDate ? 'Usar Regra 80/20 Padrão' : 'Data Manual Específica'}</span>
           </button>
         </div>
 
-        <div id="lag-options-group" class="grid grid-cols-4 gap-2 ${hasCustomDate ? 'opacity-40 pointer-events-none' : ''}">
-          ${[1, 2, 3, 4].map(months => `
-            <button
-              type="button"
-              class="lag-option-btn p-2.5 rounded-2xl flex flex-col items-center justify-center gap-0.5 transition-all ${Number(lagMonths) === months ? 'bg-secondary-fixed text-on-secondary-fixed-variant shadow-sm ring-2 ring-secondary' : 'bg-surface-container-low text-on-surface hover:bg-surface-container'}"
-              data-lag="${months}"
-            >
-              <span class="text-[12px] font-bold">D+${months * 30}</span>
-              <span class="text-[10px] text-on-surface-variant">${months} ${months === 1 ? 'mês' : 'meses'}</span>
-            </button>
-          `).join("")}
-        </div>
-        <input type="hidden" id="input-shift-lag" value="${lagMonths}" />
-
-        <!-- Optional Custom Override Date -->
         <div id="custom-date-container" class="${hasCustomDate ? '' : 'hidden'} mt-1 flex flex-col gap-1">
           <label class="text-[11px] font-semibold text-secondary flex items-center gap-1">
             ${renderIcon("calendar_month", "text-[14px]")}
-            Data Fixa Manual de Repasse (Substitui D+X):
+            Data Fixa Manual de Repasse (Substitui D+60/D+90):
           </label>
           <div class="h-11 bg-surface-container-low rounded-2xl px-3 flex items-center gap-2 shadow-sm border border-secondary/30">
             ${renderIcon("edit_calendar", "text-[18px] text-secondary")}
@@ -5367,6 +7176,7 @@ function renderShiftForm(data = null) {
             />
           </div>
         </div>
+        <input type="hidden" id="input-shift-lag" value="${lagMonths}" />
       </div>
 
       <!-- Clinical Notes & Handover -->
@@ -5381,19 +7191,6 @@ function renderShiftForm(data = null) {
           class="w-full bg-surface-container-low rounded-2xl p-3 text-[13px] text-on-surface placeholder:text-outline focus:outline-none focus:bg-white border border-transparent focus:border-primary transition-all resize-none shadow-sm"
           placeholder="Ex: Leito 4 intubado, passagem tranquila. Faturamento confirmou repasse para dia 15."
         >${notes}</textarea>
-      </div>
-
-      <!-- Real-time Projection Card -->
-      <div class="bg-gradient-to-br from-primary-fixed/40 via-surface-container-low to-secondary-fixed/40 p-3.5 rounded-2xl shadow-[0_4px_16px_rgba(126,74,138,0.06)] flex items-center gap-3">
-        <div class="w-9 h-9 rounded-xl bg-white text-primary flex items-center justify-center shrink-0 shadow-sm">
-          ${renderIcon("event_upcoming", "text-[20px]")}
-        </div>
-        <div class="flex flex-col min-w-0">
-          <span class="text-[11px] font-bold text-primary">Previsão Calculada de Depósito:</span>
-          <span class="text-[14px] font-bold text-on-surface truncate" id="label-expected-date">
-            ${formatDateBR(expectedDate)} ${hasCustomDate ? '(Data Manual)' : `(D+${lagMonths * 30})`}
-          </span>
-        </div>
       </div>
 
       <!-- Submit Button -->
@@ -5425,7 +7222,7 @@ function renderSalaryForm(data = null) {
       <div class="flex flex-col gap-1.5">
         <label class="text-[12px] font-bold text-on-surface-variant">Descrição do Cargo / Vínculo</label>
         <div class="h-11 bg-surface-container-low rounded-2xl px-3.5 flex items-center gap-2 shadow-sm">
-          ${typeof renderIcon === 'function' ? renderIcon('work', 'text-[20px] text-primary') : '<span class="material-symbols-outlined text-primary text-[20px]">work</span>'}
+          ${renderIcon('work', 'text-[20px] text-primary')}
           <input
             type="text"
             id="input-salary-desc"
@@ -5457,7 +7254,7 @@ function renderSalaryForm(data = null) {
         <div class="flex flex-col gap-1.5">
           <label class="text-[12px] font-bold text-on-surface-variant">Dia do Pagamento</label>
           <div class="h-11 bg-surface-container-low rounded-2xl px-3.5 flex items-center gap-2 shadow-sm">
-            ${typeof renderIcon === 'function' ? renderIcon('calendar_month', 'text-[18px] text-tertiary') : '<span class="material-symbols-outlined text-tertiary text-[18px]">calendar_month</span>'}
+            ${renderIcon('calendar_month', 'text-[18px] text-tertiary')}
             <input
               type="number"
               min="1"
@@ -5476,65 +7273,133 @@ function renderSalaryForm(data = null) {
         class="h-12 w-full rounded-full bg-gradient-to-r from-secondary-container via-secondary to-primary text-white font-bold text-[14px] flex items-center justify-center gap-2 shadow-[0_8px_20px_rgba(253,78,135,0.35)] active:scale-[0.98] transition-all mt-2"
       >
         <span>${isEdit ? 'Atualizar Salário Fixo' : 'Salvar Salário Fixo'}</span>
-        ${typeof renderIcon === 'function' ? renderIcon('check', 'text-[18px]') : '<span class="material-symbols-outlined text-[18px]">check</span>'}
+        ${renderIcon('check', 'text-[18px]')}
       </button>
     </form>
   `;
 }
 
 /**
- * Form: Cadastrar Despesa Pediátrica
+ * Form: Cadastrar Despesa Pediátrica (PF vs PJ)
  */
 function renderExpenseForm(data = null) {
   const isEdit = Boolean(data);
   const desc = data ? data.description : "";
-  const category = data ? data.category : EXPENSE_CATEGORIES[0];
+  const categoriesPF = state.store.getExpenseCategories ? state.store.getExpenseCategories("pf") : EXPENSE_CATEGORIES_PF;
+  const categoriesPJ = state.store.getExpenseCategories ? state.store.getExpenseCategories("pj") : EXPENSE_CATEGORIES_PJ;
+  const category = data ? data.category : (categoriesPF[0] || "Alimentação");
   const type = data ? data.type : "fixed";
   const val = data ? data.value : "";
   const dueDate = data ? data.dueDate : `${state.activeMonth}-10`;
   const isPaid = data ? data.isPaid : false;
+  const scope = data ? (data.scope || state.store.getCategoryScope(category)) : state.store.getCategoryScope(category);
+  const scopeCategories = scope === "pj" ? categoriesPJ : categoriesPF;
 
   return `
     <form id="form-expense" class="flex flex-col gap-4">
+      <!-- Âmbito da Despesa: PF (Vida Pessoal) vs PJ (Trabalho/Clínica) -->
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[12px] font-bold text-on-surface-variant">Âmbito da Vida Financeira</label>
+        <div class="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            class="expense-scope-btn py-2 px-3 rounded-2xl text-[12px] font-bold text-center transition-all cursor-pointer ${scope === 'pf' ? 'bg-secondary text-white shadow-sm' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
+            data-scope="pf"
+          >
+            ${renderIcon('person', 'text-[15px] inline mr-1')} Pessoa Física (PF)
+          </button>
+          <button
+            type="button"
+            class="expense-scope-btn py-2 px-3 rounded-2xl text-[12px] font-bold text-center transition-all cursor-pointer ${scope === 'pj' ? 'bg-secondary text-white shadow-sm' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
+            data-scope="pj"
+          >
+            ${renderIcon('business', 'text-[15px] inline mr-1')} Pessoa Jurídica (PJ)
+          </button>
+        </div>
+        <input type="hidden" id="input-expense-scope" value="${scope}" />
+      </div>
+
       <div class="flex flex-col gap-1.5">
         <label class="text-[12px] font-bold text-on-surface-variant">Descrição da Despesa</label>
-        <div class="h-11 bg-surface-container-low rounded-2xl px-3.5 flex items-center gap-2 shadow-sm">
-          ${typeof renderIcon === 'function' ? renderIcon('receipt', 'text-[20px] text-secondary') : '<span class="material-symbols-outlined text-secondary text-[20px]">receipt</span>'}
+        <div class="h-11 bg-surface-container-low rounded-2xl px-3.5 flex items-center gap-2 shadow-sm border border-transparent focus-within:border-primary focus-within:bg-white transition-all">
+          ${renderIcon('receipt', 'text-[20px] text-secondary')}
           <input
             type="text"
             id="input-expense-desc"
             class="w-full bg-transparent text-[14px] text-on-surface focus:outline-none"
-            placeholder="Ex: Sublocação de Consultório / CRM / Combustível"
+            placeholder="Ex: Alimentação, Lazer, CRM, Sublocação..."
             value="${desc}"
             required
           />
         </div>
       </div>
 
-      <div class="grid grid-cols-2 gap-3">
-        <!-- Categoria Pediátrica Pré-definida -->
-        <div class="flex flex-col gap-1.5">
-          <label class="text-[12px] font-bold text-on-surface-variant">Categoria</label>
-          <select
-            id="input-expense-category"
-            class="h-11 bg-surface-container-low rounded-2xl px-3 text-[12px] text-on-surface font-medium focus:outline-none shadow-sm"
+      <!-- Categoria da Despesa com Criação Dinâmica & Quick Pills -->
+      <div class="flex flex-col gap-1.5">
+        <div class="flex items-center justify-between">
+          <label class="text-[12px] font-bold text-on-surface-variant flex items-center gap-1.5">
+            ${renderIcon('category', 'text-[15px] text-secondary')}
+            <span>Categoria da Despesa</span>
+          </label>
+          <button
+            type="button"
+            id="btn-quick-add-category"
+            class="text-[11px] font-bold text-primary hover:text-secondary flex items-center gap-0.5 transition-all py-0.5 px-2 rounded-full hover:bg-primary-fixed/30 active:scale-95 cursor-pointer"
           >
-            ${EXPENSE_CATEGORIES.map(c => `
-              <option value="${c}" ${category === c ? 'selected' : ''}>${c}</option>
-            `).join("")}
-          </select>
+            ${renderIcon('add', 'text-[13px]')} + Nova Categoria
+          </button>
         </div>
 
-        <!-- Tipo: Fixa vs Variável -->
-        <div class="flex flex-col gap-1.5">
-          <label class="text-[12px] font-bold text-on-surface-variant">Tipo de Custo</label>
-          <select
-            id="input-expense-type"
-            class="h-11 bg-surface-container-low rounded-2xl px-3 text-[12px] text-on-surface font-medium focus:outline-none shadow-sm"
+        <!-- Quick Category Pills per scope (1-tap selection) -->
+        <div class="flex items-center gap-1.5 overflow-x-auto pb-1 pt-0.5 -mx-1 px-1 no-scrollbar" id="quick-category-pills-container">
+          ${scopeCategories.map(c => `
+            <button
+              type="button"
+              class="quick-category-pill py-1 px-2.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer ${category === c ? 'bg-secondary text-white shadow-sm font-bold' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
+              data-category="${c}"
+            >
+              ${c}
+            </button>
+          `).join("")}
+          <button
+            type="button"
+            id="btn-pill-add-category"
+            class="py-1 px-2.5 rounded-full text-[11px] font-bold whitespace-nowrap bg-primary-fixed/50 text-primary hover:bg-primary-fixed flex items-center gap-0.5 transition-all active:scale-95 cursor-pointer"
           >
-            <option value="fixed" ${type === 'fixed' ? 'selected' : ''}>Fixa (Recorrente)</option>
-            <option value="variable" ${type === 'variable' ? 'selected' : ''}>Variável (Avulsa)</option>
-          </select>
+            ${renderIcon('add', 'text-[13px]')} Outra Categoria
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="flex flex-col gap-1">
+            <select
+              id="input-expense-category"
+              class="h-11 bg-surface-container-low rounded-2xl px-3 text-[12px] text-on-surface font-semibold focus:outline-none shadow-sm cursor-pointer"
+            >
+              <optgroup label="🌸 Pessoa Física (Vida Pessoal)">
+                ${categoriesPF.map(c => `
+                  <option value="${c}" ${category === c ? 'selected' : ''}>${c}</option>
+                `).join("")}
+              </optgroup>
+              <optgroup label="🩺 Pessoa Jurídica (Trabalho & Clínica)">
+                ${categoriesPJ.map(c => `
+                  <option value="${c}" ${category === c ? 'selected' : ''}>${c}</option>
+                `).join("")}
+              </optgroup>
+              <option value="__new__" class="font-bold text-primary">+ Nova Categoria...</option>
+            </select>
+          </div>
+
+          <!-- Tipo: Fixa vs Variável -->
+          <div class="flex flex-col gap-1">
+            <select
+              id="input-expense-type"
+              class="h-11 bg-surface-container-low rounded-2xl px-3 text-[12px] text-on-surface font-semibold focus:outline-none shadow-sm cursor-pointer"
+            >
+              <option value="fixed" ${type === 'fixed' ? 'selected' : ''}>Fixa (Recorrente)</option>
+              <option value="variable" ${type === 'variable' ? 'selected' : ''}>Variável (Avulsa)</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -5542,13 +7407,13 @@ function renderExpenseForm(data = null) {
         <!-- Valor -->
         <div class="flex flex-col gap-1.5">
           <label class="text-[12px] font-bold text-on-surface-variant">Valor (R$)</label>
-          <div class="h-11 bg-surface-container-low rounded-2xl px-3.5 flex items-center gap-1 shadow-sm">
+          <div class="h-11 bg-surface-container-low rounded-2xl px-3.5 flex items-center gap-1 shadow-sm border border-transparent focus-within:border-primary focus-within:bg-white transition-all">
             <span class="text-[13px] font-bold text-on-surface">R$</span>
             <input
               type="number"
               step="0.01"
               id="input-expense-value"
-              class="w-full bg-transparent text-[16px] font-bold text-on-surface focus:outline-none"
+              class="w-full bg-transparent text-[16px] font-bold text-on-surface focus:outline-none font-display"
               placeholder="0.00"
               value="${val}"
               required
@@ -5559,8 +7424,8 @@ function renderExpenseForm(data = null) {
         <!-- Data de Vencimento -->
         <div class="flex flex-col gap-1.5">
           <label class="text-[12px] font-bold text-on-surface-variant">Data de Vencimento</label>
-          <div class="h-11 bg-surface-container-low rounded-2xl px-3 flex items-center gap-2 shadow-sm">
-            <span class="material-symbols-outlined text-primary text-[18px]">calendar_today</span>
+          <div class="h-11 bg-surface-container-low rounded-2xl px-3 flex items-center gap-2 shadow-sm border border-transparent focus-within:border-primary focus-within:bg-white transition-all">
+            ${renderIcon('calendar_today', 'text-[18px] text-primary')}
             <input
               type="date"
               id="input-expense-duedate"
@@ -5587,10 +7452,10 @@ function renderExpenseForm(data = null) {
 
       <button
         type="submit"
-        class="h-12 w-full rounded-full bg-gradient-to-r from-secondary-container via-secondary to-primary text-white font-bold text-[14px] flex items-center justify-center gap-2 shadow-[0_8px_20px_rgba(253,78,135,0.35)] active:scale-[0.98] transition-all mt-2"
+        class="h-12 w-full rounded-full bg-gradient-to-r from-secondary-container via-secondary to-primary text-white font-bold text-[14px] flex items-center justify-center gap-2 shadow-[0_8px_20px_rgba(253,78,135,0.35)] active:scale-[0.98] transition-all mt-2 cursor-pointer"
       >
         <span>${isEdit ? 'Atualizar Despesa' : 'Registrar Despesa'}</span>
-        <span class="material-symbols-outlined text-[18px]">check</span>
+        ${renderIcon('check', 'text-[18px]')}
       </button>
     </form>
   `;
@@ -5613,36 +7478,55 @@ function attachBottomSheetFormEvents() {
     });
   });
 
-  // Shift form live recalculations, quick pills, tax regimes, and custom date toggle
+  // Shift form live recalculations, quick pills, tax slider, and custom date toggle
   const formShift = document.getElementById("form-shift");
   if (formShift) {
     const inputGross = document.getElementById("input-shift-gross");
     const inputNet = document.getElementById("input-shift-net");
     const inputDate = document.getElementById("input-shift-date");
     const inputType = document.getElementById("input-shift-type");
+    const inputWorkType = document.getElementById("input-shift-work-type");
     const inputLag = document.getElementById("input-shift-lag");
     const inputCustomDate = document.getElementById("input-shift-custom-date");
     const btnToggleCustom = document.getElementById("btn-toggle-custom-date");
     const customDateContainer = document.getElementById("custom-date-container");
-    const lagGroup = document.getElementById("lag-options-group");
     const labelExpected = document.getElementById("label-expected-date");
-    const inputTaxRegime = document.getElementById("input-shift-tax-regime");
+    const inputTaxSlider = document.getElementById("input-shift-tax-slider");
     const inputTaxRate = document.getElementById("input-shift-tax-rate");
-    const labelTaxDisplay = document.getElementById("label-tax-rate-display");
+    const labelTaxSliderDisplay = document.getElementById("label-tax-slider-display");
     const labelDeduction = document.getElementById("label-tax-deduction-amount");
     const badgeHourly = document.getElementById("badge-live-hourly-rate");
 
-    const updateCalculations = () => {
-      const dateVal = inputDate.value || getLocalDateString(state.referenceDate || new Date());
-      const lagVal = Number(inputLag.value) || 3;
+    const updateInstallmentsPreview = () => {
+      const net = parseFloat(inputNet ? inputNet.value : 0) || 0;
+      const dateVal = (inputDate && inputDate.value) ? inputDate.value : getLocalDateString(state.referenceDate || new Date());
       const isCustomActive = customDateContainer && !customDateContainer.classList.contains("hidden");
       const customDateVal = (isCustomActive && inputCustomDate && inputCustomDate.value) ? inputCustomDate.value : null;
 
+      const installments = calculateShiftInstallments(dateVal, net, customDateVal);
+      const labelInst1Val = document.getElementById("label-install-1-val");
+      const labelInst1Date = document.getElementById("label-install-1-date");
+      const labelInst2Val = document.getElementById("label-install-2-val");
+      const labelInst2Date = document.getElementById("label-install-2-date");
+
+      if (installments && installments.length >= 2) {
+        if (labelInst1Val) labelInst1Val.textContent = formatCurrency(installments[0].value);
+        if (labelInst1Date) labelInst1Date.textContent = `Previsão: ${formatDateBR(installments[0].dueDate)}`;
+        if (labelInst2Val) labelInst2Val.textContent = formatCurrency(installments[1].value);
+        if (labelInst2Date) labelInst2Date.textContent = `Previsão: ${formatDateBR(installments[1].dueDate)}`;
+      } else if (installments && installments.length === 1) {
+        if (labelInst1Val) labelInst1Val.textContent = formatCurrency(installments[0].value);
+        if (labelInst1Date) labelInst1Date.textContent = `Previsão: ${formatDateBR(installments[0].dueDate)}`;
+        if (labelInst2Val) labelInst2Val.textContent = "R$ 0,00";
+        if (labelInst2Date) labelInst2Date.textContent = "Data única manual";
+      }
+
+      const lagVal = Number(inputLag ? inputLag.value : 3) || 3;
       const expected = calculateExpectedPaymentDate(dateVal, lagVal, customDateVal);
       if (labelExpected) {
         labelExpected.textContent = customDateVal
-          ? `${formatDateBR(expected)} (Data Manual)`
-          : `${formatDateBR(expected)} (D+${lagVal * 30})`;
+          ? `${formatDateBR(expected)} (Manual)`
+          : formatDateBR(expected);
       }
       updateHourlyRateBadge();
     };
@@ -5664,10 +7548,11 @@ function attachBottomSheetFormEvents() {
       const deduction = gross - net;
       if (labelDeduction) {
         labelDeduction.textContent = deduction > 0
-          ? `Dedução: ${formatCurrency(deduction)} (${taxRate}%)`
+          ? `Dedução: ${formatCurrency(deduction)} (${taxRate.toFixed(1)}%)`
           : 'Líquido em conta';
       }
       updateHourlyRateBadge();
+      updateInstallmentsPreview();
     };
 
     const recalcFromNet = () => {
@@ -5680,38 +7565,48 @@ function attachBottomSheetFormEvents() {
         const deduction = gross - net;
         if (labelDeduction) {
           labelDeduction.textContent = deduction > 0
-            ? `Dedução: ${formatCurrency(deduction)} (${taxRate}%)`
+            ? `Dedução: ${formatCurrency(deduction)} (${taxRate.toFixed(1)}%)`
             : 'Líquido em conta';
         }
       }
       updateHourlyRateBadge();
+      updateInstallmentsPreview();
     };
 
-    // Initial badge update
+    // Initial badge and installments update
     updateHourlyRateBadge();
+    updateInstallmentsPreview();
 
-    if (btnToggleCustom && customDateContainer && lagGroup) {
+    // Tax slider volume control
+    if (inputTaxSlider) {
+      inputTaxSlider.addEventListener("input", () => {
+        const rate = parseFloat(inputTaxSlider.value) || 6;
+        if (inputTaxRate) inputTaxRate.value = rate;
+        if (labelTaxSliderDisplay) labelTaxSliderDisplay.textContent = `${rate.toFixed(1)}%`;
+        recalcFromGross();
+      });
+    }
+
+    if (btnToggleCustom && customDateContainer) {
       btnToggleCustom.addEventListener("click", () => {
         const isHidden = customDateContainer.classList.contains("hidden");
         if (isHidden) {
           customDateContainer.classList.remove("hidden");
-          lagGroup.classList.add("opacity-40", "pointer-events-none");
-          btnToggleCustom.innerHTML = `${renderIcon("rule", "text-[14px]")} <span>Usar Regra D+X</span>`;
+          btnToggleCustom.innerHTML = `${renderIcon("rule", "text-[14px]")} <span>Usar Regra 80/20 Padrão</span>`;
           if (inputCustomDate && !inputCustomDate.value) {
-            inputCustomDate.value = calculateExpectedPaymentDate(inputDate.value || getLocalDateString(new Date()), Number(inputLag.value) || 3);
+            inputCustomDate.value = calculateExpectedPaymentDate(inputDate.value || getLocalDateString(new Date()), 3);
           }
         } else {
           customDateContainer.classList.add("hidden");
-          lagGroup.classList.remove("opacity-40", "pointer-events-none");
           btnToggleCustom.innerHTML = `${renderIcon("tune", "text-[14px]")} <span>Data Manual Específica</span>`;
           if (inputCustomDate) inputCustomDate.value = "";
         }
-        updateCalculations();
+        updateInstallmentsPreview();
       });
     }
 
     if (inputCustomDate) {
-      inputCustomDate.addEventListener("change", updateCalculations);
+      inputCustomDate.addEventListener("change", updateInstallmentsPreview);
     }
 
     if (inputGross) {
@@ -5726,42 +7621,7 @@ function attachBottomSheetFormEvents() {
       inputType.addEventListener("change", updateHourlyRateBadge);
     }
 
-    if (inputDate) inputDate.addEventListener("change", updateCalculations);
-
-    // Tax regime buttons
-    document.querySelectorAll(".tax-regime-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const name = btn.getAttribute("data-name");
-        const rate = btn.getAttribute("data-rate");
-        if (inputTaxRegime) inputTaxRegime.value = name;
-        if (inputTaxRate) inputTaxRate.value = rate;
-        if (labelTaxDisplay) labelTaxDisplay.textContent = `${rate}% de imposto`;
-
-        document.querySelectorAll(".tax-regime-btn").forEach(b => {
-          b.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant", "ring-2", "ring-secondary", "shadow-sm");
-          b.classList.add("bg-surface-container-low", "text-on-surface");
-        });
-        btn.classList.add("bg-secondary-fixed", "text-on-secondary-fixed-variant", "ring-2", "ring-secondary", "shadow-sm");
-        btn.classList.remove("bg-surface-container-low", "text-on-surface");
-
-        recalcFromGross();
-      });
-    });
-
-    // Lag buttons
-    document.querySelectorAll(".lag-option-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const lag = btn.getAttribute("data-lag");
-        inputLag.value = lag;
-        document.querySelectorAll(".lag-option-btn").forEach(b => {
-          b.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm", "ring-2", "ring-secondary");
-          b.classList.add("bg-surface-container-low", "text-on-surface");
-        });
-        btn.classList.add("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm", "ring-2", "ring-secondary");
-        btn.classList.remove("bg-surface-container-low", "text-on-surface");
-        updateCalculations();
-      });
-    });
+    if (inputDate) inputDate.addEventListener("change", updateInstallmentsPreview);
 
     // Quick hospital pills
     document.querySelectorAll(".quick-hospital-pill").forEach(pill => {
@@ -5770,26 +7630,68 @@ function attachBottomSheetFormEvents() {
         const inputHosp = document.getElementById("input-shift-hospital");
         if (inputHosp) inputHosp.value = hosp;
         document.querySelectorAll(".quick-hospital-pill").forEach(p => {
-          p.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant");
+          p.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
           p.classList.add("bg-surface-container-low", "text-on-surface-variant");
         });
-        pill.classList.add("bg-secondary-fixed", "text-on-secondary-fixed-variant");
+        pill.classList.add("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
         pill.classList.remove("bg-surface-container-low", "text-on-surface-variant");
       });
     });
+
+    // Quick add custom hospital without wiping form inputs
+    const btnAddHospPill = document.querySelector(".quick-add-hospital-pill");
+    if (btnAddHospPill) {
+      btnAddHospPill.addEventListener("click", () => {
+        const name = prompt("Digite o nome da maternidade ou local de trabalho:");
+        if (name && name.trim()) {
+          const cleanName = name.trim();
+          state.store.addWorkLocation(cleanName);
+          const inputHosp = document.getElementById("input-shift-hospital");
+          if (inputHosp) inputHosp.value = cleanName;
+
+          // Deselect existing quick hospital pills
+          document.querySelectorAll(".quick-hospital-pill").forEach(p => {
+            p.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
+            p.classList.add("bg-surface-container-low", "text-on-surface-variant");
+          });
+
+          // Dynamically insert new active pill before the "+ Outro Local" button
+          const newPill = document.createElement("button");
+          newPill.type = "button";
+          newPill.className = "quick-hospital-pill py-1 px-2.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all bg-secondary-fixed text-on-secondary-fixed-variant shadow-sm";
+          newPill.setAttribute("data-hospital", cleanName);
+          newPill.textContent = cleanName.length > 20 ? cleanName.slice(0, 18) + '...' : cleanName;
+          newPill.addEventListener("click", () => {
+            if (inputHosp) inputHosp.value = cleanName;
+            document.querySelectorAll(".quick-hospital-pill").forEach(p => {
+              p.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
+              p.classList.add("bg-surface-container-low", "text-on-surface-variant");
+            });
+            newPill.classList.add("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
+            newPill.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+          });
+
+          if (btnAddHospPill.parentNode) {
+            btnAddHospPill.parentNode.insertBefore(newPill, btnAddHospPill);
+          }
+          showToast(`Local "${cleanName}" cadastrado com sucesso! 🏥`);
+        }
+      });
+    }
 
     formShift.addEventListener("submit", (e) => {
       e.preventDefault();
       const hospital = document.getElementById("input-shift-hospital").value.trim();
       const shiftDate = document.getElementById("input-shift-date").value;
       const shiftType = document.getElementById("input-shift-type").value;
+      const workType = document.getElementById("input-shift-work-type")?.value || "Plantão em Maternidade";
       const sector = document.getElementById("input-shift-sector")?.value || "UTI Neonatal";
-      const taxRegime = document.getElementById("input-shift-tax-regime")?.value || "Simples Nacional (6%)";
       const taxRate = parseFloat(document.getElementById("input-shift-tax-rate")?.value) || 6;
+      const taxRegime = `${taxRate}% Personalizado`;
       const notes = document.getElementById("input-shift-notes")?.value.trim() || "";
       const grossValue = parseFloat(document.getElementById("input-shift-gross").value) || 0;
       const netValue = parseFloat(document.getElementById("input-shift-net").value) || (grossValue * (1 - taxRate / 100));
-      const paymentLagMonths = Number(document.getElementById("input-shift-lag").value) || 3;
+      const paymentLagMonths = 3;
       const isCustomActive = customDateContainer && !customDateContainer.classList.contains("hidden");
       const customPaymentDate = (isCustomActive && inputCustomDate && inputCustomDate.value) ? inputCustomDate.value : null;
 
@@ -5802,6 +7704,7 @@ function attachBottomSheetFormEvents() {
         hospital,
         shiftDate,
         shiftType,
+        workType,
         sector,
         taxRegime,
         taxRate,
@@ -5809,12 +7712,15 @@ function attachBottomSheetFormEvents() {
         grossValue,
         netValue,
         paymentLagMonths,
-        customPaymentDate
+        customPaymentDate,
+        splitPayment: !customPaymentDate
       };
 
-      if (state.editingItem && (state.editingItem.type === "shift" || state.editingItem.type === "plantao") && state.editingItem.data && state.editingItem.data.id) {
+      const isEdit = Boolean(state.editingItem && (state.editingItem.type === "shift" || state.editingItem.type === "plantao") && state.editingItem.data && state.editingItem.data.id);
+
+      if (isEdit) {
         state.store.updateShift(state.editingItem.data.id, shiftPayload);
-        showToast(`Plantão do ${hospital} atualizado com sucesso! 🌸`);
+        showToast(`Plantão do ${hospital} atualizado! 🌸`);
       } else {
         state.store.addShift(shiftPayload);
         showToast(`Plantão do ${hospital} salvo no radar! 🌸`);
@@ -5822,6 +7728,14 @@ function attachBottomSheetFormEvents() {
 
       closeBottomSheet();
       renderCurrentView();
+
+      // Pediatric visual reaction: baby smiling + hearts
+      showBabyReaction({
+        type: 'income',
+        title: isEdit ? 'Plantão Atualizado! 👶💖' : 'Plantão Salvo no Radar! 👶💖',
+        message: 'Previsão de recebimento calculada: 80% em 60 dias (D+60) e 20% em 90 dias (D+90)!',
+        amount: netValue
+      });
     });
   }
 
@@ -5844,17 +7758,193 @@ function attachBottomSheetFormEvents() {
       showToast(`Salário fixo '${description}' salvo com sucesso! 💼`);
       closeBottomSheet();
       renderCurrentView();
+
+      showBabyReaction({
+        type: 'income',
+        title: 'Salário Fixo Salvo! 👶💖',
+        message: 'Renda fixa mensal contabilizada no seu planejamento financeiro.',
+        amount: value
+      });
     });
   }
 
-  // Expense form submit
+  // Expense form submit & PF/PJ scope toggles & custom categories
   const formExpense = document.getElementById("form-expense");
   if (formExpense) {
+    const inputScope = document.getElementById("input-expense-scope");
+    const inputCat = document.getElementById("input-expense-category");
+
+    const refreshCategorySelectOptions = (selectedCategory) => {
+      if (!inputCat) return;
+      const categoriesPF = state.store.getExpenseCategories ? state.store.getExpenseCategories("pf") : EXPENSE_CATEGORIES_PF;
+      const categoriesPJ = state.store.getExpenseCategories ? state.store.getExpenseCategories("pj") : EXPENSE_CATEGORIES_PJ;
+
+      inputCat.innerHTML = `
+        <optgroup label="🌸 Pessoa Física (Vida Pessoal)">
+          ${categoriesPF.map(c => `<option value="${c}" ${selectedCategory === c ? 'selected' : ''}>${c}</option>`).join("")}
+        </optgroup>
+        <optgroup label="🩺 Pessoa Jurídica (Trabalho & Clínica)">
+          ${categoriesPJ.map(c => `<option value="${c}" ${selectedCategory === c ? 'selected' : ''}>${c}</option>`).join("")}
+        </optgroup>
+        <option value="__new__" class="font-bold text-primary">+ Nova Categoria...</option>
+      `;
+      inputCat.value = selectedCategory;
+    };
+
+    const attachPillEvents = () => {
+      document.querySelectorAll(".quick-category-pill").forEach(pill => {
+        pill.addEventListener("click", () => {
+          const chosenCat = pill.getAttribute("data-category");
+          if (inputCat) {
+            inputCat.value = chosenCat;
+          }
+          const catScope = state.store.getCategoryScope ? state.store.getCategoryScope(chosenCat) : getCategoryScope(chosenCat);
+          if (inputScope) inputScope.value = catScope;
+
+          document.querySelectorAll(".expense-scope-btn").forEach(b => {
+            const s = b.getAttribute("data-scope");
+            if (s === catScope) {
+              b.classList.add("bg-secondary", "text-white", "shadow-sm");
+              b.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+            } else {
+              b.classList.remove("bg-secondary", "text-white", "shadow-sm");
+              b.classList.add("bg-surface-container-low", "text-on-surface-variant");
+            }
+          });
+
+          document.querySelectorAll(".quick-category-pill").forEach(p => {
+            p.classList.remove("bg-secondary", "text-white", "shadow-sm", "font-bold");
+            p.classList.add("bg-surface-container-low", "text-on-surface-variant");
+          });
+          pill.classList.add("bg-secondary", "text-white", "shadow-sm", "font-bold");
+          pill.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+        });
+      });
+
+      document.getElementById("btn-pill-add-category")?.addEventListener("click", triggerAddCategoryFlow);
+    };
+
+    const refreshQuickPills = (targetScope, activeCategory) => {
+      const pillsContainer = document.getElementById("quick-category-pills-container");
+      if (!pillsContainer) return;
+      const currentCat = activeCategory || (inputCat ? inputCat.value : "");
+      const categories = state.store.getExpenseCategories ? state.store.getExpenseCategories(targetScope) : (targetScope === "pj" ? EXPENSE_CATEGORIES_PJ : EXPENSE_CATEGORIES_PF);
+
+      pillsContainer.innerHTML = `
+        ${categories.map(c => `
+          <button
+            type="button"
+            class="quick-category-pill py-1 px-2.5 rounded-full text-[11px] font-semibold whitespace-nowrap transition-all cursor-pointer ${currentCat === c ? 'bg-secondary text-white shadow-sm font-bold' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
+            data-category="${c}"
+          >
+            ${c}
+          </button>
+        `).join("")}
+        <button
+          type="button"
+          id="btn-pill-add-category"
+          class="py-1 px-2.5 rounded-full text-[11px] font-bold whitespace-nowrap bg-primary-fixed/50 text-primary hover:bg-primary-fixed flex items-center gap-0.5 transition-all active:scale-95 cursor-pointer"
+        >
+          ${renderIcon('add', 'text-[13px]')} Outra Categoria
+        </button>
+      `;
+
+      attachPillEvents();
+    };
+
+    const triggerAddCategoryFlow = () => {
+      const curScope = inputScope ? inputScope.value : "pf";
+      openCategoryModal({
+        mode: "add",
+        initialData: { scope: curScope },
+        onSave: ({ name, scope }) => {
+          state.store.addExpenseCategory({ name, scope });
+          if (inputScope) inputScope.value = scope;
+          document.querySelectorAll(".expense-scope-btn").forEach(b => {
+            const s = b.getAttribute("data-scope");
+            if (s === scope) {
+              b.classList.add("bg-secondary", "text-white", "shadow-sm");
+              b.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+            } else {
+              b.classList.remove("bg-secondary", "text-white", "shadow-sm");
+              b.classList.add("bg-surface-container-low", "text-on-surface-variant");
+            }
+          });
+          refreshCategorySelectOptions(name);
+          refreshQuickPills(scope, name);
+          showToast(`Categoria '${name}' adicionada com sucesso! ✨`);
+        },
+        onCancel: () => {
+          if (inputCat && inputCat.value === "__new__") {
+            const curScope = inputScope ? inputScope.value : "pf";
+            const fallbackList = state.store.getExpenseCategories ? state.store.getExpenseCategories(curScope) : EXPENSE_CATEGORIES_PF;
+            inputCat.value = fallbackList[0] || "Alimentação";
+            refreshQuickPills(curScope, inputCat.value);
+          }
+        }
+      });
+    };
+
+    attachPillEvents();
+    document.getElementById("btn-quick-add-category")?.addEventListener("click", triggerAddCategoryFlow);
+
+    // Scope buttons
+    document.querySelectorAll(".expense-scope-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const scope = btn.getAttribute("data-scope");
+        if (inputScope) inputScope.value = scope;
+        document.querySelectorAll(".expense-scope-btn").forEach(b => {
+          b.classList.remove("bg-secondary", "text-white", "shadow-sm");
+          b.classList.add("bg-surface-container-low", "text-on-surface-variant");
+        });
+        btn.classList.add("bg-secondary", "text-white", "shadow-sm");
+        btn.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+
+        // Auto align category if current is in other scope
+        const currentCat = inputCat ? inputCat.value : "";
+        const currentCatScope = state.store.getCategoryScope ? state.store.getCategoryScope(currentCat) : getCategoryScope(currentCat);
+        let nextCat = currentCat;
+        if (currentCatScope !== scope) {
+          const scopeList = state.store.getExpenseCategories ? state.store.getExpenseCategories(scope) : (scope === "pj" ? EXPENSE_CATEGORIES_PJ : EXPENSE_CATEGORIES_PF);
+          nextCat = scopeList[0] || (scope === "pj" ? "Consultório/Sublocação" : "Alimentação");
+          if (inputCat) inputCat.value = nextCat;
+        }
+
+        refreshQuickPills(scope, nextCat);
+      });
+    });
+
+    // Auto sync scope if user chooses category from another optgroup
+    if (inputCat) {
+      inputCat.addEventListener("change", () => {
+        const cat = inputCat.value;
+        if (cat === "__new__") {
+          triggerAddCategoryFlow();
+          return;
+        }
+
+        const autoScope = state.store.getCategoryScope ? state.store.getCategoryScope(cat) : getCategoryScope(cat);
+        if (inputScope) inputScope.value = autoScope;
+        document.querySelectorAll(".expense-scope-btn").forEach(b => {
+          const s = b.getAttribute("data-scope");
+          if (s === autoScope) {
+            b.classList.add("bg-secondary", "text-white", "shadow-sm");
+            b.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+          } else {
+            b.classList.remove("bg-secondary", "text-white", "shadow-sm");
+            b.classList.add("bg-surface-container-low", "text-on-surface-variant");
+          }
+        });
+        refreshQuickPills(autoScope, cat);
+      });
+    }
+
     formExpense.addEventListener("submit", (e) => {
       e.preventDefault();
       const description = document.getElementById("input-expense-desc").value.trim();
       const category = document.getElementById("input-expense-category").value;
       const type = document.getElementById("input-expense-type").value;
+      const scope = document.getElementById("input-expense-scope")?.value || (state.store.getCategoryScope ? state.store.getCategoryScope(category) : getCategoryScope(category));
       const value = parseFloat(document.getElementById("input-expense-value").value) || 0;
       const dueDate = document.getElementById("input-expense-duedate").value;
       const isPaid = document.getElementById("input-expense-paid").checked;
@@ -5864,11 +7954,19 @@ function attachBottomSheetFormEvents() {
         return;
       }
 
-      if (state.editingItem && (state.editingItem.type === "despesa" || state.editingItem.type === "expense") && state.editingItem.data && state.editingItem.data.id) {
+      if (category === "__new__") {
+        showToast("Selecione ou crie uma categoria válida.", "warning");
+        return;
+      }
+
+      const isEdit = Boolean(state.editingItem && (state.editingItem.type === "despesa" || state.editingItem.type === "expense") && state.editingItem.data && state.editingItem.data.id);
+
+      if (isEdit) {
         state.store.updateExpense(state.editingItem.data.id, {
           description,
           category,
           type,
+          scope,
           value,
           dueDate,
           isPaid
@@ -5879,6 +7977,7 @@ function attachBottomSheetFormEvents() {
           description,
           category,
           type,
+          scope,
           value,
           dueDate,
           isPaid
@@ -5888,6 +7987,14 @@ function attachBottomSheetFormEvents() {
 
       closeBottomSheet();
       renderCurrentView();
+
+      // Pediatric visual reaction: baby crying gently with caring advice
+      showBabyReaction({
+        type: 'expense',
+        title: isEdit ? 'Despesa Atualizada! 🍼🥺' : 'Despesa Anotada! 🍼🥺',
+        message: 'O bebê chora com a saída financeira, mas o orçamento continua impecável e sob controle!',
+        amount: value
+      });
     });
   }
 }
@@ -6037,7 +8144,7 @@ function initApp() {
     // Initial render
     renderCurrentView();
   } catch (err) {
-    console.error("Critical error starting Pediatric Chic:", err);
+    console.error("Critical error starting Finanças Pediatria:", err);
     if (dom.mainContent) {
       dom.mainContent.innerHTML = `
         <div class="p-6 bg-red-50 text-red-700 rounded-2xl m-4 border border-red-200">
@@ -6065,6 +8172,14 @@ function bootApp() {
 }
 
 if (typeof window !== "undefined") {
+  try {
+    Object.defineProperty(window, "APP_CREATOR", {
+      value: APP_CREATOR,
+      writable: false,
+      configurable: false
+    });
+  } catch (e) {}
+
   bootApp();
   window.pediatricApp = {
     state,
@@ -6072,6 +8187,10 @@ if (typeof window !== "undefined") {
     closeBottomSheet,
     openDialog,
     closeDialog,
+    openTrashDialog,
+    openDoctorProfileDialog,
+    openCategoryModal,
+    showBabyReaction,
     showToast,
     switchTab,
     initApp,

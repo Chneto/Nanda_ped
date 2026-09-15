@@ -244,3 +244,53 @@ export function renderDonutChartSVG(categoriesData, totalExpenses) {
 
   return { svg, legend };
 }
+
+/**
+ * Generates an SVG bar chart comparing expenses between current and previous month.
+ * @param {object} momData result of store.getMonthOverMonthExpenseVariation(monthStr)
+ * @returns {string} SVG HTML string
+ */
+export function renderMonthOverMonthChartSVG(momData) {
+  if (!momData || (!momData.currentTotal && !momData.prevTotal)) {
+    return `
+      <div class="p-4 text-center text-on-surface-variant text-[12px]">
+        Dados insuficientes para comparação mês a mês.
+      </div>
+    `;
+  }
+
+  const max = Math.max(momData.currentTotal, momData.prevTotal, 1000);
+  const curH = Math.max(8, Math.round((momData.currentTotal / max) * 100));
+  const prevH = Math.max(8, Math.round((momData.prevTotal / max) * 100));
+
+  const diffBadge = momData.isIncrease
+    ? `<span class="text-error font-bold text-[11px] flex items-center gap-0.5">▲ +${momData.diffPercent}% (+${formatCurrency(momData.diffValue)})</span>`
+    : `<span class="text-tertiary font-bold text-[11px] flex items-center gap-0.5">▼ ${momData.diffPercent}% (${formatCurrency(momData.diffValue)})</span>`;
+
+  return `
+    <div class="flex flex-col gap-3 p-4 bg-surface-container-low rounded-2xl">
+      <div class="flex items-center justify-between">
+        <span class="text-[12px] font-bold text-on-surface">Evolução Mês a Mês</span>
+        ${diffBadge}
+      </div>
+      <div class="flex items-end justify-around h-32 pt-4 px-4 border-b border-outline-variant/30">
+        <!-- Mês Anterior -->
+        <div class="flex flex-col items-center gap-1.5 flex-1 max-w-[80px]">
+          <span class="text-[10px] font-bold text-on-surface-variant">${formatCurrency(momData.prevTotal)}</span>
+          <div class="w-12 bg-surface-container-high rounded-t-xl transition-all duration-500" style="height: ${prevH}px;"></div>
+          <span class="text-[11px] font-semibold text-on-surface-variant">${momData.prevMonthStr.slice(5)}/${momData.prevMonthStr.slice(2, 4)}</span>
+        </div>
+        <!-- Mês Atual -->
+        <div class="flex flex-col items-center gap-1.5 flex-1 max-w-[80px]">
+          <span class="text-[10px] font-bold text-secondary">${formatCurrency(momData.currentTotal)}</span>
+          <div class="w-12 bg-gradient-to-t from-secondary to-primary rounded-t-xl transition-all duration-500 shadow-sm" style="height: ${curH}px;"></div>
+          <span class="text-[11px] font-bold text-secondary">${momData.currentMonthStr.slice(5)}/${momData.currentMonthStr.slice(2, 4)}</span>
+        </div>
+      </div>
+      <div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-1 px-1">
+        <span>Pessoal (PF): <strong class="text-on-surface font-semibold">${momData.pfPercent}%</strong> (${formatCurrency(momData.currentPF)})</span>
+        <span>PJ (Trabalho): <strong class="text-on-surface font-semibold">${momData.pjPercent}%</strong> (${formatCurrency(momData.currentPJ)})</span>
+      </div>
+    </div>
+  `;
+}

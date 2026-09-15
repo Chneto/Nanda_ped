@@ -1,7 +1,7 @@
 {
-  "name": "Pediatria Chic - Gestão Financeira",
-  "short_name": "Pediatria Chic",
-  "description": "Controle financeiro para médicas pediatras - Salário fixo, plantões D+90 e despesas",
+  "name": "Finanças Pediatria",
+  "short_name": "Finanças Pediatria",
+  "description": "Controle financeiro para médicas pediatras - Criado por FChNeto",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
