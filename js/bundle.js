@@ -349,6 +349,9 @@ const CATEGORY_COLORS = {
   "Saúde": "#00BFA5",
   "Viagens": "#00E5FF",
   "Impostos & Contabilidade": "#7E57C2",
+  "Contador": "#7E57C2",
+  "Mercantil/Mercado": "#FF5252",
+  "Lanches": "#FF7043",
   "Outros (Pessoal)": "#9C27B0",
   "Outros (PJ)": "#607D8B",
   "Outros": "#7A7E91"
@@ -370,6 +373,9 @@ const CATEGORY_ICONS = {
   "Saúde": "health_and_safety",
   "Viagens": "flight",
   "Impostos & Contabilidade": "calculate",
+  "Contador": "calculate",
+  "Mercantil/Mercado": "shopping_cart",
+  "Lanches": "restaurant",
   "Outros (Pessoal)": "receipt_long",
   "Outros (PJ)": "business",
   "Outros": "receipt_long"
@@ -1173,8 +1179,13 @@ class PediatricStore {
   // --- Expenses Operations ---
 
   addExpense(expense) {
-    const category = expense.category || "Outros";
+    const category = (expense.category || "Outros").trim();
     const scope = expense.scope || this.getCategoryScope(category);
+
+    // Auto-register custom category if not in standard PF or PJ list
+    if (category && !EXPENSE_CATEGORIES_PF.includes(category) && !EXPENSE_CATEGORIES_PJ.includes(category) && category !== "Outros") {
+      this.addExpenseCategory({ name: category, scope });
+    }
 
     const newExpense = {
       id: expense.id || "e_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
@@ -1196,8 +1207,13 @@ class PediatricStore {
     const index = this.data.expenses.findIndex(e => e.id === id);
     if (index === -1) return null;
 
-    const cat = updates.category !== undefined ? updates.category : this.data.expenses[index].category;
+    const cat = updates.category !== undefined ? String(updates.category).trim() : this.data.expenses[index].category;
     const scope = updates.scope !== undefined ? updates.scope : (this.data.expenses[index].scope || this.getCategoryScope(cat));
+
+    // Auto-register custom category if not in standard PF or PJ list
+    if (cat && !EXPENSE_CATEGORIES_PF.includes(cat) && !EXPENSE_CATEGORIES_PJ.includes(cat) && cat !== "Outros") {
+      this.addExpenseCategory({ name: cat, scope });
+    }
 
     this.data.expenses[index] = {
       ...this.data.expenses[index],
@@ -1426,10 +1442,19 @@ class PediatricStore {
   }
 
   updateExpenseCategory(idOrName, updates) {
-    if (!Array.isArray(this.data.customExpenseCategories) || !idOrName || !updates) return null;
-    const target = this.data.customExpenseCategories.find(
+    if (!idOrName || !updates) return null;
+    if (!Array.isArray(this.data.customExpenseCategories)) {
+      this.data.customExpenseCategories = [];
+    }
+    let target = this.data.customExpenseCategories.find(
       c => c.id === idOrName || c.name.toLowerCase() === String(idOrName).toLowerCase()
     );
+
+    // If target not yet in custom categories (e.g. was standard), register it as custom
+    if (!target) {
+      const scope = updates.scope || this.getCategoryScope(idOrName);
+      target = this.addExpenseCategory({ name: String(idOrName).trim(), scope });
+    }
     if (!target) return null;
 
     const oldName = target.name;
@@ -1483,7 +1508,17 @@ class PediatricStore {
     const customs = this.getCustomExpenseCategories();
     const found = customs.find(c => c.name.toLowerCase() === String(category).trim().toLowerCase());
     if (found && found.color) return found.color;
-    return "#B80F55";
+    const lower = String(category).toLowerCase();
+    if (lower.includes("mercado") || lower.includes("mercantil") || lower.includes("compras") || lower.includes("supermercado")) return "#FF5252";
+    if (lower.includes("lanche") || lower.includes("comida") || lower.includes("restaurante")) return "#FF7043";
+    if (lower.includes("contador") || lower.includes("contabil")) return "#7E57C2";
+    if (lower.includes("farmacia") || lower.includes("farmácia") || lower.includes("remédio") || lower.includes("medicamento")) return "#00BFA5";
+    if (lower.includes("carro") || lower.includes("uber") || lower.includes("combustivel") || lower.includes("combustível")) return "#448AFF";
+    if (lower.includes("consultorio") || lower.includes("consultório") || lower.includes("sublocacao") || lower.includes("aluguel")) return "#EC407A";
+    const palette = ["#B80F55", "#7E4A8A", "#006A62", "#EC407A", "#26A69A", "#AB47BC", "#FF7043", "#7C4DFF"];
+    let hash = 0;
+    for (let i = 0; i < category.length; i++) hash = (hash << 5) - hash + category.charCodeAt(i);
+    return palette[Math.abs(hash) % palette.length];
   }
 
   getCategoryIcon(category) {
@@ -1493,12 +1528,18 @@ class PediatricStore {
     const found = customs.find(c => c.name.toLowerCase() === String(category).trim().toLowerCase());
     if (found && found.icon) return found.icon;
     const lower = String(category).toLowerCase();
-    if (lower.includes("mercado") || lower.includes("mercantil") || lower.includes("compras")) return "shopping_cart";
-    if (lower.includes("lanche") || lower.includes("comida") || lower.includes("restaurante")) return "restaurant";
-    if (lower.includes("contador") || lower.includes("contabil")) return "calculate";
-    if (lower.includes("farmacia") || lower.includes("remédio") || lower.includes("medicamento")) return "medication";
-    if (lower.includes("carro") || lower.includes("uber") || lower.includes("combustivel")) return "directions_car";
-    return "receipt_long";
+    if (lower.includes("mercado") || lower.includes("mercantil") || lower.includes("compras") || lower.includes("supermercado")) return "shopping_cart";
+    if (lower.includes("lanche") || lower.includes("comida") || lower.includes("restaurante") || lower.includes("alimentacao") || lower.includes("alimentação")) return "restaurant";
+    if (lower.includes("contador") || lower.includes("contabil") || lower.includes("imposto")) return "calculate";
+    if (lower.includes("farmacia") || lower.includes("farmácia") || lower.includes("remédio") || lower.includes("medicamento")) return "medication";
+    if (lower.includes("carro") || lower.includes("uber") || lower.includes("combustivel") || lower.includes("combustível")) return "directions_car";
+    if (lower.includes("consultorio") || lower.includes("consultório") || lower.includes("clinica") || lower.includes("clínica")) return "domain";
+    if (lower.includes("viagem") || lower.includes("passagem") || lower.includes("hotel")) return "flight";
+    if (lower.includes("educacao") || lower.includes("educação") || lower.includes("curso") || lower.includes("congresso")) return "school";
+    if (lower.includes("lazer") || lower.includes("cinema") || lower.includes("show")) return "attractions";
+    if (lower.includes("presente")) return "card_giftcard";
+    if (lower.includes("beleza") || lower.includes("cabelo") || lower.includes("estetica")) return "spa";
+    return this.getCategoryScope(category) === "pj" ? "business" : "sell";
   }
 
   toggleExpensePaid(id) {
@@ -3269,6 +3310,144 @@ function openCategoryModal({ mode = "add", initialData = null, onSave, onCancel 
     closeDialog();
     if (typeof onSave === "function") {
       onSave({ id: initialData?.id, name, scope });
+    }
+  });
+}
+
+/**
+ * Quick Category Switcher Dialog for Expenses (1-tap modification from Expense Card)
+ */
+function openQuickCategoryChangeDialog(expense) {
+  const currentCategory = expense.category;
+  const categoriesPF = state.store.getExpenseCategories ? state.store.getExpenseCategories("pf") : EXPENSE_CATEGORIES_PF;
+  const categoriesPJ = state.store.getExpenseCategories ? state.store.getExpenseCategories("pj") : EXPENSE_CATEGORIES_PJ;
+
+  const html = `
+    <div class="p-5 flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto font-body">
+      <div class="flex items-center justify-between border-b border-purple-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-secondary-fixed text-secondary flex items-center justify-center font-bold">
+            ${renderIcon('category', 'text-[22px]')}
+          </div>
+          <div>
+            <h3 class="font-headline text-[16px] font-bold text-on-surface">Modificar Categoria</h3>
+            <p class="text-[11px] text-on-surface-variant font-medium truncate max-w-[220px]">
+              ${expense.description} • Atual: <span class="font-bold text-secondary">${currentCategory}</span>
+            </p>
+          </div>
+        </div>
+        <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container cursor-pointer" id="btn-close-quick-cat">
+          ${renderIcon('close', 'text-[18px]')}
+        </button>
+      </div>
+
+      <!-- Direct Entry / Free Text Input -->
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[11px] font-bold text-on-surface-variant">Digite qualquer categoria que desejar:</label>
+        <div class="h-11 bg-surface-container-low rounded-2xl px-3 flex items-center gap-2 border border-transparent focus-within:border-secondary focus-within:bg-white transition-all shadow-xs">
+          ${renderIcon('edit_note', 'text-[20px] text-secondary')}
+          <input
+            type="text"
+            id="input-quick-custom-cat"
+            class="w-full bg-transparent text-[13px] font-semibold text-on-surface focus:outline-none placeholder:text-outline"
+            placeholder="Ex: Contador, Mercantil/Mercado, Lanches..."
+            value=""
+            autofocus
+          />
+          <button
+            type="button"
+            id="btn-apply-quick-custom-cat"
+            class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-secondary to-primary text-white text-[11px] font-bold shrink-0 shadow-xs hover:opacity-95 active:scale-95 transition-all cursor-pointer"
+          >
+            Aplicar
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Category Selectors PF & PJ -->
+      <div class="flex flex-col gap-2.5 pt-1">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-bold text-secondary uppercase tracking-wider">🌸 Pessoa Física (Pessoal)</span>
+        </div>
+        <div class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto no-scrollbar">
+          ${categoriesPF.map(cat => `
+            <button
+              type="button"
+              class="quick-select-cat-btn px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${currentCategory === cat ? 'bg-secondary text-white shadow-xs font-black' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
+              data-category="${cat}"
+              data-scope="pf"
+            >
+              ${cat}
+            </button>
+          `).join("")}
+        </div>
+
+        <div class="flex items-center justify-between pt-1">
+          <span class="text-[11px] font-bold text-tertiary uppercase tracking-wider">🩺 Pessoa Jurídica (Trabalho)</span>
+        </div>
+        <div class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto no-scrollbar">
+          ${categoriesPJ.map(cat => `
+            <button
+              type="button"
+              class="quick-select-cat-btn px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${currentCategory === cat ? 'bg-tertiary text-white shadow-xs font-black' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
+              data-category="${cat}"
+              data-scope="pj"
+            >
+              ${cat}
+            </button>
+          `).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+
+  openDialog(html);
+
+  setTimeout(() => {
+    document.getElementById("input-quick-custom-cat")?.focus();
+  }, 80);
+
+  const applyCategoryChange = (newCat, scope = null) => {
+    const trimmed = newCat.trim();
+    if (!trimmed) {
+      showToast("Informe o nome da categoria.", "warning");
+      return;
+    }
+    const resolvedScope = scope || (state.store.getCategoryScope ? state.store.getCategoryScope(trimmed) : "pf");
+    state.store.updateExpense(expense.id, {
+      category: trimmed,
+      scope: resolvedScope
+    });
+    closeDialog();
+    renderCurrentView();
+    showToast(`Categoria alterada para '${trimmed}'! ✨`);
+  };
+
+  document.getElementById("btn-close-quick-cat")?.addEventListener("click", closeDialog);
+
+  document.querySelectorAll(".quick-select-cat-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const cat = btn.getAttribute("data-category");
+      const scope = btn.getAttribute("data-scope");
+      applyCategoryChange(cat, scope);
+    });
+  });
+
+  const handleApplyInput = () => {
+    const customVal = document.getElementById("input-quick-custom-cat")?.value;
+    if (customVal && customVal.trim()) {
+      applyCategoryChange(customVal.trim());
+    } else {
+      showToast("Digite o nome da categoria.", "warning");
+    }
+  };
+
+  document.getElementById("btn-apply-quick-custom-cat")?.addEventListener("click", handleApplyInput);
+
+  document.getElementById("input-quick-custom-cat")?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleApplyInput();
     }
   });
 }
@@ -5778,9 +5957,9 @@ function renderExpensesView() {
   } else if (state.expenseFilter === "variavel") {
     filtered = filtered.filter(e => e.type === "variable");
   } else if (state.expenseFilter === "pf") {
-    filtered = filtered.filter(e => (e.scope || getCategoryScope(e.category)) === "pf");
+    filtered = filtered.filter(e => (e.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(e.category) : getCategoryScope(e.category))) === "pf");
   } else if (state.expenseFilter === "pj") {
-    filtered = filtered.filter(e => (e.scope || getCategoryScope(e.category)) === "pj");
+    filtered = filtered.filter(e => (e.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(e.category) : getCategoryScope(e.category))) === "pj");
   }
 
   // Monthly category distribution for active filter
@@ -5795,15 +5974,15 @@ function renderExpensesView() {
       category,
       amount,
       percentage: pct,
-      color: CATEGORY_COLORS[category] || "#7A7E91",
-      icon: CATEGORY_ICONS[category] || "receipt_long"
+      color: state.store.getCategoryColor ? state.store.getCategoryColor(category) : (CATEGORY_COLORS[category] || "#7A7E91"),
+      icon: state.store.getCategoryIcon ? state.store.getCategoryIcon(category) : (CATEGORY_ICONS[category] || "receipt_long")
     };
   }).sort((a, b) => b.amount - a.amount);
   const donutMonthly = renderDonutChartSVG(filteredCategoryData, filteredSpent);
 
   const countAll = expenses.length;
-  const countPF = expenses.filter(e => (e.scope || getCategoryScope(e.category)) === "pf").length;
-  const countPJ = expenses.filter(e => (e.scope || getCategoryScope(e.category)) === "pj").length;
+  const countPF = expenses.filter(e => (e.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(e.category) : getCategoryScope(e.category))) === "pf").length;
+  const countPJ = expenses.filter(e => (e.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(e.category) : getCategoryScope(e.category))) === "pj").length;
   const countFixas = expenses.filter(e => e.type === "fixed").length;
   const countVars = expenses.filter(e => e.type === "variable").length;
 
@@ -6016,9 +6195,9 @@ function renderExpensesView() {
  * Renders an individual Expense card with 1-touch toggle and action menu
  */
 function renderExpenseCard(expense) {
-  const color = CATEGORY_COLORS[expense.category] || "#CE93D8";
-  const icon = CATEGORY_ICONS[expense.category] || "receipt_long";
-  const scope = expense.scope || getCategoryScope(expense.category);
+  const color = state.store.getCategoryColor ? state.store.getCategoryColor(expense.category) : (CATEGORY_COLORS[expense.category] || "#CE93D8");
+  const icon = state.store.getCategoryIcon ? state.store.getCategoryIcon(expense.category) : (CATEGORY_ICONS[expense.category] || "receipt_long");
+  const scope = expense.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(expense.category) : getCategoryScope(expense.category));
 
   // Calculate due status
   const refDate = state.referenceDate ? getLocalDateString(state.referenceDate) : getLocalDateString(new Date());
@@ -6045,9 +6224,21 @@ function renderExpenseCard(expense) {
           ${renderIcon(icon, "text-[20px]")}
         </div>
         <div class="flex flex-col min-w-0 flex-1">
-          <div class="flex items-center gap-1.5">
+          <div class="flex items-center gap-1.5 flex-wrap">
             <span class="text-[14px] font-semibold text-on-surface truncate">${expense.description}</span>
             <span class="px-1.5 py-0.2 rounded-full font-bold text-[9px] ${scope === 'pf' ? 'bg-pink-100 text-pink-700' : 'bg-purple-100 text-purple-700'}">${scope.toUpperCase()}</span>
+            <button
+              type="button"
+              class="btn-card-category-quick inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer"
+              style="background-color: ${color}15; color: ${color}; border: 1px solid ${color}35;"
+              data-id="${expense.id}"
+              data-category="${expense.category}"
+              title="Toque para mudar a categoria (Ex: Contador, Mercado, Lanches...)"
+            >
+              ${renderIcon(icon, 'text-[11px]')}
+              <span>${expense.category}</span>
+              ${renderIcon('arrow_drop_down', 'text-[12px] -ml-1 opacity-70')}
+            </button>
           </div>
           <div class="flex items-center gap-2 mt-0.5 text-[11px] ${dueBadgeClass}">
             <span class="capitalize text-on-surface-variant">${expense.type === 'fixed' ? 'Fixa' : 'Variável'}</span>
@@ -6775,6 +6966,18 @@ function attachCardActionEvents() {
     });
   });
 
+  // Quick Modify Expense Category (1-Tap from Card)
+  document.querySelectorAll(".btn-card-category-quick").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute("data-id");
+      const expense = state.store.data.expenses.find(x => x.id === id);
+      if (expense) {
+        openQuickCategoryChangeDialog(expense);
+      }
+    });
+  });
+
   // Edit Expense
   document.querySelectorAll(".btn-edit-expense").forEach(btn => {
     btn.addEventListener("click", (e) => {
@@ -7292,11 +7495,13 @@ function renderExpenseForm(data = null) {
   const val = data ? data.value : "";
   const dueDate = data ? data.dueDate : `${state.activeMonth}-10`;
   const isPaid = data ? data.isPaid : false;
-  const scope = data ? (data.scope || state.store.getCategoryScope(category)) : state.store.getCategoryScope(category);
+  const scope = data ? (data.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(category) : getCategoryScope(category))) : (state.store.getCategoryScope ? state.store.getCategoryScope(category) : getCategoryScope(category));
   const scopeCategories = scope === "pj" ? categoriesPJ : categoriesPF;
+  const categoryColor = state.store.getCategoryColor ? state.store.getCategoryColor(category) : "#B80F55";
+  const categoryIcon = state.store.getCategoryIcon ? state.store.getCategoryIcon(category) : "receipt_long";
 
   return `
-    <form id="form-expense" class="flex flex-col gap-4">
+    <form id="form-expense" class="flex flex-col gap-4 font-body">
       <!-- Âmbito da Despesa: PF (Vida Pessoal) vs PJ (Trabalho/Clínica) -->
       <div class="flex flex-col gap-1.5">
         <label class="text-[12px] font-bold text-on-surface-variant">Âmbito da Vida Financeira</label>
@@ -7326,7 +7531,7 @@ function renderExpenseForm(data = null) {
           <input
             type="text"
             id="input-expense-desc"
-            class="w-full bg-transparent text-[14px] text-on-surface focus:outline-none"
+            class="w-full bg-transparent text-[14px] font-medium text-on-surface focus:outline-none"
             placeholder="Ex: Alimentação, Lazer, CRM, Sublocação..."
             value="${desc}"
             required
@@ -7334,7 +7539,7 @@ function renderExpenseForm(data = null) {
         </div>
       </div>
 
-      <!-- Categoria da Despesa com Criação Dinâmica & Quick Pills -->
+      <!-- Categoria da Despesa com Custom Dropdown, Direct Typing & Quick Pills -->
       <div class="flex flex-col gap-1.5">
         <div class="flex items-center justify-between">
           <label class="text-[12px] font-bold text-on-surface-variant flex items-center gap-1.5">
@@ -7370,28 +7575,98 @@ function renderExpenseForm(data = null) {
           </button>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div class="flex flex-col gap-1">
-            <select
-              id="input-expense-category"
-              class="h-11 bg-surface-container-low rounded-2xl px-3 text-[12px] text-on-surface font-semibold focus:outline-none shadow-sm cursor-pointer"
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Chic Custom Category Selector & Direct Input -->
+          <div class="flex flex-col gap-1 relative" id="category-selector-container">
+            <label class="text-[11px] font-bold text-on-surface-variant flex items-center justify-between">
+              <span>Selecionar ou Digitar</span>
+              <span class="text-[10px] text-secondary font-medium" id="category-scope-label">${scope === 'pj' ? 'Pessoa Jurídica' : 'Pessoa Física'}</span>
+            </label>
+
+            <!-- Interactive Trigger Box -->
+            <button
+              type="button"
+              id="btn-category-picker-trigger"
+              class="category-picker-trigger h-11 px-3 flex items-center justify-between gap-2 shadow-xs cursor-pointer text-left w-full"
             >
+              <div class="flex items-center gap-2 min-w-0 flex-1">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0" id="category-display-icon-bg" style="background-color: ${categoryColor}25; color: ${categoryColor};">
+                  <span id="category-display-icon">${renderIcon(categoryIcon, 'text-[14px]')}</span>
+                </div>
+                <span id="category-display-text" class="text-[13px] font-bold text-on-surface truncate">${category}</span>
+              </div>
+              <div class="flex items-center gap-1 shrink-0 text-on-surface-variant">
+                <span class="text-[10px] px-1.5 py-0.2 rounded-full font-bold uppercase ${scope === 'pj' ? 'bg-mint-income-bg text-mint-income' : 'bg-lilac-light text-lilac-dark'}" id="category-display-badge">${scope.toUpperCase()}</span>
+                <span id="category-chevron-icon" class="transition-transform duration-200">${renderIcon('expand_more', 'text-[18px] text-secondary')}</span>
+              </div>
+            </button>
+
+            <!-- Native select (kept in DOM for accessibility, form serialization & backward compatibility) -->
+            <select id="input-expense-category" class="hidden">
               <optgroup label="🌸 Pessoa Física (Vida Pessoal)">
-                ${categoriesPF.map(c => `
-                  <option value="${c}" ${category === c ? 'selected' : ''}>${c}</option>
-                `).join("")}
+                ${categoriesPF.map(c => `<option value="${c}" ${category === c ? 'selected' : ''}>${c}</option>`).join("")}
               </optgroup>
               <optgroup label="🩺 Pessoa Jurídica (Trabalho & Clínica)">
-                ${categoriesPJ.map(c => `
-                  <option value="${c}" ${category === c ? 'selected' : ''}>${c}</option>
-                `).join("")}
+                ${categoriesPJ.map(c => `<option value="${c}" ${category === c ? 'selected' : ''}>${c}</option>`).join("")}
               </optgroup>
+              ${!categoriesPF.includes(category) && !categoriesPJ.includes(category) ? `<option value="${category}" selected>${category}</option>` : ''}
               <option value="__new__" class="font-bold text-primary">+ Nova Categoria...</option>
             </select>
+
+            <!-- Custom Category Dropdown Popover Menu (100% styled with Manrope & Stitch tokens) -->
+            <div id="category-picker-menu" class="category-menu-popover hidden">
+              <!-- Live Search & Direct Category Creator Input -->
+              <div class="p-2 border-b border-purple-100 bg-surface-container-low/50">
+                <div class="h-9 bg-white rounded-xl px-2.5 flex items-center gap-1.5 border border-purple-100 focus-within:border-secondary transition-all">
+                  ${renderIcon('search', 'text-[16px] text-secondary')}
+                  <input
+                    type="text"
+                    id="input-category-search"
+                    placeholder="Digite qualquer categoria (ex: Contador, Lanches...)"
+                    class="w-full bg-transparent text-[12px] font-semibold text-on-surface focus:outline-none placeholder:text-on-surface-variant/50"
+                  />
+                  <button type="button" id="btn-clear-cat-search" class="text-on-surface-variant/50 hover:text-on-surface hidden cursor-pointer">
+                    ${renderIcon('close', 'text-[14px]')}
+                  </button>
+                </div>
+                <!-- Dynamic "Use/Create Typed Category" button -->
+                <button
+                  type="button"
+                  id="btn-use-typed-category"
+                  class="hidden mt-1.5 w-full py-1.5 px-2.5 rounded-xl bg-gradient-to-r from-secondary to-primary text-white text-[11px] font-bold flex items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer"
+                >
+                  ${renderIcon('add_circle', 'text-[14px]')}
+                  <span id="text-use-typed-category">Usar nova categoria</span>
+                </button>
+              </div>
+
+              <!-- Scope filter toggle within menu -->
+              <div class="flex items-center gap-1 p-1.5 border-b border-purple-50 bg-white text-[10.5px]">
+                <button type="button" class="cat-menu-scope-tab flex-1 py-1 rounded-lg font-bold text-center transition-all bg-secondary text-white cursor-pointer" data-scope="all">Todas</button>
+                <button type="button" class="cat-menu-scope-tab flex-1 py-1 rounded-lg font-bold text-center transition-all bg-surface-container-low text-on-surface-variant cursor-pointer" data-scope="pf">🌸 Pessoal</button>
+                <button type="button" class="cat-menu-scope-tab flex-1 py-1 rounded-lg font-bold text-center transition-all bg-surface-container-low text-on-surface-variant cursor-pointer" data-scope="pj">🩺 Trabalho</button>
+              </div>
+
+              <!-- Category Items Scrollable List -->
+              <div class="category-menu-list no-scrollbar" id="category-menu-items-list"></div>
+
+              <!-- Footer Add Action -->
+              <div class="p-2 border-t border-purple-100 bg-surface-container-low/40 flex items-center justify-between">
+                <button
+                  type="button"
+                  id="btn-menu-add-category"
+                  class="w-full py-1.5 px-2 rounded-xl text-primary hover:bg-primary-fixed/30 text-[11.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer"
+                >
+                  ${renderIcon('add', 'text-[14px]')}
+                  <span>+ Criar Categoria Personalizada</span>
+                </button>
+              </div>
+            </div>
           </div>
 
           <!-- Tipo: Fixa vs Variável -->
           <div class="flex flex-col gap-1">
+            <label class="text-[11px] font-bold text-on-surface-variant">Tipo de Despesa</label>
             <select
               id="input-expense-type"
               class="h-11 bg-surface-container-low rounded-2xl px-3 text-[12px] text-on-surface font-semibold focus:outline-none shadow-sm cursor-pointer"
@@ -7773,51 +8048,165 @@ function attachBottomSheetFormEvents() {
   if (formExpense) {
     const inputScope = document.getElementById("input-expense-scope");
     const inputCat = document.getElementById("input-expense-category");
+    const pickerTrigger = document.getElementById("btn-category-picker-trigger");
+    const pickerMenu = document.getElementById("category-picker-menu");
+    const catSearchInput = document.getElementById("input-category-search");
+    const btnClearSearch = document.getElementById("btn-clear-cat-search");
+    const btnUseTyped = document.getElementById("btn-use-typed-category");
+    const textUseTyped = document.getElementById("text-use-typed-category");
+    let activeMenuScope = "all";
 
-    const refreshCategorySelectOptions = (selectedCategory) => {
-      if (!inputCat) return;
-      const categoriesPF = state.store.getExpenseCategories ? state.store.getExpenseCategories("pf") : EXPENSE_CATEGORIES_PF;
-      const categoriesPJ = state.store.getExpenseCategories ? state.store.getExpenseCategories("pj") : EXPENSE_CATEGORIES_PJ;
+    const closeCategoryPicker = () => {
+      if (pickerMenu) pickerMenu.classList.add("hidden");
+      if (pickerTrigger) pickerTrigger.classList.remove("active");
+    };
 
-      inputCat.innerHTML = `
-        <optgroup label="🌸 Pessoa Física (Vida Pessoal)">
-          ${categoriesPF.map(c => `<option value="${c}" ${selectedCategory === c ? 'selected' : ''}>${c}</option>`).join("")}
-        </optgroup>
-        <optgroup label="🩺 Pessoa Jurídica (Trabalho & Clínica)">
-          ${categoriesPJ.map(c => `<option value="${c}" ${selectedCategory === c ? 'selected' : ''}>${c}</option>`).join("")}
-        </optgroup>
-        <option value="__new__" class="font-bold text-primary">+ Nova Categoria...</option>
-      `;
-      inputCat.value = selectedCategory;
+    const openCategoryPicker = () => {
+      if (!pickerMenu) return;
+      pickerMenu.classList.remove("hidden");
+      if (pickerTrigger) pickerTrigger.classList.add("active");
+      renderCategoryList(catSearchInput ? catSearchInput.value : "", activeMenuScope);
+      setTimeout(() => catSearchInput?.focus(), 80);
+    };
+
+    const setSelectedCategory = (chosenCat) => {
+      if (!chosenCat) return;
+      const trimmed = chosenCat.trim();
+      if (!trimmed || trimmed === "__new__") return;
+      const catScope = state.store.getCategoryScope ? state.store.getCategoryScope(trimmed) : getCategoryScope(trimmed);
+      const catColor = state.store.getCategoryColor ? state.store.getCategoryColor(trimmed) : "#B80F55";
+      const catIcon = state.store.getCategoryIcon ? state.store.getCategoryIcon(trimmed) : "receipt_long";
+
+      // Ensure option exists in native select for form serialization
+      if (inputCat) {
+        let opt = Array.from(inputCat.options).find(o => o.value.toLowerCase() === trimmed.toLowerCase());
+        if (!opt) {
+          opt = new Option(trimmed, trimmed, true, true);
+          inputCat.add(opt);
+        }
+        inputCat.value = opt.value;
+      }
+
+      // Update trigger display
+      const dispText = document.getElementById("category-display-text");
+      const dispIcon = document.getElementById("category-display-icon");
+      const dispIconBg = document.getElementById("category-display-icon-bg");
+      const dispBadge = document.getElementById("category-display-badge");
+      const scopeLabel = document.getElementById("category-scope-label");
+
+      if (dispText) dispText.textContent = trimmed;
+      if (dispIcon) dispIcon.innerHTML = renderIcon(catIcon, 'text-[14px]');
+      if (dispIconBg) {
+        dispIconBg.style.backgroundColor = catColor + '25';
+        dispIconBg.style.color = catColor;
+      }
+      if (dispBadge) {
+        dispBadge.textContent = catScope.toUpperCase();
+        dispBadge.className = `text-[10px] px-1.5 py-0.2 rounded-full font-bold uppercase ${catScope === 'pj' ? 'bg-mint-income-bg text-mint-income' : 'bg-lilac-light text-lilac-dark'}`;
+      }
+      if (scopeLabel) {
+        scopeLabel.textContent = catScope === 'pj' ? 'Pessoa Jurídica' : 'Pessoa Física';
+      }
+
+      // Auto-sync scope hidden input and scope buttons
+      if (inputScope) inputScope.value = catScope;
+      document.querySelectorAll(".expense-scope-btn").forEach(b => {
+        const s = b.getAttribute("data-scope");
+        if (s === catScope) {
+          b.classList.add("bg-secondary", "text-white", "shadow-sm");
+          b.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+        } else {
+          b.classList.remove("bg-secondary", "text-white", "shadow-sm");
+          b.classList.add("bg-surface-container-low", "text-on-surface-variant");
+        }
+      });
+
+      refreshQuickPills(catScope, trimmed);
+      closeCategoryPicker();
+    };
+
+    const renderCategoryList = (query = "", filterScope = "all") => {
+      const listEl = document.getElementById("category-menu-items-list");
+      if (!listEl) return;
+      const currentVal = (inputCat ? inputCat.value : "").toLowerCase();
+      const pfList = state.store.getExpenseCategories ? state.store.getExpenseCategories("pf") : EXPENSE_CATEGORIES_PF;
+      const pjList = state.store.getExpenseCategories ? state.store.getExpenseCategories("pj") : EXPENSE_CATEGORIES_PJ;
+
+      let items = [];
+      if (filterScope === "pf" || filterScope === "all") {
+        pfList.forEach(name => items.push({ name, scope: "pf" }));
+      }
+      if (filterScope === "pj" || filterScope === "all") {
+        pjList.forEach(name => {
+          if (!items.find(i => i.name.toLowerCase() === name.toLowerCase())) {
+            items.push({ name, scope: "pj" });
+          }
+        });
+      }
+
+      const q = query.trim().toLowerCase();
+      if (q) {
+        items = items.filter(i => i.name.toLowerCase().includes(q));
+      }
+
+      // Update button to use typed category
+      if (btnUseTyped && textUseTyped) {
+        const exactMatch = items.some(i => i.name.toLowerCase() === q);
+        if (q && !exactMatch) {
+          textUseTyped.textContent = `Usar categoria "${query.trim()}" (Criar nova)`;
+          btnUseTyped.classList.remove("hidden");
+        } else {
+          btnUseTyped.classList.add("hidden");
+        }
+      }
+
+      if (items.length === 0) {
+        listEl.innerHTML = `
+          <div class="py-4 px-3 text-center text-[12px] text-on-surface-variant">
+            Nenhuma categoria padrão com "<span class="font-bold text-secondary">${query}</span>".<br/>
+            <span class="text-primary font-semibold">Clique no botão acima para criar e usar "${query}"! ✨</span>
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = items.map(i => {
+        const isSelected = currentVal === i.name.toLowerCase();
+        const color = state.store.getCategoryColor ? state.store.getCategoryColor(i.name) : "#B80F55";
+        const icon = state.store.getCategoryIcon ? state.store.getCategoryIcon(i.name) : "receipt_long";
+        return `
+          <div
+            class="category-menu-item ${isSelected ? 'active' : ''}"
+            data-category="${i.name}"
+            data-scope="${i.scope}"
+          >
+            <div class="flex items-center gap-2 min-w-0">
+              <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style="background-color: ${color}20; color: ${color};">
+                ${renderIcon(icon, 'text-[14px]')}
+              </div>
+              <span class="font-bold text-[12.5px] truncate">${i.name}</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <span class="text-[9px] px-1.5 py-0.2 rounded-full font-bold uppercase ${i.scope === 'pj' ? 'bg-mint-income-bg text-mint-income' : 'bg-lilac-light text-lilac-dark'}">${i.scope.toUpperCase()}</span>
+              ${isSelected ? renderIcon('check', 'text-[16px] text-secondary') : ''}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      listEl.querySelectorAll(".category-menu-item").forEach(item => {
+        item.addEventListener("click", () => {
+          const chosen = item.getAttribute("data-category");
+          setSelectedCategory(chosen);
+        });
+      });
     };
 
     const attachPillEvents = () => {
       document.querySelectorAll(".quick-category-pill").forEach(pill => {
         pill.addEventListener("click", () => {
           const chosenCat = pill.getAttribute("data-category");
-          if (inputCat) {
-            inputCat.value = chosenCat;
-          }
-          const catScope = state.store.getCategoryScope ? state.store.getCategoryScope(chosenCat) : getCategoryScope(chosenCat);
-          if (inputScope) inputScope.value = catScope;
-
-          document.querySelectorAll(".expense-scope-btn").forEach(b => {
-            const s = b.getAttribute("data-scope");
-            if (s === catScope) {
-              b.classList.add("bg-secondary", "text-white", "shadow-sm");
-              b.classList.remove("bg-surface-container-low", "text-on-surface-variant");
-            } else {
-              b.classList.remove("bg-secondary", "text-white", "shadow-sm");
-              b.classList.add("bg-surface-container-low", "text-on-surface-variant");
-            }
-          });
-
-          document.querySelectorAll(".quick-category-pill").forEach(p => {
-            p.classList.remove("bg-secondary", "text-white", "shadow-sm", "font-bold");
-            p.classList.add("bg-surface-container-low", "text-on-surface-variant");
-          });
-          pill.classList.add("bg-secondary", "text-white", "shadow-sm", "font-bold");
-          pill.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+          setSelectedCategory(chosenCat);
         });
       });
 
@@ -7859,31 +8248,95 @@ function attachBottomSheetFormEvents() {
         initialData: { scope: curScope },
         onSave: ({ name, scope }) => {
           state.store.addExpenseCategory({ name, scope });
-          if (inputScope) inputScope.value = scope;
-          document.querySelectorAll(".expense-scope-btn").forEach(b => {
-            const s = b.getAttribute("data-scope");
-            if (s === scope) {
-              b.classList.add("bg-secondary", "text-white", "shadow-sm");
-              b.classList.remove("bg-surface-container-low", "text-on-surface-variant");
-            } else {
-              b.classList.remove("bg-secondary", "text-white", "shadow-sm");
-              b.classList.add("bg-surface-container-low", "text-on-surface-variant");
-            }
-          });
-          refreshCategorySelectOptions(name);
-          refreshQuickPills(scope, name);
+          setSelectedCategory(name);
           showToast(`Categoria '${name}' adicionada com sucesso! ✨`);
         },
-        onCancel: () => {
-          if (inputCat && inputCat.value === "__new__") {
-            const curScope = inputScope ? inputScope.value : "pf";
-            const fallbackList = state.store.getExpenseCategories ? state.store.getExpenseCategories(curScope) : EXPENSE_CATEGORIES_PF;
-            inputCat.value = fallbackList[0] || "Alimentação";
-            refreshQuickPills(curScope, inputCat.value);
-          }
-        }
+        onCancel: () => {}
       });
     };
+
+    // Category Trigger Toggle
+    pickerTrigger?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (pickerMenu && !pickerMenu.classList.contains("hidden")) {
+        closeCategoryPicker();
+      } else {
+        openCategoryPicker();
+      }
+    });
+
+    // Close when clicking outside category selector
+    document.addEventListener("click", (e) => {
+      const selectorContainer = document.getElementById("category-selector-container");
+      if (selectorContainer && !selectorContainer.contains(e.target)) {
+        closeCategoryPicker();
+      }
+    });
+
+    // Live search input
+    catSearchInput?.addEventListener("input", () => {
+      const q = catSearchInput.value;
+      if (btnClearSearch) {
+        if (q.trim()) btnClearSearch.classList.remove("hidden");
+        else btnClearSearch.classList.add("hidden");
+      }
+      renderCategoryList(q, activeMenuScope);
+    });
+
+    btnClearSearch?.addEventListener("click", () => {
+      if (catSearchInput) {
+        catSearchInput.value = "";
+        catSearchInput.focus();
+      }
+      btnClearSearch.classList.add("hidden");
+      renderCategoryList("", activeMenuScope);
+    });
+
+    btnUseTyped?.addEventListener("click", () => {
+      const q = catSearchInput ? catSearchInput.value.trim() : "";
+      if (q) {
+        const curScope = inputScope ? inputScope.value : "pf";
+        const detectedScope = state.store.getCategoryScope ? state.store.getCategoryScope(q) : curScope;
+        state.store.addExpenseCategory({ name: q, scope: detectedScope });
+        setSelectedCategory(q);
+        showToast(`Categoria '${q}' criada e selecionada! ✨`);
+      }
+    });
+
+    catSearchInput?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const q = catSearchInput.value.trim();
+        if (q) {
+          const curScope = inputScope ? inputScope.value : "pf";
+          const detectedScope = state.store.getCategoryScope ? state.store.getCategoryScope(q) : curScope;
+          state.store.addExpenseCategory({ name: q, scope: detectedScope });
+          setSelectedCategory(q);
+          showToast(`Categoria '${q}' selecionada! ✨`);
+        }
+      }
+    });
+
+    // Scope tabs inside menu
+    document.querySelectorAll(".cat-menu-scope-tab").forEach(tab => {
+      tab.addEventListener("click", (e) => {
+        e.stopPropagation();
+        activeMenuScope = tab.getAttribute("data-scope") || "all";
+        document.querySelectorAll(".cat-menu-scope-tab").forEach(t => {
+          t.classList.remove("bg-secondary", "text-white");
+          t.classList.add("bg-surface-container-low", "text-on-surface-variant");
+        });
+        tab.classList.add("bg-secondary", "text-white");
+        tab.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+        renderCategoryList(catSearchInput ? catSearchInput.value : "", activeMenuScope);
+      });
+    });
+
+    document.getElementById("btn-menu-add-category")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeCategoryPicker();
+      triggerAddCategoryFlow();
+    });
 
     attachPillEvents();
     document.getElementById("btn-quick-add-category")?.addEventListener("click", triggerAddCategoryFlow);
@@ -7900,6 +8353,12 @@ function attachBottomSheetFormEvents() {
         btn.classList.add("bg-secondary", "text-white", "shadow-sm");
         btn.classList.remove("bg-surface-container-low", "text-on-surface-variant");
 
+        // Update scope label
+        const scopeLabel = document.getElementById("category-scope-label");
+        if (scopeLabel) {
+          scopeLabel.textContent = scope === 'pj' ? 'Pessoa Jurídica' : 'Pessoa Física';
+        }
+
         // Auto align category if current is in other scope
         const currentCat = inputCat ? inputCat.value : "";
         const currentCatScope = state.store.getCategoryScope ? state.store.getCategoryScope(currentCat) : getCategoryScope(currentCat);
@@ -7907,14 +8366,14 @@ function attachBottomSheetFormEvents() {
         if (currentCatScope !== scope) {
           const scopeList = state.store.getExpenseCategories ? state.store.getExpenseCategories(scope) : (scope === "pj" ? EXPENSE_CATEGORIES_PJ : EXPENSE_CATEGORIES_PF);
           nextCat = scopeList[0] || (scope === "pj" ? "Consultório/Sublocação" : "Alimentação");
-          if (inputCat) inputCat.value = nextCat;
+          setSelectedCategory(nextCat);
+        } else {
+          refreshQuickPills(scope, currentCat);
         }
-
-        refreshQuickPills(scope, nextCat);
       });
     });
 
-    // Auto sync scope if user chooses category from another optgroup
+    // Auto sync scope if user chooses category from another optgroup in native select
     if (inputCat) {
       inputCat.addEventListener("change", () => {
         const cat = inputCat.value;
@@ -7922,39 +8381,33 @@ function attachBottomSheetFormEvents() {
           triggerAddCategoryFlow();
           return;
         }
-
-        const autoScope = state.store.getCategoryScope ? state.store.getCategoryScope(cat) : getCategoryScope(cat);
-        if (inputScope) inputScope.value = autoScope;
-        document.querySelectorAll(".expense-scope-btn").forEach(b => {
-          const s = b.getAttribute("data-scope");
-          if (s === autoScope) {
-            b.classList.add("bg-secondary", "text-white", "shadow-sm");
-            b.classList.remove("bg-surface-container-low", "text-on-surface-variant");
-          } else {
-            b.classList.remove("bg-secondary", "text-white", "shadow-sm");
-            b.classList.add("bg-surface-container-low", "text-on-surface-variant");
-          }
-        });
-        refreshQuickPills(autoScope, cat);
+        setSelectedCategory(cat);
       });
     }
 
     formExpense.addEventListener("submit", (e) => {
       e.preventDefault();
       const description = document.getElementById("input-expense-desc").value.trim();
-      const category = document.getElementById("input-expense-category").value;
+      let category = document.getElementById("input-expense-category").value;
       const type = document.getElementById("input-expense-type").value;
       const scope = document.getElementById("input-expense-scope")?.value || (state.store.getCategoryScope ? state.store.getCategoryScope(category) : getCategoryScope(category));
       const value = parseFloat(document.getElementById("input-expense-value").value) || 0;
       const dueDate = document.getElementById("input-expense-duedate").value;
       const isPaid = document.getElementById("input-expense-paid").checked;
 
+      // If user typed a category into search input but didn't click apply
+      const pendingTyped = catSearchInput ? catSearchInput.value.trim() : "";
+      if (pendingTyped && (!category || category === "__new__" || category === "Alimentação" || category === "Lazer")) {
+        category = pendingTyped;
+        state.store.addExpenseCategory({ name: category, scope });
+      }
+
       if (!description || value <= 0 || !dueDate) {
         showToast("Preencha todos os campos obrigatórios da despesa.", "warning");
         return;
       }
 
-      if (category === "__new__") {
+      if (category === "__new__" || !category) {
         showToast("Selecione ou crie uma categoria válida.", "warning");
         return;
       }
