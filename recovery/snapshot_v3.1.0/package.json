@@ -1,6 +1,6 @@
 {
   "name": "financas-pediatria",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Controle Financeiro PWA Mobile-First para Médica Pediatra",
   "main": "index.html",
   "type": "module",
