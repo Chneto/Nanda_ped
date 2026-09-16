@@ -1,20 +1,19 @@
-# 🔄 RECOVERY — Finanças Pediatria (Guia de Restauração v3.1.0 & v3.0.0)
+# 🔄 RECOVERY — Finanças Pediatria (Guia de Restauração v3.0.0)
 
-> **Pontos de Restauração Oficiais:**  
-> - **v3.1.0 (Pediatric Dark Sanctuary & Stitch Chic)**: 78 testes aprovados (`recovery/snapshot_v3.1.0/`).  
-> - **v3.0.0 (Ultra Release)**: 71 testes aprovados (`recovery/snapshot_v3.0.0/`).  
+> **Ponto de Restauração Oficial:** v3.0.0 (Ultra Release)  
 > **Criado por:** FChNeto  
-> **Finalidade:** Garantir restauração rápida e 100% automatizada a qualquer momento.
+> **Finalidade:** Garantir restauração rápida e 100% automatizada para a versão estável v3.0.0 com 71 testes aprovados.
 
 ---
 
 ## 🛡️ Camadas de Proteção & Recuperação
 
-O projeto dispõe de métodos independentes para restaurar snapshots estáveis a qualquer momento:
+O projeto dispõe de **4 métodos independentes** para restaurar a versão v3.0.0 a qualquer momento:
 
-1. **Snapshot v3.1.0 (`recovery/snapshot_v3.1.0/`):** Contém todo o código-fonte com Pediatric Dark Sanctuary, Seletores Dropdown Modernos, Menu Hambúrguer, Foto de Perfil e Central de Blindagem Jurídica (78 testes passando).
-2. **Snapshot v3.0.0 (`recovery/snapshot_v3.0.0/`):** Contém o marco v3.0.0 inicial com Consultório, SBAR e DRE (71 testes passando).
-3. **Scripts de Restauração Automatizada:** `scripts/restore_v3.0.0.bat`, `scripts/restore_v3.0.0.js`, `scripts/restore_v3.0.0.ps1`.
+1. **Método 1: Restauração em 1 Duplo-Clique (Windows):** `scripts/restore_v3.0.0.bat`
+2. **Método 2: Script Automatizado Node.js (`npm run restore`):** Restaura os arquivos, reconstrói o bundle unificado e valida todos os 71 testes automatizados.
+3. **Método 3: Via Script PowerShell:** `scripts/restore_v3.0.0.ps1`
+4. **Método 4: Cópia Manual do Snapshot (`recovery/snapshot_v3.0.0`):** Cópia direta do backup estruturado preservado no repositório.
 
 ---
 
