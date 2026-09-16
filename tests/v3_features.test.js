@@ -377,3 +377,47 @@ test('V3 Feature 12: Immutable App Creator Signature & Version Integrity', (t) =
   assert.strictEqual(APP_CREATOR.name, "FChNeto", "Creator name must strictly remain FChNeto");
   assert.strictEqual(APP_CREATOR.signature, "Criado por FChNeto", "Creator signature must strictly remain Criado por FChNeto");
 });
+
+test('V3 Feature 13: DRE Aliases & Fator R Dynamic Optimizer Compatibility', (t) => {
+  const store = new PediatricStore();
+  store.loadDemoData();
+
+  const dre = store.getDRE("2026-09");
+  assert.strictEqual(typeof dre.taxes, "number", "DRE must alias taxes to taxesTotal for UI compatibility");
+  assert.strictEqual(typeof dre.pjOperatingExpenses, "number", "DRE must alias pjOperatingExpenses");
+  assert.strictEqual(typeof dre.pfExpenses, "number", "DRE must alias pfExpenses");
+  assert.strictEqual(typeof dre.distributableDividends, "number", "DRE must alias distributableDividends");
+
+  const opt = store.getFatorROptimizer("2026-09");
+  assert.strictEqual(typeof opt.meetsThreshold, "boolean", "Fator R optimizer must provide meetsThreshold alias");
+  assert.ok(Array.isArray(opt.options), "Fator R optimizer must return options array");
+});
+
+test('V3 Feature 14: Doctor FIRE Simulator Persistence & Interactivity', (t) => {
+  const store = new PediatricStore();
+  store.data.currentEquity = 300000;
+
+  // When omitted, reads from store.data.currentEquity
+  const firePersisted = store.getDoctorFIREMetrics();
+  assert.strictEqual(firePersisted.equity, 300000);
+  assert.strictEqual(firePersisted.currentSavings, 300000);
+  assert.ok(firePersisted.shiftsReplacedCount >= 1, "Should calculate shifts replaced from persisted equity");
+
+  // When overridden, uses dynamic parameter
+  const fireSim = store.getDoctorFIREMetrics(600000);
+  assert.strictEqual(fireSim.equity, 600000);
+  assert.strictEqual(fireSim.currentSavings, 600000);
+  assert.ok(fireSim.shiftsReplacedCount >= firePersisted.shiftsReplacedCount);
+});
+
+test('V3 Feature 15: Brazilian Medical Voice NLP Edge Numbers & Day Recognition', (t) => {
+  const parsed1 = parseMedicalVoiceInput("Plantão Mater Dei dia 22 quatrocentos e cinquenta");
+  assert.ok(parsed1);
+  assert.strictEqual(parsed1.grossValue, 450);
+  assert.ok(parsed1.date.endsWith("-22"));
+
+  const parsed2 = parseMedicalVoiceInput("Consulta puericultura Maria três mil e quinhentos reais");
+  assert.ok(parsed2);
+  assert.strictEqual(parsed2.grossValue, 3500);
+});
+

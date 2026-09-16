@@ -1088,7 +1088,8 @@ input[type="range"].tax-slider::-moz-range-thumb {
   transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.spotlight-overlay.open {
+.spotlight-overlay.open,
+.spotlight-overlay.active {
   opacity: 1;
   pointer-events: auto;
 }
@@ -1105,7 +1106,8 @@ input[type="range"].tax-slider::-moz-range-thumb {
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.spotlight-overlay.open .spotlight-card {
+.spotlight-overlay.open .spotlight-card,
+.spotlight-overlay.active .spotlight-card {
   transform: translateY(0) scale(1);
 }
 

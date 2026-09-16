@@ -1649,6 +1649,7 @@ export class PediatricStore {
     shifts.forEach(s => {
       let h = 12;
       if (s.hours) h = Number(s.hours);
+      else if (s.explicitHours) h = Number(s.explicitHours);
       else if (s.durationMinutes) h = Number(s.durationMinutes) / 60;
       else {
         const found = SHIFT_TYPES.find(t => t.id === s.shiftType);
@@ -2351,6 +2352,8 @@ export class PediatricStore {
       let shiftHours = 0;
       if (s.hours !== undefined && Number(s.hours) > 0) {
         shiftHours = Number(s.hours);
+      } else if (s.explicitHours !== undefined && Number(s.explicitHours) > 0) {
+        shiftHours = Number(s.explicitHours);
       } else if (s.durationMinutes !== undefined && Number(s.durationMinutes) > 0) {
         shiftHours = Number(s.durationMinutes) / 60;
       } else {
@@ -2784,16 +2787,16 @@ export class PediatricStore {
   getDRE(periodStr = null) {
     const pStr = periodStr || getLocalDateString(new Date()).slice(0, 7);
 
-    let shiftsInPeriod = this.data.shifts.filter(s => s.shiftDate.startsWith(pStr));
-    let consultationsInPeriod = (this.data.consultations || []).filter(c => c.date.startsWith(pStr));
-    let expensesInPeriod = this.data.expenses.filter(e => e.dueDate.startsWith(pStr));
+    let shiftsInPeriod = this.data.shifts.filter(s => s.shiftDate && s.shiftDate.startsWith(pStr));
+    let consultationsInPeriod = (this.data.consultations || []).filter(c => c.date && c.date.startsWith(pStr));
+    let expensesInPeriod = this.data.expenses.filter(e => (e.dueDate && e.dueDate.startsWith(pStr)) || (e.date && e.date.startsWith(pStr)));
 
     const grossShifts = shiftsInPeriod.reduce((sum, s) => sum + (Number(s.grossValue) || 0), 0);
     const netShifts = shiftsInPeriod.reduce((sum, s) => sum + (Number(s.netValue) || 0), 0);
     const taxesShifts = Math.max(0, grossShifts - netShifts);
 
-    const grossConsultations = consultationsInPeriod.reduce((sum, c) => sum + (Number(c.grossValue) || 0), 0);
-    const netConsultations = consultationsInPeriod.reduce((sum, c) => sum + (Number(c.netValue) || 0), 0);
+    const grossConsultations = consultationsInPeriod.reduce((sum, c) => sum + (Number(c.grossValue !== undefined ? c.grossValue : c.value) || 0), 0);
+    const netConsultations = consultationsInPeriod.reduce((sum, c) => sum + (Number(c.netValue !== undefined ? c.netValue : c.value) || 0), 0);
     const taxesConsultations = Math.max(0, grossConsultations - netConsultations);
 
     const monthsInPeriod = pStr.length === 4 ? 12 : 1;
@@ -2832,11 +2835,16 @@ export class PediatricStore {
       grossShifts,
       grossConsultations,
       grossSalaries,
+      taxes: taxesTotal,
       taxesTotal,
+      pjExpenses: pjExpensesTotal,
       pjExpensesTotal,
+      pjOperatingExpenses: pjExpensesTotal,
       operationalMarginPJ,
       proLabore,
       netDividends,
+      distributableDividends: netDividends,
+      pfExpenses: pfExpensesTotal,
       pfExpensesTotal,
       netSurplus: realSuperavit,
       realSuperavit,
@@ -2849,7 +2857,7 @@ export class PediatricStore {
    * Computes exact rolling 12 months ratio to keep medical PJ in Anexo III (6%) instead of Anexo V (15.5%).
    * @param {Date|string} referenceDate
    */
-  getFatorROptimizer(referenceDate = new Date()) {
+  getFatorROptimizer(referenceDate = new Date(), options = null) {
     const refDate = referenceDate instanceof Date ? referenceDate : new Date(String(referenceDate) + "T00:00:00");
     const refDateStr = getLocalDateString(refDate);
     const [curYear, curMonth] = refDateStr.slice(0, 7).split("-").map(Number);
@@ -2862,12 +2870,12 @@ export class PediatricStore {
       const mStr = `${targetYear}-${String(targetMonth).padStart(2, "0")}`;
 
       const shiftsGross = this.data.shifts
-        .filter(s => s.shiftDate.startsWith(mStr))
+        .filter(s => s.shiftDate && s.shiftDate.startsWith(mStr))
         .reduce((sum, s) => sum + (Number(s.grossValue) || 0), 0);
 
       const consultGross = (this.data.consultations || [])
-        .filter(c => c.date.startsWith(mStr))
-        .reduce((sum, c) => sum + (Number(c.grossValue) || 0), 0);
+        .filter(c => c.date && c.date.startsWith(mStr))
+        .reduce((sum, c) => sum + (Number(c.grossValue !== undefined ? c.grossValue : c.value) || 0), 0);
 
       const salariesGross = this.data.fixedSalaries
         .reduce((sum, s) => sum + (Number(s.value) || 0), 0);
@@ -2880,9 +2888,18 @@ export class PediatricStore {
       rbt12 = 240000; // ~20k/month benchmark
     }
 
-    // Folha12: Pró-labore + encargos over past 12 months
+    // Recommended Pro-Labore for exact 28% compliance
     const recommendedMonthlyProLabore = Math.max(1412, Math.round((rbt12 * 0.28) / 12));
-    const folha12 = recommendedMonthlyProLabore * 12;
+
+    let folha12;
+    if (options && typeof options === "object" && options.actualFolha12 !== undefined) {
+      folha12 = Number(options.actualFolha12) || 0;
+    } else if (options && typeof options === "object" && options.proLabore !== undefined) {
+      folha12 = (Number(options.proLabore) || 0) * 12;
+    } else {
+      folha12 = recommendedMonthlyProLabore * 12;
+    }
+
     const fatorRPercentage = Number(((folha12 / rbt12) * 100).toFixed(1));
     const isAnexoIII = fatorRPercentage >= 28.0;
 
@@ -2896,12 +2913,40 @@ export class PediatricStore {
       ? `Sua folha representa ${fatorRPercentage}% do faturamento. Sua PJ está enquadrada com segurança no Anexo III (alíquota inicial de 6%), gerando economia tributária anual de ${formatCurrency(annualTaxSavings)} em comparação ao Anexo V.`
       : `Atenção: sua folha atual representa ${fatorRPercentage}% do faturamento (abaixo do limiar de 28%). Recomendamos ajustar o pró-labore mensal para pelo menos ${formatCurrency(recommendedMonthlyProLabore)} para enquadrar no Anexo III e economizar ${formatCurrency(annualTaxSavings)}/ano.`;
 
+    const optionsList = [
+      {
+        label: "Mínimo Recomendado (Fator R 28%)",
+        proLaboreMonthly: recommendedMonthlyProLabore,
+        fatorR: 28.0,
+        anexo: "Anexo III",
+        taxRate: 0.06,
+        isSafe: true
+      },
+      {
+        label: "Salário Mínimo Vigente (Sem Fator R)",
+        proLaboreMonthly: 1412,
+        fatorR: Number(((1412 * 12 / rbt12) * 100).toFixed(1)),
+        anexo: (1412 * 12 / rbt12) >= 0.28 ? "Anexo III" : "Anexo V",
+        taxRate: (1412 * 12 / rbt12) >= 0.28 ? 0.06 : 0.155,
+        isSafe: (1412 * 12 / rbt12) >= 0.28
+      },
+      {
+        label: "Pró-Labore Conforto (35%)",
+        proLaboreMonthly: Math.round((rbt12 * 0.35) / 12),
+        fatorR: 35.0,
+        anexo: "Anexo III",
+        taxRate: 0.06,
+        isSafe: true
+      }
+    ];
+
     return {
       rbt12,
       folha12,
       fatorRPercentage,
       currentFatorR: fatorRPercentage,
       isAnexoIII,
+      meetsThreshold: isAnexoIII,
       anexo: isAnexoIII ? "Anexo III (6%)" : "Anexo V (15.5%)",
       taxRate: isAnexoIII ? 0.06 : 0.155,
       recommendedMonthlyProLabore,
@@ -2909,7 +2954,8 @@ export class PediatricStore {
       annualTaxSavings,
       monthlyTaxSavings,
       anexoIIISavingsPercent: 9.5,
-      recommendation
+      recommendation,
+      options: optionsList
     };
   }
 
@@ -2918,8 +2964,10 @@ export class PediatricStore {
    * Calculates how many 12h night shifts the doctor can permanently drop per month.
    * @param {number} currentEquity Accumulated financial investments in R$
    */
-  getDoctorFIREMetrics(currentEquity = 0) {
-    const equity = Number(currentEquity) || 0;
+  getDoctorFIREMetrics(currentEquity = null) {
+    const equity = (currentEquity !== null && currentEquity !== undefined)
+      ? (Number(currentEquity) || 0)
+      : (Number(this.data.currentEquity) || 0);
     
     // Average monthly living cost (PF + PJ)
     const mStr = getLocalDateString(new Date()).slice(0, 7);
@@ -3257,7 +3305,7 @@ export class PediatricStore {
   generateAccountantKit(monthStr = null) {
     const mStr = monthStr || getLocalDateString(new Date()).slice(0, 7);
     const dre = this.getDRE(mStr);
-    const fatorR = this.getFatorROptimizer();
+    const fatorR = this.getFatorROptimizer(mStr);
     const csvContent = this.generateCSV(mStr, { onlyMonth: true });
 
     const summaryText = [
@@ -3272,7 +3320,7 @@ export class PediatricStore {
       ``,
       `🧾 *Retenções & Impostos Apurados:* ${formatCurrency(dre.taxesTotal)}`,
       `💼 *Despesas Operacionais Dedutíveis (PJ):* ${formatCurrency(dre.pjExpensesTotal)}`,
-      `💵 *Lucro Líquido Distribuível Isento:* ${formatCurrency(dre.distributableDividends)}`,
+      `💵 *Lucro Líquido Distribuível Isento:* ${formatCurrency(dre.distributableDividends || dre.netDividends)}`,
       ``,
       `📈 *Otimização Tributária (Fator R LC 123/2006):*`,
       `• Receita Bruta 12 Meses (RBT12): ${formatCurrency(fatorR.rbt12)}`,
@@ -3287,6 +3335,7 @@ export class PediatricStore {
       monthStr: mStr,
       summaryText,
       csvContent,
+      csv: csvContent,
       whatsAppLink: `https://wa.me/?text=${encodeURIComponent(summaryText)}`
     };
   }
@@ -3321,7 +3370,15 @@ export class PediatricStore {
     }
 
     // Patient Name extraction for consultations
-    let patientName = "Paciente";
+    let patientName = "Paciente Puericultura";
+    const nameMatch = text.match(/(?:consulta|atendimento|puericultura|paciente)\s+(?:de|da|do)?\s*([a-zá-ú]+(?:\s+[a-zá-ú]+)?)/i);
+    if (nameMatch && nameMatch[1]) {
+      const candidate = nameMatch[1].trim();
+      const forbidden = ["puericultura", "avulsa", "anual", "particular", "de", "da", "do", "no", "na", "dia", "valor", "ontem", "hoje"];
+      if (!forbidden.includes(candidate.toLowerCase())) {
+        patientName = candidate.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+      }
+    }
     if (text.includes("maria eduarda")) patientName = "Maria Eduarda";
     else if (text.includes("maria")) patientName = "Maria";
     else if (text.includes("bernardo")) patientName = "Bernardo";
@@ -3330,7 +3387,15 @@ export class PediatricStore {
     // 2. Date determination
     const today = new Date();
     let shiftDate = getLocalDateString(today);
-    if (text.includes("ontem")) {
+    const dayMatch = text.match(/\b(?:no\s+)?dia\s+(\d{1,2})\b/);
+    if (dayMatch) {
+      const dNum = parseInt(dayMatch[1], 10);
+      if (dNum >= 1 && dNum <= 31) {
+        const y = today.getFullYear();
+        const m = String(today.getMonth() + 1).padStart(2, "0");
+        shiftDate = `${y}-${m}-${String(dNum).padStart(2, "0")}`;
+      }
+    } else if (text.includes("ontem")) {
       today.setDate(today.getDate() - 1);
       shiftDate = getLocalDateString(today);
     } else if (text.includes("anteontem")) {
@@ -3351,21 +3416,75 @@ export class PediatricStore {
     }
 
     // 4. Gross Value extraction
-    let grossValue = 2000;
-    // Direct digits matching e.g. 2500, 1800, 2000
+    let grossValue = isConsultation ? 350 : 2000;
+    // Direct digits matching e.g. 2500, 1800, 2000, 350
     const digitMatch = text.match(/\b([1-9][0-9]{2,4})\b/);
     if (digitMatch) {
       grossValue = parseFloat(digitMatch[1]);
+    } else if (text.includes("cinco mil e quinhentos") || text.includes("5 mil e quinhentos")) {
+      grossValue = 5500;
+    } else if (text.includes("cinco mil") || text.includes("5 mil")) {
+      grossValue = 5000;
+    } else if (text.includes("quatro mil e quinhentos") || text.includes("4 mil e quinhentos")) {
+      grossValue = 4500;
+    } else if (text.includes("quatro mil") || text.includes("4 mil")) {
+      grossValue = 4000;
+    } else if (text.includes("três mil e quinhentos") || text.includes("tres mil e quinhentos") || text.includes("3 mil e quinhentos")) {
+      grossValue = 3500;
+    } else if (text.includes("três mil e duzentos") || text.includes("3 mil e duzentos")) {
+      grossValue = 3200;
+    } else if (text.includes("três mil") || text.includes("tres mil") || text.includes("3 mil")) {
+      grossValue = 3000;
     } else if (text.includes("dois mil e quinhentos") || text.includes("2 mil e quinhentos")) {
       grossValue = 2500;
+    } else if (text.includes("dois mil e quatrocentos") || text.includes("2 mil e quatrocentos")) {
+      grossValue = 2400;
+    } else if (text.includes("dois mil e duzentos") || text.includes("2 mil e duzentos")) {
+      grossValue = 2200;
     } else if (text.includes("dois mil") || text.includes("2 mil")) {
       grossValue = 2000;
     } else if (text.includes("mil e oitocentos") || text.includes("1800")) {
       grossValue = 1800;
+    } else if (text.includes("mil e seiscentos")) {
+      grossValue = 1600;
     } else if (text.includes("mil e quinhentos") || text.includes("1500")) {
       grossValue = 1500;
-    } else if (text.includes("três mil") || text.includes("3 mil")) {
-      grossValue = 3000;
+    } else if (text.includes("mil e duzentos")) {
+      grossValue = 1200;
+    } else if (text.includes("mil reais") || text.match(/\bmil\b/)) {
+      grossValue = 1000;
+    } else if (text.includes("novecentos e cinquenta")) {
+      grossValue = 950;
+    } else if (text.includes("novecentos")) {
+      grossValue = 900;
+    } else if (text.includes("oitocentos e cinquenta")) {
+      grossValue = 850;
+    } else if (text.includes("oitocentos")) {
+      grossValue = 800;
+    } else if (text.includes("setecentos e cinquenta")) {
+      grossValue = 750;
+    } else if (text.includes("setecentos")) {
+      grossValue = 700;
+    } else if (text.includes("seiscentos e cinquenta")) {
+      grossValue = 650;
+    } else if (text.includes("seiscentos")) {
+      grossValue = 600;
+    } else if (text.includes("quinhentos e cinquenta")) {
+      grossValue = 550;
+    } else if (text.includes("quinhentos")) {
+      grossValue = 500;
+    } else if (text.includes("quatrocentos e cinquenta")) {
+      grossValue = 450;
+    } else if (text.includes("quatrocentos")) {
+      grossValue = 400;
+    } else if (text.includes("trezentos e cinquenta")) {
+      grossValue = 350;
+    } else if (text.includes("trezentos")) {
+      grossValue = 300;
+    } else if (text.includes("duzentos e cinquenta")) {
+      grossValue = 250;
+    } else if (text.includes("duzentos")) {
+      grossValue = 200;
     }
 
     // 5. Tax Regime & Rate

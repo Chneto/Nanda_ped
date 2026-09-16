@@ -1894,6 +1894,7 @@ class PediatricStore {
     shifts.forEach(s => {
       let h = 12;
       if (s.hours) h = Number(s.hours);
+      else if (s.explicitHours) h = Number(s.explicitHours);
       else if (s.durationMinutes) h = Number(s.durationMinutes) / 60;
       else {
         const found = SHIFT_TYPES.find(t => t.id === s.shiftType);
@@ -2596,6 +2597,8 @@ class PediatricStore {
       let shiftHours = 0;
       if (s.hours !== undefined && Number(s.hours) > 0) {
         shiftHours = Number(s.hours);
+      } else if (s.explicitHours !== undefined && Number(s.explicitHours) > 0) {
+        shiftHours = Number(s.explicitHours);
       } else if (s.durationMinutes !== undefined && Number(s.durationMinutes) > 0) {
         shiftHours = Number(s.durationMinutes) / 60;
       } else {
@@ -3029,16 +3032,16 @@ class PediatricStore {
   getDRE(periodStr = null) {
     const pStr = periodStr || getLocalDateString(new Date()).slice(0, 7);
 
-    let shiftsInPeriod = this.data.shifts.filter(s => s.shiftDate.startsWith(pStr));
-    let consultationsInPeriod = (this.data.consultations || []).filter(c => c.date.startsWith(pStr));
-    let expensesInPeriod = this.data.expenses.filter(e => e.dueDate.startsWith(pStr));
+    let shiftsInPeriod = this.data.shifts.filter(s => s.shiftDate && s.shiftDate.startsWith(pStr));
+    let consultationsInPeriod = (this.data.consultations || []).filter(c => c.date && c.date.startsWith(pStr));
+    let expensesInPeriod = this.data.expenses.filter(e => (e.dueDate && e.dueDate.startsWith(pStr)) || (e.date && e.date.startsWith(pStr)));
 
     const grossShifts = shiftsInPeriod.reduce((sum, s) => sum + (Number(s.grossValue) || 0), 0);
     const netShifts = shiftsInPeriod.reduce((sum, s) => sum + (Number(s.netValue) || 0), 0);
     const taxesShifts = Math.max(0, grossShifts - netShifts);
 
-    const grossConsultations = consultationsInPeriod.reduce((sum, c) => sum + (Number(c.grossValue) || 0), 0);
-    const netConsultations = consultationsInPeriod.reduce((sum, c) => sum + (Number(c.netValue) || 0), 0);
+    const grossConsultations = consultationsInPeriod.reduce((sum, c) => sum + (Number(c.grossValue !== undefined ? c.grossValue : c.value) || 0), 0);
+    const netConsultations = consultationsInPeriod.reduce((sum, c) => sum + (Number(c.netValue !== undefined ? c.netValue : c.value) || 0), 0);
     const taxesConsultations = Math.max(0, grossConsultations - netConsultations);
 
     const monthsInPeriod = pStr.length === 4 ? 12 : 1;
@@ -3077,11 +3080,16 @@ class PediatricStore {
       grossShifts,
       grossConsultations,
       grossSalaries,
+      taxes: taxesTotal,
       taxesTotal,
+      pjExpenses: pjExpensesTotal,
       pjExpensesTotal,
+      pjOperatingExpenses: pjExpensesTotal,
       operationalMarginPJ,
       proLabore,
       netDividends,
+      distributableDividends: netDividends,
+      pfExpenses: pfExpensesTotal,
       pfExpensesTotal,
       netSurplus: realSuperavit,
       realSuperavit,
@@ -3094,7 +3102,7 @@ class PediatricStore {
    * Computes exact rolling 12 months ratio to keep medical PJ in Anexo III (6%) instead of Anexo V (15.5%).
    * @param {Date|string} referenceDate
    */
-  getFatorROptimizer(referenceDate = new Date()) {
+  getFatorROptimizer(referenceDate = new Date(), options = null) {
     const refDate = referenceDate instanceof Date ? referenceDate : new Date(String(referenceDate) + "T00:00:00");
     const refDateStr = getLocalDateString(refDate);
     const [curYear, curMonth] = refDateStr.slice(0, 7).split("-").map(Number);
@@ -3107,12 +3115,12 @@ class PediatricStore {
       const mStr = `${targetYear}-${String(targetMonth).padStart(2, "0")}`;
 
       const shiftsGross = this.data.shifts
-        .filter(s => s.shiftDate.startsWith(mStr))
+        .filter(s => s.shiftDate && s.shiftDate.startsWith(mStr))
         .reduce((sum, s) => sum + (Number(s.grossValue) || 0), 0);
 
       const consultGross = (this.data.consultations || [])
-        .filter(c => c.date.startsWith(mStr))
-        .reduce((sum, c) => sum + (Number(c.grossValue) || 0), 0);
+        .filter(c => c.date && c.date.startsWith(mStr))
+        .reduce((sum, c) => sum + (Number(c.grossValue !== undefined ? c.grossValue : c.value) || 0), 0);
 
       const salariesGross = this.data.fixedSalaries
         .reduce((sum, s) => sum + (Number(s.value) || 0), 0);
@@ -3125,9 +3133,18 @@ class PediatricStore {
       rbt12 = 240000; // ~20k/month benchmark
     }
 
-    // Folha12: Pró-labore + encargos over past 12 months
+    // Recommended Pro-Labore for exact 28% compliance
     const recommendedMonthlyProLabore = Math.max(1412, Math.round((rbt12 * 0.28) / 12));
-    const folha12 = recommendedMonthlyProLabore * 12;
+
+    let folha12;
+    if (options && typeof options === "object" && options.actualFolha12 !== undefined) {
+      folha12 = Number(options.actualFolha12) || 0;
+    } else if (options && typeof options === "object" && options.proLabore !== undefined) {
+      folha12 = (Number(options.proLabore) || 0) * 12;
+    } else {
+      folha12 = recommendedMonthlyProLabore * 12;
+    }
+
     const fatorRPercentage = Number(((folha12 / rbt12) * 100).toFixed(1));
     const isAnexoIII = fatorRPercentage >= 28.0;
 
@@ -3141,12 +3158,40 @@ class PediatricStore {
       ? `Sua folha representa ${fatorRPercentage}% do faturamento. Sua PJ está enquadrada com segurança no Anexo III (alíquota inicial de 6%), gerando economia tributária anual de ${formatCurrency(annualTaxSavings)} em comparação ao Anexo V.`
       : `Atenção: sua folha atual representa ${fatorRPercentage}% do faturamento (abaixo do limiar de 28%). Recomendamos ajustar o pró-labore mensal para pelo menos ${formatCurrency(recommendedMonthlyProLabore)} para enquadrar no Anexo III e economizar ${formatCurrency(annualTaxSavings)}/ano.`;
 
+    const optionsList = [
+      {
+        label: "Mínimo Recomendado (Fator R 28%)",
+        proLaboreMonthly: recommendedMonthlyProLabore,
+        fatorR: 28.0,
+        anexo: "Anexo III",
+        taxRate: 0.06,
+        isSafe: true
+      },
+      {
+        label: "Salário Mínimo Vigente (Sem Fator R)",
+        proLaboreMonthly: 1412,
+        fatorR: Number(((1412 * 12 / rbt12) * 100).toFixed(1)),
+        anexo: (1412 * 12 / rbt12) >= 0.28 ? "Anexo III" : "Anexo V",
+        taxRate: (1412 * 12 / rbt12) >= 0.28 ? 0.06 : 0.155,
+        isSafe: (1412 * 12 / rbt12) >= 0.28
+      },
+      {
+        label: "Pró-Labore Conforto (35%)",
+        proLaboreMonthly: Math.round((rbt12 * 0.35) / 12),
+        fatorR: 35.0,
+        anexo: "Anexo III",
+        taxRate: 0.06,
+        isSafe: true
+      }
+    ];
+
     return {
       rbt12,
       folha12,
       fatorRPercentage,
       currentFatorR: fatorRPercentage,
       isAnexoIII,
+      meetsThreshold: isAnexoIII,
       anexo: isAnexoIII ? "Anexo III (6%)" : "Anexo V (15.5%)",
       taxRate: isAnexoIII ? 0.06 : 0.155,
       recommendedMonthlyProLabore,
@@ -3154,7 +3199,8 @@ class PediatricStore {
       annualTaxSavings,
       monthlyTaxSavings,
       anexoIIISavingsPercent: 9.5,
-      recommendation
+      recommendation,
+      options: optionsList
     };
   }
 
@@ -3163,8 +3209,10 @@ class PediatricStore {
    * Calculates how many 12h night shifts the doctor can permanently drop per month.
    * @param {number} currentEquity Accumulated financial investments in R$
    */
-  getDoctorFIREMetrics(currentEquity = 0) {
-    const equity = Number(currentEquity) || 0;
+  getDoctorFIREMetrics(currentEquity = null) {
+    const equity = (currentEquity !== null && currentEquity !== undefined)
+      ? (Number(currentEquity) || 0)
+      : (Number(this.data.currentEquity) || 0);
     
     // Average monthly living cost (PF + PJ)
     const mStr = getLocalDateString(new Date()).slice(0, 7);
@@ -3502,7 +3550,7 @@ class PediatricStore {
   generateAccountantKit(monthStr = null) {
     const mStr = monthStr || getLocalDateString(new Date()).slice(0, 7);
     const dre = this.getDRE(mStr);
-    const fatorR = this.getFatorROptimizer();
+    const fatorR = this.getFatorROptimizer(mStr);
     const csvContent = this.generateCSV(mStr, { onlyMonth: true });
 
     const summaryText = [
@@ -3517,7 +3565,7 @@ class PediatricStore {
       ``,
       `🧾 *Retenções & Impostos Apurados:* ${formatCurrency(dre.taxesTotal)}`,
       `💼 *Despesas Operacionais Dedutíveis (PJ):* ${formatCurrency(dre.pjExpensesTotal)}`,
-      `💵 *Lucro Líquido Distribuível Isento:* ${formatCurrency(dre.distributableDividends)}`,
+      `💵 *Lucro Líquido Distribuível Isento:* ${formatCurrency(dre.distributableDividends || dre.netDividends)}`,
       ``,
       `📈 *Otimização Tributária (Fator R LC 123/2006):*`,
       `• Receita Bruta 12 Meses (RBT12): ${formatCurrency(fatorR.rbt12)}`,
@@ -3532,6 +3580,7 @@ class PediatricStore {
       monthStr: mStr,
       summaryText,
       csvContent,
+      csv: csvContent,
       whatsAppLink: `https://wa.me/?text=${encodeURIComponent(summaryText)}`
     };
   }
@@ -3566,7 +3615,15 @@ class PediatricStore {
     }
 
     // Patient Name extraction for consultations
-    let patientName = "Paciente";
+    let patientName = "Paciente Puericultura";
+    const nameMatch = text.match(/(?:consulta|atendimento|puericultura|paciente)\s+(?:de|da|do)?\s*([a-zá-ú]+(?:\s+[a-zá-ú]+)?)/i);
+    if (nameMatch && nameMatch[1]) {
+      const candidate = nameMatch[1].trim();
+      const forbidden = ["puericultura", "avulsa", "anual", "particular", "de", "da", "do", "no", "na", "dia", "valor", "ontem", "hoje"];
+      if (!forbidden.includes(candidate.toLowerCase())) {
+        patientName = candidate.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+      }
+    }
     if (text.includes("maria eduarda")) patientName = "Maria Eduarda";
     else if (text.includes("maria")) patientName = "Maria";
     else if (text.includes("bernardo")) patientName = "Bernardo";
@@ -3575,7 +3632,15 @@ class PediatricStore {
     // 2. Date determination
     const today = new Date();
     let shiftDate = getLocalDateString(today);
-    if (text.includes("ontem")) {
+    const dayMatch = text.match(/\b(?:no\s+)?dia\s+(\d{1,2})\b/);
+    if (dayMatch) {
+      const dNum = parseInt(dayMatch[1], 10);
+      if (dNum >= 1 && dNum <= 31) {
+        const y = today.getFullYear();
+        const m = String(today.getMonth() + 1).padStart(2, "0");
+        shiftDate = `${y}-${m}-${String(dNum).padStart(2, "0")}`;
+      }
+    } else if (text.includes("ontem")) {
       today.setDate(today.getDate() - 1);
       shiftDate = getLocalDateString(today);
     } else if (text.includes("anteontem")) {
@@ -3596,21 +3661,75 @@ class PediatricStore {
     }
 
     // 4. Gross Value extraction
-    let grossValue = 2000;
-    // Direct digits matching e.g. 2500, 1800, 2000
+    let grossValue = isConsultation ? 350 : 2000;
+    // Direct digits matching e.g. 2500, 1800, 2000, 350
     const digitMatch = text.match(/\b([1-9][0-9]{2,4})\b/);
     if (digitMatch) {
       grossValue = parseFloat(digitMatch[1]);
+    } else if (text.includes("cinco mil e quinhentos") || text.includes("5 mil e quinhentos")) {
+      grossValue = 5500;
+    } else if (text.includes("cinco mil") || text.includes("5 mil")) {
+      grossValue = 5000;
+    } else if (text.includes("quatro mil e quinhentos") || text.includes("4 mil e quinhentos")) {
+      grossValue = 4500;
+    } else if (text.includes("quatro mil") || text.includes("4 mil")) {
+      grossValue = 4000;
+    } else if (text.includes("três mil e quinhentos") || text.includes("tres mil e quinhentos") || text.includes("3 mil e quinhentos")) {
+      grossValue = 3500;
+    } else if (text.includes("três mil e duzentos") || text.includes("3 mil e duzentos")) {
+      grossValue = 3200;
+    } else if (text.includes("três mil") || text.includes("tres mil") || text.includes("3 mil")) {
+      grossValue = 3000;
     } else if (text.includes("dois mil e quinhentos") || text.includes("2 mil e quinhentos")) {
       grossValue = 2500;
+    } else if (text.includes("dois mil e quatrocentos") || text.includes("2 mil e quatrocentos")) {
+      grossValue = 2400;
+    } else if (text.includes("dois mil e duzentos") || text.includes("2 mil e duzentos")) {
+      grossValue = 2200;
     } else if (text.includes("dois mil") || text.includes("2 mil")) {
       grossValue = 2000;
     } else if (text.includes("mil e oitocentos") || text.includes("1800")) {
       grossValue = 1800;
+    } else if (text.includes("mil e seiscentos")) {
+      grossValue = 1600;
     } else if (text.includes("mil e quinhentos") || text.includes("1500")) {
       grossValue = 1500;
-    } else if (text.includes("três mil") || text.includes("3 mil")) {
-      grossValue = 3000;
+    } else if (text.includes("mil e duzentos")) {
+      grossValue = 1200;
+    } else if (text.includes("mil reais") || text.match(/\bmil\b/)) {
+      grossValue = 1000;
+    } else if (text.includes("novecentos e cinquenta")) {
+      grossValue = 950;
+    } else if (text.includes("novecentos")) {
+      grossValue = 900;
+    } else if (text.includes("oitocentos e cinquenta")) {
+      grossValue = 850;
+    } else if (text.includes("oitocentos")) {
+      grossValue = 800;
+    } else if (text.includes("setecentos e cinquenta")) {
+      grossValue = 750;
+    } else if (text.includes("setecentos")) {
+      grossValue = 700;
+    } else if (text.includes("seiscentos e cinquenta")) {
+      grossValue = 650;
+    } else if (text.includes("seiscentos")) {
+      grossValue = 600;
+    } else if (text.includes("quinhentos e cinquenta")) {
+      grossValue = 550;
+    } else if (text.includes("quinhentos")) {
+      grossValue = 500;
+    } else if (text.includes("quatrocentos e cinquenta")) {
+      grossValue = 450;
+    } else if (text.includes("quatrocentos")) {
+      grossValue = 400;
+    } else if (text.includes("trezentos e cinquenta")) {
+      grossValue = 350;
+    } else if (text.includes("trezentos")) {
+      grossValue = 300;
+    } else if (text.includes("duzentos e cinquenta")) {
+      grossValue = 250;
+    } else if (text.includes("duzentos")) {
+      grossValue = 200;
     }
 
     // 5. Tax Regime & Rate
@@ -4305,14 +4424,37 @@ function formatMoney(value, forceShow = false) {
   return formatCurrency(value);
 }
 
-/**
- * Tactile Haptic Vibration Feedback
- * @param {number} duration
- */
-function triggerHaptic(duration = 10) {
+function triggerHaptic(duration = 12) {
   try {
     if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
       navigator.vibrate(duration);
+      return;
+    }
+  } catch (e) {}
+
+  // Hybrid tactile fallback for iOS Safari via Web Audio API micro-pulse
+  try {
+    if (typeof window !== "undefined") {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        if (!window.__pediatricHapticCtx) {
+          window.__pediatricHapticCtx = new AudioCtx();
+        }
+        if (window.__pediatricHapticCtx.state === "suspended") {
+          window.__pediatricHapticCtx.resume().catch(() => {});
+        }
+        const ctx = window.__pediatricHapticCtx;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(140, ctx.currentTime);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.035);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.035);
+      }
     }
   } catch (e) {}
 }
@@ -4426,7 +4568,7 @@ function openSpotlightSearch() {
   if (!dom.spotlightResults) dom.spotlightResults = document.getElementById("spotlight-results");
 
   if (!dom.spotlightOverlay) return;
-  dom.spotlightOverlay.classList.add("active");
+  dom.spotlightOverlay.classList.add("open", "active");
   if (dom.spotlightInput) {
     dom.spotlightInput.value = "";
     setTimeout(() => dom.spotlightInput.focus(), 50);
@@ -4437,7 +4579,7 @@ function openSpotlightSearch() {
 function closeSpotlightSearch() {
   if (!dom.spotlightOverlay) dom.spotlightOverlay = document.getElementById("spotlight-overlay");
   if (dom.spotlightOverlay) {
-    dom.spotlightOverlay.classList.remove("active");
+    dom.spotlightOverlay.classList.remove("open", "active");
   }
 }
 
@@ -4471,23 +4613,25 @@ function renderSpotlightResults(query = "") {
   if (q) {
     filteredActions = actions.filter(a => a.title.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q));
     filteredShifts = shifts.filter(s =>
-      s.hospital.toLowerCase().includes(q) ||
+      (s.hospital && s.hospital.toLowerCase().includes(q)) ||
       (s.sector && s.sector.toLowerCase().includes(q)) ||
       (s.notes && s.notes.toLowerCase().includes(q)) ||
-      s.shiftDate.includes(q)
+      (s.shiftDate && s.shiftDate.includes(q))
     ).slice(0, 5);
 
     filteredConsultations = consultations.filter(c =>
-      c.patientName.toLowerCase().includes(q) ||
-      c.consultationType.toLowerCase().includes(q) ||
+      (c.patientName && c.patientName.toLowerCase().includes(q)) ||
+      (c.consultationType && c.consultationType.toLowerCase().includes(q)) ||
+      (c.type && c.type.toLowerCase().includes(q)) ||
       (c.notes && c.notes.toLowerCase().includes(q)) ||
-      c.date.includes(q)
+      (c.date && c.date.includes(q))
     ).slice(0, 5);
 
     filteredExpenses = expenses.filter(e =>
-      e.description.toLowerCase().includes(q) ||
-      e.category.toLowerCase().includes(q) ||
-      e.date.includes(q)
+      (e.description && e.description.toLowerCase().includes(q)) ||
+      (e.category && e.category.toLowerCase().includes(q)) ||
+      (e.dueDate && e.dueDate.includes(q)) ||
+      (e.date && e.date.includes(q))
     ).slice(0, 5);
   } else {
     filteredShifts = shifts.slice(-3).reverse();
@@ -4542,7 +4686,7 @@ function renderSpotlightResults(query = "") {
           </div>
           <div class="flex-1 min-w-0">
             <h4 class="text-[13px] font-bold text-on-surface truncate">${c.patientName}</h4>
-            <p class="text-[11px] text-on-surface-variant truncate">${c.consultationType} • ${formatDateBR(c.date)} • ${formatCurrency(c.value)}</p>
+            <p class="text-[11px] text-on-surface-variant truncate">${c.consultationType || c.type || "Consulta"} • ${formatDateBR(c.date)} • ${formatCurrency(c.value !== undefined ? c.value : (c.grossValue || 0))}</p>
           </div>
           <span class="text-[11px] text-tertiary font-bold">Editar</span>
         </div>
@@ -4560,7 +4704,7 @@ function renderSpotlightResults(query = "") {
           </div>
           <div class="flex-1 min-w-0">
             <h4 class="text-[13px] font-bold text-on-surface truncate">${e.description}</h4>
-            <p class="text-[11px] text-on-surface-variant truncate">${e.category} • ${formatDateBR(e.date)} • ${formatCurrency(e.value)}</p>
+            <p class="text-[11px] text-on-surface-variant truncate">${e.category} • ${formatDateBR(e.dueDate || e.date)} • ${formatCurrency(e.value)}</p>
           </div>
           <span class="text-[11px] text-error font-bold">Ver</span>
         </div>
@@ -4626,11 +4770,13 @@ function initSpotlightSearch() {
   window.addEventListener("keydown", (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
       e.preventDefault();
-      if (dom.spotlightOverlay?.classList.contains("active")) {
+      if (dom.spotlightOverlay && (dom.spotlightOverlay.classList.contains("active") || dom.spotlightOverlay.classList.contains("open"))) {
         closeSpotlightSearch();
       } else {
         openSpotlightSearch();
       }
+    } else if (e.key === "Escape" && dom.spotlightOverlay && (dom.spotlightOverlay.classList.contains("active") || dom.spotlightOverlay.classList.contains("open"))) {
+      closeSpotlightSearch();
     }
   });
 }
@@ -4722,9 +4868,13 @@ function processVoiceTranscript(transcript) {
     openBottomSheet("plantao", {
       hospital: parsed.hospital || "Hospital Mater Dei",
       shiftType: parsed.shiftType || "12h Diurno",
+      sector: parsed.sector || "UTI Neonatal",
       shiftDate: parsed.shiftDate || getLocalDateString(state.referenceDate || new Date()),
       grossValue: parsed.grossValue || 1500,
-      netValue: parsed.grossValue ? parsed.grossValue * 0.94 : 1410
+      taxRegime: parsed.taxRegime || "Simples Nacional (6%)",
+      taxRate: parsed.taxRate !== undefined ? parsed.taxRate : 6,
+      netValue: parsed.netValue !== undefined ? parsed.netValue : (parsed.grossValue ? parsed.grossValue * 0.94 : 1410),
+      notes: parsed.notes || ""
     });
     showToast(`Plantão identificado: ${parsed.hospital || 'Plantão'}! 🎙️✨`);
   } else if (parsed.type === "consultation") {
@@ -4732,8 +4882,10 @@ function processVoiceTranscript(transcript) {
       patientName: parsed.patientName || "Paciente Puericultura",
       consultationType: parsed.consultationType || "Puericultura (Avulsa)",
       value: parsed.value || 350,
+      grossValue: parsed.grossValue || parsed.value || 350,
       date: parsed.date || getLocalDateString(state.referenceDate || new Date()),
-      paid: true
+      paid: true,
+      notes: parsed.notes || ""
     });
     showToast(`Consulta identificada: ${parsed.patientName || 'Puericultura'}! 🎙️✨`);
   } else if (parsed.type === "expense") {
@@ -4741,8 +4893,10 @@ function processVoiceTranscript(transcript) {
       description: parsed.description || "Despesa Médica",
       category: parsed.category || "Consultório",
       value: parsed.value || 100,
+      dueDate: parsed.date || parsed.shiftDate || getLocalDateString(state.referenceDate || new Date()),
       date: parsed.date || getLocalDateString(state.referenceDate || new Date()),
-      scope: parsed.scope || "PJ"
+      scope: parsed.scope || "PJ",
+      notes: parsed.notes || ""
     });
     showToast(`Despesa identificada: ${parsed.description}! 🎙️✨`);
   }
@@ -4901,19 +5055,19 @@ function openDREDialog(targetMonth = state.activeMonth) {
         <span class="text-[11px] font-bold text-on-surface uppercase tracking-wider">Demonstrativo do Resultado (DRE)</span>
         <div class="flex justify-between text-[12px] font-semibold py-1 border-b border-outline-variant/10">
           <span>(+) Faturamento Bruto (PJ + Consultório)</span>
-          <span class="font-display font-bold text-primary ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.grossRevenue)}</span>
+          <span class="font-display font-bold text-primary ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.grossRevenueTotal || dre.grossRevenue)}</span>
         </div>
         <div class="flex justify-between text-[12px] text-error font-medium py-1 border-b border-outline-variant/10">
           <span>(-) Impostos Médicos (Simples / Carnê-Leão)</span>
-          <span class="font-display font-bold ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.taxes)}</span>
+          <span class="font-display font-bold ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.taxesTotal !== undefined ? dre.taxesTotal : dre.taxes)}</span>
         </div>
         <div class="flex justify-between text-[12px] font-bold text-on-surface py-1 border-b border-outline-variant/10">
           <span>(=) Receita Operacional Líquida</span>
-          <span class="font-display ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.netRevenue)}</span>
+          <span class="font-display ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.netOperationalRevenue !== undefined ? dre.netOperationalRevenue : dre.netRevenue)}</span>
         </div>
         <div class="flex justify-between text-[12px] text-on-surface-variant py-1 border-b border-outline-variant/10">
           <span>(-) Custos Operacionais PJ (CRM, Deslocamento)</span>
-          <span class="font-display font-medium text-error ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.pjOperatingExpenses)}</span>
+          <span class="font-display font-medium text-error ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.pjExpensesTotal !== undefined ? dre.pjExpensesTotal : dre.pjOperatingExpenses)}</span>
         </div>
         <div class="flex justify-between text-[12px] text-primary font-semibold py-1 border-b border-outline-variant/10">
           <span>(-) Pró-Labore da Médica (Fator R 28%)</span>
@@ -4921,11 +5075,11 @@ function openDREDialog(targetMonth = state.activeMonth) {
         </div>
         <div class="flex justify-between text-[12px] text-on-surface-variant py-1 border-b border-outline-variant/10">
           <span>(-) Despesas Pessoais PF (Vida, Família)</span>
-          <span class="font-display font-medium text-error ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.pfExpenses)}</span>
+          <span class="font-display font-medium text-error ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.pfExpensesTotal !== undefined ? dre.pfExpensesTotal : dre.pfExpenses)}</span>
         </div>
         <div class="flex justify-between text-[13px] font-extrabold text-tertiary pt-1.5">
           <span>(=) Superávit Mensal (Poupança Real)</span>
-          <span class="font-display text-[15px] ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.netSurplus)}</span>
+          <span class="font-display text-[15px] ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.realSuperavit !== undefined ? dre.realSuperavit : dre.netSurplus)}</span>
         </div>
       </div>
 
@@ -4935,11 +5089,11 @@ function openDREDialog(targetMonth = state.activeMonth) {
             ${renderIcon("account_balance", "text-[16px]")}
             Fator R Dinâmico (Alíquota 6% no Simples)
           </span>
-          <span class="px-2 py-0.5 rounded-full ${opt.meetsThreshold ? 'bg-tertiary-fixed text-tertiary' : 'bg-secondary-fixed text-secondary'} text-[11px] font-bold">
+          <span id="dre-fator-r-badge" class="px-2 py-0.5 rounded-full ${opt.meetsThreshold || opt.isAnexoIII ? 'bg-tertiary-fixed text-tertiary' : 'bg-secondary-fixed text-secondary'} text-[11px] font-bold">
             ${opt.currentFatorR}% atual
           </span>
         </div>
-        <p class="text-[11px] text-on-surface-variant leading-snug">
+        <p id="dre-fator-r-rec" class="text-[11px] text-on-surface-variant leading-snug">
           ${opt.recommendation}
         </p>
 
@@ -4953,6 +5107,17 @@ function openDREDialog(targetMonth = state.activeMonth) {
             <span class="text-[16px] font-bold text-tertiary font-display ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(opt.annualTaxSavings)}</span>
           </div>
         </div>
+
+        <div class="flex items-center justify-between pt-1 border-t border-secondary/10 text-[11px]">
+          <span class="text-on-surface-variant">Simular Pró-Labore (R$/mês):</span>
+          <input
+            type="number"
+            id="input-sim-prolabore"
+            class="w-24 px-2 py-1 rounded-lg bg-white border border-outline-variant/30 text-right font-bold text-secondary focus:outline-none"
+            value="${opt.suggestedProLabore}"
+            step="100"
+          />
+        </div>
       </div>
     </div>
   `;
@@ -4960,6 +5125,19 @@ function openDREDialog(targetMonth = state.activeMonth) {
   openDialog(html);
   const btnClose = document.getElementById("btn-close-dre");
   if (btnClose) btnClose.addEventListener("click", closeDialog);
+
+  const inputSim = document.getElementById("input-sim-prolabore");
+  const badgeEl = document.getElementById("dre-fator-r-badge");
+  const recEl = document.getElementById("dre-fator-r-rec");
+  if (inputSim && badgeEl && recEl) {
+    inputSim.addEventListener("input", () => {
+      const simVal = parseFloat(inputSim.value) || 0;
+      const simOpt = state.store.getFatorROptimizer(targetMonth, { proLabore: simVal });
+      badgeEl.textContent = `${simOpt.currentFatorR}% simulado`;
+      badgeEl.className = `px-2 py-0.5 rounded-full ${simOpt.meetsThreshold || simOpt.isAnexoIII ? 'bg-tertiary-fixed text-tertiary' : 'bg-secondary-fixed text-secondary'} text-[11px] font-bold`;
+      recEl.textContent = simOpt.recommendation;
+    });
+  }
 }
 
 /**
@@ -5036,7 +5214,7 @@ function openReconciliationDialog() {
         return;
       }
 
-      const rec = reconcileBankTransactions(txs, state.activeMonth);
+      const rec = state.store.reconcileBankTransactions(txs, state.activeMonth);
       renderReconciliationMatches(rec);
     };
     reader.readAsText(file);
@@ -5051,41 +5229,116 @@ function openReconciliationDialog() {
         <span class="text-[12px] font-bold text-tertiary">
           ${matchedInflows.length} repasse(s) e ${matchedOutflows.length} despesa(s) identificados!
         </span>
-        <button type="button" id="btn-confirm-all-reconciled" class="px-3 py-1 rounded-full bg-tertiary text-white text-[11px] font-bold active:scale-95">
+        <button type="button" id="btn-confirm-all-reconciled" class="px-3 py-1 rounded-full bg-tertiary text-white text-[11px] font-bold active:scale-95 cursor-pointer">
           Conciliar Todos
         </button>
       </div>
     `;
 
-    matchedInflows.forEach((m) => {
-      html += `
-        <div class="p-3 rounded-xl bg-surface-container-low flex items-center justify-between">
-          <div class="flex flex-col">
-            <span class="text-[12px] font-bold text-on-surface">${m.shift.hospital} (${m.matchType})</span>
-            <span class="text-[11px] text-on-surface-variant">${formatDateBR(m.bankTx.date)} • ${m.bankTx.memo || 'Depósito'}</span>
+    if (matchedInflows.length > 0) {
+      html += `<div class="text-[10px] font-bold text-on-surface-variant/60 uppercase px-1 mt-2 tracking-wider">Entradas & Repasses Hospitalares</div>`;
+      matchedInflows.forEach((m, idx) => {
+        const txDate = m.bankTx?.date || m.transaction?.date || "";
+        const txMemo = m.bankTx?.memo || m.transaction?.memo || "Depósito";
+        let title = "";
+        let amount = m.expectedAmount || (m.transaction ? m.transaction.amount : 0);
+
+        if (m.type === "shift_installment" && m.shift) {
+          title = `${m.shift.hospital} — ${m.installment?.number}ª parcela (${m.installment?.percent}%)`;
+        } else if (m.type === "shift_full" && m.shift) {
+          title = `${m.shift.hospital} — Quitação Integral`;
+        } else if (m.type === "consultation" && m.consultation) {
+          title = `Consulta: ${m.consultation.patientName}`;
+        } else {
+          title = m.suggestedAction || "Entrada Conciliada";
+        }
+
+        html += `
+          <div class="p-3 rounded-xl bg-surface-container-low flex items-center justify-between gap-2">
+            <div class="flex flex-col min-w-0 flex-1">
+              <span class="text-[12px] font-bold text-on-surface truncate">${title}</span>
+              <span class="text-[11px] text-on-surface-variant truncate">${formatDateBR(txDate)} • ${txMemo}</span>
+            </div>
+            <div class="text-right flex items-center gap-2 shrink-0">
+              <span class="text-[13px] font-bold text-tertiary">${formatCurrency(amount)}</span>
+              <button type="button" class="btn-confirm-single-rec px-2.5 py-1 rounded-full bg-secondary-fixed text-secondary text-[11px] font-bold active:scale-95 cursor-pointer" data-inflow-idx="${idx}">
+                Confirmar
+              </button>
+            </div>
           </div>
-          <div class="text-right flex items-center gap-2">
-            <span class="text-[13px] font-bold text-tertiary">${formatCurrency(m.expectedAmount)}</span>
-            <button type="button" class="btn-confirm-single-rec px-2.5 py-1 rounded-full bg-secondary-fixed text-secondary text-[11px] font-bold active:scale-95" data-shift-id="${m.shift.id}">
-              Confirmar
-            </button>
+        `;
+      });
+    }
+
+    if (matchedOutflows.length > 0) {
+      html += `<div class="text-[10px] font-bold text-on-surface-variant/60 uppercase px-1 mt-2 tracking-wider">Saídas & Despesas Operacionais</div>`;
+      matchedOutflows.forEach((m, idx) => {
+        const txDate = m.bankTx?.date || m.transaction?.date || "";
+        const txMemo = m.bankTx?.memo || m.transaction?.memo || "Pagamento";
+        const title = m.expense ? `${m.expense.description} (${m.expense.category})` : (m.suggestedAction || "Despesa");
+        const amount = m.expectedAmount || (m.expense ? m.expense.value : (m.transaction ? Math.abs(m.transaction.amount) : 0));
+
+        html += `
+          <div class="p-3 rounded-xl bg-surface-container-low flex items-center justify-between gap-2">
+            <div class="flex flex-col min-w-0 flex-1">
+              <span class="text-[12px] font-bold text-on-surface truncate">${title}</span>
+              <span class="text-[11px] text-on-surface-variant truncate">${formatDateBR(txDate)} • ${txMemo}</span>
+            </div>
+            <div class="text-right flex items-center gap-2 shrink-0">
+              <span class="text-[13px] font-bold text-error">${formatCurrency(amount)}</span>
+              <button type="button" class="btn-confirm-outflow-rec px-2.5 py-1 rounded-full bg-primary-fixed text-primary text-[11px] font-bold active:scale-95 cursor-pointer" data-outflow-idx="${idx}">
+                Confirmar
+              </button>
+            </div>
           </div>
-        </div>
-      `;
-    });
+        `;
+      });
+    }
 
     resultsContainer.innerHTML = html;
     if (typeof enhanceIcons === "function") enhanceIcons(resultsContainer);
 
     document.querySelectorAll(".btn-confirm-single-rec").forEach(b => {
       b.addEventListener("click", () => {
-        const sId = b.getAttribute("data-shift-id");
-        state.store.markShiftAsReceived(sId);
+        const idx = parseInt(b.getAttribute("data-inflow-idx"), 10);
+        const m = matchedInflows[idx];
+        if (!m) return;
+        const txDate = m.bankTx?.date || m.transaction?.date || null;
+
+        if (m.type === "shift_installment" && m.shift && m.installment) {
+          state.store.toggleShiftInstallment(m.shift.id, m.installment.number, txDate);
+        } else if (m.type === "shift_full" && m.shift) {
+          state.store.markShiftAsReceived(m.shift.id, txDate);
+        } else if (m.type === "consultation" && m.consultation) {
+          state.store.toggleConsultationPaid(m.consultation.id, txDate);
+        } else if (m.shift) {
+          state.store.markShiftAsReceived(m.shift.id, txDate);
+        }
+
         b.textContent = "Confirmado ✓";
         b.disabled = true;
         b.classList.remove("bg-secondary-fixed", "text-secondary");
         b.classList.add("bg-tertiary-fixed", "text-tertiary");
-        showToast("Repasse conciliado e marcado como recebido! 🌸");
+        showToast("Repasse conciliado com sucesso! 🌸");
+        renderCurrentView();
+      });
+    });
+
+    document.querySelectorAll(".btn-confirm-outflow-rec").forEach(b => {
+      b.addEventListener("click", () => {
+        const idx = parseInt(b.getAttribute("data-outflow-idx"), 10);
+        const m = matchedOutflows[idx];
+        if (!m) return;
+
+        if (m.expense) {
+          state.store.updateExpense(m.expense.id, { isPaid: true });
+        }
+
+        b.textContent = "Baixado ✓";
+        b.disabled = true;
+        b.classList.remove("bg-primary-fixed", "text-primary");
+        b.classList.add("bg-tertiary-fixed", "text-tertiary");
+        showToast("Despesa conciliada e baixada! 🌸");
         renderCurrentView();
       });
     });
@@ -5094,9 +5347,25 @@ function openReconciliationDialog() {
     if (btnAll) {
       btnAll.addEventListener("click", () => {
         matchedInflows.forEach(m => {
-          state.store.markShiftAsReceived(m.shift.id);
+          const txDate = m.bankTx?.date || m.transaction?.date || null;
+          if (m.type === "shift_installment" && m.shift && m.installment) {
+            state.store.toggleShiftInstallment(m.shift.id, m.installment.number, txDate);
+          } else if (m.type === "shift_full" && m.shift) {
+            state.store.markShiftAsReceived(m.shift.id, txDate);
+          } else if (m.type === "consultation" && m.consultation) {
+            state.store.toggleConsultationPaid(m.consultation.id, txDate);
+          } else if (m.shift) {
+            state.store.markShiftAsReceived(m.shift.id, txDate);
+          }
         });
-        showToast("Todos os repasses foram conciliados! 🌸");
+
+        matchedOutflows.forEach(m => {
+          if (m.expense) {
+            state.store.updateExpense(m.expense.id, { isPaid: true });
+          }
+        });
+
+        showToast("Todos os repasses e despesas foram conciliados! 🌸");
         closeDialog();
         renderCurrentView();
       });
@@ -5153,7 +5422,8 @@ function openAccountantKitDialog(targetMonth = state.activeMonth) {
   const btnDl = document.getElementById("btn-download-accountant-csv");
   if (btnDl) {
     btnDl.addEventListener("click", () => {
-      const blob = new Blob([kit.csv], { type: "text/csv;charset=utf-8;" });
+      const csvData = kit.csvContent || kit.csv || "";
+      const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
@@ -5163,6 +5433,7 @@ function openAccountantKitDialog(targetMonth = state.activeMonth) {
       showToast("CSV para contabilidade baixado! 📄");
     });
   }
+
 
   const btnWa = document.getElementById("btn-whatsapp-accountant");
   if (btnWa) {
@@ -5204,27 +5475,48 @@ function openFIREDialog() {
         <span class="text-[11px] text-on-surface-variant">Gera <strong>${formatMoney(fire.monthlyPassiveIncomeTarget)}/mês</strong> perpétuos sem necessidade de dar plantões.</span>
       </div>
 
+      <div class="p-3.5 rounded-2xl bg-surface-container-low flex flex-col gap-2">
+        <label class="text-[11px] font-bold text-on-surface flex items-center justify-between">
+          <span>Seu Patrimônio Investido Atual (R$):</span>
+          <span class="text-[10px] text-secondary font-semibold">Simulação Interativa</span>
+        </label>
+        <div class="relative">
+          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[13px] font-bold text-on-surface-variant">R$</span>
+          <input
+            type="number"
+            id="input-fire-equity"
+            value="${state.store.data.currentEquity || (fire.currentSavings > 0 ? fire.currentSavings : '')}"
+            placeholder="Ex: 150000"
+            class="w-full h-11 pl-10 pr-3.5 rounded-xl bg-surface-container border border-outline-variant/30 text-[14px] font-bold text-on-surface focus:outline-none focus:border-secondary"
+          />
+        </div>
+      </div>
+
       <div class="grid grid-cols-2 gap-2 text-center">
         <div class="p-3 rounded-xl bg-surface-container-low flex flex-col">
           <span class="text-[10px] text-on-surface-variant uppercase font-bold">Custo de Vida Médio</span>
           <span class="text-[16px] font-bold text-on-surface mt-0.5 ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(fire.averageMonthlyExpense)}/mês</span>
         </div>
         <div class="p-3 rounded-xl bg-surface-container-low flex flex-col">
-          <span class="text-[10px] text-on-surface-variant uppercase font-bold">Patrimônio Acumulado</span>
-          <span class="text-[16px] font-bold text-tertiary mt-0.5 ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(fire.currentSavings)}</span>
+          <span class="text-[10px] text-on-surface-variant uppercase font-bold">Patrimônio Atual</span>
+          <span id="fire-accumulated-display" class="text-[16px] font-bold text-tertiary mt-0.5 ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(fire.currentSavings)}</span>
         </div>
       </div>
 
       <div class="p-3.5 rounded-2xl bg-surface-container-low flex flex-col gap-2">
         <div class="flex items-center justify-between">
-          <span class="text-[12px] font-bold text-on-surface">Termômetro de Independência de Plantões:</span>
-          <span class="text-[11px] font-bold text-secondary">${fire.shiftsReplacedCount} plantões eliminados!</span>
+          <span class="text-[12px] font-bold text-on-surface">Termômetro de Independência:</span>
+          <span id="fire-shifts-count" class="text-[11px] font-bold text-secondary">${fire.shiftsReplacedCount} plantões eliminados!</span>
         </div>
         <div class="w-full h-3 rounded-full bg-surface-container overflow-hidden">
-          <div class="h-full bg-gradient-to-r from-secondary to-primary" style="width: ${Math.min(100, (fire.currentSavings / (fire.targetNestEgg || 1)) * 100)}%;"></div>
+          <div id="fire-thermo-bar" class="h-full bg-gradient-to-r from-secondary to-primary transition-all duration-300" style="width: ${Math.min(100, (fire.currentSavings / (fire.targetNestEgg || 1)) * 100)}%;"></div>
+        </div>
+        <div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-1">
+          <span>Renda passiva gerada: <strong id="fire-passive-income" class="text-tertiary">${formatMoney(fire.passiveMonthlyIncome)}/mês</strong></span>
+          <span id="fire-badge" class="px-2 py-0.5 rounded-full bg-secondary-fixed/50 text-secondary font-bold text-[10px]">${fire.freedomBadge}</span>
         </div>
         <p class="text-[11px] text-on-surface-variant leading-snug">
-          Cada R$ 1.500 de renda passiva mensal gerada pela sua carteira elimina <strong>1 plantão noturno de 12h</strong> para sempre da sua rotina!
+          Cada R$ 1.800 de renda passiva mensal gerada pela sua carteira elimina <strong>1 plantão noturno de 12h</strong> para sempre da sua escala!
         </p>
       </div>
     </div>
@@ -5233,6 +5525,30 @@ function openFIREDialog() {
   openDialog(html);
   const btnClose = document.getElementById("btn-close-fire");
   if (btnClose) btnClose.addEventListener("click", closeDialog);
+
+  const inputEq = document.getElementById("input-fire-equity");
+  if (inputEq) {
+    inputEq.addEventListener("input", (e) => {
+      const val = parseFloat(e.target.value) || 0;
+      state.store.data.currentEquity = val;
+      state.store.save();
+      const updated = state.store.getDoctorFIREMetrics(val);
+
+      const elAccum = document.getElementById("fire-accumulated-display");
+      const elShifts = document.getElementById("fire-shifts-count");
+      const elBar = document.getElementById("fire-thermo-bar");
+      const elPassive = document.getElementById("fire-passive-income");
+      const elBadge = document.getElementById("fire-badge");
+
+      if (elAccum) elAccum.textContent = formatMoney(updated.currentSavings);
+      if (elShifts) elShifts.textContent = `${updated.shiftsReplacedCount} plantões eliminados!`;
+      if (elBar) elBar.style.width = `${Math.min(100, (updated.currentSavings / (updated.targetNestEgg || 1)) * 100)}%`;
+      if (elPassive) elPassive.textContent = `${formatMoney(updated.passiveMonthlyIncome)}/mês`;
+      if (elBadge) elBadge.textContent = updated.freedomBadge;
+
+      triggerHaptic(8);
+    });
+  }
 }
 
 /**
@@ -5336,6 +5652,11 @@ function openOnboardingDialog() {
           const crm = document.getElementById("onboarding-crm")?.value;
           if (name) state.store.data.doctorName = name;
           if (crm) state.store.data.doctorCrm = crm;
+        } else if (step === 2) {
+          const hosp = document.getElementById("onboarding-hospital")?.value;
+          const tax = parseFloat(document.getElementById("onboarding-tax")?.value);
+          if (hosp && hosp.trim()) state.store.addWorkLocation(hosp.trim());
+          if (!isNaN(tax)) state.store.data.defaultTaxRate = tax;
         }
         step++;
         updateDialog();
@@ -9379,32 +9700,6 @@ function attachExpensesEvents() {
   const statementBtns = document.querySelectorAll(".btn-open-printable-statement");
   statementBtns.forEach(btn => btn.addEventListener("click", openPrintableStatementDialog));
 
-  // Executive Action Buttons in Reports
-  document.querySelectorAll(".btn-open-dre-reports").forEach(b => b.addEventListener("click", () => openDREDialog()));
-  document.querySelectorAll(".btn-open-accountant-reports").forEach(b => b.addEventListener("click", () => openAccountantKitDialog()));
-  document.querySelectorAll(".btn-open-fire-reports").forEach(b => b.addEventListener("click", () => openFIREDialog()));
-
-  // 12M Forecast Scrubber
-  const scrubberSlider = document.getElementById("forecast-scrubber-slider");
-  if (scrubberSlider) {
-    const proj12M = state.store.get12MonthsRollingProjection(state.activeMonth);
-    const labelMonth = document.getElementById("scrubber-month-label");
-    const labelInflows = document.getElementById("scrubber-inflows");
-    const labelExpenses = document.getElementById("scrubber-expenses");
-    const labelBalance = document.getElementById("scrubber-balance");
-
-    scrubberSlider.addEventListener("input", (e) => {
-      const idx = parseInt(e.target.value, 10) || 0;
-      const mData = proj12M.months[idx];
-      if (mData) {
-        if (labelMonth) labelMonth.textContent = formatMonthYear(mData.month);
-        if (labelInflows) labelInflows.textContent = formatMoney(mData.inflow);
-        if (labelExpenses) labelExpenses.textContent = formatMoney(mData.expense);
-        if (labelBalance) labelBalance.textContent = formatMoney(mData.cumulativeBalance);
-      }
-    });
-  }
-
   attachCardActionEvents();
 }
 
@@ -9443,6 +9738,73 @@ function attachReportsEvents() {
 
   const statementBtns = document.querySelectorAll(".btn-open-printable-statement");
   statementBtns.forEach(btn => btn.addEventListener("click", openPrintableStatementDialog));
+
+  // Executive Action Buttons in Reports
+  document.querySelectorAll(".btn-open-dre-reports").forEach(b => b.addEventListener("click", () => openDREDialog()));
+  document.querySelectorAll(".btn-open-accountant-reports").forEach(b => b.addEventListener("click", () => openAccountantKitDialog()));
+  document.querySelectorAll(".btn-open-fire-reports").forEach(b => b.addEventListener("click", () => openFIREDialog()));
+
+  // 12M Rolling Forecast Scrubber & Interactive Chart
+  const scrubberSlider = document.getElementById("forecast-scrubber-slider");
+  const proj12M = state.store.get12MonthsRollingProjection(state.activeMonth);
+  const labelMonth = document.getElementById("scrubber-month-label");
+  const labelInflows = document.getElementById("scrubber-inflows");
+  const labelExpenses = document.getElementById("scrubber-expenses");
+  const labelBalance = document.getElementById("scrubber-balance");
+  const scrubberGuide = document.getElementById("scrubber-guide");
+  const scrubberTooltip = document.getElementById("scrubber-tooltip");
+  const tooltipMonth = document.getElementById("scrubber-tooltip-month");
+  const tooltipInflow = document.getElementById("scrubber-tooltip-inflow");
+  const tooltipBalance = document.getElementById("scrubber-tooltip-balance");
+
+  const updateScrubber = (idx, triggerHapticFeedback = true) => {
+    const mData = proj12M.months[idx];
+    if (!mData) return;
+
+    if (labelMonth) labelMonth.textContent = formatMonthYear(mData.month);
+    if (labelInflows) labelInflows.textContent = formatMoney(mData.inflow);
+    if (labelExpenses) labelExpenses.textContent = formatMoney(mData.expense);
+    if (labelBalance) labelBalance.textContent = formatMoney(mData.cumulativeBalance);
+
+    if (scrubberSlider && String(scrubberSlider.value) !== String(idx)) {
+      scrubberSlider.value = idx;
+    }
+
+    const col = document.querySelector(`.scrubber-column[data-index="${idx}"]`);
+    if (col) {
+      const colX = parseFloat(col.getAttribute("data-x")) || 0;
+      if (scrubberGuide) {
+        scrubberGuide.setAttribute("x1", colX);
+        scrubberGuide.setAttribute("x2", colX);
+        scrubberGuide.classList.remove("hidden");
+      }
+    }
+
+    if (scrubberTooltip) {
+      if (tooltipMonth) tooltipMonth.textContent = mData.fullLabel || formatMonthYear(mData.month);
+      if (tooltipInflow) tooltipInflow.textContent = formatMoney(mData.inflow);
+      if (tooltipBalance) tooltipBalance.textContent = formatMoney(mData.cumulativeBalance);
+      scrubberTooltip.classList.remove("hidden");
+    }
+
+    if (triggerHapticFeedback) triggerHaptic(8);
+  };
+
+  if (scrubberSlider) {
+    scrubberSlider.addEventListener("input", (e) => {
+      const idx = parseInt(e.target.value, 10) || 0;
+      updateScrubber(idx);
+    });
+  }
+
+  document.querySelectorAll(".scrubber-column").forEach(col => {
+    const handleColSelect = () => {
+      const idx = parseInt(col.getAttribute("data-index"), 10) || 0;
+      updateScrubber(idx);
+    };
+    col.addEventListener("pointerdown", handleColSelect);
+    col.addEventListener("pointerenter", handleColSelect);
+  });
 }
 
 function attachCardActionEvents() {
