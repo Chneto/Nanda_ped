@@ -1,7 +1,7 @@
 # 🧠 MEMORY — Finanças Pediatria (Guia Canônico de Contexto & Memória do Sistema)
 
 > **Documento Canônico de Memória para Agentes Autônomos, IAs e Desenvolvedores.**  
-> Este arquivo sintetiza todo o histórico, regras de negócio, decisões arquiteturais, design system, convenções de testes e fluxos operacionais da aplicação **Finanças Pediatria (Versão 3.1.0 Pediatric Dark Sanctuary & Stitch Chic)**.  
+> Este arquivo sintetiza todo o histórico, regras de negócio, decisões arquiteturais, design system, convenções de testes e fluxos operacionais da aplicação **Finanças Pediatria (Versão 3.1.1 Anti-Crop Smart Select & Modal Scroll Safeguards)**.  
 > **Consulte este arquivo antes de planejar ou executar qualquer alteração no código.**
 
 ---
@@ -9,10 +9,10 @@
 ## 📌 1. Identidade do Produto & Metadados
 
 - **Nome da Aplicação:** Finanças Pediatria
-- **Versão Vigente:** `3.1.0`
+- **Versão Vigente:** `3.1.1`
 - **Autor / Criador:** **FChNeto** (Constante imutável no código: `APP_CREATOR = 'FChNeto'`; exibida no rodapé, cabeçalho e modais).
 - **Público-Alvo:** Médica Pediatra (atuação em maternidades, enfermarias, pronto-socorro infantil, UTI neonatal e consultório particular de puericultura).
-- **Proposta de Valor:** Controle financeiro médico de alta performance, acolhedor e seguro, integrando consultório, plantões hospitalares postergados (80% D+60 / 20% D+90), DRE médica, inteligência do Fator R (28%), SBAR clínico LGPD-safe, conciliação bancária OFX, conforto visual absoluto no modo escuro (Pediatric Dark Sanctuary), menu hambúrguer despoluído, foto de perfil da médica e central de blindagem jurídica (LGPD e CFM).
+- **Proposta de Valor:** Controle financeiro médico de alta performance, acolhedor e seguro, integrando consultório, plantões hospitalares postergados (80% D+60 / 20% D+90), DRE médica, inteligência do Fator R (28%), SBAR clínico LGPD-safe, conciliação bancária OFX, conforto visual absoluto no modo escuro (Pediatric Dark Sanctuary), menu hambúrguer despoluído, foto de perfil da médica, seleção de alíquotas com proteção anti-crop (*In-Flow Expansion*) e central de blindagem jurídica (LGPD e CFM).
 - **Ambiente Principal:** Mobile-First — iPhone 16 Plus (430px x 932px) instalado como PWA via Safari com blindagem contra auto-zoom (`16px`).
 - **Licença:** MIT (Copyright 2026 FChNeto).
 
@@ -40,10 +40,15 @@ A interface segue a estética acolhedora, sofisticada e limpa desenvolvida para 
   - `--text-muted`: `#D8B4E2` (Lilás suave legível).
   - `--border-color`: `rgba(255, 105, 180, 0.25)`.
 
-### Tipografia & Controles:
+### Tipografia, Controles & Arquitetura Anti-Crop:
 - **Títulos, Números e Métricas:** `'Bricolage Grotesque'`, sans-serif.
 - **Textos de Apoio, Rótulos, Botões e Formulários:** `'Manrope'`, sans-serif.
-- **Selects & Dropdowns:** Proibido uso de selects nativos desformatados. Todos usam `.custom-select` com cantos arredondados (`rounded-2xl`) e chevron rosa pediátrico (`#b80f55`).
+- **Selects & Dropdowns Estilizados:** Proibido uso de selects nativos desformatados. Todos usam `.custom-select` com cantos arredondados (`rounded-2xl`) e chevron rosa pediátrico (`#b80f55`).
+- **Arquitetura *In-Flow Expansion* para Menus em Diálogos/Modais (v3.1.1):**
+  - `.dialog-card .custom-select-popover` e `.dialog-box .custom-select-popover` utilizam `position: relative !important; top: 0 !important; width: 100% !important; margin-top: 8px !important; margin-bottom: 8px !important;`.
+  - Ao abrir o dropdown dentro de um modal (como o seletor de regime tributário no Onboarding), o menu expande no fluxo do documento, empurra os botões inferiores ("Voltar" e "Próximo") naturalmente para baixo e expande a altura de rolagem do modal (`scrollHeight`).
+  - As listas usam `overscroll-behavior: auto; -webkit-overflow-scrolling: touch;`, eliminando o aprisionamento de toque no iOS/Android.
+  - O código JS detecta `isInsideDialog` para evitar abertura invertida (*dropup*) desnecessária dentro de modais e executa rolagem suave automática para manter o menu e botões visíveis.
 - **Margem Superior (Safe Area iOS):**
   ```css
   --safe-top: max(env(safe-area-inset-top, 0px), 52px);
@@ -114,11 +119,12 @@ A interface segue a estética acolhedora, sofisticada e limpa desenvolvida para 
 
 ---
 
-## 🧪 4. Convenções de Testes Automatizados (71 Testes)
+## 🧪 4. Convenções de Testes Automatizados (85 Testes Aprovados)
 
-- Todos os testes residem na pasta `tests/` e são executados com `node --test tests/*.test.js`.
-- O bundle `js/bundle.js` é unificado via `node scripts/build_bundle.js`.
-- É **proibido alterar ou enfraquecer testes** para fazê-los passar. A solução deve sempre resolver o problema geral de forma robusta.
+- Todos os 85 testes residem na pasta `tests/` e são executados com `npm test` ou `node --test tests/*.test.js`.
+- O bundle `js/bundle.js` é unificado via `node scripts/build_bundle.js` sem qualquer dependência externa de build.
+- Cobertura total de: cálculos D+60 / D+90, simulador FIRE médico, DRE & Fator R (28%), SBAR clínico LGPD, conciliação bancária OFX/CSV, NLP de voz, Pediatric Dark Sanctuary, Menu Hambúrguer, Foto da Médica, Seletor de Hospitais Stitch, e Proteções Anti-Crop / Modal Scroll Safeguards (`tests/select_crop_fix.test.js`).
+- É **proibido alterar ou enfraquecer testes** para fazê-los passar. A solução deve sempre resolver o problema de forma robusta e arquiteturalmente sólida.
 
 ---
 
