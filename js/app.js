@@ -251,6 +251,13 @@ export function applyTheme(theme) {
       iconSpan.innerHTML = renderIcon(iconName);
     }
   }
+
+  // Dynamic re-render so SVG charts, badges and layout tokens adapt instantly
+  if (dom.mainContent && state.activeTab && typeof renderCurrentView === "function") {
+    try {
+      renderCurrentView();
+    } catch (err) {}
+  }
 }
 
 export function initThemeSystem() {
@@ -1325,12 +1332,17 @@ export function openOnboardingDialog() {
             <label class="text-[11px] font-bold text-on-surface">Hospital Principal:</label>
             <input type="text" id="onboarding-hospital" value="Hospital Mater Dei" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary" />
             <label class="text-[11px] font-bold text-on-surface mt-1">Regime Tributário Predominante:</label>
-            <select id="onboarding-tax" class="w-full h-11 px-3 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface">
-              <option value="6">PJ Simples Nacional (6% com Fator R)</option>
-              <option value="11">PJ Lucro Presumido (~11.33%)</option>
-              <option value="15.5">PJ Simples Anexo V (15.5%)</option>
-              <option value="27.5">Pessoa Física / RPA (27.5%)</option>
-            </select>
+            ${renderCustomSelectHTML({
+              id: 'onboarding-tax',
+              value: '6',
+              options: [
+                { value: '6', label: 'PJ Simples Nacional (6% com Fator R)' },
+                { value: '11', label: 'PJ Lucro Presumido (~11.33%)' },
+                { value: '15.5', label: 'PJ Simples Anexo V (15.5%)' },
+                { value: '27.5', label: 'Pessoa Física / RPA (27.5%)' }
+              ],
+              icon: 'tune'
+            })}
           </div>
           <div class="grid grid-cols-2 gap-2 mt-2">
             <button type="button" id="btn-prev-step" class="h-11 rounded-full bg-surface-container text-on-surface font-bold text-[13px]">Voltar</button>
@@ -1362,6 +1374,9 @@ export function openOnboardingDialog() {
 
   const updateDialog = () => {
     openDialog(renderStep());
+    if (dom.dialogContainer) {
+      attachCustomSelectEvents(dom.dialogContainer);
+    }
     const btnNext = document.getElementById("btn-next-step");
     const btnPrev = document.getElementById("btn-prev-step");
     const btnFinish = document.getElementById("btn-finish-onboarding");
@@ -1517,27 +1532,51 @@ export function spawnPediatricParticles(x = null, y = null, count = 8, type = 'm
   const container = (dom && dom.particlesContainer) || document.getElementById('pediatric-particles-container') || (document.body && document.body.appendChild ? document.body : null);
   if (!container) return;
 
+  // Support invocation with event as first argument: spawnPediatricParticles(e, 'hearts')
+  let resolvedX = null;
+  let resolvedY = null;
+  if (x && typeof x === 'object') {
+    if ('clientX' in x || 'pageX' in x) {
+      resolvedX = x.clientX || x.pageX || null;
+      resolvedY = x.clientY || x.pageY || null;
+    }
+    if (typeof y === 'string') {
+      type = y;
+    }
+  } else if (typeof x === 'number') {
+    resolvedX = x;
+    resolvedY = typeof y === 'number' ? y : null;
+  }
+
+  const defaultX = typeof window !== 'undefined' ? window.innerWidth / 2 : 200;
+  const defaultY = typeof window !== 'undefined' ? window.innerHeight * 0.55 : 300;
+  const startX = (resolvedX !== null && !isNaN(resolvedX)) ? resolvedX : defaultX;
+  const startY = (resolvedY !== null && !isNaN(resolvedY)) ? resolvedY : defaultY;
+
   const emojiMap = {
     hearts: ['💖', '💕', '💗', '🌸', '✨', '💐'],
     butterflies: ['🦋', '🌸', '✨', '💕', '🌷'],
-    mixed: ['💖', '💕', '🦋', '✨', '🌸', '👶', '🩺']
+    mixed: ['💖', '💕', '🦋', '✨', '🌸', '🍼', '🩺']
   };
   const list = emojiMap[type] || emojiMap.mixed;
 
-  const startX = x !== null ? x : (typeof window !== 'undefined' ? window.innerWidth / 2 : 200);
-  const startY = y !== null ? y : (typeof window !== 'undefined' ? window.innerHeight * 0.55 : 300);
-
   for (let i = 0; i < count; i++) {
     const p = document.createElement('div');
-    p.className = 'pediatric-particle';
-    p.textContent = list[Math.floor(Math.random() * list.length)];
+    const symbol = list[Math.floor(Math.random() * list.length)];
+    p.textContent = symbol;
+    const isButterfly = symbol === '🦋' || type === 'butterflies';
+    p.className = `pediatric-particle ${isButterfly ? 'butterfly' : ''}`;
 
     const dx = (Math.random() - 0.5) * 140;
     const rot = (Math.random() - 0.5) * 50;
     const delay = Math.random() * 0.2;
     const fontSize = 16 + Math.floor(Math.random() * 12);
 
+    p.style.setProperty('--drift-x', `${dx}px`);
     p.style.setProperty('--dx', `${dx}px`);
+    p.style.setProperty('--rot-mid', `${rot * 0.6}deg`);
+    p.style.setProperty('--rot-high', `${rot * 1.2}deg`);
+    p.style.setProperty('--rot-end', `${rot * 1.5}deg`);
     p.style.setProperty('--rot', `${rot}deg`);
     p.style.left = `${startX + (Math.random() - 0.5) * 30}px`;
     p.style.top = `${startY + (Math.random() - 0.5) * 20}px`;
@@ -1547,7 +1586,7 @@ export function spawnPediatricParticles(x = null, y = null, count = 8, type = 'm
     container.appendChild(p);
     setTimeout(() => {
       if (p.parentNode) p.parentNode.removeChild(p);
-    }, 2000);
+    }, 2200);
   }
 }
 
@@ -1560,65 +1599,64 @@ export function showBabyReaction({ type = 'income', title = '', message = '', am
   if (!dom.babyOverlay || !dom.babyContent) return;
 
   const isIncome = type === 'income';
-  const animClass = 'baby-joy-bounce';
-  const defaultTitle = isIncome ? 'Uhull! Entrada Registrada! 👶💖' : 'Cuidado & Organização! 🦋✨';
+  const defaultTitle = isIncome ? 'Uhull! Entrada Registrada! 👶💖' : 'Cuidado & Organização! 🍼✨';
   const defaultMsg = isIncome
-    ? 'Bebê sorridente com corações! Seu faturamento pediátrico crescendo com saúde e dedicação.'
-    : 'Bebê calminho e seguro: finanças em dia com carinho, proteção e controle!';
+    ? 'Bebê sorridente com corações! Seu faturamento crescendo com saúde, amor e dedicação.'
+    : 'Tudo anotado e sob controle! Suas finanças protegidas com carinho pediátrico.';
 
   const formattedAmount = amount !== null ? formatCurrency(amount) : '';
 
   dom.babyContent.innerHTML = `
     <!-- Floating Hearts, Butterflies & Sparkles -->
     ${isIncome ? `
-      <span class="floating-heart text-[24px]" style="left: 10%; top: 15%; animation-delay: 0s;">💖</span>
-      <span class="floating-heart text-[28px]" style="left: 75%; top: 12%; animation-delay: 0.4s;">💕</span>
-      <span class="floating-heart text-[20px]" style="left: 45%; top: 8%; animation-delay: 0.8s;">✨</span>
-      <span class="floating-heart text-[22px]" style="left: 85%; top: 35%; animation-delay: 1.2s;">👶</span>
+      <span class="floating-heart text-[22px]" style="left: 10%; top: 15%; animation-delay: 0s;">💖</span>
+      <span class="floating-heart text-[26px]" style="left: 75%; top: 12%; animation-delay: 0.4s;">💕</span>
+      <span class="floating-heart text-[18px]" style="left: 45%; top: 8%; animation-delay: 0.8s;">✨</span>
+      <span class="floating-heart text-[20px]" style="left: 85%; top: 35%; animation-delay: 1.2s;">👶</span>
     ` : `
-      <span class="floating-heart text-[24px]" style="left: 12%; top: 20%; animation-delay: 0s;">🦋</span>
-      <span class="floating-heart text-[26px]" style="left: 78%; top: 15%; animation-delay: 0.4s;">🌸</span>
-      <span class="floating-heart text-[20px]" style="left: 48%; top: 8%; animation-delay: 0.8s;">✨</span>
-      <span class="floating-heart text-[22px]" style="left: 82%; top: 32%; animation-delay: 1.2s;">💕</span>
+      <span class="floating-heart text-[22px]" style="left: 12%; top: 20%; animation-delay: 0s;">🦋</span>
+      <span class="floating-heart text-[24px]" style="left: 78%; top: 15%; animation-delay: 0.4s;">🌸</span>
+      <span class="floating-heart text-[18px]" style="left: 48%; top: 8%; animation-delay: 0.8s;">✨</span>
+      <span class="floating-heart text-[20px]" style="left: 82%; top: 32%; animation-delay: 1.2s;">🍼</span>
     `}
 
-    <div class="w-28 h-28 mx-auto rounded-full overflow-hidden shadow-lg border-4 ${isIncome ? 'border-primary-pink' : 'border-lilac-medium'} ${animClass} relative mb-3 bg-primary-fixed flex items-center justify-center">
+    <div class="w-20 h-20 mx-auto rounded-full overflow-hidden shadow-sm border-2 ${isIncome ? 'border-primary-pink' : 'border-lilac-medium'} baby-joy-bounce relative mb-2.5 bg-primary-fixed flex items-center justify-center">
       <img
         src="./assets/images/baby_happy.jpg"
-        alt="Bebê feliz sorrindo"
+        alt="Bebê fofo"
         class="w-full h-full object-cover"
         onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.classList.remove('hidden');"
       />
-      <div class="w-full h-full hidden flex items-center justify-center text-[44px]">
-        ${isIncome ? '👶💖' : '👶🌸'}
+      <div class="w-full h-full hidden flex items-center justify-center text-[36px]">
+        ${isIncome ? '👶💖' : '🍼🌸'}
       </div>
     </div>
 
-    <h3 class="font-headline text-[17px] font-bold ${isIncome ? 'text-secondary' : 'text-primary'} mb-1">
+    <h3 class="font-headline text-[15.5px] font-bold ${isIncome ? 'text-secondary' : 'text-primary'} mb-1">
       ${title || defaultTitle}
     </h3>
 
     ${formattedAmount ? `
-      <div class="text-[17px] font-extrabold text-on-surface font-display mb-1.5">
+      <div class="text-[16px] font-extrabold text-on-surface font-display mb-1">
         ${formattedAmount}
       </div>
     ` : ''}
 
-    <p class="text-[12px] text-on-surface-variant leading-relaxed mb-4 px-2">
+    <p class="text-[11.5px] text-on-surface-variant leading-relaxed mb-3 px-2">
       ${message || defaultMsg}
     </p>
 
     <button
       type="button"
       id="btn-close-baby-reaction"
-      class="h-10 px-6 rounded-full bg-gradient-to-r ${isIncome ? 'from-secondary to-primary' : 'from-primary to-secondary'} text-white font-bold text-[13px] shadow-sm transition-all active:scale-95 mx-auto cursor-pointer"
+      class="h-9 px-5 rounded-full bg-gradient-to-r ${isIncome ? 'from-secondary to-primary' : 'from-primary to-secondary'} text-white font-bold text-[12px] shadow-xs transition-all active:scale-95 mx-auto cursor-pointer"
     >
       Continuar ✨
     </button>
   `;
 
   dom.babyOverlay.classList.add("active");
-  triggerHaptic(20);
+  triggerHaptic(18);
   spawnPediatricParticles(null, null, isIncome ? 10 : 8, isIncome ? 'hearts' : 'butterflies');
 
   const closeReaction = () => {
@@ -1632,7 +1670,7 @@ export function showBabyReaction({ type = 'income', title = '', message = '', am
   };
 
   if (dom.babyTimeout) clearTimeout(dom.babyTimeout);
-  dom.babyTimeout = setTimeout(closeReaction, 2800);
+  dom.babyTimeout = setTimeout(closeReaction, 2400);
 }
 
 /**
@@ -4499,16 +4537,17 @@ function renderShiftsView() {
           </button>
         </div>
 
-        <div class="flex items-center gap-1">
-          <select
-            id="select-shift-sector"
-            class="text-[11px] font-semibold bg-surface-container-low text-on-surface-variant px-2.5 py-1.5 rounded-full border border-transparent focus:border-primary focus:bg-white focus:outline-none transition-all"
-          >
-            <option value="all" ${state.shiftSectorFilter === 'all' ? 'selected' : ''}>Todos os Setores</option>
-            ${CLINICAL_SECTORS.map(sec => `
-              <option value="${sec}" ${state.shiftSectorFilter === sec ? 'selected' : ''}>${sec}</option>
-            `).join("")}
-          </select>
+        <div class="flex items-center gap-1 min-w-[145px]">
+          ${renderCustomSelectHTML({
+            id: 'select-shift-sector',
+            value: state.shiftSectorFilter,
+            options: [
+              { value: 'all', label: 'Todos os Setores' },
+              ...CLINICAL_SECTORS.map(sec => ({ value: sec, label: sec }))
+            ],
+            icon: 'stethoscope',
+            extraClass: 'min-w-[145px]'
+          })}
         </div>
       </div>
 
@@ -5253,7 +5292,7 @@ function renderExpensesView() {
                   <div class="flex flex-col min-w-0">
                     <span class="text-[13px] font-bold text-on-surface truncate">${c.category}</span>
                     <div class="flex items-center gap-1.5 text-[10px]">
-                      <span class="px-1.5 py-0.2 rounded-full font-bold ${c.scope === 'pf' ? 'bg-pink-100 text-pink-700' : 'bg-purple-100 text-purple-700'}">${c.scope.toUpperCase()}</span>
+                      <span class="px-1.5 py-0.2 rounded-full font-bold ${c.scope === 'pj' ? 'bg-mint-income-bg text-mint-income' : 'bg-lilac-light text-lilac-dark'}">${c.scope.toUpperCase()}</span>
                       <span class="text-on-surface-variant">Anterior: ${formatMoney(c.previousAmount)}</span>
                     </div>
                   </div>
@@ -5350,7 +5389,7 @@ function renderExpenseCard(expense) {
         <div class="flex flex-col min-w-0 flex-1">
           <div class="flex items-center gap-1.5 flex-wrap">
             <span class="text-[14px] font-semibold text-on-surface truncate">${expense.description}</span>
-            <span class="px-1.5 py-0.2 rounded-full font-bold text-[9px] ${scope === 'pf' ? 'bg-pink-100 text-pink-700' : 'bg-purple-100 text-purple-700'}">${scope.toUpperCase()}</span>
+            <span class="px-1.5 py-0.2 rounded-full font-bold text-[9px] ${scope === 'pj' ? 'bg-mint-income-bg text-mint-income' : 'bg-lilac-light text-lilac-dark'}">${scope.toUpperCase()}</span>
             <button
               type="button"
               class="btn-card-category-quick inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer"
@@ -5870,6 +5909,9 @@ function attachShiftsEvents() {
     });
   }
 
+  // Initialize custom rounded selects in shifts view (e.g. sector filter)
+  attachCustomSelectEvents(dom.mainContent);
+
   // Sector filter select
   const sectorSelect = document.getElementById("select-shift-sector");
   if (sectorSelect) {
@@ -6099,6 +6141,9 @@ function attachCardActionEvents() {
       const id = btn.getAttribute("data-id");
       const updated = state.store.toggleConsultationPaid(id);
       if (updated) {
+        if (updated.paid) {
+          spawnPediatricParticles(e, 'butterflies');
+        }
         showToast(updated.paid ? "Consulta marcada como recebida! 🩺✨" : "Consulta marcada como pendente.", "check_circle");
         renderCurrentView();
       }
@@ -6498,24 +6543,72 @@ function renderShiftForm(data = null) {
 
   return `
     <form id="form-shift" class="flex flex-col gap-4">
-      <!-- Hospital / Maternidade -->
-      <div class="flex flex-col gap-1.5">
+      <!-- Hospital / Maternidade (Stitch Rounded Custom Picker) -->
+      <div class="flex flex-col gap-1.5 relative" id="hospital-selector-container">
         <label class="text-[12px] font-bold text-on-surface-variant flex items-center justify-between">
           <span>Hospital ou Maternidade</span>
           <span class="text-secondary text-[11px] flex items-center gap-0.5">
             ${renderIcon('auto_awesome', 'text-[13px]')} Locais Cadastrados
           </span>
         </label>
-        <div class="h-11 bg-surface-container-low rounded-2xl px-3.5 flex items-center gap-2 shadow-sm border border-transparent focus-within:border-primary focus-within:bg-white">
-          ${renderIcon('local_hospital', 'text-[20px] text-secondary')}
-          <input
-            type="text"
-            id="input-shift-hospital"
-            class="w-full bg-transparent text-[14px] text-on-surface focus:outline-none placeholder:text-outline"
-            placeholder="Ex: Maternidade Araken"
-            value="${hospital}"
-            required
-          />
+
+        <!-- Interactive Trigger Box -->
+        <button
+          type="button"
+          id="btn-hospital-picker-trigger"
+          class="hospital-picker-trigger category-picker-trigger h-11 px-3.5 rounded-2xl bg-surface-container-low border border-purple-100/50 dark:border-purple-900/30 flex items-center justify-between gap-2 shadow-xs cursor-pointer text-left w-full hover:border-secondary transition-all"
+        >
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-secondary/15 text-secondary">
+              ${renderIcon('local_hospital', 'text-[14px]')}
+            </div>
+            <span id="hospital-display-text" class="text-[13px] font-bold text-on-surface truncate">
+              ${hospital || 'Selecione ou busque o hospital...'}
+            </span>
+          </div>
+          <div class="flex items-center gap-1 shrink-0 text-on-surface-variant">
+            <span class="text-[10px] px-1.5 py-0.2 rounded-full font-bold uppercase bg-secondary-fixed text-secondary">LOCAL</span>
+            <span id="hospital-chevron-icon" class="text-secondary transition-transform duration-200">${renderIcon('expand_more', 'text-[18px]')}</span>
+          </div>
+        </button>
+
+        <!-- Native hidden input to preserve complete form serialization & test compatibility -->
+        <input
+          type="text"
+          id="input-shift-hospital"
+          class="hidden"
+          value="${hospital}"
+          required
+        />
+
+        <!-- Custom Hospital Dropdown Popover Menu -->
+        <div id="hospital-picker-menu" class="hospital-menu-popover category-menu-popover hidden absolute top-[calc(100%+6px)] inset-x-0 z-[85] bg-white dark:bg-[#1F1228] rounded-[20px] border border-purple-100 dark:border-purple-900/40 shadow-xl overflow-hidden flex flex-col">
+          <!-- Live Search & Add -->
+          <div class="p-2 border-b border-purple-100 dark:border-purple-900/30 bg-surface-container-low/50">
+            <div class="h-9 bg-white dark:bg-[#241430] rounded-xl px-2.5 flex items-center gap-1.5 border border-purple-100 dark:border-purple-900/40 focus-within:border-secondary transition-all">
+              ${renderIcon('search', 'text-[16px] text-secondary')}
+              <input
+                type="text"
+                id="input-hospital-search"
+                placeholder="Buscar ou digitar novo hospital..."
+                class="w-full bg-transparent text-[12px] font-semibold text-on-surface focus:outline-none placeholder:text-on-surface-variant/50"
+              />
+              <button type="button" id="btn-clear-hospital-search" class="text-on-surface-variant/50 hover:text-on-surface hidden cursor-pointer">
+                ${renderIcon('close', 'text-[14px]')}
+              </button>
+            </div>
+            <button
+              type="button"
+              id="btn-use-typed-hospital"
+              class="hidden mt-1.5 w-full py-1.5 px-2.5 rounded-xl bg-gradient-to-r from-secondary to-primary text-white text-[11px] font-bold flex items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer"
+            >
+              ${renderIcon('add_circle', 'text-[14px]')}
+              <span id="text-use-typed-hospital">Usar novo local</span>
+            </button>
+          </div>
+
+          <!-- List of Hospitals -->
+          <div class="hospital-menu-list category-menu-list no-scrollbar max-h-48 overflow-y-auto p-1.5" id="hospital-menu-items-list"></div>
         </div>
         <!-- Quick pills with default & custom locations -->
         <div class="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 -mx-1 px-1 no-scrollbar">
@@ -7413,18 +7506,147 @@ function attachBottomSheetFormEvents() {
 
     if (inputDate) inputDate.addEventListener("change", updateInstallmentsPreview);
 
+    // Stitch Rounded Hospital Picker Interactions
+    const inputHosp = document.getElementById("input-shift-hospital");
+    const hospTrigger = document.getElementById("btn-hospital-picker-trigger");
+    const hospMenu = document.getElementById("hospital-picker-menu");
+    const hospSearchInput = document.getElementById("input-hospital-search");
+    const btnClearHospSearch = document.getElementById("btn-clear-hospital-search");
+    const btnUseTypedHosp = document.getElementById("btn-use-typed-hospital");
+    const textUseTypedHosp = document.getElementById("text-use-typed-hospital");
+    const hospDispText = document.getElementById("hospital-display-text");
+    const hospChevron = document.getElementById("hospital-chevron-icon");
+
+    const closeHospPicker = () => {
+      if (hospMenu) hospMenu.classList.add("hidden");
+      if (hospTrigger) hospTrigger.classList.remove("active");
+      if (hospChevron) hospChevron.style.transform = "";
+    };
+
+    const openHospPicker = () => {
+      if (!hospMenu) return;
+      hospMenu.classList.remove("hidden");
+      if (hospTrigger) hospTrigger.classList.add("active");
+      if (hospChevron) hospChevron.style.transform = "rotate(180deg)";
+      renderHospitalList(hospSearchInput ? hospSearchInput.value : "");
+      setTimeout(() => hospSearchInput?.focus(), 80);
+    };
+
+    const setChosenHospital = (name) => {
+      if (!name) return;
+      const clean = name.trim();
+      if (!clean) return;
+      if (inputHosp) {
+        inputHosp.value = clean;
+        inputHosp.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      if (hospDispText) hospDispText.textContent = clean;
+
+      // Update pills
+      document.querySelectorAll(".quick-hospital-pill").forEach(p => {
+        const isMatch = p.getAttribute("data-hospital") === clean;
+        p.classList.toggle("bg-secondary-fixed", isMatch);
+        p.classList.toggle("text-on-secondary-fixed-variant", isMatch);
+        p.classList.toggle("shadow-sm", isMatch);
+        p.classList.toggle("bg-surface-container-low", !isMatch);
+        p.classList.toggle("text-on-surface-variant", !isMatch);
+      });
+
+      closeHospPicker();
+      spawnPediatricParticles(null, null, 4, 'hearts');
+    };
+
+    const renderHospitalList = (query = "") => {
+      const listEl = document.getElementById("hospital-menu-items-list");
+      if (!listEl) return;
+      const q = query.trim().toLowerCase();
+      const current = (inputHosp ? inputHosp.value : "").toLowerCase();
+      let locations = state.store.getWorkLocations ? state.store.getWorkLocations() : [];
+
+      if (q) {
+        locations = locations.filter(l => l.toLowerCase().includes(q));
+      }
+
+      if (btnUseTypedHosp && textUseTypedHosp) {
+        const exact = locations.some(l => l.toLowerCase() === q);
+        if (q && !exact) {
+          textUseTypedHosp.textContent = `Usar "${query.trim()}" (Adicionar local)`;
+          btnUseTypedHosp.classList.remove("hidden");
+        } else {
+          btnUseTypedHosp.classList.add("hidden");
+        }
+      }
+
+      if (locations.length === 0) {
+        listEl.innerHTML = `
+          <div class="p-3 text-center text-[12px] text-on-surface-variant italic">
+            Nenhum local encontrado. Toque no botão acima para cadastrar.
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = locations.map(loc => {
+        const isSel = loc.toLowerCase() === current;
+        return `
+          <div class="custom-select-item hospital-menu-item flex items-center justify-between p-2 rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors ${isSel ? 'active' : ''}" data-hospital="${loc}">
+            <div class="flex items-center gap-2 truncate">
+              <span class="text-secondary text-[15px]">${renderIcon('local_hospital', 'text-[15px]')}</span>
+              <span class="text-[12.5px] font-semibold text-on-surface truncate">${loc}</span>
+            </div>
+            ${isSel ? `<span class="text-secondary font-bold shrink-0">${renderIcon('check', 'text-[15px]')}</span>` : ''}
+          </div>
+        `;
+      }).join("");
+
+      listEl.querySelectorAll(".hospital-menu-item").forEach(item => {
+        item.addEventListener("click", () => {
+          setChosenHospital(item.getAttribute("data-hospital"));
+        });
+      });
+    };
+
+    if (hospTrigger) {
+      hospTrigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isClosed = hospMenu && hospMenu.classList.contains("hidden");
+        if (isClosed) openHospPicker();
+        else closeHospPicker();
+      });
+    }
+
+    if (hospSearchInput) {
+      hospSearchInput.addEventListener("input", (e) => {
+        const val = e.target.value;
+        if (btnClearHospSearch) btnClearHospSearch.classList.toggle("hidden", !val);
+        renderHospitalList(val);
+      });
+    }
+
+    if (btnClearHospSearch) {
+      btnClearHospSearch.addEventListener("click", () => {
+        if (hospSearchInput) hospSearchInput.value = "";
+        btnClearHospSearch.classList.add("hidden");
+        renderHospitalList("");
+        hospSearchInput?.focus();
+      });
+    }
+
+    if (btnUseTypedHosp) {
+      btnUseTypedHosp.addEventListener("click", () => {
+        const val = hospSearchInput ? hospSearchInput.value.trim() : "";
+        if (val) {
+          state.store.addWorkLocation(val);
+          setChosenHospital(val);
+        }
+      });
+    }
+
     // Quick hospital pills
     document.querySelectorAll(".quick-hospital-pill").forEach(pill => {
       pill.addEventListener("click", () => {
         const hosp = pill.getAttribute("data-hospital");
-        const inputHosp = document.getElementById("input-shift-hospital");
-        if (inputHosp) inputHosp.value = hosp;
-        document.querySelectorAll(".quick-hospital-pill").forEach(p => {
-          p.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
-          p.classList.add("bg-surface-container-low", "text-on-surface-variant");
-        });
-        pill.classList.add("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
-        pill.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+        setChosenHospital(hosp);
       });
     });
 
@@ -7436,14 +7658,7 @@ function attachBottomSheetFormEvents() {
         if (name && name.trim()) {
           const cleanName = name.trim();
           state.store.addWorkLocation(cleanName);
-          const inputHosp = document.getElementById("input-shift-hospital");
-          if (inputHosp) inputHosp.value = cleanName;
-
-          // Deselect existing quick hospital pills
-          document.querySelectorAll(".quick-hospital-pill").forEach(p => {
-            p.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
-            p.classList.add("bg-surface-container-low", "text-on-surface-variant");
-          });
+          setChosenHospital(cleanName);
 
           // Dynamically insert new active pill before the "+ Outro Local" button
           const newPill = document.createElement("button");
@@ -7452,13 +7667,7 @@ function attachBottomSheetFormEvents() {
           newPill.setAttribute("data-hospital", cleanName);
           newPill.textContent = cleanName.length > 20 ? cleanName.slice(0, 18) + '...' : cleanName;
           newPill.addEventListener("click", () => {
-            if (inputHosp) inputHosp.value = cleanName;
-            document.querySelectorAll(".quick-hospital-pill").forEach(p => {
-              p.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
-              p.classList.add("bg-surface-container-low", "text-on-surface-variant");
-            });
-            newPill.classList.add("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
-            newPill.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+            setChosenHospital(cleanName);
           });
 
           if (btnAddHospPill.parentNode) {
@@ -8033,11 +8242,11 @@ function attachBottomSheetFormEvents() {
       closeBottomSheet();
       renderCurrentView();
 
-      // Pediatric visual reaction: baby crying gently with caring advice
+      // Pediatric visual reaction: subtle, delicate & caring feedback
       showBabyReaction({
         type: 'expense',
-        title: isEdit ? 'Despesa Atualizada! 🍼🥺' : 'Despesa Anotada! 🍼🥺',
-        message: 'O bebê chora com a saída financeira, mas o orçamento continua impecável e sob controle!',
+        title: isEdit ? 'Despesa Atualizada! 🍼✨' : 'Despesa Registrada! 🍼✨',
+        message: 'Tudo anotado e sob controle! Suas finanças protegidas com carinho pediátrico.',
         amount: value
       });
     });
@@ -8226,7 +8435,10 @@ export function initApp() {
 
     // FAB Modal
     if (dom.fabBtn) {
-      dom.fabBtn.addEventListener("click", () => openBottomSheet("plantao"));
+      dom.fabBtn.addEventListener("click", (e) => {
+        spawnPediatricParticles(e, 'hearts');
+        openBottomSheet("plantao");
+      });
     }
 
     // Light dismiss on bottom sheet overlay click

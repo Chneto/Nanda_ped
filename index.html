@@ -386,11 +386,18 @@
               <p id="drawer-doctor-crm" class="text-[10px] text-on-surface-variant/80 truncate">CRM-SP • Pediatria</p>
             </div>
 
-            <button type="button" id="btn-drawer-edit-profile" class="w-8 h-8 rounded-full bg-white dark:bg-[#2B1838] flex items-center justify-center text-primary shadow-xs hover:text-secondary shrink-0 cursor-pointer" title="Editar Perfil">
-              <span class="material-symbols-outlined text-[16px]" data-icon="edit">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
-              </span>
-            </button>
+            <div class="flex items-center gap-1 shrink-0">
+              <button type="button" id="btn-drawer-remove-photo" class="w-8 h-8 rounded-full bg-white dark:bg-[#2B1838] text-error hover:text-error/80 flex items-center justify-center shadow-xs hidden cursor-pointer" title="Remover Foto">
+                <span class="material-symbols-outlined text-[15px]" data-icon="delete">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                </span>
+              </button>
+              <button type="button" id="btn-drawer-edit-profile" class="w-8 h-8 rounded-full bg-white dark:bg-[#2B1838] flex items-center justify-center text-primary shadow-xs hover:text-secondary cursor-pointer" title="Editar Perfil">
+                <span class="material-symbols-outlined text-[16px]" data-icon="edit">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                </span>
+              </button>
+            </div>
           </div>
 
           <!-- Quick Action Buttons Row (Preserving original IDs and data-icons for tests & functionality) -->

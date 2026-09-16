@@ -163,11 +163,17 @@ export function renderForecastChartSVG(forecastData, options = {}) {
  * @returns {{svg: string, legend: string}}
  */
 export function renderDonutChartSVG(categoriesData, totalExpenses) {
+  const isDark = typeof document !== 'undefined' && (
+    (document.documentElement && document.documentElement.getAttribute('data-theme') === 'dark') ||
+    (document.body && document.body.classList && document.body.classList.contains('dark'))
+  );
+  const trackStroke = isDark ? '#2B1838' : '#ebedff';
+
   if (!categoriesData || categoriesData.length === 0 || totalExpenses <= 0) {
     const emptySvg = `
       <div class="relative w-32 h-32 flex items-center justify-center">
         <svg class="w-full h-full" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="38" fill="none" stroke="#ebedff" stroke-width="12" />
+          <circle cx="50" cy="50" r="38" fill="none" stroke="${trackStroke}" stroke-width="12" />
         </svg>
         <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center px-1">
           <span class="material-symbols-outlined text-primary text-[20px]">spa</span>
@@ -219,7 +225,7 @@ export function renderDonutChartSVG(categoriesData, totalExpenses) {
     <div class="relative w-32 h-32 flex-shrink-0 flex items-center justify-center">
       <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
         <!-- Background Track -->
-        <circle cx="50" cy="50" r="${radius}" fill="none" stroke="#ebedff" stroke-width="12" />
+        <circle cx="50" cy="50" r="${radius}" fill="none" stroke="${trackStroke}" stroke-width="12" />
         <!-- Segment Arcs -->
         ${circlesMarkup}
       </svg>
@@ -439,6 +445,8 @@ export function renderForecast12MSVG(projectionData, options = {}) {
     <circle cx="${pt.x}" cy="${pt.yBalance}" r="3.5" fill="${isDark12M ? '#1F1228' : '#ffffff'}" stroke="${isDark12M ? '#FF69B4' : '#7e4a8a'}" stroke-width="2" class="pointer-events-none" />
   `).join("");
 
+  const balanceLineColor = isDark12M ? '#FF69B4' : '#7e4a8a';
+
   return `
     <div class="forecast-12m-wrapper relative w-full flex flex-col gap-2">
       <!-- Interactive Scrubber Tooltip Container (Dynamic) -->
@@ -460,8 +468,8 @@ export function renderForecast12MSVG(projectionData, options = {}) {
               <stop offset="100%" stop-color="#CE93D8" />
             </linearGradient>
             <linearGradient id="balanceAreaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stop-color="#7e4a8a" stop-opacity="0.16" />
-              <stop offset="100%" stop-color="#7e4a8a" stop-opacity="0.0" />
+              <stop offset="0%" stop-color="${balanceLineColor}" stop-opacity="${isDark12M ? '0.24' : '0.16'}" />
+              <stop offset="100%" stop-color="${balanceLineColor}" stop-opacity="0.0" />
             </linearGradient>
           </defs>
 
@@ -478,7 +486,7 @@ export function renderForecast12MSVG(projectionData, options = {}) {
           <path d="${areaPathD}" fill="url(#balanceAreaGradient)" />
 
           <!-- Cumulative Balance Line -->
-          <path d="${linePathD}" fill="none" stroke="#7e4a8a" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="${linePathD}" fill="none" stroke="${balanceLineColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
 
           <!-- Bars & Scrubber Zones -->
           ${barsMarkup}
@@ -496,7 +504,7 @@ export function renderForecast12MSVG(projectionData, options = {}) {
         <span class="flex items-center gap-1.5">
           <span class="w-2.5 h-2.5 rounded-sm bg-gradient-to-tr from-secondary to-primary inline-block"></span>
           <span>Entradas</span>
-          <span class="w-3 h-0.5 bg-[#7e4a8a] inline-block ml-2"></span>
+          <span class="w-3 h-0.5 inline-block ml-2" style="background-color: ${balanceLineColor};"></span>
           <span>Saldo Acumulado</span>
         </span>
         <span class="text-[10px] text-secondary font-medium">↔ Deslize para navegar pelos 12 meses</span>

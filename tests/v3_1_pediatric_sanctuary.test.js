@@ -106,3 +106,61 @@ test('Bundle includes new v3.1 functions for Custom Select, Drawer, Particles, a
   assert.ok(bundle.includes('2.147/2016') || bundle.includes('2.147'), 'Bundle must reference CFM Res 2.147');
   assert.ok(bundle.includes('Fator R'), 'Bundle must reference Fator R');
 });
+
+test('Audit: Custom Selectors and Hospital Picker Integration across Views and Modals', () => {
+  const appJs = fs.readFileSync(path.join(rootDir, 'js', 'app.js'), 'utf8');
+
+  // 1. Shifts View sector filter uses custom rounded select
+  assert.ok(appJs.includes("id: 'select-shift-sector'"), 'Shifts view must render custom select for sector filter');
+  assert.ok(appJs.includes('attachCustomSelectEvents(dom.mainContent)'), 'attachShiftsEvents must initialize custom select events');
+
+  // 2. Shift Modal hospital picker and selectors
+  assert.ok(appJs.includes('hospital-picker-trigger'), 'Shift modal must use Stitch rounded hospital picker trigger');
+  assert.ok(appJs.includes('hospital-picker-menu'), 'Shift modal must use custom hospital menu popover');
+  assert.ok(appJs.includes('id: \'input-shift-work-type\''), 'Shift modal must use custom select for work type');
+  assert.ok(appJs.includes('id: \'input-shift-sector\''), 'Shift modal must use custom select for sector');
+  assert.ok(appJs.includes('id: \'input-shift-type\''), 'Shift modal must use custom select for shift type');
+
+  // 3. Consultation Modal selectors
+  assert.ok(appJs.includes('id: \'input-consultation-type\''), 'Consultation modal must use custom select for type');
+  assert.ok(appJs.includes('id: \'input-consultation-puericultura-month\''), 'Consultation modal must use custom select for puericultura month');
+  assert.ok(appJs.includes('id: \'input-consultation-duration\''), 'Consultation modal must use custom select for duration');
+  assert.ok(appJs.includes('id: \'input-consultation-payment-method\''), 'Consultation modal must use custom select for payment method');
+
+  // 4. Onboarding Modal selector
+  assert.ok(appJs.includes('id: \'onboarding-tax\''), 'Onboarding modal must use custom select for tax regime');
+});
+
+test('Audit: Dark Mode Contrast and Chart Safeguards', () => {
+  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8');
+  const chartsJs = fs.readFileSync(path.join(rootDir, 'js', 'charts.js'), 'utf8');
+
+  // 1. Error tokens in dark mode
+  assert.ok(css.includes('--error: #FF6E6E'), 'Dark mode must define high-contrast --error');
+  assert.ok(css.includes('--error-container: #4D101C'), 'Dark mode must define deep --error-container');
+  assert.ok(css.includes('--on-error-container: #FFDAD6'), 'Dark mode must define legible --on-error-container');
+
+  // 2. Border and pastel background overrides
+  assert.ok(css.includes('.border-purple-100'), 'Dark mode must override purple borders');
+  assert.ok(css.includes('.bg-purple-50'), 'Dark mode must override pastel purple backgrounds');
+  assert.ok(css.includes('.badge-rate-gold'), 'Dark mode must provide high-contrast gold badge styling');
+
+  // 3. Dynamic dark mode in charts.js
+  assert.ok(chartsJs.includes('trackStroke'), 'charts.js must dynamically set donut track stroke based on theme');
+  assert.ok(chartsJs.includes("isDark ? '#2B1838' : '#ebedff'"), 'Donut track stroke must use dark plum in dark mode');
+});
+
+test('Audit: Microinteractions and Pediatric Particles Robustness', () => {
+  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8');
+  const appJs = fs.readFileSync(path.join(rootDir, 'js', 'app.js'), 'utf8');
+
+  // 1. CSS Keyframe variable fallbacks
+  assert.ok(css.includes('--drift-x') && css.includes('--dx'), 'floatFlutterUp must support both --drift-x and --dx');
+  assert.ok(css.includes('@keyframes butterflyFlutter'), 'CSS must define @keyframes butterflyFlutter');
+
+  // 2. JS particle generation handles events and coordinates
+  assert.ok(appJs.includes('resolvedX') || appJs.includes('clientX'), 'spawnPediatricParticles must safely handle event objects');
+  assert.ok(appJs.includes('spawnPediatricParticles(e, \'hearts\')'), 'FAB must trigger hearts particles');
+  assert.ok(appJs.includes('spawnPediatricParticles(e, \'butterflies\')'), 'Consultation paid toggle must trigger butterflies');
+});
+

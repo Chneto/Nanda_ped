@@ -21,7 +21,9 @@ A versão **3.1.0** traz aprimoramentos fundamentais de usabilidade, conforto vi
 
 #### 2. 🎨 Dropdowns Modernos e Arredondados (Stitch Chic Selectors)
 - **Eliminação de Menus Nativos Rústicos:** Substituição dos seletores quadrados nativos dos sistemas operacionais por menus suspensos customizados (`rounded-2xl` / 16-20px), idênticos ao seletor moderno de despesas.
-- **Tipografia & Ícones Manrope:** Cada seletor (Atuação Pediátrica, Setor Clínico, Tipo de Escala, Tipo de Despesa, Tipo de Atendimento, Puericultura, Duração, Pagamento) conta com ícone temático, crachá, chevron animado e checkmark de seleção.
+- **Seletor de Hospitais & Locais de Trabalho:** Seletor Stitch arredondado com busca em tempo real, adição de novos locais em 1 toque, popover flutuante e pílulas rápidas (`Hospital Mater Dei`, etc.).
+- **Filtros e Seletores Clínicos Integrados:** Seletor de Setor Clínico na visão de Plantões, Atuação Pediátrica, Setor Clínico, Tipo de Escala, Tipo de Despesa, Tipo de Atendimento, Puericultura, Duração, Pagamento e Regime Tributário no Onboarding.
+- **Tipografia & Ícones Manrope:** Cada seletor conta com ícone temático, crachá, chevron animado e checkmark de seleção.
 - **Compatibilidade Plena e Acessibilidade:** Manutenção de `<select>` nativo oculto sincronizado nos dois sentidos, preservando submissão de formulários e testes existentes.
 
 #### 3. 🍔 Menu Hambúrguer & Gaveta Lateral Despoluída
@@ -36,6 +38,7 @@ A versão **3.1.0** traz aprimoramentos fundamentais de usabilidade, conforto vi
 - **Personalização Visual:** A médica pode enviar uma foto sua diretamente do celular ou computador.
 - **Processamento no Navegador:** Corte centralizado quadrado automático, compressão otimizada em JPEG e armazenamento local seguro (Zero Cloud Leak).
 - **Sincronização Instantânea de Avatares:** A foto atualiza imediatamente o cabeçalho superior, o menu hambúrguer e a caixa de diálogo de configurações.
+- **Remoção e Reversão para Iniciais:** Botão de 1 toque no menu hambúrguer e no modal de perfil para remover a foto e restaurar as iniciais estilizadas da médica.
 
 #### 5. ✨ Microinterações & Chuva de Partículas Pediátricas
 - **Motor de Partículas Leve:** Efeito flutuante de corações delicados (`💖`, `💕`), borboletas (`🦋`) e brilhos estelares (`✨`, `🌸`) ao cadastrar plantões, registrar consultas ou despesas, e alternar temas.
