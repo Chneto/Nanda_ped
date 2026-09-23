@@ -1,5 +1,5 @@
 /**
- * Finanças Pediatria - Unified Standalone Bundle
+ * Finanças Pediatria - Unified Standalone Bundle (v3.x Master)
  * Self-contained for zero-CORS file:// protocol and offline execution
  */
 (function() {
