@@ -5,17 +5,6 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 
-const iconsPath = path.join(rootDir, 'js', 'icons.js');
-const storePath = path.join(rootDir, 'js', 'store.js');
-const chartsPath = path.join(rootDir, 'js', 'charts.js');
-const appPath = path.join(rootDir, 'js', 'app.js');
-const bundlePath = path.join(rootDir, 'js', 'bundle.js');
-
-let iconsCode = fs.readFileSync(iconsPath, 'utf8');
-let storeCode = fs.readFileSync(storePath, 'utf8');
-let chartsCode = fs.readFileSync(chartsPath, 'utf8');
-let appCode = fs.readFileSync(appPath, 'utf8');
-
 function cleanModule(code) {
   return code
     // Strip ES module imports
@@ -27,13 +16,21 @@ function cleanModule(code) {
     .replace(/^export\s+default\s+/gm, '');
 }
 
-iconsCode = cleanModule(iconsCode);
-storeCode = cleanModule(storeCode);
-chartsCode = cleanModule(chartsCode);
-appCode = cleanModule(appCode);
+// 1. Constrói Bundle Raiz (v3.x Master)
+function buildRootBundle() {
+  const iconsPath = path.join(rootDir, 'js', 'icons.js');
+  const storePath = path.join(rootDir, 'js', 'store.js');
+  const chartsPath = path.join(rootDir, 'js', 'charts.js');
+  const appPath = path.join(rootDir, 'js', 'app.js');
+  const bundlePath = path.join(rootDir, 'js', 'bundle.js');
 
-const bundle = `/**
- * Finanças Pediatria - Unified Standalone Bundle
+  let iconsCode = cleanModule(fs.readFileSync(iconsPath, 'utf8'));
+  let storeCode = cleanModule(fs.readFileSync(storePath, 'utf8'));
+  let chartsCode = cleanModule(chartsPath ? fs.readFileSync(chartsPath, 'utf8') : '');
+  let appCode = cleanModule(fs.readFileSync(appPath, 'utf8'));
+
+  const bundle = `/**
+ * Finanças Pediatria - Unified Standalone Bundle (v3.x Master)
  * Self-contained for zero-CORS file:// protocol and offline execution
  */
 (function() {
@@ -53,6 +50,48 @@ const bundle = `/**
 })();
 `;
 
-fs.writeFileSync(bundlePath, bundle, 'utf8');
-console.log('Bundle successfully written to:', bundlePath);
-console.log('Bundle file size:', bundle.length, 'bytes');
+  fs.writeFileSync(bundlePath, bundle, 'utf8');
+  console.log('Root bundle escrito em:', bundlePath);
+}
+
+// 2. Constrói Bundle v2.0 (Sanctuary Minimalist)
+function buildV2Bundle() {
+  const v2Dir = path.join(rootDir, 'v2.0', 'js');
+  const iconsPath = path.join(v2Dir, 'icons.js');
+  const storePath = path.join(v2Dir, 'store.js');
+  const chartsPath = path.join(v2Dir, 'charts.js');
+  const appPath = path.join(v2Dir, 'app.js');
+  const bundlePath = path.join(v2Dir, 'bundle.js');
+
+  let iconsCode = cleanModule(fs.readFileSync(iconsPath, 'utf8'));
+  let storeCode = cleanModule(fs.readFileSync(storePath, 'utf8'));
+  let chartsCode = cleanModule(fs.readFileSync(chartsPath, 'utf8'));
+  let appCode = cleanModule(fs.readFileSync(appPath, 'utf8'));
+
+  const bundle = `/**
+ * Finanças Pediatria v2.0 - Unified Standalone Bundle
+ * Self-contained for zero-CORS file:// protocol and offline execution
+ */
+(function() {
+  'use strict';
+
+  // --- ICONS SYSTEM ---
+  ${iconsCode}
+
+  // --- STORE ENGINE ---
+  ${storeCode}
+
+  // --- CHARTS ENGINE ---
+  ${chartsCode}
+
+  // --- APPLICATION LOGIC ---
+  ${appCode}
+})();
+`;
+
+  fs.writeFileSync(bundlePath, bundle, 'utf8');
+  console.log('v2.0 bundle escrito em:', bundlePath);
+}
+
+buildRootBundle();
+buildV2Bundle();
