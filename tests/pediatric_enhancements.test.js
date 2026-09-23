@@ -393,7 +393,7 @@ test('Trash & Undo Recovery mechanism in PediatricStore', () => {
 });
 
 test('Safe Area & Top Margin Protection', () => {
-  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8');
+  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8').replace(/\r\n/g, '\n');
   assert.ok(css.includes('--safe-top: max(env(safe-area-inset-top, 0px), 52px);'), 'Must enforce minimum 52px safe-top');
   assert.ok(css.includes('.glass-header {\n  padding-top: var(--safe-top) !important;'), 'Glass header must enforce safe-top with !important');
 
