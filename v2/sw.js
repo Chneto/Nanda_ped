@@ -3,7 +3,7 @@
  * Cache-first para assets estáticos e suporte 100% offline com tolerância a falhas
  */
 
-const CACHE_NAME = 'pediatria-v2-cache-v2';
+const CACHE_NAME = 'pediatria-v2-cache-v3';
 const ASSETS_TO_CACHE = [
   './index.html',
   './css/styles.css',

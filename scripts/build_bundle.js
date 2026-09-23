@@ -78,6 +78,12 @@ function buildV2Bundle() {
   // --- ICONS SYSTEM ---
   ${iconsCode}
 
+  // Fallback global de ícones para o escopo do window
+  if (typeof window !== 'undefined') {
+    window.getIconSvg = getIconSvg;
+    window.getIcon = getIcon;
+  }
+
   // --- STORE ENGINE ---
   ${storeCode}
 
@@ -91,6 +97,14 @@ function buildV2Bundle() {
 
   fs.writeFileSync(bundlePath, bundle, 'utf8');
   console.log('v2.0 bundle escrito em:', bundlePath);
+
+  // Sincroniza alias /v2/ para o GitHub Pages
+  const v2AliasDir = path.join(rootDir, 'v2', 'js');
+  if (fs.existsSync(v2AliasDir)) {
+    const aliasBundlePath = path.join(v2AliasDir, 'bundle.js');
+    fs.writeFileSync(aliasBundlePath, bundle, 'utf8');
+    console.log('v2 alias bundle escrito em:', aliasBundlePath);
+  }
 }
 
 buildRootBundle();
