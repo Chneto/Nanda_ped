@@ -1687,6 +1687,11 @@ class PediatricApp {
     const body = document.getElementById('modal-body-content');
     if (!body) return;
 
+    // Atualiza a aba ativa no cabeçalho do modal
+    document.querySelectorAll('.modal-tab-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-modal-tab') === this.activeModalTab);
+    });
+
     if (this.activeModalTab === 'shift') {
       const today = getLocalDateString();
       const hospitalOptions = this.store.data.hospitals.map(h => `<option value="${h}">${h}</option>`).join('');
