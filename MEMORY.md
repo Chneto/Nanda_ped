@@ -119,12 +119,21 @@ A interface segue a estética acolhedora, sofisticada e limpa desenvolvida para 
 
 ---
 
-## 🧪 4. Convenções de Testes Automatizados (85 Testes Aprovados)
+## 🧪 4. Convenções de Testes Automatizados (94 Testes Aprovados)
 
-- Todos os 85 testes residem na pasta `tests/` e são executados com `npm test` ou `node --test tests/*.test.js`.
-- O bundle `js/bundle.js` é unificado via `node scripts/build_bundle.js` sem qualquer dependência externa de build.
-- Cobertura total de: cálculos D+60 / D+90, simulador FIRE médico, DRE & Fator R (28%), SBAR clínico LGPD, conciliação bancária OFX/CSV, NLP de voz, Pediatric Dark Sanctuary, Menu Hambúrguer, Foto da Médica, Seletor de Hospitais Stitch, e Proteções Anti-Crop / Modal Scroll Safeguards (`tests/select_crop_fix.test.js`).
+- Todos os 94 testes residem na pasta `tests/` e são executados com `npm test` ou `node --test tests/*.test.js`.
+- O bundle `js/bundle.js` e `v2.0/js/bundle.js` são unificados via `node scripts/build_bundle.js` sem qualquer dependência externa de build.
+- Cobertura total de: cálculos D+60 / D+90, simulador FIRE médico, DRE & Fator R (28%), SBAR clínico LGPD, conciliação bancária OFX/CSV, NLP de voz, Pediatric Dark Sanctuary, Menu Hambúrguer, Foto da Médica, Seletor de Hospitais Stitch, e Proteções Anti-Crop / Modal Scroll Safeguards (`tests/select_crop_fix.test.js`), além dos 9 testes dedicados da suíte v2.0 (`tests/v2_suite.test.js`).
 - É **proibido alterar ou enfraquecer testes** para fazê-los passar. A solução deve sempre resolver o problema de forma robusta e arquiteturalmente sólida.
+
+---
+
+## 🌐 5. Arquitetura de Deploy no GitHub Pages & Branches
+
+- **Branch de Deploy do GitHub Pages**: `Nandapedv3` (configurada no GitHub como a fonte oficial de publicação).  
+  *Regra Crítica*: Todo commit deve ser sincronizado e publicado simultaneamente nas 3 branches: `NandapedV2`, `main` e `Nandapedv3`.
+- **Bypass do Motor Jekyll (`.nojekyll`)**: Arquivo `.nojekyll` mantido na raiz para impedir que o GitHub Pages oculte pastas com ponto no nome (como `/v2.0/`).
+- **Alias `/v2/`**: Mantido espelhado e idêntico a `/v2.0/` para garantir carregamento instantâneo por qualquer uma das duas rotas.
 
 ---
 
