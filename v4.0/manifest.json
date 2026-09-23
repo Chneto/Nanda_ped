@@ -1,0 +1,29 @@
+{
+  "name": "Finanças Pediatria v4.0 - Dra. Fernanda",
+  "short_name": "Finanças Ped v4",
+  "description": "Controle financeiro pediátrico com regras D+60 (80%) e D+90 (20%), macro-grupos de despesas e interface Silk & Rose Gold",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF6F5",
+  "theme_color": "#E8A598",
+  "icons": [
+    {
+      "src": "./assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
