@@ -268,5 +268,105 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
     assert.ok(cssContent.includes('font-size: 16px !important'));
     assert.ok(cssContent.includes('env(safe-area-inset-top'));
     assert.ok(cssContent.includes('env(safe-area-inset-bottom'));
+    assert.ok(cssContent.includes('.macro-filter-bar'), 'CSS deve conter barra de filtros por macro-grupo');
+    assert.ok(cssContent.includes('.silk-select-container'), 'CSS deve conter estilos para silk select');
+    assert.ok(cssContent.includes('.silk-select-menu.dropup') || cssContent.includes('.silk-select-menu'), 'CSS deve conter suporte a dropup');
+    assert.ok(cssContent.includes('.macro-category-card'), 'CSS deve conter cards de categorização por tipo');
+    assert.ok(cssContent.includes('.net-result-card'), 'CSS deve conter card de resultado líquido');
+  });
+
+  test('v4 Gráficos Financeiros & 5 Representações Visuais', async () => {
+    const {
+      renderForecastChart,
+      renderDonutExpenses,
+      renderComparisonVisual,
+      renderMonthCalendarVisual,
+      renderNetBalanceVisual
+    } = await import('../v4/js/charts.js');
+
+    // 1. renderForecastChart
+    const el1 = { innerHTML: '' };
+    renderForecastChart(el1, [
+      { month: '2026-05', label: 'Maio', income: 6000, expenses: 2000, balance: 4000 }
+    ]);
+    assert.ok(el1.innerHTML.includes('<svg'), 'renderForecastChart deve gerar SVG');
+    assert.ok(el1.innerHTML.includes('Entradas'));
+
+    // 2. renderDonutExpenses
+    const el2 = { innerHTML: '', querySelector: () => null };
+    renderDonutExpenses(el2, [{ name: 'Alimentação', value: 500, percentage: 100, color: '#FF7043', icon: 'meal' }], 500, 'macro');
+    assert.ok(el2.innerHTML.includes('donut-svg'));
+    assert.ok(el2.innerHTML.includes('Macro-Grupos'));
+
+    // 3. renderComparisonVisual
+    const el3 = { innerHTML: '' };
+    renderComparisonVisual(el3, 5000, 3000, 'Maio de 2026');
+    assert.ok(el3.innerHTML.includes('Caixa Real'));
+    assert.ok(el3.innerHTML.includes('Produção Represada'));
+
+    // 4. renderMonthCalendarVisual
+    const el4 = { innerHTML: '' };
+    renderMonthCalendarVisual(el4, '2026-05', [{ date: '2026-05-10' }], [{ date: '2026-05-02' }]);
+    assert.ok(el4.innerHTML.includes('mini-calendar-wrapper'));
+    assert.ok(el4.innerHTML.includes('Mapa Visual do Mês'));
+
+    // 5. renderNetBalanceVisual
+    const el5 = { innerHTML: '' };
+    renderNetBalanceVisual(el5, { totalIncome: 6000, totalExpenses: 2000, balance: 4000 }, 'Maio de 2026');
+    assert.ok(el5.innerHTML.includes('net-result-card'));
+    assert.ok(el5.innerHTML.includes('Superávit Positivo'));
+  });
+
+  test('v4 Custom Silk Select Dropdown & Dropup (In-Flow Anti-Crop)', async () => {
+    const { PediatricApp } = await import('../v4/js/app.js');
+
+    // Cria instância com mock de DOM básico
+    const mockApp = Object.create(PediatricApp.prototype);
+    mockApp.store = store;
+
+    // Teste de renderCustomSelect com grupos (Macro-Grupos de Categorias)
+    const groupedOptions = MACRO_GROUPS.map(mg => ({
+      groupName: mg.name,
+      icon: mg.icon,
+      color: mg.color,
+      items: mg.categories.map(c => ({ value: c, label: c, icon: 'tag', color: mg.color }))
+    }));
+
+    const selectHtml = mockApp.renderCustomSelect({
+      id: 'test-category',
+      name: 'category',
+      value: 'Mercantil',
+      options: groupedOptions,
+      grouped: true,
+      isDropup: true
+    });
+
+    assert.ok(selectHtml.includes('silk-select-container'));
+    assert.ok(selectHtml.includes('silk-dropup'));
+    assert.ok(selectHtml.includes('input-test-category'));
+    assert.ok(selectHtml.includes('silk-select-group-header'));
+    assert.ok(selectHtml.includes('Mercantil'));
+    assert.ok(selectHtml.includes('Alimentação'));
+  });
+
+  test('v4 Menu Hambúrguer Drawer, Perfil no Cabeçalho & Pré-Seleção de Maternidades', () => {
+    const appJsContent = fs.readFileSync(path.join(rootDir, 'v4', 'js', 'app.js'), 'utf8');
+
+    // 1. Ver Perfil no Cabeçalho
+    assert.ok(appJsContent.includes('#btn-header-profile'), 'Deve conter identificador do botão de perfil no cabeçalho');
+    assert.ok(appJsContent.includes('headerProfile'), 'Deve haver listener de clique para o perfil no cabeçalho');
+
+    // 2. Itens do Drawer do Menu Hambúrguer
+    assert.ok(appJsContent.includes('#drawer-item-categories'), 'Drawer deve conter item de Categorização');
+    assert.ok(appJsContent.includes('#drawer-item-profile'), 'Drawer deve conter item de Editar Perfil');
+    assert.ok(appJsContent.includes('#drawer-item-hub'), 'Drawer deve conter item de Hub de Finanças');
+    assert.ok(appJsContent.includes('#drawer-item-reset'), 'Drawer deve conter item de Zerar Dados');
+
+    // 3. Pré-Seleção rápida de Araken e Leide Morais
+    assert.ok(appJsContent.includes('Maternidade Araken'));
+    assert.ok(appJsContent.includes('Maternidade Leide Morais'));
+    assert.ok(appJsContent.includes('data-quick-hospital="Maternidade Araken"'));
+    assert.ok(appJsContent.includes('data-quick-hospital="Maternidade Leide Morais"'));
   });
 });
+

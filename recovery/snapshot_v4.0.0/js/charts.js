@@ -385,3 +385,55 @@ export function renderMonthCalendarVisual(container, yearMonthStr, shifts = [], 
     </div>
   `;
 }
+
+/**
+ * Renderiza o Balanço Líquido e Taxa de Poupança/Comprometimento
+ * @param {HTMLElement|string} container
+ * @param {Object} summary
+ * @param {string} monthLabel
+ */
+export function renderNetBalanceVisual(container, summary, monthLabel = '') {
+  const el = typeof container === 'string' ? document.getElementById(container) : container;
+  if (!el) return;
+
+  const income = summary?.totalIncome || 0;
+  const expense = summary?.totalExpenses || 0;
+  const balance = summary?.balance ?? (income - expense);
+  const isSurplus = balance >= 0;
+
+  const expensePct = income > 0 ? Math.min(100, Math.round((expense / income) * 100)) : (expense > 0 ? 100 : 0);
+  const savePct = income > 0 && isSurplus ? Math.max(0, Math.round((balance / income) * 100)) : 0;
+
+  el.innerHTML = `
+    <div class="net-result-card">
+      <div class="net-result-header">
+        <div>
+          <span class="net-result-label">Resultado Líquido de ${monthLabel || 'Mês'}</span>
+          <h3 class="net-result-value ${isSurplus ? 'surplus' : 'deficit'}">
+            ${formatCurrency(balance)}
+          </h3>
+        </div>
+        <span class="net-result-badge ${isSurplus ? 'surplus' : 'deficit'}">
+          ${isSurplus ? '✨ Superávit Positivo' : '⚠️ Déficit de Caixa'}
+        </span>
+      </div>
+
+      <div class="net-result-progress-box">
+        <div class="net-result-bar-labels">
+          <span>Gastos: ${expensePct}% da Renda</span>
+          <span>Poupança Líquida: ${savePct}%</span>
+        </div>
+        <div class="net-result-bar-track">
+          <div class="net-result-bar-expense" style="width: ${expensePct}%;"></div>
+          <div class="net-result-bar-savings" style="width: ${savePct}%;"></div>
+        </div>
+      </div>
+
+      <div class="net-result-meta-row">
+        <span>Total Entradas: <strong>${formatCurrency(income)}</strong></span>
+        <span>Total Saídas: <strong>${formatCurrency(expense)}</strong></span>
+      </div>
+    </div>
+  `;
+}
+
