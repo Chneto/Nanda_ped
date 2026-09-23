@@ -9,10 +9,10 @@
 ## 📌 1. Identidade do Produto & Metadados
 
 - **Nome da Aplicação:** Finanças Pediatria
-- **Versão Vigente:** `3.1.1`
+- **Versão Vigente:** `3.1.1` (Versão Completa/Avançada) e `2.0.0` (Nova Versão Pura, Higienizada & Sem Poluição em `/v2.0/`).
 - **Autor / Criador:** **FChNeto** (Constante imutável no código: `APP_CREATOR = 'FChNeto'`; exibida no rodapé, cabeçalho e modais).
 - **Público-Alvo:** Médica Pediatra (atuação em maternidades, enfermarias, pronto-socorro infantil, UTI neonatal e consultório particular de puericultura).
-- **Proposta de Valor:** Controle financeiro médico de alta performance, acolhedor e seguro, integrando consultório, plantões hospitalares postergados (80% D+60 / 20% D+90), DRE médica, inteligência do Fator R (28%), SBAR clínico LGPD-safe, conciliação bancária OFX, conforto visual absoluto no modo escuro (Pediatric Dark Sanctuary), menu hambúrguer despoluído, foto de perfil da médica, seleção de alíquotas com proteção anti-crop (*In-Flow Expansion*) e central de blindagem jurídica (LGPD e CFM).
+- **Proposta de Valor:** Controle financeiro médico de alta performance, acolhedor e seguro. Na **v2.0**, foco total na simplicidade, elegância sem poluição visual, monitoramento de gastos mensais (todas as 22 categorias obrigatórias), ganhos fixos (Bolsa de Residência Médica) e variáveis (Plantões em Sala de Parto rigorosamente calculados como 80% D+60 e 20% D+90), compras parceladas distribuídas no tempo, gráficos de previsão e rosca SVG nativos, e persistência tripla garantida no iOS com backup em 1 toque no app Arquivos/iCloud.
 - **Ambiente Principal:** Mobile-First — iPhone 16 Plus (430px x 932px) instalado como PWA via Safari com blindagem contra auto-zoom (`16px`).
 - **Licença:** MIT (Copyright 2026 FChNeto).
 

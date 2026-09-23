@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  
+  <title>Finanças Pediatria v2.0 - Dra. Fernanda Ch.</title>
+  <meta name="description" content="Controle financeiro de bolsa residência e plantões em sala de parto com regras D+60 e D+90." />
+  
+  <!-- Apple iOS WebApp Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Finanças Ped" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="theme-color" content="#EC407A" />
+
+  <!-- PWA Manifest & Icons -->
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" href="./assets/icons/favicon.png" />
+  <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
+
+  <!-- Estilos da Versão 2.0 -->
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <div id="app-container">
+    <!-- Renderizado dinamicamente via js/app.js -->
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 80vh; gap: 12px; color: #EC407A;">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="spin">
+        <line x1="12" y1="2" x2="12" y2="6"></line>
+        <line x1="12" y1="18" x2="12" y2="22"></line>
+        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line>
+        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line>
+        <line x1="2" y1="12" x2="6" y2="12"></line>
+        <line x1="18" y1="12" x2="22" y2="12"></line>
+        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line>
+        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line>
+      </svg>
+      <p style="font-size: 0.9rem; font-weight: 600; color: #7A7E91;">Carregando Finanças Pediatria v2.0...</p>
+    </div>
+  </div>
+
+  <noscript>
+    <div style="padding: 20px; text-align: center; color: #D81B60;">
+      Para utilizar o Finanças Pediatria, por favor ative o JavaScript no seu navegador.
+    </div>
+  </noscript>
+
+  <!-- Módulos da Aplicação -->
+  <script type="module" src="./js/app.js"></script>
+
+  <!-- Registro do Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(() => console.log('SW Finanças v2.0 registrado com sucesso.'))
+          .catch((err) => console.warn('Falha ao registrar SW:', err));
+      });
+    }
+  </script>
+</body>
+</html>
