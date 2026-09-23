@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, interactive-widget=resizes-content" />
   <title>Finanças Pediatria</title>
   <meta name="description" content="Controle financeiro para médicas pediatras - Criado por FChNeto" />
   <meta name="theme-color" content="#EC407A" />
@@ -32,51 +32,51 @@
       theme: {
         extend: {
           colors: {
-            "primary-pink": "#F48FB1",
-            "primary-pink-dark": "#EC407A",
-            "lilac-light": "#F3E5F5",
-            "lilac-medium": "#CE93D8",
-            "lilac-dark": "#AB47BC",
-            "mint-income": "#26A69A",
-            "mint-income-bg": "#E0F2F1",
-            "coral-expense": "#FF7043",
-            "coral-expense-bg": "#FBE9E7",
-            "bg-app": "#FBF8FD",
-            "card-bg": "#FFFFFF",
-            "text-main": "#2D3142",
-            "text-muted": "#7A7E91",
+            "primary-pink": "var(--primary-pink)",
+            "primary-pink-dark": "var(--primary-pink-dark)",
+            "lilac-light": "var(--lilac-light)",
+            "lilac-medium": "var(--lilac-medium)",
+            "lilac-dark": "var(--lilac-dark)",
+            "mint-income": "var(--mint-income)",
+            "mint-income-bg": "var(--mint-income-bg)",
+            "coral-expense": "var(--coral-expense)",
+            "coral-expense-bg": "var(--coral-expense-bg)",
+            "bg-app": "var(--bg-app)",
+            "card-bg": "var(--card-bg)",
+            "text-main": "var(--text-main)",
+            "text-muted": "var(--text-muted)",
 
             // Stitch compatibility
-            "surface": "#faf8ff",
-            "surface-bright": "#faf8ff",
-            "surface-container-lowest": "#ffffff",
-            "surface-container-low": "#f3f2ff",
-            "surface-container": "#ebedff",
-            "surface-container-high": "#e4e7fe",
-            "surface-container-highest": "#dee1f8",
-            "on-surface": "#171b2b",
-            "on-surface-variant": "#4d444d",
-            "primary": "#7e4a8a",
-            "primary-container": "#ce93d8",
-            "primary-fixed": "#fdd6ff",
-            "primary-fixed-dim": "#efb1f9",
-            "on-primary-fixed": "#340141",
-            "on-primary-fixed-variant": "#643370",
-            "secondary": "#b80f55",
-            "secondary-container": "#fd4e87",
-            "secondary-fixed": "#ffd9df",
-            "secondary-fixed-dim": "#ffb1c2",
-            "on-secondary-fixed": "#3f0018",
-            "on-secondary-fixed-variant": "#8f003f",
-            "tertiary": "#006a62",
-            "tertiary-container": "#41b9ad",
-            "tertiary-fixed": "#84f5e8",
-            "on-tertiary-fixed": "#00201d",
-            "error": "#ba1a1a",
-            "error-container": "#ffdad6",
-            "on-error-container": "#93000a",
-            "outline": "#7f747e",
-            "outline-variant": "#d0c2ce"
+            "surface": "var(--surface)",
+            "surface-bright": "var(--surface-bright)",
+            "surface-container-lowest": "var(--surface-container-lowest)",
+            "surface-container-low": "var(--surface-container-low)",
+            "surface-container": "var(--surface-container)",
+            "surface-container-high": "var(--surface-container-high)",
+            "surface-container-highest": "var(--surface-container-highest)",
+            "on-surface": "var(--on-surface)",
+            "on-surface-variant": "var(--on-surface-variant)",
+            "primary": "var(--primary)",
+            "primary-container": "var(--primary-container)",
+            "primary-fixed": "var(--primary-fixed)",
+            "primary-fixed-dim": "var(--primary-fixed-dim)",
+            "on-primary-fixed": "var(--on-primary-fixed)",
+            "on-primary-fixed-variant": "var(--on-primary-fixed-variant)",
+            "secondary": "var(--secondary)",
+            "secondary-container": "var(--secondary-container)",
+            "secondary-fixed": "var(--secondary-fixed)",
+            "secondary-fixed-dim": "var(--secondary-fixed-dim)",
+            "on-secondary-fixed": "var(--on-secondary-fixed)",
+            "on-secondary-fixed-variant": "var(--on-secondary-fixed-variant)",
+            "tertiary": "var(--tertiary)",
+            "tertiary-container": "var(--tertiary-container)",
+            "tertiary-fixed": "var(--tertiary-fixed)",
+            "on-tertiary-fixed": "var(--on-tertiary-fixed)",
+            "error": "var(--error)",
+            "error-container": "var(--error-container)",
+            "on-error-container": "var(--on-error-container)",
+            "outline": "var(--outline)",
+            "outline-variant": "var(--outline-variant)"
           },
           borderRadius: {
             "card": "24px",
@@ -129,57 +129,18 @@
             </div>
           </div>
 
-          <!-- Controls: Notifications, Install, Profile, Desktop Toggle -->
-          <div class="flex items-center gap-1">
-            <!-- Install PWA App Button -->
+          <!-- Controls: Dark Mode Toggle, Doctor Profile Avatar, Hamburger Menu -->
+          <div class="flex items-center gap-1.5">
+            <!-- Dark Mode Toggle ("Plantão Noturno / UTI Neonatal") -->
             <button
               type="button"
-              id="btn-install-app"
-              class="w-9 h-9 rounded-full bg-secondary-fixed text-secondary hover:bg-secondary-fixed/80 flex items-center justify-center shadow-sm transition-all active:scale-95"
-              title="Instalar no celular (PWA)"
-              aria-label="Instalar aplicativo"
+              id="btn-theme-toggle"
+              class="w-9 h-9 rounded-full bg-white text-on-surface-variant hover:text-primary flex items-center justify-center shadow-sm transition-all active:scale-95 cursor-pointer"
+              title="Plantão Noturno (Modo Escuro)"
+              aria-label="Alternar modo escuro"
             >
-              <span class="material-symbols-outlined text-[18px]" data-icon="smartphone">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
-              </span>
-            </button>
-
-            <!-- Notifications with dynamic counter badge -->
-            <button
-              type="button"
-              id="btn-notifications"
-              class="relative w-9 h-9 rounded-full bg-white text-on-surface-variant hover:text-primary flex items-center justify-center shadow-sm transition-all active:scale-95"
-              aria-label="Notificações e Avisos"
-              title="Avisos e Repasses"
-            >
-              <span class="material-symbols-outlined text-[20px]" data-icon="notifications">
-                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
-              </span>
-              <span id="notif-badge" class="notif-badge-dot hidden">0</span>
-            </button>
-
-            <!-- Privacy Mode Toggle (Nubank / Mobills Inspired) -->
-            <button
-              type="button"
-              id="btn-toggle-privacy"
-              class="w-9 h-9 rounded-full bg-white text-on-surface-variant hover:text-primary flex items-center justify-center shadow-sm transition-all active:scale-95"
-              title="Modo Sigilo (Ocultar Valores)"
-              aria-label="Alternar visibilidade de valores"
-            >
-              <span class="material-symbols-outlined text-[18px]" data-icon="visibility">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
-              </span>
-            </button>
-
-            <!-- Desktop Preview Frame Toggle -->
-            <button
-              type="button"
-              id="btn-toggle-frame"
-              class="w-9 h-9 rounded-full bg-white text-on-surface-variant hover:text-primary flex items-center justify-center shadow-sm transition-all active:scale-95"
-              title="Expandir tela"
-            >
-              <span class="material-symbols-outlined text-[18px]" data-icon="desktop_windows">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg>
+              <span class="material-symbols-outlined text-[18px]" data-icon="dark_mode">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/></svg>
               </span>
             </button>
 
@@ -187,11 +148,12 @@
             <button
               type="button"
               id="btn-profile"
-              class="relative w-9 h-9 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-[11px] shadow-sm overflow-hidden border border-white active:scale-95 transition-transform"
+              class="relative w-9 h-9 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary font-bold text-[11px] shadow-sm overflow-hidden border border-white active:scale-95 transition-transform cursor-pointer"
               title="Perfil & Metas da Médica"
               aria-label="Perfil da Médica"
             >
               <img
+                id="header-avatar-img"
                 src="./assets/icons/icon-192.png"
                 alt="Perfil Pediatra"
                 class="w-full h-full object-cover"
@@ -199,8 +161,31 @@
               />
               <span id="header-avatar-initials" class="hidden font-bold">DR</span>
             </button>
+
+            <!-- Hamburger Menu Button (Drawer Trigger with alert dot) -->
+            <button
+              type="button"
+              id="btn-hamburger"
+              class="relative w-9 h-9 rounded-full bg-white text-on-surface hover:text-secondary flex items-center justify-center shadow-sm transition-all active:scale-95 cursor-pointer"
+              title="Menu Principal"
+              aria-label="Menu Principal"
+            >
+              <span class="material-symbols-outlined text-[20px]" data-icon="menu">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+              </span>
+              <span id="hamburger-notif-badge" class="notif-badge-dot hidden">0</span>
+            </button>
           </div>
         </div>
+
+        <!-- Banner de Atalho para a Versão 2.0 Higienizada -->
+        <a href="./v2.0/" class="flex items-center justify-between px-3 py-1.5 rounded-full bg-gradient-to-r from-pink-500/10 to-purple-500/10 border border-pink-200/50 hover:bg-pink-100/50 transition-all text-xs font-semibold text-pink-700 dark:text-pink-300">
+          <span class="flex items-center gap-1.5">
+            <span>🌸</span>
+            <span>Finanças Pediatria <strong>v2.0 (Nova Versão)</strong></span>
+          </span>
+          <span class="text-[10px] bg-pink-500 text-white px-2 py-0.5 rounded-full font-bold">Abrir v2.0 &rarr;</span>
+        </a>
 
         <!-- Month / Year Selector Bar with Quick Picker Trigger -->
         <div class="flex items-center justify-between bg-white rounded-full p-1 shadow-[0_4px_16px_rgba(126,74,138,0.06)] border border-purple-50">
@@ -326,7 +311,7 @@
 
       <!-- Dialog Modal Overlay & Container for Submenus, Vouchers, Confirmations, Notifications -->
       <div id="dialog-overlay" class="dialog-overlay"></div>
-      <div id="dialog-container" class="dialog-box" role="dialog" aria-modal="true"></div>
+      <div id="dialog-container" class="dialog-box dialog-card" role="dialog" aria-modal="true"></div>
 
       <!-- Toast Notification -->
       <div id="toast" class="toast-container">
@@ -340,6 +325,253 @@
       <div id="baby-reaction-overlay" class="baby-reaction-backdrop" role="dialog" aria-modal="true">
         <div id="baby-reaction-content" class="baby-reaction-card"></div>
       </div>
+
+      <!-- Spotlight Universal Search Overlay (Spotlight Pediátrico / Cmd+K) -->
+      <div id="spotlight-overlay" class="spotlight-overlay" role="dialog" aria-modal="true" aria-label="Busca Universal">
+        <div class="spotlight-card flex flex-col max-h-[85vh]">
+          <div class="p-3 border-b border-outline-variant/20 flex items-center gap-2 bg-surface-container-lowest">
+            <span class="material-symbols-outlined text-secondary text-[20px]" data-icon="search">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            </span>
+            <input
+              type="text"
+              id="spotlight-input"
+              class="w-full bg-transparent border-none text-[15px] font-semibold text-on-surface focus:outline-none placeholder:text-on-surface-variant/40"
+              placeholder="Buscar plantões, despesas, locais, SBAR... (Cmd+K)"
+              autocomplete="off"
+            />
+            <button type="button" id="btn-close-spotlight" class="w-8 h-8 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container active:scale-95" aria-label="Fechar busca">
+              <span class="material-symbols-outlined text-[18px]" data-icon="close">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </span>
+            </button>
+          </div>
+          <div id="spotlight-results" class="flex-1 overflow-y-auto p-2 flex flex-col gap-1 max-h-[380px]">
+            <!-- Results dynamically rendered -->
+          </div>
+          <div class="px-3.5 py-2 bg-surface-container-low border-t border-outline-variant/20 flex items-center justify-between text-[11px] text-on-surface-variant">
+            <span>Dica: <strong>Cmd+K</strong> ou <strong>Esc</strong></span>
+            <span class="font-bold text-primary">Finanças Pediatria v3.0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hamburger Drawer & Overlay (Pediatric Chic Sidebar) -->
+      <div id="hamburger-drawer-overlay" class="drawer-overlay" aria-hidden="true"></div>
+      <aside id="hamburger-drawer" class="drawer-panel p-5 flex flex-col justify-between text-on-surface" aria-label="Menu Principal Lateral" role="dialog" aria-modal="true">
+        <div class="flex flex-col gap-4">
+          <!-- Drawer Top Header -->
+          <div class="flex items-center justify-between border-b border-purple-100 dark:border-purple-900/40 pb-3">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-secondary text-[22px]" data-icon="favorite">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              </span>
+              <span class="font-headline text-[16px] font-bold">Menu & Configurações</span>
+            </div>
+            <button type="button" id="btn-close-drawer" class="w-8 h-8 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:bg-surface-container cursor-pointer active:scale-95" aria-label="Fechar Menu">
+              <span class="material-symbols-outlined text-[18px]" data-icon="close">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              </span>
+            </button>
+          </div>
+
+          <!-- Doctor Profile Card with Photo Upload -->
+          <div class="p-3.5 rounded-2xl bg-surface-container-low border border-purple-100 dark:border-purple-900/30 flex items-center gap-3 relative shadow-xs">
+            <div class="relative w-14 h-14 rounded-full overflow-hidden shrink-0 border-2 border-primary-pink shadow-sm bg-secondary-fixed flex items-center justify-center group">
+              <img id="drawer-avatar-img" src="./assets/icons/icon-192.png" alt="Foto da Médica" class="w-full h-full object-cover" onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.classList.remove('hidden');" />
+              <span id="drawer-avatar-initials" class="hidden font-bold text-secondary text-[16px]">DR</span>
+              <!-- Upload photo badge button -->
+              <button type="button" id="btn-drawer-upload-photo" class="absolute inset-0 bg-black/40 flex items-center justify-center text-white opacity-80 hover:opacity-100 transition-opacity cursor-pointer" title="Alterar Foto de Perfil">
+                <span class="material-symbols-outlined text-[20px]" data-icon="photo_camera">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-1.8V6h-2.2L14.4 4H9.6L8.2 6H6v4.2c-1.2.9-2 2.3-2 3.8 0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5 0-1.5-.8-2.9-2-3.8zM12 19c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"/></svg>
+                </span>
+              </button>
+            </div>
+            <input type="file" id="input-doctor-photo" accept="image/*" class="hidden" />
+
+            <div class="flex flex-col min-w-0 flex-1 leading-snug">
+              <h4 id="drawer-doctor-name" class="font-headline text-[14px] font-bold text-on-surface truncate">Dra. Pediatra</h4>
+              <p id="drawer-doctor-title" class="text-[11px] text-primary font-semibold truncate">Pediatria & Neonatologia 🩺✨</p>
+              <p id="drawer-doctor-crm" class="text-[10px] text-on-surface-variant/80 truncate">CRM-SP • Pediatria</p>
+            </div>
+
+            <div class="flex items-center gap-1 shrink-0">
+              <button type="button" id="btn-drawer-remove-photo" class="w-8 h-8 rounded-full bg-white dark:bg-[#2B1838] text-error hover:text-error/80 flex items-center justify-center shadow-xs hidden cursor-pointer" title="Remover Foto">
+                <span class="material-symbols-outlined text-[15px]" data-icon="delete">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                </span>
+              </button>
+              <button type="button" id="btn-drawer-edit-profile" class="w-8 h-8 rounded-full bg-white dark:bg-[#2B1838] flex items-center justify-center text-primary shadow-xs hover:text-secondary cursor-pointer" title="Editar Perfil">
+                <span class="material-symbols-outlined text-[16px]" data-icon="edit">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Quick Action Buttons Row (Preserving original IDs and data-icons for tests & functionality) -->
+          <div class="flex flex-col gap-1">
+            <span class="text-[10.5px] font-bold text-on-surface-variant uppercase tracking-wider px-1">Ferramentas Rápidas</span>
+            <div class="grid grid-cols-5 gap-2 p-2 rounded-2xl bg-surface-container-low border border-purple-100 dark:border-purple-900/30">
+              <!-- Notifications -->
+              <button
+                type="button"
+                id="btn-notifications"
+                class="relative h-10 rounded-xl bg-white dark:bg-[#241430] text-on-surface-variant hover:text-primary flex flex-col items-center justify-center shadow-xs transition-all active:scale-95 cursor-pointer"
+                aria-label="Notificações e Avisos"
+                title="Avisos e Repasses"
+              >
+                <span class="material-symbols-outlined text-[18px]" data-icon="notifications">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z"/></svg>
+                </span>
+                <span id="notif-badge" class="notif-badge-dot hidden">0</span>
+              </button>
+
+              <!-- Privacy Mode Toggle -->
+              <button
+                type="button"
+                id="btn-toggle-privacy"
+                class="h-10 rounded-xl bg-white dark:bg-[#241430] text-on-surface-variant hover:text-primary flex flex-col items-center justify-center shadow-xs transition-all active:scale-95 cursor-pointer"
+                title="Modo Sigilo (Ocultar Valores)"
+                aria-label="Alternar visibilidade de valores"
+              >
+                <span class="material-symbols-outlined text-[18px]" data-icon="visibility">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                </span>
+              </button>
+
+              <!-- Spotlight Universal Search -->
+              <button
+                type="button"
+                id="btn-spotlight"
+                class="h-10 rounded-xl bg-white dark:bg-[#241430] text-on-surface-variant hover:text-primary flex flex-col items-center justify-center shadow-xs transition-all active:scale-95 cursor-pointer"
+                title="Busca Rápida (Cmd+K)"
+                aria-label="Buscar plantões e atalhos"
+              >
+                <span class="material-symbols-outlined text-[18px]" data-icon="search">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                </span>
+              </button>
+
+              <!-- Desktop Preview Frame Toggle -->
+              <button
+                type="button"
+                id="btn-toggle-frame"
+                class="h-10 rounded-xl bg-white dark:bg-[#241430] text-on-surface-variant hover:text-primary flex flex-col items-center justify-center shadow-xs transition-all active:scale-95 cursor-pointer"
+                title="Expandir tela"
+              >
+                <span class="material-symbols-outlined text-[18px]" data-icon="desktop_windows">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M21 2H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h7v2H8v2h8v-2h-2v-2h7c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H3V4h18v12z"/></svg>
+                </span>
+              </button>
+
+              <!-- Install PWA App Button -->
+              <button
+                type="button"
+                id="btn-install-app"
+                class="h-10 rounded-xl bg-secondary-fixed text-secondary hover:bg-secondary-fixed/80 flex flex-col items-center justify-center shadow-xs transition-all active:scale-95 cursor-pointer"
+                title="Instalar no celular (PWA)"
+                aria-label="Instalar aplicativo"
+              >
+                <span class="material-symbols-outlined text-[18px]" data-icon="smartphone">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Shortcuts & Management Modules List -->
+          <div class="flex flex-col gap-1.5">
+            <span class="text-[10.5px] font-bold text-on-surface-variant uppercase tracking-wider px-1">Módulos de Gestão</span>
+            
+            <div class="flex flex-col gap-1 bg-surface-container-low/60 rounded-2xl p-1.5 border border-purple-50 dark:border-purple-900/20">
+              <button type="button" id="drawer-shortcut-dre" class="btn-drawer-dre flex items-center justify-between p-2 rounded-xl hover:bg-white dark:hover:bg-[#2B1838] transition-colors text-left cursor-pointer">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-lg bg-primary-fixed/40 text-primary flex items-center justify-center text-[14px]">📊</span>
+                  <span class="text-[12.5px] font-semibold text-on-surface">DRE & Fator R (Simples Nacional)</span>
+                </div>
+                <span class="text-[10px] text-secondary font-bold">Otimizar</span>
+              </button>
+
+              <button type="button" id="drawer-shortcut-reconcile" class="btn-drawer-reconcile flex items-center justify-between p-2 rounded-xl hover:bg-white dark:hover:bg-[#2B1838] transition-colors text-left cursor-pointer">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-lg bg-mint-income-bg text-mint-income flex items-center justify-center text-[14px]">🏦</span>
+                  <span class="text-[12.5px] font-semibold text-on-surface">Conciliação Bancária (OFX / CSV)</span>
+                </div>
+                <span class="text-[10px] text-mint-income font-bold">Importar</span>
+              </button>
+
+              <button type="button" id="drawer-shortcut-contador" class="btn-drawer-kit flex items-center justify-between p-2 rounded-xl hover:bg-white dark:hover:bg-[#2B1838] transition-colors text-left cursor-pointer">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-lg bg-lilac-light text-lilac-dark flex items-center justify-center text-[14px]">📑</span>
+                  <span class="text-[12.5px] font-semibold text-on-surface">Kit do Contador em 1 Toque</span>
+                </div>
+                <span class="text-[10px] text-primary font-bold">Gerar</span>
+              </button>
+
+              <button type="button" id="drawer-shortcut-sbar" class="btn-drawer-sbar flex items-center justify-between p-2 rounded-xl hover:bg-white dark:hover:bg-[#2B1838] transition-colors text-left cursor-pointer">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-lg bg-secondary-fixed/50 text-secondary flex items-center justify-center text-[14px]">🩺</span>
+                  <span class="text-[12.5px] font-semibold text-on-surface">SBAR Clínico & Passagem de Plantão</span>
+                </div>
+                <span class="text-[10px] text-secondary font-bold">LGPD ✓</span>
+              </button>
+
+              <button type="button" id="drawer-shortcut-fire" class="btn-drawer-fire flex items-center justify-between p-2 rounded-xl hover:bg-white dark:hover:bg-[#2B1838] transition-colors text-left cursor-pointer">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-lg bg-coral-expense-bg text-coral-expense flex items-center justify-center text-[14px]">🎯</span>
+                  <span class="text-[12.5px] font-semibold text-on-surface">Simulador FIRE da Médica Pediatra</span>
+                </div>
+                <span class="text-[10px] text-coral-expense font-bold">Futuro</span>
+              </button>
+
+              <button type="button" id="drawer-shortcut-trash" class="btn-drawer-trash flex items-center justify-between p-2 rounded-xl hover:bg-white dark:hover:bg-[#2B1838] transition-colors text-left cursor-pointer">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-7 h-7 rounded-lg bg-error-container/30 text-error flex items-center justify-center text-[14px]">🗑️</span>
+                  <span class="text-[12.5px] font-semibold text-on-surface">Lixeira & Recuperação de Dados</span>
+                </div>
+                <span class="text-[10px] text-outline font-bold">Restaurar</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Brazilian Legal Compliance & Security Special Card -->
+          <div class="flex flex-col gap-1">
+            <span class="text-[10.5px] font-bold text-on-surface-variant uppercase tracking-wider px-1">Segurança & Legislação</span>
+            <button
+              type="button"
+              id="btn-drawer-legal"
+              class="w-full p-3 rounded-2xl bg-gradient-to-r from-primary-fixed/40 via-secondary-fixed/30 to-mint-income-bg/30 border border-primary/20 dark:border-primary/30 flex items-center justify-between text-left hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer shadow-xs"
+            >
+              <div class="flex items-center gap-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-xl bg-white dark:bg-[#2B1838] text-secondary flex items-center justify-center shrink-0 shadow-xs">
+                  <span class="material-symbols-outlined text-[18px]" data-icon="policy">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                  </span>
+                </div>
+                <div class="flex flex-col leading-tight min-w-0">
+                  <span class="text-[12.5px] font-bold text-on-surface truncate">Conformidade Legal & Segurança</span>
+                  <span class="text-[10px] text-primary font-medium truncate">LGPD • CFM • LAI • CF/88 • Local-First</span>
+                </div>
+              </div>
+              <span class="text-[14px] text-secondary font-bold">›</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Drawer Footer -->
+        <div class="border-t border-purple-100 dark:border-purple-900/30 pt-3 flex flex-col items-center text-center gap-1">
+          <p class="text-[11px] font-bold text-secondary flex items-center gap-1">
+            <span>🌸</span> Finanças Pediatria • v3.1
+          </p>
+          <p class="text-[10px] text-on-surface-variant font-medium">
+            Criado por FChNeto • Arquitetura 100% Segura
+          </p>
+        </div>
+      </aside>
+
+      <!-- Floating Particles Container (Cute Hearts, Butterflies & Sparkles) -->
+      <div id="pediatric-particles-container" class="pointer-events-none fixed inset-0 z-[9999] overflow-hidden"></div>
 
     </div>
   </div>
