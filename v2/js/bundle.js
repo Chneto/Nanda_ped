@@ -94,6 +94,12 @@ function getIcon(name, extraClass = "", size = 20) {
 }
 
 
+  // Fallback global de ícones para o escopo do window
+  if (typeof window !== 'undefined') {
+    window.getIconSvg = getIconSvg;
+    window.getIcon = getIcon;
+  }
+
   // --- STORE ENGINE ---
   ﻿/**
  * Finanças Pediatria v2.0 - Core Storage & Financial Engine
