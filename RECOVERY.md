@@ -1,6 +1,7 @@
-# 🔄 RECOVERY — Finanças Pediatria (Guia de Restauração v3.1.1, v3.1.0 & v3.0.0)
+# 🔄 RECOVERY — Finanças Pediatria (Guia de Restauração v4.0.0, v3.1.1, v3.1.0 & v2.0)
 
 > **Pontos de Restauração Oficiais Disponíveis:**  
+> - **v4.0.0 (Silk & Rose Gold — Macro-Grupos, Maternidades Rápidas & Visual Hub)**: 104 testes aprovados (`recovery/snapshot_v4.0.0/`).  
 > - **v2.0.0 (Nova Versão Pura, Higienizada & Sem Poluição)**: 94 testes aprovados (`recovery/snapshot_v2.0/`).  
 > - **v3.1.1 (Anti-Crop Smart Select & Modal Scroll Safeguards)**: 85 testes aprovados (`recovery/snapshot_v3.1.1/`).  
 > - **v3.1.0 (Pediatric Dark Sanctuary & Stitch Chic)**: 78 testes aprovados (`recovery/snapshot_v3.1.0/`).  

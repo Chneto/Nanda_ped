@@ -9,10 +9,10 @@
 ## 📌 1. Identidade do Produto & Metadados
 
 - **Nome da Aplicação:** Finanças Pediatria
-- **Versão Vigente:** `3.1.1` (Versão Completa/Avançada) e `2.0.0` (Nova Versão Pura, Higienizada & Sem Poluição em `/v2.0/`).
+- **Versão Vigente:** `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Versão Master Executiva) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
 - **Autor / Criador:** **FChNeto** (Constante imutável no código: `APP_CREATOR = 'FChNeto'`; exibida no rodapé, cabeçalho e modais).
 - **Público-Alvo:** Médica Pediatra (atuação em maternidades, enfermarias, pronto-socorro infantil, UTI neonatal e consultório particular de puericultura).
-- **Proposta de Valor:** Controle financeiro médico de alta performance, acolhedor e seguro. Na **v2.0**, foco total na simplicidade, elegância sem poluição visual, monitoramento de gastos mensais (todas as 22 categorias obrigatórias), ganhos fixos (Bolsa de Residência Médica) e variáveis (Plantões em Sala de Parto rigorosamente calculados como 80% D+60 e 20% D+90), compras parceladas distribuídas no tempo, gráficos de previsão e rosca SVG nativos, e persistência tripla garantida no iOS com backup em 1 toque no app Arquivos/iCloud.
+- **Proposta de Valor:** Controle financeiro médico de alta performance, acolhedor e seguro. Na **v4.0.0**, o frontend foi profundamente refinado no conceito **"Silk & Rose Gold"**: bordas hiper-arredondadas (30px), paleta delicada Rose Gold (`#E8A598`), Seda Rosa e Menta, chips rápidos de 1 toque para Maternidade Araken e Leide Morais, botões diretos de lançamento ("+ Nova Despesa" e "+ Novo Plantão"), categorização inteligente em 6 Macro-Grupos estilo apps bancários modernos (Nubank/Revolut) com alternador interativo no gráfico de rosca, sparklines de impacto no orçamento para cada despesa, e Menu Hambúrguer avançado com Drawer deslizante, edição de perfil com foto médica, Hub de Finanças Visual (comparativo de liquidez e mini-calendário do mês) e Formatação de Dados em 2 etapas protegida por download automático prévio de backup preventivo.
 - **Ambiente Principal:** Mobile-First — iPhone 16 Plus (430px x 932px) instalado como PWA via Safari com blindagem contra auto-zoom (`16px`).
 - **Licença:** MIT (Copyright 2026 FChNeto).
 
