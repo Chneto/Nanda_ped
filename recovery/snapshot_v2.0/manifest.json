@@ -1,0 +1,29 @@
+{
+  "name": "Finanças Pediatria - Dra. Fernanda",
+  "short_name": "Finanças Ped",
+  "description": "Controle financeiro de bolsa residência e plantões em sala de parto",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FDFBFE",
+  "theme_color": "#EC407A",
+  "icons": [
+    {
+      "src": "./assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

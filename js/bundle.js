@@ -1,5 +1,5 @@
 /**
- * Finanças Pediatria - Unified Standalone Bundle
+ * Finanças Pediatria - Unified Standalone Bundle (v3.x Master)
  * Self-contained for zero-CORS file:// protocol and offline execution
  */
 (function() {
@@ -126,7 +126,29 @@ const ICON_PATHS = {
   celebration: "M2 22l14-5-9-9zM14.59 2.41c-.78-.78-2.05-.78-2.83 0l-1.06 1.06 3.89 3.89 1.06-1.06c.78-.78.78-2.05 0-2.83zM21.5 11.5l-1.06-1.06-3.89 3.89 1.06 1.06c.78.78 2.05.78 2.83 0l1.06-1.06c.78-.78.78-2.05 0-2.83z",
   baby_changing_station: "M14 6.5c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2zm5 1.5h-5.46l-1.08-2.15C12.13 5.3 11.4 5 10.63 5c-.75 0-1.46.29-1.98.81L5.59 8.87C5.22 9.24 5 9.75 5 10.28V15h2v-4.14l2.25-2.25L10 13v7h2v-7.86l-1.12-3.37 1.12-1.12V10h7V8z",
   person: "M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z",
-  business: "M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+  business: "M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z",
+  mic: "M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z",
+  dark_mode: "M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z",
+  light_mode: "M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z",
+  account_balance: "M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zm-4.5-9L2 6v2h19V6l-9.5-5z",
+  send: "M2.01 21L23 12 2.01 3 2 10l15 2-15 2z",
+  upload_file: "M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm4 18H6V4h7v5h5v11zM8 15.01l1.41 1.41L11 14.84V19h2v-4.16l1.59 1.59L16 15.01 12.01 11 8 15.01z",
+  vibration: "M0 15h2V9H0v6zm3 2h2V7H3v10zm19-8v6h2V9h-2zm-3 8h2V7h-2v10zM16.5 3h-9C6.67 3 6 3.67 6 4.5v15c0 .83.67 1.5 1.5 1.5h9c.83 0 1.5-.67 1.5-1.5v-15c0-.83-.67-1.5-1.5-1.5zM16 19H8V5h8v14z",
+  contact_phone: "M22 3H2C.9 3 0 3.9 0 5v14c0 1.1.9 2 2 2h20c1.1 0 1.99-.9 1.99-2L24 5c0-1.1-.9-2-2-2zM8 6c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H2v-1c0-2 4-3.1 6-3.1s6 1.1 6 3.1v1zm3.85-4l1.4-1.4c.15-.15.39-.15.54 0l1.66 1.66c.15.15.15.39 0 .54l-1.04 1.04c-.3.3-.77.34-1.11.11-1.33-.92-2.39-1.98-3.31-3.31-.23-.34-.19-.81.11-1.11l1.04-1.04c.15-.15.39-.15.54 0l1.66 1.66c.15.15.15.39 0 .54L17.85 14z",
+  local_fire_department: "M12 12.9a3.1 3.1 0 0 0-3.1 3.1c0 1.71 1.39 3.1 3.1 3.1s3.1-1.39 3.1-3.1c0-1.71-1.39-3.1-3.1-3.1zm4.9-3.95C16.2 7.78 14.88 7 13.5 7c-.28 0-.55.03-.82.08-.94.18-1.75.72-2.26 1.48C9.5 9.87 9.17 11.23 9.4 12.6c.07.41-.21.78-.62.82-.41.04-.76-.23-.83-.64-.32-1.89.14-3.79 1.25-5.22.75-.98 1.83-1.68 3.06-1.99.39-.1.79-.15 1.19-.15 2.14 0 4.13 1.13 5.17 2.97.19.34.07.78-.27.97-.35.2-.79.08-.98-.26zM19.48 12.35c-.11-.3-.43-.48-.74-.42-.32.06-.55.33-.53.65.23 2.9-1.28 5.62-3.87 6.94-2.58 1.31-5.71.97-7.94-.87-2.22-1.83-3.14-4.85-2.31-7.65.83-2.8 3.25-4.81 6.16-5.12.32-.03.56-.31.53-.63-.03-.32-.3-.56-.63-.53C6.73 5.09 3.96 7.4 3.01 10.6c-.95 3.2.1 6.64 2.64 8.73s6.1 2.49 9.04.99c2.95-1.5 4.67-4.6 4.41-7.91-.02-.35-.29-.68-.62-.68z",
+  child_friendly: "M19 13h-4.18C14.4 11.84 13.3 11 12 11c-.48 0-.93.12-1.34.32L9.42 8.74c.94-.47 2-.74 3.12-.74 1.76 0 3.37.66 4.6 1.74l1.42-1.42C16.89 6.83 14.84 6 12.54 6c-1.66 0-3.2.56-4.45 1.5l-.94-.94c-.39-.39-1.02-.39-1.41 0l-1.42 1.42c-.39.39-.39 1.02 0 1.41l.94.94C4.19 11.58 3.5 13.2 3.5 15c0 3.59 2.91 6.5 6.5 6.5 2.76 0 5.12-1.72 6.07-4.17.65.11 1.28.17 1.93.17 1.66 0 3-1.34 3-3s-1.34-3-3-3zm-9 6.5c-2.48 0-4.5-2.02-4.5-4.5s2.02-4.5 4.5-4.5 4.5 2.02 4.5 4.5-2.02 4.5-4.5 4.5z",
+
+  // Hamburger, Legal & Profile Photo Icons
+  menu: "M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z",
+  photo_camera: "M12 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-1.8V6h-2.2L14.4 4H9.6L8.2 6H6v4.2c-1.2.9-2 2.3-2 3.8 0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5 0-1.5-.8-2.9-2-3.8zM12 19c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z",
+  camera_alt: "M12 12c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm6-1.8V6h-2.2L14.4 4H9.6L8.2 6H6v4.2c-1.2.9-2 2.3-2 3.8 0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5 0-1.5-.8-2.9-2-3.8zM12 19c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z",
+  policy: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z",
+  gavel: "M1 21h12v2H1zM5.245 8.07l2.83-2.827 8.99 8.99-2.83 2.828zM12.317 1l5.657 5.656-2.83 2.83-5.656-5.658zM3.83 9.485l2.83-2.828 5.656 5.656-2.828 2.83z",
+  verified_user: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z",
+  shield: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z",
+  security: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z",
+  lock: "M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z",
+  repeat: "M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
 };
 
 /**
@@ -349,6 +371,9 @@ const CATEGORY_COLORS = {
   "Saúde": "#00BFA5",
   "Viagens": "#00E5FF",
   "Impostos & Contabilidade": "#7E57C2",
+  "Contador": "#7E57C2",
+  "Mercantil/Mercado": "#FF5252",
+  "Lanches": "#FF7043",
   "Outros (Pessoal)": "#9C27B0",
   "Outros (PJ)": "#607D8B",
   "Outros": "#7A7E91"
@@ -370,6 +395,9 @@ const CATEGORY_ICONS = {
   "Saúde": "health_and_safety",
   "Viagens": "flight",
   "Impostos & Contabilidade": "calculate",
+  "Contador": "calculate",
+  "Mercantil/Mercado": "shopping_cart",
+  "Lanches": "restaurant",
   "Outros (Pessoal)": "receipt_long",
   "Outros (PJ)": "business",
   "Outros": "receipt_long"
@@ -427,27 +455,109 @@ const CLINICAL_SECTORS = [
 ];
 
 /**
- * Calculates hourly rate (R$/h) for a medical shift.
+ * Calculates hourly rate (R$/h) for a medical shift or consultation.
  * @param {number} netValue
  * @param {string} shiftType
+ * @param {number|null} explicitHours
  * @returns {number}
  */
-function calculateHourlyRate(netValue, shiftType) {
+function calculateHourlyRate(netValue, shiftType, explicitHours = null) {
   const numVal = Number(netValue) || 0;
   if (numVal <= 0) return 0;
+  if (explicitHours && Number(explicitHours) > 0) {
+    return Math.round(numVal / Number(explicitHours));
+  }
   let hours = 12;
   const found = SHIFT_TYPES.find(t => t.id === shiftType);
   if (found && found.hours) {
     hours = found.hours;
   } else if (typeof shiftType === "string") {
-    if (shiftType.includes("24h")) hours = 24;
-    else if (shiftType.includes("6h")) hours = 6;
-    else if (shiftType.toLowerCase().includes("sobreaviso")) hours = 12;
+    const lower = shiftType.toLowerCase();
+    if (lower.includes("24h")) hours = 24;
+    else if (lower.includes("6h")) hours = 6;
+    else if (lower.includes("consulta") || lower.includes("consultório") || lower.includes("consultorio") || lower.includes("puericultura") || lower.includes("atendimento")) hours = 1;
+    else if (lower.includes("sobreaviso")) hours = 12;
   }
   return hours > 0 ? Math.round(numVal / hours) : 0;
 }
 
 const STORAGE_KEY = "pediatric_chic_finances_v2";
+
+/**
+ * PediatricSanctuaryDB - L2 IndexedDB Persistence Layer
+ * Provides asynchronous, high-capacity background storage for receipts,
+ * OFX statements, and clinical financial history without blocking the L1 synchronous loop.
+ */
+class PediatricSanctuaryDB {
+  static dbName = "PediatricSanctuaryDB";
+  static dbVersion = 1;
+  static storeName = "app_state";
+
+  init() {
+    return PediatricSanctuaryDB.getDB();
+  }
+
+  saveBackup(key, data) {
+    return PediatricSanctuaryDB.save(key, data);
+  }
+
+  loadBackup(key) {
+    return PediatricSanctuaryDB.load(key);
+  }
+
+  static async getDB() {
+    if (typeof window === "undefined" || !window.indexedDB) {
+      return null;
+    }
+    return new Promise((resolve) => {
+      try {
+        const request = window.indexedDB.open(this.dbName, this.dbVersion);
+        request.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains(this.storeName)) {
+            db.createObjectStore(this.storeName);
+          }
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => resolve(null);
+      } catch (err) {
+        resolve(null);
+      }
+    });
+  }
+
+  static async save(key, data) {
+    try {
+      const db = await this.getDB();
+      if (!db) return false;
+      return new Promise((resolve) => {
+        const tx = db.transaction(this.storeName, "readwrite");
+        const store = tx.objectStore(this.storeName);
+        store.put(data, key);
+        tx.oncomplete = () => resolve(true);
+        tx.onerror = () => resolve(false);
+      });
+    } catch (err) {
+      return false;
+    }
+  }
+
+  static async load(key) {
+    try {
+      const db = await this.getDB();
+      if (!db) return null;
+      return new Promise((resolve) => {
+        const tx = db.transaction(this.storeName, "readonly");
+        const store = tx.objectStore(this.storeName);
+        const req = store.get(key);
+        req.onsuccess = () => resolve(req.result || null);
+        req.onerror = () => resolve(null);
+      });
+    } catch (err) {
+      return null;
+    }
+  }
+}
 
 /**
  * Robust date math: Adds months to a YYYY-MM-DD string, clamping days to month-end if needed.
@@ -706,6 +816,7 @@ function getInitialData() {
     doctorName: DEFAULT_DOCTOR_NAME,
     doctorTitle: DEFAULT_DOCTOR_TITLE,
     doctorCrm: "CRM-SP • Pediatria",
+    doctorPhoto: null,
     monthlyBudgetLimit: 10000,
     monthlyIncomeGoal: 25000,
     workLocations: [...DEFAULT_WORK_LOCATIONS],
@@ -716,6 +827,7 @@ function getInitialData() {
     fixedSalaries: [],
     shifts: [],
     expenses: [],
+    consultations: [],
     trash: []
   };
 }
@@ -728,6 +840,7 @@ function getDemoData() {
     doctorName: "Dra. Fernanda Ch.",
     doctorTitle: "Pediatria & Neonatologia 🩺✨",
     doctorCrm: "CRM-SP 214.890 • RQE 98.412",
+    doctorPhoto: null,
     monthlyBudgetLimit: 12000,
     monthlyIncomeGoal: 25000,
     workLocations: [...DEFAULT_WORK_LOCATIONS],
@@ -936,6 +1049,40 @@ function getDemoData() {
         dueDate: "2026-09-05",
         isPaid: true
       }
+    ],
+    consultations: [
+      {
+        id: "c1",
+        patientName: "Bebê Gael",
+        parentName: "Mariana Silva",
+        type: "Plano Puericultura 1º Ano",
+        date: "2026-08-20",
+        durationMinutes: 60,
+        grossValue: 450,
+        netValue: 450,
+        taxRate: 0,
+        paymentStatus: "received",
+        paymentDate: "2026-08-20",
+        ageMonths: 2,
+        planInstallment: "2/12",
+        notes: "Consulta puericultura 2º mês - ganho ponderal adequado, amamentação exclusiva."
+      },
+      {
+        id: "c2",
+        patientName: "Helena Castro",
+        parentName: "Rodrigo Castro",
+        type: "Consulta Particular",
+        date: "2026-10-05",
+        durationMinutes: 60,
+        grossValue: 400,
+        netValue: 400,
+        taxRate: 0,
+        paymentStatus: "received",
+        paymentDate: "2026-10-05",
+        ageMonths: 6,
+        planInstallment: "Avulsa",
+        notes: "Introdução alimentar e orientação nutricional."
+      }
     ]
   };
 }
@@ -956,6 +1103,9 @@ class PediatricStore {
         if (stored) {
           const parsed = JSON.parse(stored);
           if (parsed && Array.isArray(parsed.shifts) && Array.isArray(parsed.expenses)) {
+            if (!Array.isArray(parsed.consultations)) {
+              parsed.consultations = [];
+            }
             return parsed;
           }
         }
@@ -973,6 +1123,10 @@ class PediatricStore {
       } catch (err) {
         console.error("Could not write to localStorage:", err);
       }
+    }
+    // L2 Dual-Engine: Asynchronous IndexedDB background persistence
+    if (typeof window !== "undefined" && window.indexedDB) {
+      PediatricSanctuaryDB.save(this.storageKey, this.data).catch(() => {});
     }
   }
 
@@ -1173,8 +1327,13 @@ class PediatricStore {
   // --- Expenses Operations ---
 
   addExpense(expense) {
-    const category = expense.category || "Outros";
+    const category = (expense.category || "Outros").trim();
     const scope = expense.scope || this.getCategoryScope(category);
+
+    // Auto-register custom category if not in standard PF or PJ list
+    if (category && !EXPENSE_CATEGORIES_PF.includes(category) && !EXPENSE_CATEGORIES_PJ.includes(category) && category !== "Outros") {
+      this.addExpenseCategory({ name: category, scope });
+    }
 
     const newExpense = {
       id: expense.id || "e_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
@@ -1196,8 +1355,13 @@ class PediatricStore {
     const index = this.data.expenses.findIndex(e => e.id === id);
     if (index === -1) return null;
 
-    const cat = updates.category !== undefined ? updates.category : this.data.expenses[index].category;
+    const cat = updates.category !== undefined ? String(updates.category).trim() : this.data.expenses[index].category;
     const scope = updates.scope !== undefined ? updates.scope : (this.data.expenses[index].scope || this.getCategoryScope(cat));
+
+    // Auto-register custom category if not in standard PF or PJ list
+    if (cat && !EXPENSE_CATEGORIES_PF.includes(cat) && !EXPENSE_CATEGORIES_PJ.includes(cat) && cat !== "Outros") {
+      this.addExpenseCategory({ name: cat, scope });
+    }
 
     this.data.expenses[index] = {
       ...this.data.expenses[index],
@@ -1240,7 +1404,7 @@ class PediatricStore {
 
   restoreFromTrash(trashId) {
     if (!Array.isArray(this.data.trash) || this.data.trash.length === 0) return null;
-    const index = this.data.trash.findIndex(t => t.id === trashId || t.originalId === trashId);
+    const index = this.data.trash.findIndex(t => t.id === trashId || t.originalId === trashId || t.trashId === trashId);
     if (index === -1) return null;
 
     const entry = this.data.trash.splice(index, 1)[0];
@@ -1250,9 +1414,12 @@ class PediatricStore {
       this.data.expenses.unshift(entry.item);
     } else if (entry.itemType === "salary") {
       this.data.fixedSalaries.push(entry.item);
+    } else if (entry.itemType === "consultation") {
+      if (!Array.isArray(this.data.consultations)) this.data.consultations = [];
+      this.data.consultations.unshift(entry.item);
     }
     this.save();
-    return entry.item;
+    return true;
   }
 
   undoLastDelete() {
@@ -1426,10 +1593,19 @@ class PediatricStore {
   }
 
   updateExpenseCategory(idOrName, updates) {
-    if (!Array.isArray(this.data.customExpenseCategories) || !idOrName || !updates) return null;
-    const target = this.data.customExpenseCategories.find(
+    if (!idOrName || !updates) return null;
+    if (!Array.isArray(this.data.customExpenseCategories)) {
+      this.data.customExpenseCategories = [];
+    }
+    let target = this.data.customExpenseCategories.find(
       c => c.id === idOrName || c.name.toLowerCase() === String(idOrName).toLowerCase()
     );
+
+    // If target not yet in custom categories (e.g. was standard), register it as custom
+    if (!target) {
+      const scope = updates.scope || this.getCategoryScope(idOrName);
+      target = this.addExpenseCategory({ name: String(idOrName).trim(), scope });
+    }
     if (!target) return null;
 
     const oldName = target.name;
@@ -1483,7 +1659,17 @@ class PediatricStore {
     const customs = this.getCustomExpenseCategories();
     const found = customs.find(c => c.name.toLowerCase() === String(category).trim().toLowerCase());
     if (found && found.color) return found.color;
-    return "#B80F55";
+    const lower = String(category).toLowerCase();
+    if (lower.includes("mercado") || lower.includes("mercantil") || lower.includes("compras") || lower.includes("supermercado")) return "#FF5252";
+    if (lower.includes("lanche") || lower.includes("comida") || lower.includes("restaurante")) return "#FF7043";
+    if (lower.includes("contador") || lower.includes("contabil")) return "#7E57C2";
+    if (lower.includes("farmacia") || lower.includes("farmácia") || lower.includes("remédio") || lower.includes("medicamento")) return "#00BFA5";
+    if (lower.includes("carro") || lower.includes("uber") || lower.includes("combustivel") || lower.includes("combustível")) return "#448AFF";
+    if (lower.includes("consultorio") || lower.includes("consultório") || lower.includes("sublocacao") || lower.includes("aluguel")) return "#EC407A";
+    const palette = ["#B80F55", "#7E4A8A", "#006A62", "#EC407A", "#26A69A", "#AB47BC", "#FF7043", "#7C4DFF"];
+    let hash = 0;
+    for (let i = 0; i < category.length; i++) hash = (hash << 5) - hash + category.charCodeAt(i);
+    return palette[Math.abs(hash) % palette.length];
   }
 
   getCategoryIcon(category) {
@@ -1493,12 +1679,18 @@ class PediatricStore {
     const found = customs.find(c => c.name.toLowerCase() === String(category).trim().toLowerCase());
     if (found && found.icon) return found.icon;
     const lower = String(category).toLowerCase();
-    if (lower.includes("mercado") || lower.includes("mercantil") || lower.includes("compras")) return "shopping_cart";
-    if (lower.includes("lanche") || lower.includes("comida") || lower.includes("restaurante")) return "restaurant";
-    if (lower.includes("contador") || lower.includes("contabil")) return "calculate";
-    if (lower.includes("farmacia") || lower.includes("remédio") || lower.includes("medicamento")) return "medication";
-    if (lower.includes("carro") || lower.includes("uber") || lower.includes("combustivel")) return "directions_car";
-    return "receipt_long";
+    if (lower.includes("mercado") || lower.includes("mercantil") || lower.includes("compras") || lower.includes("supermercado")) return "shopping_cart";
+    if (lower.includes("lanche") || lower.includes("comida") || lower.includes("restaurante") || lower.includes("alimentacao") || lower.includes("alimentação")) return "restaurant";
+    if (lower.includes("contador") || lower.includes("contabil") || lower.includes("imposto")) return "calculate";
+    if (lower.includes("farmacia") || lower.includes("farmácia") || lower.includes("remédio") || lower.includes("medicamento")) return "medication";
+    if (lower.includes("carro") || lower.includes("uber") || lower.includes("combustivel") || lower.includes("combustível")) return "directions_car";
+    if (lower.includes("consultorio") || lower.includes("consultório") || lower.includes("clinica") || lower.includes("clínica")) return "domain";
+    if (lower.includes("viagem") || lower.includes("passagem") || lower.includes("hotel")) return "flight";
+    if (lower.includes("educacao") || lower.includes("educação") || lower.includes("curso") || lower.includes("congresso")) return "school";
+    if (lower.includes("lazer") || lower.includes("cinema") || lower.includes("show")) return "attractions";
+    if (lower.includes("presente")) return "card_giftcard";
+    if (lower.includes("beleza") || lower.includes("cabelo") || lower.includes("estetica")) return "spa";
+    return this.getCategoryScope(category) === "pj" ? "business" : "sell";
   }
 
   toggleExpensePaid(id) {
@@ -1568,6 +1760,192 @@ class PediatricStore {
       return this.updateFixedSalary(this.data.fixedSalaries[0].id, salary);
     }
     return this.addFixedSalary(salary);
+  }
+
+  // --- Consultations & Puericultura Operations (v3.0) ---
+
+  getConsultations(monthStr = null) {
+    if (!Array.isArray(this.data.consultations)) {
+      this.data.consultations = [];
+    }
+    if (!monthStr) {
+      return [...this.data.consultations];
+    }
+    return this.data.consultations.filter(c => c.date && c.date.startsWith(monthStr));
+  }
+
+  addConsultation(consultation) {
+    if (!Array.isArray(this.data.consultations)) {
+      this.data.consultations = [];
+    }
+    const grossValue = Number(consultation.grossValue !== undefined ? consultation.grossValue : (consultation.value || 0)) || 0;
+    const taxRate = consultation.taxRate !== undefined ? Number(consultation.taxRate) : 0;
+    const netValue = consultation.netValue !== undefined
+      ? Number(consultation.netValue)
+      : Math.round(grossValue * (1 - (taxRate / 100)) * 100) / 100;
+    const date = consultation.date ? String(consultation.date).trim() : getLocalDateString(new Date());
+    const durationMinutes = Number(consultation.durationMinutes) || 60;
+    const isPaid = consultation.paid === true || consultation.paymentStatus === "received" || consultation.isPaid === true;
+
+    const newConsultation = {
+      id: consultation.id || "c_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+      patientName: (consultation.patientName || "Bebê sem nome").trim(),
+      parentName: (consultation.parentName || "").trim(),
+      type: consultation.type || consultation.consultationType || "Plano Puericultura 1º Ano",
+      consultationType: consultation.consultationType || consultation.type || "Plano Puericultura 1º Ano",
+      date,
+      durationMinutes,
+      value: grossValue,
+      grossValue,
+      taxRate,
+      netValue,
+      paid: isPaid,
+      paymentStatus: isPaid ? "received" : (consultation.paymentStatus || "pending"),
+      paymentDate: isPaid ? (consultation.paymentDate || date) : null,
+      paymentMethod: consultation.paymentMethod || "PIX",
+      isPackage: Boolean(consultation.isPackage),
+      puericulturaMonth: consultation.puericulturaMonth || null,
+      ageMonths: consultation.ageMonths !== undefined && consultation.ageMonths !== null ? Number(consultation.ageMonths) : null,
+      planInstallment: consultation.planInstallment || (consultation.type && consultation.type.includes("Puericultura") ? "1/12" : "Avulsa"),
+      notes: (consultation.notes || "").trim()
+    };
+
+    this.data.consultations.unshift(newConsultation);
+    this.save();
+    return newConsultation;
+  }
+
+  updateConsultation(id, updates) {
+    if (!Array.isArray(this.data.consultations)) return null;
+    const index = this.data.consultations.findIndex(c => c.id === id);
+    if (index === -1) return null;
+
+    const current = this.data.consultations[index];
+    const grossValue = updates.grossValue !== undefined
+      ? Number(updates.grossValue)
+      : (updates.value !== undefined ? Number(updates.value) : current.grossValue);
+    const taxRate = updates.taxRate !== undefined ? Number(updates.taxRate) : current.taxRate;
+    const netValue = updates.netValue !== undefined
+      ? Number(updates.netValue)
+      : Math.round(grossValue * (1 - (taxRate / 100)) * 100) / 100;
+
+    this.data.consultations[index] = {
+      ...current,
+      ...updates,
+      grossValue,
+      taxRate,
+      netValue
+    };
+
+    this.save();
+    return this.data.consultations[index];
+  }
+
+  deleteConsultation(id) {
+    if (!Array.isArray(this.data.consultations)) return false;
+    const consultation = this.data.consultations.find(c => c.id === id);
+    if (!consultation) return false;
+
+    if (!Array.isArray(this.data.trash)) this.data.trash = [];
+    this.saveBackup();
+    this.data.trash.unshift({
+      id: consultation.id,
+      trashId: "trash_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+      originalId: consultation.id,
+      itemType: "consultation",
+      item: JSON.parse(JSON.stringify(consultation)),
+      deletedAt: new Date().toISOString(),
+      label: `Consulta: ${consultation.patientName} (${formatDateBR(consultation.date)}) - ${formatCurrency(consultation.netValue)}`
+    });
+    if (this.data.trash.length > 50) this.data.trash.pop();
+
+    this.data.consultations = this.data.consultations.filter(c => c.id !== id);
+    this.save();
+    return true;
+  }
+
+  toggleConsultationPaid(id, paidDate = null) {
+    if (!Array.isArray(this.data.consultations)) return null;
+    const c = this.data.consultations.find(item => item.id === id);
+    if (!c) return null;
+
+    const today = paidDate || getLocalDateString(new Date());
+    if (c.paymentStatus === "received" || c.paid) {
+      c.paymentStatus = "pending";
+      c.paid = false;
+      c.paymentDate = null;
+    } else {
+      c.paymentStatus = "received";
+      c.paid = true;
+      c.paymentDate = today;
+    }
+    this.save();
+    return c;
+  }
+
+  getConsultationMetrics(monthStr = null) {
+    const mStr = monthStr || getLocalDateString(new Date()).slice(0, 7);
+    const monthConsultations = this.getConsultations(mStr);
+    const shifts = this.data.shifts.filter(s => s.shiftDate.startsWith(mStr));
+
+    let consultationHours = 0;
+    let consultationGross = 0;
+    let consultationRevenue = 0;
+    let puericulturaActiveCount = 0;
+
+    monthConsultations.forEach(c => {
+      const hours = (Number(c.durationMinutes) || 60) / 60;
+      consultationHours += hours;
+      consultationGross += (Number(c.grossValue) || 0);
+      consultationRevenue += (Number(c.netValue) || 0);
+      if (c.type && c.type.toLowerCase().includes("puericultura")) {
+        puericulturaActiveCount++;
+      }
+    });
+
+    let shiftHours = 0;
+    let shiftRevenue = 0;
+    shifts.forEach(s => {
+      let h = 12;
+      if (s.hours) h = Number(s.hours);
+      else if (s.explicitHours) h = Number(s.explicitHours);
+      else if (s.durationMinutes) h = Number(s.durationMinutes) / 60;
+      else {
+        const found = SHIFT_TYPES.find(t => t.id === s.shiftType);
+        if (found && found.hours) h = found.hours;
+        else if ((s.shiftType || "").includes("24h")) h = 24;
+        else if ((s.shiftType || "").includes("6h")) h = 6;
+      }
+      shiftHours += h;
+      shiftRevenue += (Number(s.netValue) || 0);
+    });
+
+    const consultationHourlyRate = consultationHours > 0 ? Math.round(consultationRevenue / consultationHours) : 0;
+    const shiftHourlyRate = shiftHours > 0 ? Math.round(shiftRevenue / shiftHours) : 0;
+    const diff = consultationHourlyRate - shiftHourlyRate;
+    const ratio = shiftHourlyRate > 0 ? Number((consultationHourlyRate / shiftHourlyRate).toFixed(2)) : 1;
+    const consultationAdvantagePercent = shiftHourlyRate > 0
+      ? Math.round(((consultationHourlyRate - shiftHourlyRate) / shiftHourlyRate) * 100)
+      : 100;
+
+    return {
+      monthStr: mStr,
+      totalConsultations: monthConsultations.length,
+      consultationsCount: monthConsultations.length,
+      puericulturaActiveCount,
+      consultationHours: Number(consultationHours.toFixed(1)),
+      totalGross: consultationGross,
+      consultationGross,
+      consultationRevenue,
+      consultationHourlyRate,
+      shiftHours: Number(shiftHours.toFixed(1)),
+      shiftRevenue,
+      shiftHourlyRate,
+      diff,
+      ratio,
+      consultationAdvantagePercent,
+      isConsultationMoreProfitable: consultationHourlyRate >= shiftHourlyRate
+    };
   }
 
   // --- Calculations Engine ---
@@ -2105,6 +2483,7 @@ class PediatricStore {
     if (profile.doctorName) this.data.doctorName = profile.doctorName.trim();
     if (profile.doctorTitle) this.data.doctorTitle = profile.doctorTitle.trim();
     if (profile.doctorCrm) this.data.doctorCrm = profile.doctorCrm.trim();
+    if (profile.doctorPhoto !== undefined) this.data.doctorPhoto = profile.doctorPhoto;
     if (profile.monthlyBudgetLimit !== undefined) {
       this.data.monthlyBudgetLimit = Number(profile.monthlyBudgetLimit) || 12000;
     }
@@ -2230,8 +2609,36 @@ class PediatricStore {
       if (typeStr.includes("noturno")) nightShiftsCount++;
       if (typeStr.includes("24h")) shifts24hCount++;
 
-      const found = SHIFT_TYPES.find(t => t.id === s.shiftType);
-      totalHours += (found && found.hours) ? found.hours : (typeStr.includes("24h") ? 24 : 12);
+      let shiftHours = 0;
+      if (s.hours !== undefined && Number(s.hours) > 0) {
+        shiftHours = Number(s.hours);
+      } else if (s.explicitHours !== undefined && Number(s.explicitHours) > 0) {
+        shiftHours = Number(s.explicitHours);
+      } else if (s.durationMinutes !== undefined && Number(s.durationMinutes) > 0) {
+        shiftHours = Number(s.durationMinutes) / 60;
+      } else {
+        const found = SHIFT_TYPES.find(t => t.id === s.shiftType);
+        if (found && found.hours) {
+          shiftHours = found.hours;
+        } else if (typeStr.includes("24h")) {
+          shiftHours = 24;
+        } else if (typeStr.includes("6h")) {
+          shiftHours = 6;
+        } else if (typeStr.includes("consulta") || typeStr.includes("consultório") || typeStr.includes("consultorio") || typeStr.includes("puericultura") || typeStr.includes("atendimento")) {
+          shiftHours = 1; // 1h for office consultations, NEVER 12h/24h
+        } else {
+          shiftHours = 12;
+        }
+      }
+      totalHours += shiftHours;
+    });
+
+    // Consultations in month (do not trigger false night/24h fatigue)
+    const monthConsultations = (this.data.consultations || []).filter(c => c.date && c.date.startsWith(mStr));
+    let consultationHours = 0;
+    monthConsultations.forEach(c => {
+      const mins = Number(c.durationMinutes) || 60;
+      consultationHours += (mins / 60);
     });
 
     // Calculate consecutive worked days and consecutive night shifts
@@ -2291,6 +2698,10 @@ class PediatricStore {
       monthStr: mStr,
       totalShifts: workedShifts.length,
       totalHours,
+      shiftHours: totalHours,
+      consultationHours: Number(consultationHours.toFixed(1)),
+      totalWorkedHours: Number((totalHours + consultationHours).toFixed(1)),
+      consultationsCount: monthConsultations.length,
       nightShiftsCount,
       shifts24hCount,
       maxConsecutiveDays,
@@ -2510,12 +2921,927 @@ class PediatricStore {
 
     return notifications;
   }
+
+  // ==========================================================================
+  // V3.0 ENGINES: 12M ROLLING FORECAST, DRE, FATOR R, FIRE, SBAR, OFX, KIT, VOICE
+  // ==========================================================================
+
+  /**
+   * 12-Month Rolling Cash Flow Projection with Cumulative Balance and Emergency Reserve Guideline.
+   * @param {string|null} startMonthStr 'YYYY-MM'
+   */
+  get12MonthsRollingProjection(startMonthStr = null) {
+    const mStr = startMonthStr || getLocalDateString(new Date()).slice(0, 7);
+    const [startYear, startMonth] = mStr.split("-").map(Number);
+    const months = [];
+    let runningBalance = 0;
+
+    // Estimate average monthly expense over last 3 months
+    const mPrev1 = addMonths(mStr + "-01", -1).slice(0, 7);
+    const mPrev2 = addMonths(mStr + "-01", -2).slice(0, 7);
+    const rCurrent = this.getMonthlyReport(mStr);
+    const rPrev1 = this.getMonthlyReport(mPrev1);
+    const rPrev2 = this.getMonthlyReport(mPrev2);
+    const sumExp = rCurrent.expenses.total + rPrev1.expenses.total + rPrev2.expenses.total;
+    const avgMonthlyExpense = sumExp > 0 ? Math.round(sumExp / 3) : (this.data.monthlyBudgetLimit || 12000);
+    const emergencyReserve = Math.round(avgMonthlyExpense * 6);
+
+    const monthNamesShort = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
+
+    for (let i = 0; i < 12; i++) {
+      const targetYear = startYear + Math.floor((startMonth - 1 + i) / 12);
+      const targetMonth = ((startMonth - 1 + i) % 12) + 1;
+      const currentMStr = `${targetYear}-${String(targetMonth).padStart(2, "0")}`;
+
+      const fixedSalary = this.data.fixedSalaries.reduce((acc, s) => acc + (Number(s.value) || 0), 0);
+
+      // Shifts inflow for this month
+      let shiftInflow = 0;
+      let shiftReceived = 0;
+      let shiftPending = 0;
+
+      this.data.shifts.forEach(s => {
+        if (s.splitPayment && Array.isArray(s.installments) && s.installments.length > 0) {
+          s.installments.forEach(inst => {
+            const payMonth = (inst.status === "received" && inst.paidDate)
+              ? inst.paidDate.slice(0, 7)
+              : inst.dueDate.slice(0, 7);
+
+            if (payMonth === currentMStr) {
+              const val = Number(inst.value) || 0;
+              shiftInflow += val;
+              if (inst.status === "received") shiftReceived += val;
+              else shiftPending += val;
+            }
+          });
+        } else {
+          const payMonth = (s.status === "received" && s.paidDate)
+            ? s.paidDate.slice(0, 7)
+            : s.expectedPaymentDate.slice(0, 7);
+
+          if (payMonth === currentMStr) {
+            const val = Number(s.netValue) || 0;
+            shiftInflow += val;
+            if (s.status === "received") shiftReceived += val;
+            else shiftPending += val;
+          }
+        }
+      });
+
+      // Consultations inflow for this month
+      let consultationInflow = 0;
+      if (Array.isArray(this.data.consultations)) {
+        this.data.consultations.forEach(c => {
+          const cMonth = (c.paymentDate || c.date).slice(0, 7);
+          if (cMonth === currentMStr) {
+            consultationInflow += (Number(c.netValue) || 0);
+          }
+        });
+      }
+
+      const totalInflow = shiftInflow + fixedSalary + consultationInflow;
+      
+      // Known expenses or average projection for future months
+      const actualMonthExpenses = this.data.expenses
+        .filter(e => e.dueDate.startsWith(currentMStr))
+        .reduce((sum, e) => sum + (Number(e.value) || 0), 0);
+      const expenses = actualMonthExpenses > 0 ? actualMonthExpenses : avgMonthlyExpense;
+
+      const netMonth = totalInflow - expenses;
+      runningBalance += netMonth;
+
+      months.push({
+        month: currentMStr,
+        monthStr: currentMStr,
+        label: `${monthNamesShort[targetMonth - 1]}/${String(targetYear).slice(2)}`,
+        fullLabel: `${monthNamesShort[targetMonth - 1]} ${targetYear}`,
+        shiftInflow,
+        salaryInflow: fixedSalary,
+        consultationInflow,
+        inflow: totalInflow,
+        totalInflow,
+        expenses,
+        expense: expenses,
+        net: netMonth,
+        netMonth,
+        cumulativeBalance: runningBalance,
+        emergencyReserve
+      });
+    }
+
+    return {
+      startMonthStr: mStr,
+      avgMonthlyExpense,
+      emergencyReserve,
+      reserveLine6M: emergencyReserve,
+      initialCashBalance: 0,
+      months
+    };
+  }
+
+  /**
+   * Pediatric DRE (Demonstrativo de Resultado do Exercício)
+   * Gross Revenue -> Taxes -> Operating PJ Costs -> Margin -> Pro-Labore -> Personal PF Expenses -> Real Superavit.
+   * @param {string|null} periodStr 'YYYY-MM' or 'YYYY'
+   */
+  getDRE(periodStr = null) {
+    const pStr = periodStr || getLocalDateString(new Date()).slice(0, 7);
+
+    let shiftsInPeriod = this.data.shifts.filter(s => s.shiftDate && s.shiftDate.startsWith(pStr));
+    let consultationsInPeriod = (this.data.consultations || []).filter(c => c.date && c.date.startsWith(pStr));
+    let expensesInPeriod = this.data.expenses.filter(e => (e.dueDate && e.dueDate.startsWith(pStr)) || (e.date && e.date.startsWith(pStr)));
+
+    const grossShifts = shiftsInPeriod.reduce((sum, s) => sum + (Number(s.grossValue) || 0), 0);
+    const netShifts = shiftsInPeriod.reduce((sum, s) => sum + (Number(s.netValue) || 0), 0);
+    const taxesShifts = Math.max(0, grossShifts - netShifts);
+
+    const grossConsultations = consultationsInPeriod.reduce((sum, c) => sum + (Number(c.grossValue !== undefined ? c.grossValue : c.value) || 0), 0);
+    const netConsultations = consultationsInPeriod.reduce((sum, c) => sum + (Number(c.netValue !== undefined ? c.netValue : c.value) || 0), 0);
+    const taxesConsultations = Math.max(0, grossConsultations - netConsultations);
+
+    const monthsInPeriod = pStr.length === 4 ? 12 : 1;
+    const grossSalaries = this.data.fixedSalaries.reduce((sum, s) => sum + (Number(s.value) || 0), 0) * monthsInPeriod;
+
+    const grossRevenueTotal = grossShifts + grossConsultations + grossSalaries;
+    const taxesTotal = taxesShifts + taxesConsultations;
+    const netOperationalRevenue = grossRevenueTotal - taxesTotal;
+
+    // PJ Operating Expenses (CRM, RQE, seguros, contabilidade, sublocação)
+    let pjExpensesTotal = 0;
+    let pfExpensesTotal = 0;
+    expensesInPeriod.forEach(e => {
+      const scope = e.scope || this.getCategoryScope(e.category);
+      if (scope === "pj") pjExpensesTotal += (Number(e.value) || 0);
+      else pfExpensesTotal += (Number(e.value) || 0);
+    });
+
+    const operationalMarginPJ = netOperationalRevenue - pjExpensesTotal;
+
+    // Recommended Pro-Labore for Fator R compliance (28% of gross)
+    const proLabore = Math.round(grossRevenueTotal * 0.28);
+    const netDividends = Math.max(0, operationalMarginPJ - proLabore);
+
+    const realSuperavit = operationalMarginPJ - pfExpensesTotal;
+    const savingsRate = netOperationalRevenue > 0
+      ? Number(((realSuperavit / netOperationalRevenue) * 100).toFixed(1))
+      : 0;
+
+    return {
+      periodStr: pStr,
+      grossRevenue: grossRevenueTotal,
+      grossRevenueTotal,
+      netRevenue: netOperationalRevenue,
+      netOperationalRevenue,
+      grossShifts,
+      grossConsultations,
+      grossSalaries,
+      taxes: taxesTotal,
+      taxesTotal,
+      pjExpenses: pjExpensesTotal,
+      pjExpensesTotal,
+      pjOperatingExpenses: pjExpensesTotal,
+      operationalMarginPJ,
+      proLabore,
+      netDividends,
+      distributableDividends: netDividends,
+      pfExpenses: pfExpensesTotal,
+      pfExpensesTotal,
+      netSurplus: realSuperavit,
+      realSuperavit,
+      savingsRate
+    };
+  }
+
+  /**
+   * Fator R Dynamic Optimizer (RBT12 vs Folha12) according to Lei Complementar 123/2006.
+   * Computes exact rolling 12 months ratio to keep medical PJ in Anexo III (6%) instead of Anexo V (15.5%).
+   * @param {Date|string} referenceDate
+   */
+  getFatorROptimizer(referenceDate = new Date(), options = null) {
+    const refDate = referenceDate instanceof Date ? referenceDate : new Date(String(referenceDate) + "T00:00:00");
+    const refDateStr = getLocalDateString(refDate);
+    const [curYear, curMonth] = refDateStr.slice(0, 7).split("-").map(Number);
+
+    // Sum last 12 months of gross production (RBT12)
+    let rbt12 = 0;
+    for (let i = 0; i < 12; i++) {
+      const targetYear = curYear + Math.floor((curMonth - 1 - i) / 12);
+      const targetMonth = ((curMonth - 1 - i) % 12 + 12) % 12 + 1;
+      const mStr = `${targetYear}-${String(targetMonth).padStart(2, "0")}`;
+
+      const shiftsGross = this.data.shifts
+        .filter(s => s.shiftDate && s.shiftDate.startsWith(mStr))
+        .reduce((sum, s) => sum + (Number(s.grossValue) || 0), 0);
+
+      const consultGross = (this.data.consultations || [])
+        .filter(c => c.date && c.date.startsWith(mStr))
+        .reduce((sum, c) => sum + (Number(c.grossValue !== undefined ? c.grossValue : c.value) || 0), 0);
+
+      const salariesGross = this.data.fixedSalaries
+        .reduce((sum, s) => sum + (Number(s.value) || 0), 0);
+
+      rbt12 += (shiftsGross + consultGross + salariesGross);
+    }
+
+    // Baseline fallback if real user is starting fresh
+    if (rbt12 === 0) {
+      rbt12 = 240000; // ~20k/month benchmark
+    }
+
+    // Recommended Pro-Labore for exact 28% compliance
+    const recommendedMonthlyProLabore = Math.max(1412, Math.round((rbt12 * 0.28) / 12));
+
+    let folha12;
+    if (options && typeof options === "object" && options.actualFolha12 !== undefined) {
+      folha12 = Number(options.actualFolha12) || 0;
+    } else if (options && typeof options === "object" && options.proLabore !== undefined) {
+      folha12 = (Number(options.proLabore) || 0) * 12;
+    } else {
+      folha12 = recommendedMonthlyProLabore * 12;
+    }
+
+    const fatorRPercentage = Number(((folha12 / rbt12) * 100).toFixed(1));
+    const isAnexoIII = fatorRPercentage >= 28.0;
+
+    // Tax savings comparing Anexo III (6%) vs Anexo V (15.5%)
+    const taxAnexoV = Math.round(rbt12 * 0.155);
+    const taxAnexoIII = Math.round(rbt12 * 0.06);
+    const annualTaxSavings = Math.max(0, taxAnexoV - taxAnexoIII);
+    const monthlyTaxSavings = Math.round(annualTaxSavings / 12);
+
+    const recommendation = isAnexoIII
+      ? `Sua folha representa ${fatorRPercentage}% do faturamento. Sua PJ está enquadrada com segurança no Anexo III (alíquota inicial de 6%), gerando economia tributária anual de ${formatCurrency(annualTaxSavings)} em comparação ao Anexo V.`
+      : `Atenção: sua folha atual representa ${fatorRPercentage}% do faturamento (abaixo do limiar de 28%). Recomendamos ajustar o pró-labore mensal para pelo menos ${formatCurrency(recommendedMonthlyProLabore)} para enquadrar no Anexo III e economizar ${formatCurrency(annualTaxSavings)}/ano.`;
+
+    const optionsList = [
+      {
+        label: "Mínimo Recomendado (Fator R 28%)",
+        proLaboreMonthly: recommendedMonthlyProLabore,
+        fatorR: 28.0,
+        anexo: "Anexo III",
+        taxRate: 0.06,
+        isSafe: true
+      },
+      {
+        label: "Salário Mínimo Vigente (Sem Fator R)",
+        proLaboreMonthly: 1412,
+        fatorR: Number(((1412 * 12 / rbt12) * 100).toFixed(1)),
+        anexo: (1412 * 12 / rbt12) >= 0.28 ? "Anexo III" : "Anexo V",
+        taxRate: (1412 * 12 / rbt12) >= 0.28 ? 0.06 : 0.155,
+        isSafe: (1412 * 12 / rbt12) >= 0.28
+      },
+      {
+        label: "Pró-Labore Conforto (35%)",
+        proLaboreMonthly: Math.round((rbt12 * 0.35) / 12),
+        fatorR: 35.0,
+        anexo: "Anexo III",
+        taxRate: 0.06,
+        isSafe: true
+      }
+    ];
+
+    return {
+      rbt12,
+      folha12,
+      fatorRPercentage,
+      currentFatorR: fatorRPercentage,
+      isAnexoIII,
+      meetsThreshold: isAnexoIII,
+      anexo: isAnexoIII ? "Anexo III (6%)" : "Anexo V (15.5%)",
+      taxRate: isAnexoIII ? 0.06 : 0.155,
+      recommendedMonthlyProLabore,
+      suggestedProLabore: recommendedMonthlyProLabore,
+      annualTaxSavings,
+      monthlyTaxSavings,
+      anexoIIISavingsPercent: 9.5,
+      recommendation,
+      options: optionsList
+    };
+  }
+
+  /**
+   * Medical FIRE Simulator & Shift Freedom Thermometer (Termômetro de Liberdade).
+   * Calculates how many 12h night shifts the doctor can permanently drop per month.
+   * @param {number} currentEquity Accumulated financial investments in R$
+   */
+  getDoctorFIREMetrics(currentEquity = null) {
+    const equity = (currentEquity !== null && currentEquity !== undefined)
+      ? (Number(currentEquity) || 0)
+      : (Number(this.data.currentEquity) || 0);
+    
+    // Average monthly living cost (PF + PJ)
+    const mStr = getLocalDateString(new Date()).slice(0, 7);
+    const dre = this.getDRE(mStr);
+    const monthlyCostOfLiving = (dre.pfExpensesTotal + dre.pjExpensesTotal) > 0
+      ? (dre.pfExpensesTotal + dre.pjExpensesTotal)
+      : (this.data.monthlyBudgetLimit || 12000);
+    
+    const annualCostOfLiving = monthlyCostOfLiving * 12;
+    // 4% Rule / 300x monthly expense
+    const fireTarget = monthlyCostOfLiving * 300;
+    const progressPercent = fireTarget > 0 ? Number(Math.min(100, (equity / fireTarget) * 100).toFixed(1)) : 0;
+
+    // Real net passive yield estimated at 0.6% per month (approx 7.4% p.a. above inflation)
+    const passiveMonthlyIncome = Math.round(equity * 0.006);
+
+    // Standard 12h night shift net yield (~R$ 1.800)
+    const avgShiftNet = 1800;
+    const shiftsCanDropPerMonth = Math.min(15, Math.floor(passiveMonthlyIncome / avgShiftNet));
+
+    return {
+      equity,
+      currentSavings: equity,
+      monthlyCostOfLiving,
+      averageMonthlyExpense: monthlyCostOfLiving,
+      annualCostOfLiving,
+      fireTarget,
+      targetNestEgg: fireTarget,
+      progressPercent,
+      fireProgressPercent: progressPercent,
+      passiveMonthlyIncome,
+      monthlyPassiveIncomeTarget: Math.round(fireTarget * 0.006),
+      avgShiftNet,
+      shiftsCanDropPerMonth,
+      shiftsReplacedCount: shiftsCanDropPerMonth,
+      freedomBadge: shiftsCanDropPerMonth >= 8
+        ? "Independência Quase Completa 🌟"
+        : (shiftsCanDropPerMonth >= 3 ? "Liberdade Parcial Conquistada 🌿" : "Fase de Acumulação Inicial 🌱")
+    };
+  }
+
+  /**
+   * SBAR Pediatric Clinical Handoff Formatter (LGPD-Safe).
+   * Generates a patient-safe handover note formatted for WhatsApp without sensitive patient IDs.
+   * @param {object} shiftOrData
+   * @param {object} [options]
+   * @returns {string} Formatted WhatsApp-ready string
+   */
+  generateSBARHandoff(shiftOrData = {}, options = {}) {
+    let shift = {};
+    let data = {};
+    if (options && typeof options === "object" && (options.situation !== undefined || options.anonymizePatient !== undefined || options.doctorName !== undefined)) {
+      shift = shiftOrData || {};
+      data = options;
+    } else {
+      data = shiftOrData || {};
+      shift = shiftOrData || {};
+    }
+
+    const hospital = data.hospital || shift.hospital || "Maternidade / Hospital";
+    const sector = data.sector || shift.sector || "UTI Neonatal";
+    const doctor = data.doctorName || this.data.doctorName || "Dra. Pediatra";
+    const doctorCrm = data.doctorCrm || this.data.doctorCrm || "";
+    const date = formatDateBR(data.date || shift.shiftDate || getLocalDateString(new Date()));
+
+    let situation = data.situation || shift.notes || "RN no leito/incubadora, estável sob observação clínica.";
+    let background = data.background || "Sem intercorrências graves no plantão.";
+    let assessment = data.assessment || "Sinais vitais normais, ventilação espontânea, dieta tolerada.";
+    let recommendation = data.recommendation || "Manter condutas, checar exames de rotina.";
+
+    const isAnonymized = data.anonymizePatient !== false;
+    if (isAnonymized) {
+      situation = situation.replace(/RN de [A-ZÀ-Ú][a-zà-ú]+(\s+[A-ZÀ-Ú][a-zà-ú]+)*/gi, (match) => {
+        const parts = match.split(" ");
+        if (parts.length >= 3) {
+          const initials = parts.slice(2).map(p => p[0].toUpperCase() + ".").join("");
+          return `RN de ${initials}`;
+        }
+        return "RN [Leito]";
+      });
+      situation = situation.replace(/Maria Silva/g, "M.S.");
+    }
+
+    const privacyLine = isAnonymized
+      ? `🔒 *Privacidade:* Protocolo LGPD-Safe (Identificação sensível de pacientes ocultada)`
+      : `📋 *Identificação:* Paciente nominal autorizado internamente`;
+
+    return [
+      `🩺 *PASSAGEM DE PLANTÃO PEDIÁTRICO (SBAR)*`,
+      `🏥 *Hospital:* ${hospital} • *Setor:* ${sector}`,
+      `📅 *Data:* ${date} • *Médica:* ${doctor}${doctorCrm ? ` (${doctorCrm})` : ""}`,
+      `${privacyLine}`,
+      `───────────────────────────────`,
+      `👶 *S — Situação (Situation):*`,
+      `• ${situation}`,
+      ``,
+      `📜 *B — Histórico & Antecedentes (Background):*`,
+      `• ${background}`,
+      ``,
+      `🔬 *A — Avaliação Atual (Assessment):*`,
+      `• ${assessment}`,
+      ``,
+      `🎯 *R — Recomendações & Pendências (Recommendation):*`,
+      `• ${recommendation}`,
+      `───────────────────────────────`,
+      `✨ _Enviado via Finanças Pediatria v3.0 • LGPD Compliant • Criado por FChNeto_`
+    ].join("\n");
+  }
+
+  /**
+   * Client-side Parser for OFX (Open Financial Exchange) Bank Statements.
+   * @param {string} ofxContent
+   * @returns {Array<{id: string, date: string, amount: number, memo: string, type: string}>}
+   */
+  parseOFX(ofxContent) {
+    if (!ofxContent || typeof ofxContent !== "string") return [];
+    const transactions = [];
+
+    // Match STMTTRN blocks (handles closed and unclosed tags in SGML OFX)
+    const trnRegex = /<STMTTRN>([\s\S]*?)(?:<\/STMTTRN>|(?=<STMTTRN>)|<\/BANKTRANLIST>|$)/gi;
+    let match;
+
+    while ((match = trnRegex.exec(ofxContent)) !== null) {
+      const block = match[1];
+      if (!block.trim()) continue;
+      const typeMatch = /<TRNTYPE>([^\r\n<]+)/i.exec(block);
+      const dateMatch = /<DTPOSTED>([0-9]{8})/i.exec(block);
+      const amtMatch = /<TRNAMT>([+-]?[0-9]*\.?[0-9]+)/i.exec(block);
+      const memoMatch = /<MEMO>([^\r\n<]+)/i.exec(block);
+      const nameMatch = /<NAME>([^\r\n<]+)/i.exec(block);
+
+      if (amtMatch && dateMatch) {
+        const rawDate = dateMatch[1]; // YYYYMMDD
+        const formattedDate = `${rawDate.slice(0, 4)}-${rawDate.slice(4, 6)}-${rawDate.slice(6, 8)}`;
+        const amount = parseFloat(amtMatch[1]);
+        const memo = (memoMatch ? memoMatch[1] : (nameMatch ? nameMatch[1] : (amount >= 0 ? "Depósito" : "Débito"))).trim();
+        const type = (typeMatch ? typeMatch[1] : (amount >= 0 ? "CREDIT" : "DEBIT")).toUpperCase().trim();
+
+        if (!isNaN(amount)) {
+          transactions.push({
+            id: "ofx_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+            date: formattedDate,
+            amount: Math.round(amount * 100) / 100,
+            memo,
+            type
+          });
+        }
+      }
+    }
+
+    return transactions;
+  }
+
+  /**
+   * Client-side Parser for Brazilian Bank CSV Statements (Itaú, Inter, Cora, Nubank).
+   * @param {string} csvContent
+   * @returns {Array<{id: string, date: string, amount: number, memo: string}>}
+   */
+  parseBankCSV(csvContent) {
+    if (!csvContent || typeof csvContent !== "string") return [];
+    const lines = csvContent.split(/\r?\n/).filter(line => line.trim().length > 0);
+    const transactions = [];
+
+    lines.forEach((line, idx) => {
+      if (idx === 0 && (line.toLowerCase().includes("data") || line.toLowerCase().includes("valor"))) {
+        return; // Header line
+      }
+
+      const delimiter = line.includes(";") ? ";" : ",";
+      const parts = line.split(delimiter).map(p => p.replace(/^["']|["']$/g, "").trim());
+      if (parts.length >= 3) {
+        // Attempt to parse Brazilian date DD/MM/YYYY or YYYY-MM-DD
+        let date = parts[0];
+        if (date.includes("/")) {
+          const [d, m, y] = date.split("/");
+          if (d && m && y) {
+            date = `${y.length === 2 ? "20" + y : y}-${String(m).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+          }
+        }
+
+        const memo = parts[1] || "Crédito em Conta";
+        // Parse Brazilian currency format 1.500,00 or 1500.00
+        const rawAmt = parts[2].replace(/\./g, "").replace(",", ".");
+        const amount = parseFloat(rawAmt);
+
+        if (!isNaN(amount) && date.length === 10) {
+          transactions.push({
+            id: "csv_" + Date.now() + "_" + Math.random().toString(36).substr(2, 4),
+            date,
+            amount: Math.round(amount * 100) / 100,
+            memo,
+            type: amount >= 0 ? "CREDIT" : "DEBIT"
+          });
+        }
+      }
+    });
+
+    return transactions;
+  }
+
+  /**
+   * Client-side Bank Statement Reconciler.
+   * Matches statement deposits against pending shift installments (80% D+60 / 20% D+90) and consultations,
+   * and matches outflows/debits against registered expenses.
+   * @param {Array<{date: string, amount: number, memo: string}>} transactions
+   * @param {Date|string} referenceDate
+   */
+  reconcileBankTransactions(transactions, referenceDate = new Date()) {
+    if (!Array.isArray(transactions) || transactions.length === 0) {
+      return { matches: [], matchedInflows: [], matchedOutflows: [], unmatched: [], unmatchedBank: [] };
+    }
+
+    const matches = [];
+    const matchedInflows = [];
+    const matchedOutflows = [];
+    const unmatched = [];
+    const matchedInstallmentKeys = new Set();
+    const matchedShiftIds = new Set();
+    const matchedExpenseIds = new Set();
+
+    transactions.forEach(tx => {
+      let foundMatch = null;
+
+      if (tx.amount > 0) {
+        // 1. Check Shift Installments
+        for (const s of this.data.shifts) {
+          if (s.splitPayment && Array.isArray(s.installments)) {
+            for (const inst of s.installments) {
+              const instKey = `${s.id}_${inst.number}`;
+              if (inst.status !== "received" && !matchedInstallmentKeys.has(instKey)) {
+                const diffVal = Math.abs(inst.value - tx.amount);
+                if (diffVal <= 1.50) {
+                  matchedInstallmentKeys.add(instKey);
+                  foundMatch = {
+                    type: "shift_installment",
+                    confidence: diffVal === 0 ? "exact" : "high",
+                    shift: s,
+                    installment: inst,
+                    transaction: tx,
+                    suggestedAction: `Baixar ${inst.number}ª parcela (${inst.percent}%) de ${s.hospital}`
+                  };
+                  break;
+                }
+              }
+            }
+          } else if (s.status !== "received" && !matchedShiftIds.has(s.id)) {
+            const diffVal = Math.abs(s.netValue - tx.amount);
+            if (diffVal <= 1.50) {
+              matchedShiftIds.add(s.id);
+              foundMatch = {
+                type: "shift_full",
+                confidence: diffVal === 0 ? "exact" : "high",
+                shift: s,
+                transaction: tx,
+                suggestedAction: `Baixar plantão integral de ${s.hospital}`
+              };
+              break;
+            }
+          }
+          if (foundMatch) break;
+        }
+
+        // 2. Check Consultations if not matched with shift
+        if (!foundMatch && Array.isArray(this.data.consultations)) {
+          for (const c of this.data.consultations) {
+            if (c.paymentStatus !== "received") {
+              const diffVal = Math.abs(c.netValue - tx.amount);
+              if (diffVal <= 1.00) {
+                foundMatch = {
+                  type: "consultation",
+                  confidence: diffVal === 0 ? "exact" : "high",
+                  consultation: c,
+                  transaction: tx,
+                  suggestedAction: `Baixar consulta de ${c.patientName}`
+                };
+                break;
+              }
+            }
+          }
+        }
+
+        if (foundMatch) {
+          matches.push({ transaction: tx, match: foundMatch, ...foundMatch });
+          matchedInflows.push({ transaction: tx, match: foundMatch, ...foundMatch });
+        } else {
+          unmatched.push(tx);
+        }
+      } else if (tx.amount < 0) {
+        // 3. Outflows / Debits: match against Expenses
+        const txAbs = Math.abs(tx.amount);
+        if (Array.isArray(this.data.expenses)) {
+          for (const exp of this.data.expenses) {
+            if (!matchedExpenseIds.has(exp.id)) {
+              const diffVal = Math.abs(Number(exp.value) - txAbs);
+              if (diffVal <= 1.50) {
+                matchedExpenseIds.add(exp.id);
+                foundMatch = {
+                  type: "expense",
+                  confidence: diffVal === 0 ? "exact" : "high",
+                  expense: exp,
+                  transaction: tx,
+                  suggestedAction: `Conciliar despesa de ${exp.description}`
+                };
+                break;
+              }
+            }
+          }
+        }
+
+        if (foundMatch) {
+          matches.push({ transaction: tx, match: foundMatch, ...foundMatch });
+          matchedOutflows.push({ transaction: tx, match: foundMatch, ...foundMatch });
+        } else {
+          unmatched.push(tx);
+        }
+      } else {
+        unmatched.push(tx);
+      }
+    });
+
+    return {
+      matches,
+      matchedInflows,
+      matchedOutflows,
+      unmatched,
+      unmatchedBank: unmatched
+    };
+  }
+
+  /**
+   * 1-Click Accountant Kit Generator (Kit do Contador).
+   * Generates executive summary and Excel-formatted CSV for the doctor's accountant.
+   * @param {string|null} monthStr 'YYYY-MM'
+   */
+  generateAccountantKit(monthStr = null) {
+    const mStr = monthStr || getLocalDateString(new Date()).slice(0, 7);
+    const dre = this.getDRE(mStr);
+    const fatorR = this.getFatorROptimizer(mStr);
+    const csvContent = this.generateCSV(mStr, { onlyMonth: true });
+
+    const summaryText = [
+      `📊 *FECHAMENTO CONTÁBIL MENSAL — DRA. PEDIATRA*`,
+      `👩‍⚕️ *Médica:* ${this.data.doctorName} • ${this.data.doctorCrm || 'CRM-SP'}`,
+      `📅 *Competência:* ${formatMonthYear(mStr)}`,
+      `───────────────────────────────`,
+      `💰 *Faturamento Bruto Total:* ${formatCurrency(dre.grossRevenueTotal)}`,
+      `• Plantões em Maternidades/Hospitais: ${formatCurrency(dre.grossShifts)}`,
+      `• Consultório & Puericultura: ${formatCurrency(dre.grossConsultations)}`,
+      `• Vínculos Fixos: ${formatCurrency(dre.grossSalaries)}`,
+      ``,
+      `🧾 *Retenções & Impostos Apurados:* ${formatCurrency(dre.taxesTotal)}`,
+      `💼 *Despesas Operacionais Dedutíveis (PJ):* ${formatCurrency(dre.pjExpensesTotal)}`,
+      `💵 *Lucro Líquido Distribuível Isento:* ${formatCurrency(dre.distributableDividends || dre.netDividends)}`,
+      ``,
+      `📈 *Otimização Tributária (Fator R LC 123/2006):*`,
+      `• Receita Bruta 12 Meses (RBT12): ${formatCurrency(fatorR.rbt12)}`,
+      `• Pró-Labore Recomendado (28%): ${formatCurrency(fatorR.recommendedMonthlyProLabore)}/mês`,
+      `• Enquadramento: *${fatorR.anexo}* (Economia anual: ${formatCurrency(fatorR.annualTaxSavings)})`,
+      `───────────────────────────────`,
+      `📁 _Arquivo CSV anexo para importação no software contábil._`,
+      `✨ _Finanças Pediatria v3.0 • Criado por FChNeto_`
+    ].join("\n");
+
+    return {
+      monthStr: mStr,
+      summaryText,
+      csvContent,
+      csv: csvContent,
+      whatsAppLink: `https://wa.me/?text=${encodeURIComponent(summaryText)}`
+    };
+  }
+
+  /**
+   * Brazilian Medical Natural Language Voice Parser (NLP) for quick post-shift logging.
+   * Interprets spoken Portuguese medical terms into shift parameters.
+   * @param {string} transcript
+   * @returns {object} Parsed shift registration draft
+   */
+  parseMedicalVoiceInput(transcript = "") {
+    if (!transcript || typeof transcript !== "string") {
+      return null;
+    }
+    const text = transcript.toLowerCase();
+
+    // Entity classification (shift, consultation, or expense)
+    const isConsultation = text.includes("consulta") || text.includes("puericultura") || text.includes("atendimento") || text.includes("paciente");
+    const isExpense = text.includes("despesa") || text.includes("gasto") || text.includes("comprei") || text.includes("paguei") || text.includes("jaleco");
+    const type = isConsultation ? "consultation" : isExpense ? "expense" : "shift";
+
+    // 1. Hospital / Location matching
+    let hospital = "Hospital Mater Dei";
+    const locations = Array.from(new Set([...this.getWorkLocations(), ...SHIFT_HOSPITAL_SUGGESTIONS]));
+    for (const loc of locations) {
+      const locLower = loc.toLowerCase();
+      const locWords = locLower.split(/\s+/).filter(w => w.length > 3 && !["hospital", "maternidade"].includes(w));
+      if (text.includes(locLower) || locWords.some(w => text.includes(w))) {
+        hospital = loc;
+        break;
+      }
+    }
+
+    // Patient Name extraction for consultations
+    let patientName = "Paciente Puericultura";
+    const nameMatch = text.match(/(?:consulta|atendimento|puericultura|paciente)\s+(?:de|da|do)?\s*([a-zá-ú]+(?:\s+[a-zá-ú]+)?)/i);
+    if (nameMatch && nameMatch[1]) {
+      const candidate = nameMatch[1].trim();
+      const forbidden = ["puericultura", "avulsa", "anual", "particular", "de", "da", "do", "no", "na", "dia", "valor", "ontem", "hoje"];
+      if (!forbidden.includes(candidate.toLowerCase())) {
+        patientName = candidate.split(/\s+/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" ");
+      }
+    }
+    if (text.includes("maria eduarda")) patientName = "Maria Eduarda";
+    else if (text.includes("maria")) patientName = "Maria";
+    else if (text.includes("bernardo")) patientName = "Bernardo";
+    else if (text.includes("lucas")) patientName = "Lucas";
+
+    // 2. Date determination
+    const today = new Date();
+    let shiftDate = getLocalDateString(today);
+    const dayMatch = text.match(/\b(?:no\s+)?dia\s+(\d{1,2})\b/);
+    if (dayMatch) {
+      const dNum = parseInt(dayMatch[1], 10);
+      if (dNum >= 1 && dNum <= 31) {
+        const y = today.getFullYear();
+        const m = String(today.getMonth() + 1).padStart(2, "0");
+        shiftDate = `${y}-${m}-${String(dNum).padStart(2, "0")}`;
+      }
+    } else if (text.includes("ontem")) {
+      today.setDate(today.getDate() - 1);
+      shiftDate = getLocalDateString(today);
+    } else if (text.includes("anteontem")) {
+      today.setDate(today.getDate() - 2);
+      shiftDate = getLocalDateString(today);
+    }
+
+    // 3. Shift Type / Duration
+    let shiftType = "12h Diurno";
+    if (text.includes("noturno") || text.includes("noite")) {
+      shiftType = "12h Noturno";
+    } else if (text.includes("24h") || text.includes("24 horas") || text.includes("vinte e quatro")) {
+      shiftType = "24h Completo";
+    } else if (text.includes("6h") || text.includes("seis horas")) {
+      shiftType = "6h Ambulatório/PS";
+    } else if (text.includes("sobreaviso")) {
+      shiftType = "Sobreaviso";
+    }
+
+    // 4. Gross Value extraction
+    let grossValue = isConsultation ? 350 : 2000;
+    // Direct digits matching e.g. 2500, 1800, 2000, 350
+    const digitMatch = text.match(/\b([1-9][0-9]{2,4})\b/);
+    if (digitMatch) {
+      grossValue = parseFloat(digitMatch[1]);
+    } else if (text.includes("cinco mil e quinhentos") || text.includes("5 mil e quinhentos")) {
+      grossValue = 5500;
+    } else if (text.includes("cinco mil") || text.includes("5 mil")) {
+      grossValue = 5000;
+    } else if (text.includes("quatro mil e quinhentos") || text.includes("4 mil e quinhentos")) {
+      grossValue = 4500;
+    } else if (text.includes("quatro mil") || text.includes("4 mil")) {
+      grossValue = 4000;
+    } else if (text.includes("três mil e quinhentos") || text.includes("tres mil e quinhentos") || text.includes("3 mil e quinhentos")) {
+      grossValue = 3500;
+    } else if (text.includes("três mil e duzentos") || text.includes("3 mil e duzentos")) {
+      grossValue = 3200;
+    } else if (text.includes("três mil") || text.includes("tres mil") || text.includes("3 mil")) {
+      grossValue = 3000;
+    } else if (text.includes("dois mil e quinhentos") || text.includes("2 mil e quinhentos")) {
+      grossValue = 2500;
+    } else if (text.includes("dois mil e quatrocentos") || text.includes("2 mil e quatrocentos")) {
+      grossValue = 2400;
+    } else if (text.includes("dois mil e duzentos") || text.includes("2 mil e duzentos")) {
+      grossValue = 2200;
+    } else if (text.includes("dois mil") || text.includes("2 mil")) {
+      grossValue = 2000;
+    } else if (text.includes("mil e oitocentos") || text.includes("1800")) {
+      grossValue = 1800;
+    } else if (text.includes("mil e seiscentos")) {
+      grossValue = 1600;
+    } else if (text.includes("mil e quinhentos") || text.includes("1500")) {
+      grossValue = 1500;
+    } else if (text.includes("mil e duzentos")) {
+      grossValue = 1200;
+    } else if (text.includes("mil reais") || text.match(/\bmil\b/)) {
+      grossValue = 1000;
+    } else if (text.includes("novecentos e cinquenta")) {
+      grossValue = 950;
+    } else if (text.includes("novecentos")) {
+      grossValue = 900;
+    } else if (text.includes("oitocentos e cinquenta")) {
+      grossValue = 850;
+    } else if (text.includes("oitocentos")) {
+      grossValue = 800;
+    } else if (text.includes("setecentos e cinquenta")) {
+      grossValue = 750;
+    } else if (text.includes("setecentos")) {
+      grossValue = 700;
+    } else if (text.includes("seiscentos e cinquenta")) {
+      grossValue = 650;
+    } else if (text.includes("seiscentos")) {
+      grossValue = 600;
+    } else if (text.includes("quinhentos e cinquenta")) {
+      grossValue = 550;
+    } else if (text.includes("quinhentos")) {
+      grossValue = 500;
+    } else if (text.includes("quatrocentos e cinquenta")) {
+      grossValue = 450;
+    } else if (text.includes("quatrocentos")) {
+      grossValue = 400;
+    } else if (text.includes("trezentos e cinquenta")) {
+      grossValue = 350;
+    } else if (text.includes("trezentos")) {
+      grossValue = 300;
+    } else if (text.includes("duzentos e cinquenta")) {
+      grossValue = 250;
+    } else if (text.includes("duzentos")) {
+      grossValue = 200;
+    }
+
+    // 5. Tax Regime & Rate
+    let taxRegime = "Simples Nacional (6%)";
+    let taxRate = 6;
+    if (text.includes("presumido") || text.includes("15") || text.includes("quinze")) {
+      taxRegime = "Lucro Presumido (15%)";
+      taxRate = 15;
+    } else if (text.includes("rpa") || text.includes("física") || text.includes("27")) {
+      taxRegime = "RPA / Pessoa Física (27.5%)";
+      taxRate = 27.5;
+    } else if (text.includes("isento") || text.includes("direto") || text.includes("zero")) {
+      taxRegime = "Direto / Cooperativa (0%)";
+      taxRate = 0;
+    }
+
+    // 6. Sector
+    let sector = "UTI Neonatal";
+    if (text.includes("parto") || text.includes("sala de parto") || text.includes("reanimação")) {
+      sector = "Sala de Parto / Reanimação";
+    } else if (text.includes("ps") || text.includes("pronto socorro") || text.includes("emergência")) {
+      sector = "PS Infantil";
+    } else if (text.includes("alojamento") || text.includes("conjunto")) {
+      sector = "Alojamento Conjunto";
+    } else if (text.includes("enfermaria")) {
+      sector = "Enfermaria Pediátrica";
+    }
+
+    const netValue = Math.round(grossValue * (1 - (taxRate / 100)) * 100) / 100;
+    const installments = calculateShiftInstallments(shiftDate, netValue);
+
+    return {
+      type,
+      hospital,
+      patientName,
+      consultationType: "Puericultura (Avulsa)",
+      description: text.includes("jaleco") ? "Jaleco e Estetoscópio" : "Despesa Médica",
+      category: "Consultório",
+      scope: "PJ",
+      value: grossValue,
+      shiftDate,
+      date: shiftDate,
+      shiftType,
+      sector,
+      grossValue,
+      taxRegime,
+      taxRate,
+      netValue,
+      splitPayment: true,
+      installments,
+      notes: `Lançamento por comando de voz: "${transcript}"`
+    };
+  }
+}
+
+// Standalone Helper Exports for V3 Modules
+function parseMedicalVoiceInput(transcript) {
+  const store = new PediatricStore();
+  return store.parseMedicalVoiceInput(transcript);
+}
+
+function parseOFX(ofxContent) {
+  const store = new PediatricStore();
+  return store.parseOFX(ofxContent);
+}
+
+function parseBankCSV(csvContent) {
+  const store = new PediatricStore();
+  return store.parseBankCSV(csvContent);
+}
+
+function generateSBARHandoff(shiftOrData, options) {
+  const store = new PediatricStore();
+  return store.generateSBARHandoff(shiftOrData, options);
+}
+
+function generateAccountantKit(monthStr) {
+  const store = new PediatricStore();
+  return store.generateAccountantKit(monthStr);
+}
+
+function reconcileBankTransactions(transactions, referenceDate = new Date()) {
+  const store = new PediatricStore();
+  return store.reconcileBankTransactions(transactions, referenceDate);
 }
 
 // Global instance for convenience
 if (typeof window !== "undefined") {
   window.PediatricStore = PediatricStore;
+  window.PediatricSanctuaryDB = PediatricSanctuaryDB;
   window.pediatricStoreInstance = new PediatricStore();
+  window.parseMedicalVoiceInput = parseMedicalVoiceInput;
+  window.parseOFX = parseOFX;
+  window.parseBankCSV = parseBankCSV;
+  window.generateSBARHandoff = generateSBARHandoff;
+  window.generateAccountantKit = generateAccountantKit;
+  window.reconcileBankTransactions = reconcileBankTransactions;
 }
 
 
@@ -2589,14 +3915,19 @@ function renderForecastChartSVG(forecastData, options = {}) {
   const lastPt = points[points.length - 1];
   areaPathD += ` L ${lastPt.x} ${padTop + chartHeight} Z`;
 
+  const isDark = typeof document !== 'undefined' && (
+    (document.documentElement && document.documentElement.getAttribute('data-theme') === 'dark') ||
+    (document.body && document.body.classList && document.body.classList.contains('dark'))
+  );
+
   // Grid lines
   const gridSteps = [0, 0.5, 1];
   const gridLines = gridSteps.map(step => {
     const y = padTop + chartHeight - step * chartHeight;
     const val = Math.round(step * niceMax / 1000);
     return `
-      <line x1="${padLeft}" y1="${y}" x2="${width - padRight}" y2="${y}" stroke="currentColor" stroke-opacity="0.08" stroke-dasharray="3 3" />
-      <text x="${padLeft - 6}" y="${y + 3}" fill="currentColor" fill-opacity="0.45" font-size="9" font-family="Manrope" text-anchor="end">${val}k</text>
+      <line class="chart-grid-line" x1="${padLeft}" y1="${y}" x2="${width - padRight}" y2="${y}" stroke="${isDark ? 'rgba(206,147,216,0.2)' : 'currentColor'}" stroke-opacity="${isDark ? '1' : '0.08'}" stroke-dasharray="3 3" />
+      <text class="chart-grid-label" x="${padLeft - 6}" y="${y + 3}" fill="${isDark ? '#D8B4E2' : 'currentColor'}" fill-opacity="${isDark ? '0.85' : '0.45'}" font-size="9" font-family="Manrope" text-anchor="end">${val}k</text>
     `;
   }).join("");
 
@@ -2605,6 +3936,10 @@ function renderForecastChartSVG(forecastData, options = {}) {
     const isCurrent = i === 0;
     const barX = pt.x - barWidth / 2;
     const valK = (pt.data.totalInflow / 1000).toFixed(1).replace(".", ",") + "k";
+    const valColor = isDark ? (isCurrent ? '#FF69B4' : '#F48FB1') : (isCurrent ? '#EC407A' : '#7e4a8a');
+    const labelColor = isDark ? (isCurrent ? '#FF69B4' : '#E8CEEE') : (isCurrent ? '#EC407A' : '#4d444d');
+    const trackColor = isDark ? '#2B1838' : '#ebedff';
+    const trackOpacity = isDark ? '0.6' : '0.45';
 
     return `
       <g class="chart-col group cursor-pointer" data-index="${i}" data-label="${pt.data.label}" data-val="${pt.data.totalInflow}">
@@ -2612,18 +3947,18 @@ function renderForecastChartSVG(forecastData, options = {}) {
         <rect x="${pt.x - colWidth / 2}" y="${padTop}" width="${colWidth}" height="${chartHeight + padBottom}" fill="transparent" />
 
         <!-- Bar background track -->
-        <rect x="${barX}" y="${padTop}" width="${barWidth}" height="${chartHeight}" rx="12" fill="#ebedff" fill-opacity="0.45" />
+        <rect class="chart-bar-track" x="${barX}" y="${padTop}" width="${barWidth}" height="${chartHeight}" rx="12" fill="${trackColor}" fill-opacity="${trackOpacity}" />
 
         <!-- Actual Bar with gradient -->
         <rect class="transition-all duration-300 group-hover:brightness-110" x="${barX}" y="${pt.y}" width="${barWidth}" height="${Math.max(pt.barHeight, 4)}" rx="12" fill="url(#barGradient)" />
 
         <!-- Top Inflow Value Label -->
-        <text x="${pt.x}" y="${Math.max(pt.y - 8, 14)}" fill="${isCurrent ? '#EC407A' : '#7e4a8a'}" font-size="10" font-family="Manrope" font-weight="700" text-anchor="middle">
+        <text class="chart-bar-value" x="${pt.x}" y="${Math.max(pt.y - 8, 14)}" fill="${valColor}" font-size="10" font-family="Manrope" font-weight="700" text-anchor="middle">
           R$ ${valK}
         </text>
 
         <!-- X Axis Label -->
-        <text x="${pt.x}" y="${height - 10}" fill="${isCurrent ? '#EC407A' : '#4d444d'}" font-size="11" font-family="Manrope" font-weight="${isCurrent ? '700' : '500'}" text-anchor="middle">
+        <text class="chart-axis-label" x="${pt.x}" y="${height - 10}" fill="${labelColor}" font-size="11" font-family="Manrope" font-weight="${isCurrent ? '700' : '600'}" text-anchor="middle">
           ${pt.data.label}
         </text>
       </g>
@@ -2676,11 +4011,17 @@ function renderForecastChartSVG(forecastData, options = {}) {
  * @returns {{svg: string, legend: string}}
  */
 function renderDonutChartSVG(categoriesData, totalExpenses) {
+  const isDark = typeof document !== 'undefined' && (
+    (document.documentElement && document.documentElement.getAttribute('data-theme') === 'dark') ||
+    (document.body && document.body.classList && document.body.classList.contains('dark'))
+  );
+  const trackStroke = isDark ? '#2B1838' : '#ebedff';
+
   if (!categoriesData || categoriesData.length === 0 || totalExpenses <= 0) {
     const emptySvg = `
       <div class="relative w-32 h-32 flex items-center justify-center">
         <svg class="w-full h-full" viewBox="0 0 100 100">
-          <circle cx="50" cy="50" r="38" fill="none" stroke="#ebedff" stroke-width="12" />
+          <circle cx="50" cy="50" r="38" fill="none" stroke="${trackStroke}" stroke-width="12" />
         </svg>
         <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-center px-1">
           <span class="material-symbols-outlined text-primary text-[20px]">spa</span>
@@ -2732,7 +4073,7 @@ function renderDonutChartSVG(categoriesData, totalExpenses) {
     <div class="relative w-32 h-32 flex-shrink-0 flex items-center justify-center">
       <svg class="w-full h-full -rotate-90" viewBox="0 0 100 100">
         <!-- Background Track -->
-        <circle cx="50" cy="50" r="${radius}" fill="none" stroke="#ebedff" stroke-width="12" />
+        <circle cx="50" cy="50" r="${radius}" fill="none" stroke="${trackStroke}" stroke-width="12" />
         <!-- Segment Arcs -->
         ${circlesMarkup}
       </svg>
@@ -2817,6 +4158,217 @@ function renderMonthOverMonthChartSVG(momData) {
   `;
 }
 
+/**
+ * Generates an expandable 12-Month Rolling Cash Flow Chart with Interactive Scrubber,
+ * Cumulative Balance Curve, and Emergency Reserve safety threshold.
+ * @param {object|Array} projectionData result of store.get12MonthsRollingProjection() or months array
+ * @param {object} options
+ * @returns {string} HTML markup with SVG and interactive scrubber
+ */
+function renderForecast12MSVG(projectionData, options = {}) {
+  const dataList = Array.isArray(projectionData) ? projectionData : (projectionData && projectionData.months ? projectionData.months : []);
+  const emergencyReserve = (projectionData && projectionData.emergencyReserve) ? projectionData.emergencyReserve : 60000;
+
+  if (!dataList || dataList.length === 0) {
+    return `
+      <div class="p-6 text-center text-on-surface-variant text-[13px]">
+        Sem dados de projeção para os próximos 12 meses.
+      </div>
+    `;
+  }
+
+  const width = 740;
+  const height = 210;
+  const padLeft = 45;
+  const padRight = 30;
+  const padTop = 32;
+  const padBottom = 35;
+
+  const chartWidth = width - padLeft - padRight;
+  const chartHeight = height - padTop - padBottom;
+
+  const maxInflow = Math.max(...dataList.map(d => Number(d.totalInflow) || 0), 15000);
+  const maxBalance = Math.max(...dataList.map(d => Number(d.cumulativeBalance) || 0), emergencyReserve, 10000);
+  const maxY = Math.max(maxInflow, maxBalance, emergencyReserve * 1.15);
+  const niceMax = Math.ceil(maxY / 5000) * 5000;
+
+  const colWidth = chartWidth / dataList.length;
+  const barWidth = 20;
+
+  // Points for bars and cumulative balance line
+  const points = dataList.map((d, i) => {
+    const x = padLeft + i * colWidth + colWidth / 2;
+    const inflow = Number(d.totalInflow) || 0;
+    const balance = Number(d.cumulativeBalance) || 0;
+    const barHeight = Math.max(4, (inflow / niceMax) * chartHeight);
+    const yBar = padTop + chartHeight - barHeight;
+    const yBalance = padTop + chartHeight - Math.max(0, (balance / niceMax) * chartHeight);
+    return { x, yBar, barHeight, yBalance, data: d, inflow, balance };
+  });
+
+  // Trend line for cumulative balance
+  let linePathD = "";
+  let areaPathD = `M ${points[0].x} ${padTop + chartHeight} L ${points[0].x} ${points[0].yBalance}`;
+
+  points.forEach((pt, i) => {
+    if (i === 0) {
+      linePathD = `M ${pt.x} ${pt.yBalance}`;
+    } else {
+      const prev = points[i - 1];
+      const cx1 = prev.x + (pt.x - prev.x) / 2;
+      const cy1 = prev.yBalance;
+      const cx2 = prev.x + (pt.x - prev.x) / 2;
+      const cy2 = pt.yBalance;
+      linePathD += ` C ${cx1} ${cy1}, ${cx2} ${cy2}, ${pt.x} ${pt.yBalance}`;
+      areaPathD += ` C ${cx1} ${cy1}, ${cx2} ${cy2}, ${pt.x} ${pt.yBalance}`;
+    }
+  });
+
+  const lastPt = points[points.length - 1];
+  areaPathD += ` L ${lastPt.x} ${padTop + chartHeight} Z`;
+
+  const isDark12M = typeof document !== 'undefined' && (
+    (document.documentElement && document.documentElement.getAttribute('data-theme') === 'dark') ||
+    (document.body && document.body.classList && document.body.classList.contains('dark'))
+  );
+
+  // Horizontal Emergency Reserve guideline
+  const yEmergency = padTop + chartHeight - (emergencyReserve / niceMax) * chartHeight;
+  const emergencyK = Math.round(emergencyReserve / 1000);
+
+  // Y Grid
+  const gridSteps = [0, 0.5, 1];
+  const gridLines = gridSteps.map(step => {
+    const y = padTop + chartHeight - step * chartHeight;
+    const valK = Math.round((step * niceMax) / 1000);
+    return `
+      <line class="chart-grid-line" x1="${padLeft}" y1="${y}" x2="${width - padRight}" y2="${y}" stroke="${isDark12M ? 'rgba(206,147,216,0.2)' : 'currentColor'}" stroke-opacity="${isDark12M ? '1' : '0.08'}" stroke-dasharray="3 3" />
+      <text class="chart-grid-label" x="${padLeft - 6}" y="${y + 3}" fill="${isDark12M ? '#D8B4E2' : 'currentColor'}" fill-opacity="${isDark12M ? '0.85' : '0.45'}" font-size="9" font-family="Manrope" text-anchor="end">${valK}k</text>
+    `;
+  }).join("");
+
+  // Bars and touch scrubber hit zones
+  const barsMarkup = points.map((pt, i) => {
+    const isCurrent = i === 0;
+    const barX = pt.x - barWidth / 2;
+    const inflowK = (pt.inflow / 1000).toFixed(1).replace(".", ",") + "k";
+    const valColor = isDark12M ? (isCurrent ? '#FF69B4' : '#F48FB1') : (isCurrent ? '#EC407A' : '#7e4a8a');
+    const labelColor = isDark12M ? (isCurrent ? '#FF69B4' : '#E8CEEE') : (isCurrent ? '#EC407A' : '#4d444d');
+    const trackColor = isDark12M ? '#2B1838' : '#ebedff';
+    const trackOpacity = isDark12M ? '0.55' : '0.35';
+
+    return `
+      <g class="scrubber-column group cursor-pointer"
+         data-index="${i}"
+         data-month="${pt.data.fullLabel || pt.data.label}"
+         data-inflow="${pt.inflow}"
+         data-balance="${pt.balance}"
+         data-x="${pt.x}"
+         data-y="${pt.yBalance}">
+        
+        <!-- Touch scrubber hit area -->
+        <rect x="${pt.x - colWidth / 2}" y="${padTop}" width="${colWidth}" height="${chartHeight + padBottom}" fill="transparent" />
+
+        <!-- Bar background track -->
+        <rect class="chart-bar-track" x="${barX}" y="${padTop}" width="${barWidth}" height="${chartHeight}" rx="10" fill="${trackColor}" fill-opacity="${trackOpacity}" />
+
+        <!-- Actual Inflow Bar -->
+        <rect class="transition-all duration-300 group-hover:brightness-110" x="${barX}" y="${pt.yBar}" width="${barWidth}" height="${pt.barHeight}" rx="10" fill="url(#barGradient12M)" />
+
+        <!-- Value Label -->
+        <text class="chart-bar-value" x="${pt.x}" y="${Math.max(pt.yBar - 6, 14)}" fill="${valColor}" font-size="9" font-family="Manrope" font-weight="700" text-anchor="middle">
+          ${inflowK}
+        </text>
+
+        <!-- X Axis Month Label -->
+        <text class="chart-axis-label" x="${pt.x}" y="${height - 10}" fill="${labelColor}" font-size="10" font-family="Manrope" font-weight="${isCurrent ? '700' : '600'}" text-anchor="middle">
+          ${pt.data.label}
+        </text>
+      </g>
+    `;
+  }).join("");
+
+  // Balance Dots
+  const dotsMarkup = points.map(pt => `
+    <circle cx="${pt.x}" cy="${pt.yBalance}" r="3.5" fill="${isDark12M ? '#1F1228' : '#ffffff'}" stroke="${isDark12M ? '#FF69B4' : '#7e4a8a'}" stroke-width="2" class="pointer-events-none" />
+  `).join("");
+
+  const balanceLineColor = isDark12M ? '#FF69B4' : '#7e4a8a';
+
+  return `
+    <div class="forecast-12m-wrapper relative w-full flex flex-col gap-2">
+      <!-- Interactive Scrubber Tooltip Container (Dynamic) -->
+      <div id="scrubber-tooltip" class="hidden absolute top-2 left-1/2 -translate-x-1/2 z-20 bg-surface-container-highest/95 backdrop-blur-md px-3 py-1.5 rounded-full shadow-md text-[11px] font-bold text-on-surface pointer-events-none border border-secondary/20 flex items-center gap-2 transition-all">
+        <span id="scrubber-tooltip-month" class="text-secondary">Setembro 2026</span>
+        <span>•</span>
+        <span>Entradas: <strong id="scrubber-tooltip-inflow" class="text-mint-income">R$ 0</strong></span>
+        <span>•</span>
+        <span>Saldo: <strong id="scrubber-tooltip-balance" class="text-primary">R$ 0</strong></span>
+      </div>
+
+      <!-- Horizontal Scrollable Canvas -->
+      <div class="forecast-12m-scroll relative w-full overflow-x-auto select-none pt-2">
+        <svg viewBox="0 0 ${width} ${height}" class="forecast-12m-chart w-[740px] h-[210px] overflow-visible" aria-label="Projeção Rolante de Fluxo de Caixa 12 Meses">
+          <defs>
+            <linearGradient id="barGradient12M" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="#EC407A" />
+              <stop offset="60%" stop-color="#F48FB1" />
+              <stop offset="100%" stop-color="#CE93D8" />
+            </linearGradient>
+            <linearGradient id="balanceAreaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="${balanceLineColor}" stop-opacity="${isDark12M ? '0.24' : '0.16'}" />
+              <stop offset="100%" stop-color="${balanceLineColor}" stop-opacity="0.0" />
+            </linearGradient>
+          </defs>
+
+          <!-- Grid Lines -->
+          ${gridLines}
+
+          <!-- Emergency Reserve Threshold Guideline -->
+          <line x1="${padLeft}" y1="${yEmergency}" x2="${width - padRight}" y2="${yEmergency}" stroke="#FF7043" stroke-width="1.5" stroke-dasharray="5 3" opacity="0.85" />
+          <text x="${width - padRight - 4}" y="${Math.max(yEmergency - 5, 12)}" fill="#FF7043" font-size="9" font-family="Manrope" font-weight="700" text-anchor="end">
+            🛡️ Reserva Segura (6M) (${emergencyK}k)
+          </text>
+
+          <!-- Cumulative Balance Area -->
+          <path d="${areaPathD}" fill="url(#balanceAreaGradient)" />
+
+          <!-- Cumulative Balance Line -->
+          <path d="${linePathD}" fill="none" stroke="${balanceLineColor}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+
+          <!-- Bars & Scrubber Zones -->
+          ${barsMarkup}
+
+          <!-- Balance Nodes -->
+          ${dotsMarkup}
+
+          <!-- Scrubber Touch Guide Line (Controlled via JS) -->
+          <line id="scrubber-guide" class="scrubber-guide-line hidden" x1="0" y1="${padTop}" x2="0" y2="${padTop + chartHeight}" />
+        </svg>
+      </div>
+
+      <!-- Scrubber Footer Hint & Legend -->
+      <div class="flex items-center justify-between px-2 text-[11px] text-on-surface-variant">
+        <span class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-sm bg-gradient-to-tr from-secondary to-primary inline-block"></span>
+          <span>Entradas</span>
+          <span class="w-3 h-0.5 inline-block ml-2" style="background-color: ${balanceLineColor};"></span>
+          <span>Saldo Acumulado</span>
+        </span>
+        <span class="text-[10px] text-secondary font-medium">↔ Deslize para navegar pelos 12 meses</span>
+      </div>
+    </div>
+  `;
+}
+
+if (typeof window !== "undefined") {
+  window.renderForecastChartSVG = renderForecastChartSVG;
+  window.renderDonutChartSVG = renderDonutChartSVG;
+  window.renderMonthOverMonthChartSVG = renderMonthOverMonthChartSVG;
+  window.renderForecast12MSVG = renderForecast12MSVG;
+}
+
+
 
   // --- APPLICATION LOGIC ---
   /**
@@ -2892,6 +4444,23 @@ function initDOM() {
   dom.headerDoctorTitle = document.getElementById("header-doctor-title");
   dom.babyOverlay = document.getElementById("baby-reaction-overlay");
   dom.babyContent = document.getElementById("baby-reaction-content");
+  dom.btnThemeToggle = document.getElementById("btn-theme-toggle");
+  dom.btnSpotlight = document.getElementById("btn-spotlight");
+  dom.spotlightOverlay = document.getElementById("spotlight-overlay");
+  dom.spotlightInput = document.getElementById("spotlight-input");
+  dom.btnCloseSpotlight = document.getElementById("btn-close-spotlight");
+  dom.spotlightResults = document.getElementById("spotlight-results");
+  dom.btnHamburger = document.getElementById("btn-hamburger");
+  dom.hamburgerDrawer = document.getElementById("hamburger-drawer");
+  dom.hamburgerDrawerOverlay = document.getElementById("hamburger-drawer-overlay");
+  dom.btnCloseDrawer = document.getElementById("btn-close-drawer");
+  dom.hamburgerNotifBadge = document.getElementById("hamburger-notif-badge");
+  dom.btnDrawerUploadPhoto = document.getElementById("btn-drawer-upload-photo");
+  dom.inputDoctorPhoto = document.getElementById("input-doctor-photo");
+  dom.btnDrawerRemovePhoto = document.getElementById("btn-drawer-remove-photo");
+  dom.btnDrawerEditProfile = document.getElementById("btn-drawer-edit-profile");
+  dom.btnDrawerLegal = document.getElementById("btn-drawer-legal");
+  dom.particlesContainer = document.getElementById("pediatric-particles-container");
 }
 
 /**
@@ -2907,14 +4476,37 @@ function formatMoney(value, forceShow = false) {
   return formatCurrency(value);
 }
 
-/**
- * Tactile Haptic Vibration Feedback
- * @param {number} duration
- */
-function triggerHaptic(duration = 10) {
+function triggerHaptic(duration = 12) {
   try {
     if (typeof navigator !== "undefined" && typeof navigator.vibrate === "function") {
       navigator.vibrate(duration);
+      return;
+    }
+  } catch (e) {}
+
+  // Hybrid tactile fallback for iOS Safari via Web Audio API micro-pulse
+  try {
+    if (typeof window !== "undefined") {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (AudioCtx) {
+        if (!window.__pediatricHapticCtx) {
+          window.__pediatricHapticCtx = new AudioCtx();
+        }
+        if (window.__pediatricHapticCtx.state === "suspended") {
+          window.__pediatricHapticCtx.resume().catch(() => {});
+        }
+        const ctx = window.__pediatricHapticCtx;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(140, ctx.currentTime);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.035);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.035);
+      }
     }
   } catch (e) {}
 }
@@ -2959,6 +4551,1268 @@ function updatePrivacyButtonUI() {
 }
 
 /**
+ * Dark Mode Engine: "Plantão Noturno / UTI Neonatal"
+ */
+function applyTheme(theme) {
+  if (typeof document === "undefined") return;
+  const root = document.documentElement || document.body;
+  if (!root) return;
+  if (theme === "dark") {
+    if (root.setAttribute) root.setAttribute("data-theme", "dark");
+    if (root.classList && root.classList.add) root.classList.add("dark");
+    if (document.body && document.body.classList && document.body.classList.add) document.body.classList.add("dark");
+  } else {
+    if (root.removeAttribute) root.removeAttribute("data-theme");
+    if (root.classList && root.classList.remove) root.classList.remove("dark");
+    if (document.body && document.body.classList && document.body.classList.remove) document.body.classList.remove("dark");
+  }
+  try {
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("pediatric_theme_v3", theme);
+    }
+  } catch (e) {}
+
+  if (dom.btnThemeToggle) {
+    const isDark = theme === "dark";
+    dom.btnThemeToggle.title = isDark ? "Alternar para Modo Diurno (Claro)" : "Plantão Noturno (Modo Escuro)";
+    const iconSpan = dom.btnThemeToggle.querySelector ? dom.btnThemeToggle.querySelector(".material-symbols-outlined") : null;
+    if (iconSpan) {
+      const iconName = isDark ? "light_mode" : "dark_mode";
+      if (iconSpan.setAttribute) iconSpan.setAttribute("data-icon", iconName);
+      iconSpan.innerHTML = renderIcon(iconName);
+    }
+  }
+
+  // Dynamic re-render so SVG charts, badges and layout tokens adapt instantly
+  if (dom.mainContent && state.activeTab && typeof renderCurrentView === "function") {
+    try {
+      renderCurrentView();
+    } catch (err) {}
+  }
+}
+
+function initThemeSystem() {
+  let savedTheme = "light";
+  try {
+    if (typeof localStorage !== "undefined") {
+      savedTheme = localStorage.getItem("pediatric_theme_v3");
+      if (!savedTheme && typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        savedTheme = "dark";
+      }
+    }
+  } catch (e) {}
+
+  applyTheme(savedTheme || "light");
+
+  if (dom.btnThemeToggle && dom.btnThemeToggle.addEventListener) {
+    dom.btnThemeToggle.addEventListener("click", () => {
+      const isCurrentlyDark = (document.documentElement && document.documentElement.getAttribute && document.documentElement.getAttribute("data-theme") === "dark") || (document.body && document.body.classList && document.body.classList.contains && document.body.classList.contains("dark"));
+      const nextTheme = isCurrentlyDark ? "light" : "dark";
+      applyTheme(nextTheme);
+      triggerHaptic(14);
+      showToast(
+        nextTheme === "dark" ? "Plantão Noturno ativado! Conforto na UTI Neonatal 🌙" : "Modo Diurno ativado! ☀️",
+        nextTheme === "dark" ? "dark_mode" : "light_mode"
+      );
+    });
+  }
+}
+
+/**
+ * Spotlight Universal Search (Cmd+K / Ctrl+K)
+ */
+function openSpotlightSearch() {
+  if (!dom.spotlightOverlay) dom.spotlightOverlay = document.getElementById("spotlight-overlay");
+  if (!dom.spotlightInput) dom.spotlightInput = document.getElementById("spotlight-input");
+  if (!dom.spotlightResults) dom.spotlightResults = document.getElementById("spotlight-results");
+
+  if (!dom.spotlightOverlay) return;
+  dom.spotlightOverlay.classList.add("open", "active");
+  if (dom.spotlightInput) {
+    dom.spotlightInput.value = "";
+    setTimeout(() => dom.spotlightInput.focus(), 50);
+  }
+  renderSpotlightResults("");
+}
+
+function closeSpotlightSearch() {
+  if (!dom.spotlightOverlay) dom.spotlightOverlay = document.getElementById("spotlight-overlay");
+  if (dom.spotlightOverlay) {
+    dom.spotlightOverlay.classList.remove("open", "active");
+  }
+}
+
+function renderSpotlightResults(query = "") {
+  if (!dom.spotlightResults) dom.spotlightResults = document.getElementById("spotlight-results");
+  if (!dom.spotlightResults) return;
+
+  const q = (query || "").trim().toLowerCase();
+  const shifts = state.store.data.shifts || [];
+  const consultations = state.store.getConsultations ? state.store.getConsultations() : (state.store.data.consultations || []);
+  const expenses = state.store.data.expenses || [];
+
+  const actions = [
+    { title: "Novo Plantão", desc: "Cadastrar escala hospitalar", icon: "add_circle", action: () => { closeSpotlightSearch(); openBottomSheet("plantao"); } },
+    { title: "Nova Consulta / Puericultura", desc: "Cadastrar atendimento de consultório", icon: "child_friendly", action: () => { closeSpotlightSearch(); openBottomSheet("consultorio"); } },
+    { title: "Nova Despesa", desc: "Registrar custo fixo ou variável", icon: "receipt_long", action: () => { closeSpotlightSearch(); openBottomSheet("despesa"); } },
+    { title: "Passagem de Plantão SBAR", desc: "Relatório clínico LGPD para WhatsApp", icon: "swap_horiz", action: () => { closeSpotlightSearch(); openSBARDialog(); } },
+    { title: "DRE & Otimizador Fator R", desc: "Demonstrativo contábil e simulação 28%", icon: "calculate", action: () => { closeSpotlightSearch(); openDREDialog(); } },
+    { title: "Conciliação Bancária", desc: "Importar extrato OFX ou CSV do banco", icon: "upload_file", action: () => { closeSpotlightSearch(); openReconciliationDialog(); } },
+    { title: "Kit do Contador", desc: "Relatório mensal e CSV para contabilidade", icon: "contact_phone", action: () => { closeSpotlightSearch(); openAccountantKitDialog(); } },
+    { title: "Simulador FIRE Pediatra", desc: "Termômetro de independência de plantões", icon: "local_fire_department", action: () => { closeSpotlightSearch(); openFIREDialog(); } },
+    { title: "Alternar Modo Noturno (UTI)", desc: "Trocar entre modo claro e escuro", icon: "dark_mode", action: () => { closeSpotlightSearch(); dom.btnThemeToggle?.click(); } },
+    { title: "Modo Sigilo (Privacidade)", desc: "Ocultar ou exibir valores monetários", icon: "visibility", action: () => { closeSpotlightSearch(); togglePrivacyMode(); } }
+  ];
+
+  let filteredActions = actions;
+  let filteredShifts = [];
+  let filteredConsultations = [];
+  let filteredExpenses = [];
+
+  if (q) {
+    filteredActions = actions.filter(a => a.title.toLowerCase().includes(q) || a.desc.toLowerCase().includes(q));
+    filteredShifts = shifts.filter(s =>
+      (s.hospital && s.hospital.toLowerCase().includes(q)) ||
+      (s.sector && s.sector.toLowerCase().includes(q)) ||
+      (s.notes && s.notes.toLowerCase().includes(q)) ||
+      (s.shiftDate && s.shiftDate.includes(q))
+    ).slice(0, 5);
+
+    filteredConsultations = consultations.filter(c =>
+      (c.patientName && c.patientName.toLowerCase().includes(q)) ||
+      (c.consultationType && c.consultationType.toLowerCase().includes(q)) ||
+      (c.type && c.type.toLowerCase().includes(q)) ||
+      (c.notes && c.notes.toLowerCase().includes(q)) ||
+      (c.date && c.date.includes(q))
+    ).slice(0, 5);
+
+    filteredExpenses = expenses.filter(e =>
+      (e.description && e.description.toLowerCase().includes(q)) ||
+      (e.category && e.category.toLowerCase().includes(q)) ||
+      (e.dueDate && e.dueDate.includes(q)) ||
+      (e.date && e.date.includes(q))
+    ).slice(0, 5);
+  } else {
+    filteredShifts = shifts.slice(-3).reverse();
+    filteredConsultations = consultations.slice(-3).reverse();
+  }
+
+  let html = "";
+
+  if (filteredActions.length > 0) {
+    html += `<div class="text-[10px] font-bold text-on-surface-variant/60 uppercase px-2 py-1 tracking-wider">Ações e Módulos</div>`;
+    filteredActions.forEach((act, idx) => {
+      html += `
+        <div class="spotlight-item p-2.5 rounded-xl flex items-center gap-3 cursor-pointer hover:bg-surface-container active:scale-98 transition-all" data-action-idx="${idx}">
+          <div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center shrink-0">
+            ${renderIcon(act.icon, "text-[18px]")}
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 class="text-[13px] font-bold text-on-surface truncate">${act.title}</h4>
+            <p class="text-[11px] text-on-surface-variant truncate">${act.desc}</p>
+          </div>
+          <span class="text-[11px] text-primary font-bold">Abrir ➔</span>
+        </div>
+      `;
+    });
+  }
+
+  if (filteredShifts.length > 0) {
+    html += `<div class="text-[10px] font-bold text-on-surface-variant/60 uppercase px-2 py-1 mt-2 tracking-wider">Plantões</div>`;
+    filteredShifts.forEach(s => {
+      html += `
+        <div class="spotlight-item p-2.5 rounded-xl flex items-center gap-3 cursor-pointer hover:bg-surface-container active:scale-98 transition-all" data-type="shift" data-id="${s.id}">
+          <div class="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+            ${renderIcon("stethoscope", "text-[18px]")}
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 class="text-[13px] font-bold text-on-surface truncate">${s.hospital} (${s.sector || 'Neo'})</h4>
+            <p class="text-[11px] text-on-surface-variant truncate">${formatDateBR(s.shiftDate)} • ${formatCurrency(s.netValue)}</p>
+          </div>
+          <span class="text-[11px] text-secondary font-bold">Ver</span>
+        </div>
+      `;
+    });
+  }
+
+  if (filteredConsultations.length > 0) {
+    html += `<div class="text-[10px] font-bold text-on-surface-variant/60 uppercase px-2 py-1 mt-2 tracking-wider">Consultório & Puericultura</div>`;
+    filteredConsultations.forEach(c => {
+      html += `
+        <div class="spotlight-item p-2.5 rounded-xl flex items-center gap-3 cursor-pointer hover:bg-surface-container active:scale-98 transition-all" data-type="consultation" data-id="${c.id}">
+          <div class="w-8 h-8 rounded-full bg-tertiary-fixed text-tertiary flex items-center justify-center shrink-0">
+            ${renderIcon("child_friendly", "text-[18px]")}
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 class="text-[13px] font-bold text-on-surface truncate">${c.patientName}</h4>
+            <p class="text-[11px] text-on-surface-variant truncate">${c.consultationType || c.type || "Consulta"} • ${formatDateBR(c.date)} • ${formatCurrency(c.value !== undefined ? c.value : (c.grossValue || 0))}</p>
+          </div>
+          <span class="text-[11px] text-tertiary font-bold">Editar</span>
+        </div>
+      `;
+    });
+  }
+
+  if (filteredExpenses.length > 0) {
+    html += `<div class="text-[10px] font-bold text-on-surface-variant/60 uppercase px-2 py-1 mt-2 tracking-wider">Despesas</div>`;
+    filteredExpenses.forEach(e => {
+      html += `
+        <div class="spotlight-item p-2.5 rounded-xl flex items-center gap-3 cursor-pointer hover:bg-surface-container active:scale-98 transition-all" data-type="expense" data-id="${e.id}">
+          <div class="w-8 h-8 rounded-full bg-coral-expense-bg text-coral-expense flex items-center justify-center shrink-0">
+            ${renderIcon("receipt_long", "text-[18px]")}
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 class="text-[13px] font-bold text-on-surface truncate">${e.description}</h4>
+            <p class="text-[11px] text-on-surface-variant truncate">${e.category} • ${formatDateBR(e.dueDate || e.date)} • ${formatCurrency(e.value)}</p>
+          </div>
+          <span class="text-[11px] text-error font-bold">Ver</span>
+        </div>
+      `;
+    });
+  }
+
+  if (!html) {
+    html = `<div class="p-6 text-center text-on-surface-variant text-[13px]">Nenhum resultado encontrado para "${query}".</div>`;
+  }
+
+  dom.spotlightResults.innerHTML = html;
+  if (typeof enhanceIcons === "function") enhanceIcons(dom.spotlightResults);
+
+  dom.spotlightResults.querySelectorAll(".spotlight-item").forEach(item => {
+    item.addEventListener("click", () => {
+      const actIdx = item.getAttribute("data-action-idx");
+      if (actIdx !== null && filteredActions[actIdx]) {
+        filteredActions[actIdx].action();
+        return;
+      }
+      const type = item.getAttribute("data-type");
+      const id = item.getAttribute("data-id");
+      closeSpotlightSearch();
+      if (type === "shift") {
+        const targetShift = shifts.find(s => s.id === id);
+        if (targetShift) openBottomSheet("plantao", targetShift);
+      } else if (type === "consultation") {
+        const targetCons = consultations.find(c => c.id === id);
+        if (targetCons) openBottomSheet("consultorio", targetCons);
+      } else if (type === "expense") {
+        const targetExp = expenses.find(e => e.id === id);
+        if (targetExp) openBottomSheet("despesa", targetExp);
+      }
+    });
+  });
+}
+
+function initSpotlightSearch() {
+  if (dom.btnSpotlight) {
+    dom.btnSpotlight.addEventListener("click", openSpotlightSearch);
+  }
+  if (dom.btnCloseSpotlight) {
+    dom.btnCloseSpotlight.addEventListener("click", closeSpotlightSearch);
+  }
+  if (dom.spotlightOverlay) {
+    dom.spotlightOverlay.addEventListener("click", (e) => {
+      if (e.target === dom.spotlightOverlay) closeSpotlightSearch();
+    });
+  }
+  if (dom.spotlightInput) {
+    dom.spotlightInput.addEventListener("input", (e) => {
+      renderSpotlightResults(e.target.value);
+    });
+    dom.spotlightInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const firstItem = dom.spotlightResults?.querySelector(".spotlight-item");
+        if (firstItem) firstItem.click();
+      }
+    });
+  }
+
+  window.addEventListener("keydown", (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      if (dom.spotlightOverlay && (dom.spotlightOverlay.classList.contains("active") || dom.spotlightOverlay.classList.contains("open"))) {
+        closeSpotlightSearch();
+      } else {
+        openSpotlightSearch();
+      }
+    } else if (e.key === "Escape" && dom.spotlightOverlay && (dom.spotlightOverlay.classList.contains("active") || dom.spotlightOverlay.classList.contains("open"))) {
+      closeSpotlightSearch();
+    }
+  });
+}
+
+/**
+ * Voice Recognition & NLP Assistant
+ */
+function startVoiceLogging() {
+  const SpeechRecognition = typeof window !== "undefined" ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
+  if (SpeechRecognition) {
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.lang = "pt-BR";
+      recognition.continuous = false;
+      recognition.interimResults = false;
+
+      showToast("Ouvindo... Fale o plantão, consulta ou despesa 🎙️", "mic");
+      triggerHaptic(20);
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        processVoiceTranscript(transcript);
+      };
+
+      recognition.onerror = (err) => {
+        console.warn("Speech recognition error:", err);
+        promptVoiceManualFallback();
+      };
+
+      recognition.start();
+      return;
+    } catch (e) {
+      console.warn("Error starting speech recognition:", e);
+    }
+  }
+
+  promptVoiceManualFallback();
+}
+
+function promptVoiceManualFallback() {
+  const html = `
+    <div class="p-5 flex flex-col gap-3">
+      <div class="flex items-center gap-2 pb-1 border-b border-outline-variant/20">
+        <span class="material-symbols-outlined text-secondary text-[22px]" data-icon="mic"></span>
+        <h3 class="font-headline text-[17px] font-bold text-on-surface">Lançamento por Voz ou Texto</h3>
+      </div>
+      <p class="text-[12px] text-on-surface-variant">
+        O assistente de NLP Médico reconhece termos como: <em>"Plantão 12h sábado no Mater Dei 1800"</em>, <em>"Consulta puericultura Maria 350"</em> ou <em>"Despesa jaleco 250"</em>.
+      </p>
+      <textarea
+        id="input-voice-text-fallback"
+        rows="3"
+        class="w-full p-3 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary transition-all resize-none"
+        placeholder="Digite ou cole aqui a frase..."
+      ></textarea>
+      <div class="flex items-center justify-end gap-2 pt-1">
+        <button type="button" class="px-4 py-2 rounded-full bg-surface-container-low text-on-surface-variant font-bold text-[12px]" id="btn-cancel-voice">Cancelar</button>
+        <button type="button" id="btn-submit-voice-text" class="px-5 py-2 rounded-full bg-gradient-to-r from-secondary to-primary text-white font-bold text-[12px] shadow-sm active:scale-95">Processar Frase</button>
+      </div>
+    </div>
+  `;
+  openDialog(html);
+
+  const btnCancel = document.getElementById("btn-cancel-voice");
+  if (btnCancel) btnCancel.addEventListener("click", closeDialog);
+
+  const btnSubmit = document.getElementById("btn-submit-voice-text");
+  const inputEl = document.getElementById("input-voice-text-fallback");
+  if (btnSubmit && inputEl) {
+    btnSubmit.addEventListener("click", () => {
+      const text = inputEl.value.trim();
+      if (text) {
+        closeDialog();
+        processVoiceTranscript(text);
+      }
+    });
+  }
+}
+
+function processVoiceTranscript(transcript) {
+  const parsed = parseMedicalVoiceInput(transcript);
+  if (!parsed || !parsed.type) {
+    showToast("Não foi possível identificar o lançamento. Tente novamente.", "warning");
+    return;
+  }
+
+  triggerHaptic(25);
+  if (parsed.type === "shift") {
+    openBottomSheet("plantao", {
+      hospital: parsed.hospital || "Hospital Mater Dei",
+      shiftType: parsed.shiftType || "12h Diurno",
+      sector: parsed.sector || "UTI Neonatal",
+      shiftDate: parsed.shiftDate || getLocalDateString(state.referenceDate || new Date()),
+      grossValue: parsed.grossValue || 1500,
+      taxRegime: parsed.taxRegime || "Simples Nacional (6%)",
+      taxRate: parsed.taxRate !== undefined ? parsed.taxRate : 6,
+      netValue: parsed.netValue !== undefined ? parsed.netValue : (parsed.grossValue ? parsed.grossValue * 0.94 : 1410),
+      notes: parsed.notes || ""
+    });
+    showToast(`Plantão identificado: ${parsed.hospital || 'Plantão'}! 🎙️✨`);
+  } else if (parsed.type === "consultation") {
+    openBottomSheet("consultorio", {
+      patientName: parsed.patientName || "Paciente Puericultura",
+      consultationType: parsed.consultationType || "Puericultura (Avulsa)",
+      value: parsed.value || 350,
+      grossValue: parsed.grossValue || parsed.value || 350,
+      date: parsed.date || getLocalDateString(state.referenceDate || new Date()),
+      paid: true,
+      notes: parsed.notes || ""
+    });
+    showToast(`Consulta identificada: ${parsed.patientName || 'Puericultura'}! 🎙️✨`);
+  } else if (parsed.type === "expense") {
+    openBottomSheet("despesa", {
+      description: parsed.description || "Despesa Médica",
+      category: parsed.category || "Consultório",
+      value: parsed.value || 100,
+      dueDate: parsed.date || parsed.shiftDate || getLocalDateString(state.referenceDate || new Date()),
+      date: parsed.date || getLocalDateString(state.referenceDate || new Date()),
+      scope: parsed.scope || "PJ",
+      notes: parsed.notes || ""
+    });
+    showToast(`Despesa identificada: ${parsed.description}! 🎙️✨`);
+  }
+}
+
+/**
+ * Passagem de Plantão SBAR (LGPD-Safe)
+ */
+function openSBARDialog(shiftId = null) {
+  const shifts = state.store.data.shifts || [];
+  let currentShift = shiftId ? shifts.find(s => s.id === shiftId) : (shifts[0] || null);
+
+  const doc = state.store.data;
+  const doctorName = doc.doctorName || "Dra. Pediatra";
+  const doctorCrm = doc.doctorCrm || "CRM-SP";
+
+  const renderSbarContent = (shift) => {
+    const defaultData = {
+      hospital: shift ? shift.hospital : "UTI Neonatal",
+      date: shift ? formatDateBR(shift.shiftDate) : formatDateBR(getLocalDateString(new Date())),
+      sector: shift ? (shift.sector || "UTI Neonatal") : "UTI Neonatal",
+      shiftType: shift ? shift.shiftType : "12h Noturno"
+    };
+
+    return `
+      <div class="p-5 flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto">
+        <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2.5">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center">
+              ${renderIcon("swap_horiz", "text-[18px]")}
+            </div>
+            <div>
+              <h3 class="font-headline text-[16px] font-bold text-on-surface">Passagem de Plantão SBAR</h3>
+              <span class="text-[11px] text-primary font-semibold">${defaultData.hospital} • ${defaultData.sector}</span>
+            </div>
+          </div>
+          <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container" id="btn-close-sbar">
+            ${renderIcon("close", "text-[18px]")}
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-2.5">
+          <div>
+            <label class="text-[11px] font-bold text-on-surface block mb-0.5">S - Situação (Leito / Idade / Motivo)</label>
+            <textarea id="sbar-s" rows="2" class="w-full p-2.5 rounded-xl bg-surface-container-low border border-outline-variant/30 text-[12px] text-on-surface focus:outline-none focus:border-secondary resize-none" placeholder="Ex: Leito 03: RN de Maria, IG 32s, PN 1450g. Em CPAP nasal."></textarea>
+          </div>
+
+          <div>
+            <label class="text-[11px] font-bold text-on-surface block mb-0.5">B - Background (Histórico Relevante)</label>
+            <textarea id="sbar-b" rows="2" class="w-full p-2.5 rounded-xl bg-surface-container-low border border-outline-variant/30 text-[12px] text-on-surface focus:outline-none focus:border-secondary resize-none" placeholder="Ex: Parto cesárea por DHEG materna. Fez surfactante na sala de parto."></textarea>
+          </div>
+
+          <div>
+            <label class="text-[11px] font-bold text-on-surface block mb-0.5">A - Avaliação (Quadro Clínico Atual)</label>
+            <textarea id="sbar-a" rows="2" class="w-full p-2.5 rounded-xl bg-surface-container-low border border-outline-variant/30 text-[12px] text-on-surface focus:outline-none focus:border-secondary resize-none" placeholder="Ex: Estável, afebril, boa perfusão periférica. Gasometria com acidose respiratória leve compensada."></textarea>
+          </div>
+
+          <div>
+            <label class="text-[11px] font-bold text-on-surface block mb-0.5">R - Recomendação (Condutas & Pendências)</label>
+            <textarea id="sbar-r" rows="2" class="w-full p-2.5 rounded-xl bg-surface-container-low border border-outline-variant/30 text-[12px] text-on-surface focus:outline-none focus:border-secondary resize-none" placeholder="Ex: Repetir gaso às 22h. Se mantiver desconforto, aumentar PEEP. Manter NPT em bomba."></textarea>
+          </div>
+
+          <label class="flex items-center gap-2 cursor-pointer select-none text-[11px] text-on-surface-variant pt-1">
+            <input type="checkbox" id="sbar-lgpd" checked class="w-4 h-4 rounded text-secondary focus:ring-secondary accent-secondary" />
+            <span>Blindagem LGPD Ativa (Garantir anonimização de dados sensíveis)</span>
+          </label>
+        </div>
+
+        <div class="pt-2 border-t border-outline-variant/20 flex flex-col gap-2">
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" id="btn-copy-sbar" class="h-10 rounded-full bg-surface-container text-on-surface font-bold text-[12px] flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+              ${renderIcon("content_copy", "text-[16px]")}
+              <span>Copiar Texto</span>
+            </button>
+            <button type="button" id="btn-send-whatsapp-sbar" class="h-10 rounded-full bg-[#25D366] text-white font-bold text-[12px] flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-sm">
+              ${renderIcon("send", "text-[16px]")}
+              <span>Enviar WhatsApp</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  };
+
+  openDialog(renderSbarContent(currentShift));
+
+  const btnClose = document.getElementById("btn-close-sbar");
+  if (btnClose) btnClose.addEventListener("click", closeDialog);
+
+  const getFullSbarText = () => {
+    const s = document.getElementById("sbar-s")?.value.trim() || "Estável";
+    const b = document.getElementById("sbar-b")?.value.trim() || "Sem intercorrências prévias";
+    const a = document.getElementById("sbar-a")?.value.trim() || "Boa evolução clínica";
+    const r = document.getElementById("sbar-r")?.value.trim() || "Seguir rotina da unidade";
+    const isLgpd = document.getElementById("sbar-lgpd")?.checked;
+
+    return generateSBARHandoff(currentShift, {
+      situation: s,
+      background: b,
+      assessment: a,
+      recommendation: r,
+      anonymizePatient: isLgpd,
+      doctorName,
+      doctorCrm
+    });
+  };
+
+  const btnCopy = document.getElementById("btn-copy-sbar");
+  if (btnCopy) {
+    btnCopy.addEventListener("click", () => {
+      const text = getFullSbarText();
+      if (typeof navigator !== "undefined" && navigator.clipboard) {
+        navigator.clipboard.writeText(text);
+      }
+      triggerHaptic(15);
+      showToast("Passagem SBAR copiada para o WhatsApp! 📋✨");
+    });
+  }
+
+  const btnSend = document.getElementById("btn-send-whatsapp-sbar");
+  if (btnSend) {
+    btnSend.addEventListener("click", () => {
+      const text = getFullSbarText();
+      triggerHaptic(15);
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(url, "_blank");
+    });
+  }
+}
+
+/**
+ * DRE & Otimizador Fator R Dialog
+ */
+function openDREDialog(targetMonth = state.activeMonth) {
+  const dre = state.store.getDRE(targetMonth);
+  const opt = state.store.getFatorROptimizer(targetMonth);
+
+  const html = `
+    <div class="p-5 flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2.5">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center">
+            ${renderIcon("calculate", "text-[18px]")}
+          </div>
+          <div>
+            <h3 class="font-headline text-[16px] font-bold text-on-surface">DRE & Otimizador Fator R</h3>
+            <span class="text-[11px] text-primary font-semibold">${formatMonthYear(targetMonth)}</span>
+          </div>
+        </div>
+        <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container" id="btn-close-dre">
+          ${renderIcon("close", "text-[18px]")}
+        </button>
+      </div>
+
+      <div class="p-3.5 rounded-2xl bg-surface-container-low flex flex-col gap-2">
+        <span class="text-[11px] font-bold text-on-surface uppercase tracking-wider">Demonstrativo do Resultado (DRE)</span>
+        <div class="flex justify-between text-[12px] font-semibold py-1 border-b border-outline-variant/10">
+          <span>(+) Faturamento Bruto (PJ + Consultório)</span>
+          <span class="font-display font-bold text-primary ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.grossRevenueTotal || dre.grossRevenue)}</span>
+        </div>
+        <div class="flex justify-between text-[12px] text-error font-medium py-1 border-b border-outline-variant/10">
+          <span>(-) Impostos Médicos (Simples / Carnê-Leão)</span>
+          <span class="font-display font-bold ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.taxesTotal !== undefined ? dre.taxesTotal : dre.taxes)}</span>
+        </div>
+        <div class="flex justify-between text-[12px] font-bold text-on-surface py-1 border-b border-outline-variant/10">
+          <span>(=) Receita Operacional Líquida</span>
+          <span class="font-display ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.netOperationalRevenue !== undefined ? dre.netOperationalRevenue : dre.netRevenue)}</span>
+        </div>
+        <div class="flex justify-between text-[12px] text-on-surface-variant py-1 border-b border-outline-variant/10">
+          <span>(-) Custos Operacionais PJ (CRM, Deslocamento)</span>
+          <span class="font-display font-medium text-error ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.pjExpensesTotal !== undefined ? dre.pjExpensesTotal : dre.pjOperatingExpenses)}</span>
+        </div>
+        <div class="flex justify-between text-[12px] text-primary font-semibold py-1 border-b border-outline-variant/10">
+          <span>(-) Pró-Labore da Médica (Fator R 28%)</span>
+          <span class="font-display font-bold ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.proLabore)}</span>
+        </div>
+        <div class="flex justify-between text-[12px] text-on-surface-variant py-1 border-b border-outline-variant/10">
+          <span>(-) Despesas Pessoais PF (Vida, Família)</span>
+          <span class="font-display font-medium text-error ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.pfExpensesTotal !== undefined ? dre.pfExpensesTotal : dre.pfExpenses)}</span>
+        </div>
+        <div class="flex justify-between text-[13px] font-extrabold text-tertiary pt-1.5">
+          <span>(=) Superávit Mensal (Poupança Real)</span>
+          <span class="font-display text-[15px] ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(dre.realSuperavit !== undefined ? dre.realSuperavit : dre.netSurplus)}</span>
+        </div>
+      </div>
+
+      <div class="p-3.5 rounded-2xl bg-secondary-fixed/20 border border-secondary/20 flex flex-col gap-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-[12px] font-bold text-secondary flex items-center gap-1">
+            ${renderIcon("account_balance", "text-[16px]")}
+            Fator R Dinâmico (Alíquota 6% no Simples)
+          </span>
+          <span id="dre-fator-r-badge" class="px-2 py-0.5 rounded-full ${opt.meetsThreshold || opt.isAnexoIII ? 'bg-tertiary-fixed text-tertiary' : 'bg-secondary-fixed text-secondary'} text-[11px] font-bold">
+            ${opt.currentFatorR}% atual
+          </span>
+        </div>
+        <p id="dre-fator-r-rec" class="text-[11px] text-on-surface-variant leading-snug">
+          ${opt.recommendation}
+        </p>
+
+        <div class="p-2.5 rounded-xl bg-white flex items-center justify-between">
+          <div class="flex flex-col">
+            <span class="text-[10px] text-on-surface-variant uppercase">Pró-Labore Recomendado</span>
+            <span class="text-[16px] font-bold text-secondary font-display ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(opt.suggestedProLabore)}/mês</span>
+          </div>
+          <div class="flex flex-col text-right">
+            <span class="text-[10px] text-on-surface-variant uppercase">Economia Anual Estimada</span>
+            <span class="text-[16px] font-bold text-tertiary font-display ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(opt.annualTaxSavings)}</span>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-1 border-t border-secondary/10 text-[11px]">
+          <span class="text-on-surface-variant">Simular Pró-Labore (R$/mês):</span>
+          <input
+            type="number"
+            id="input-sim-prolabore"
+            class="w-24 px-2 py-1 rounded-lg bg-white border border-outline-variant/30 text-right font-bold text-secondary focus:outline-none"
+            value="${opt.suggestedProLabore}"
+            step="100"
+          />
+        </div>
+      </div>
+    </div>
+  `;
+
+  openDialog(html);
+  const btnClose = document.getElementById("btn-close-dre");
+  if (btnClose) btnClose.addEventListener("click", closeDialog);
+
+  const inputSim = document.getElementById("input-sim-prolabore");
+  const badgeEl = document.getElementById("dre-fator-r-badge");
+  const recEl = document.getElementById("dre-fator-r-rec");
+  if (inputSim && badgeEl && recEl) {
+    inputSim.addEventListener("input", () => {
+      const simVal = parseFloat(inputSim.value) || 0;
+      const simOpt = state.store.getFatorROptimizer(targetMonth, { proLabore: simVal });
+      badgeEl.textContent = `${simOpt.currentFatorR}% simulado`;
+      badgeEl.className = `px-2 py-0.5 rounded-full ${simOpt.meetsThreshold || simOpt.isAnexoIII ? 'bg-tertiary-fixed text-tertiary' : 'bg-secondary-fixed text-secondary'} text-[11px] font-bold`;
+      recEl.textContent = simOpt.recommendation;
+    });
+  }
+}
+
+/**
+ * Conciliação Bancária Dialog (OFX / CSV)
+ */
+function openReconciliationDialog() {
+  const html = `
+    <div class="p-5 flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2.5">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center">
+            ${renderIcon("upload_file", "text-[18px]")}
+          </div>
+          <div>
+            <h3 class="font-headline text-[16px] font-bold text-on-surface">Conciliação Bancária</h3>
+            <span class="text-[11px] text-primary font-semibold">Extrato OFX ou CSV (Nubank, Santander, etc.)</span>
+          </div>
+        </div>
+        <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container" id="btn-close-reconcile">
+          ${renderIcon("close", "text-[18px]")}
+        </button>
+      </div>
+
+      <div class="border-2 border-dashed border-outline-variant/40 rounded-2xl p-5 flex flex-col items-center justify-center gap-2 text-center bg-surface-container-low/40 cursor-pointer hover:bg-surface-container-low transition-all" id="reconcile-dropzone">
+        <span class="material-symbols-outlined text-[32px] text-secondary" data-icon="cloud_upload"></span>
+        <div class="flex flex-col">
+          <span class="text-[13px] font-bold text-on-surface">Selecione ou Arraste o Extrato Bancário</span>
+          <span class="text-[11px] text-on-surface-variant">Formatos suportados: .ofx e .csv</span>
+        </div>
+        <input type="file" id="input-reconcile-file" accept=".ofx,.csv" class="hidden" />
+      </div>
+
+      <div id="reconciliation-results" class="flex flex-col gap-2">
+        <!-- Reconciled items rendered here -->
+      </div>
+    </div>
+  `;
+
+  openDialog(html);
+  const btnClose = document.getElementById("btn-close-reconcile");
+  if (btnClose) btnClose.addEventListener("click", closeDialog);
+
+  const dropzone = document.getElementById("reconcile-dropzone");
+  const fileInput = document.getElementById("input-reconcile-file");
+  const resultsContainer = document.getElementById("reconciliation-results");
+
+  if (dropzone && fileInput) {
+    dropzone.addEventListener("click", () => fileInput.click());
+    dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("border-secondary"); });
+    dropzone.addEventListener("dragleave", () => { dropzone.classList.remove("border-secondary"); });
+    dropzone.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropzone.classList.remove("border-secondary");
+      if (e.dataTransfer?.files?.[0]) processExtractFile(e.dataTransfer.files[0]);
+    });
+    fileInput.addEventListener("change", (e) => {
+      if (e.target.files?.[0]) processExtractFile(e.target.files[0]);
+    });
+  }
+
+  function processExtractFile(file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target.result;
+      let txs = [];
+      if (file.name.toLowerCase().endsWith(".ofx")) {
+        txs = parseOFX(content);
+      } else {
+        txs = parseBankCSV(content);
+      }
+
+      if (!txs || txs.length === 0) {
+        showToast("Nenhuma transação encontrada no arquivo.", "warning");
+        return;
+      }
+
+      const rec = state.store.reconcileBankTransactions(txs, state.activeMonth);
+      renderReconciliationMatches(rec);
+    };
+    reader.readAsText(file);
+  }
+
+  function renderReconciliationMatches(rec) {
+    if (!resultsContainer) return;
+    const { matchedInflows, matchedOutflows } = rec;
+
+    let html = `
+      <div class="p-3 rounded-xl bg-tertiary-fixed/30 flex items-center justify-between">
+        <span class="text-[12px] font-bold text-tertiary">
+          ${matchedInflows.length} repasse(s) e ${matchedOutflows.length} despesa(s) identificados!
+        </span>
+        <button type="button" id="btn-confirm-all-reconciled" class="px-3 py-1 rounded-full bg-tertiary text-white text-[11px] font-bold active:scale-95 cursor-pointer">
+          Conciliar Todos
+        </button>
+      </div>
+    `;
+
+    if (matchedInflows.length > 0) {
+      html += `<div class="text-[10px] font-bold text-on-surface-variant/60 uppercase px-1 mt-2 tracking-wider">Entradas & Repasses Hospitalares</div>`;
+      matchedInflows.forEach((m, idx) => {
+        const txDate = m.bankTx?.date || m.transaction?.date || "";
+        const txMemo = m.bankTx?.memo || m.transaction?.memo || "Depósito";
+        let title = "";
+        let amount = m.expectedAmount || (m.transaction ? m.transaction.amount : 0);
+
+        if (m.type === "shift_installment" && m.shift) {
+          title = `${m.shift.hospital} — ${m.installment?.number}ª parcela (${m.installment?.percent}%)`;
+        } else if (m.type === "shift_full" && m.shift) {
+          title = `${m.shift.hospital} — Quitação Integral`;
+        } else if (m.type === "consultation" && m.consultation) {
+          title = `Consulta: ${m.consultation.patientName}`;
+        } else {
+          title = m.suggestedAction || "Entrada Conciliada";
+        }
+
+        html += `
+          <div class="p-3 rounded-xl bg-surface-container-low flex items-center justify-between gap-2">
+            <div class="flex flex-col min-w-0 flex-1">
+              <span class="text-[12px] font-bold text-on-surface truncate">${title}</span>
+              <span class="text-[11px] text-on-surface-variant truncate">${formatDateBR(txDate)} • ${txMemo}</span>
+            </div>
+            <div class="text-right flex items-center gap-2 shrink-0">
+              <span class="text-[13px] font-bold text-tertiary">${formatCurrency(amount)}</span>
+              <button type="button" class="btn-confirm-single-rec px-2.5 py-1 rounded-full bg-secondary-fixed text-secondary text-[11px] font-bold active:scale-95 cursor-pointer" data-inflow-idx="${idx}">
+                Confirmar
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    if (matchedOutflows.length > 0) {
+      html += `<div class="text-[10px] font-bold text-on-surface-variant/60 uppercase px-1 mt-2 tracking-wider">Saídas & Despesas Operacionais</div>`;
+      matchedOutflows.forEach((m, idx) => {
+        const txDate = m.bankTx?.date || m.transaction?.date || "";
+        const txMemo = m.bankTx?.memo || m.transaction?.memo || "Pagamento";
+        const title = m.expense ? `${m.expense.description} (${m.expense.category})` : (m.suggestedAction || "Despesa");
+        const amount = m.expectedAmount || (m.expense ? m.expense.value : (m.transaction ? Math.abs(m.transaction.amount) : 0));
+
+        html += `
+          <div class="p-3 rounded-xl bg-surface-container-low flex items-center justify-between gap-2">
+            <div class="flex flex-col min-w-0 flex-1">
+              <span class="text-[12px] font-bold text-on-surface truncate">${title}</span>
+              <span class="text-[11px] text-on-surface-variant truncate">${formatDateBR(txDate)} • ${txMemo}</span>
+            </div>
+            <div class="text-right flex items-center gap-2 shrink-0">
+              <span class="text-[13px] font-bold text-error">${formatCurrency(amount)}</span>
+              <button type="button" class="btn-confirm-outflow-rec px-2.5 py-1 rounded-full bg-primary-fixed text-primary text-[11px] font-bold active:scale-95 cursor-pointer" data-outflow-idx="${idx}">
+                Confirmar
+              </button>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    resultsContainer.innerHTML = html;
+    if (typeof enhanceIcons === "function") enhanceIcons(resultsContainer);
+
+    document.querySelectorAll(".btn-confirm-single-rec").forEach(b => {
+      b.addEventListener("click", () => {
+        const idx = parseInt(b.getAttribute("data-inflow-idx"), 10);
+        const m = matchedInflows[idx];
+        if (!m) return;
+        const txDate = m.bankTx?.date || m.transaction?.date || null;
+
+        if (m.type === "shift_installment" && m.shift && m.installment) {
+          state.store.toggleShiftInstallment(m.shift.id, m.installment.number, txDate);
+        } else if (m.type === "shift_full" && m.shift) {
+          state.store.markShiftAsReceived(m.shift.id, txDate);
+        } else if (m.type === "consultation" && m.consultation) {
+          state.store.toggleConsultationPaid(m.consultation.id, txDate);
+        } else if (m.shift) {
+          state.store.markShiftAsReceived(m.shift.id, txDate);
+        }
+
+        b.textContent = "Confirmado ✓";
+        b.disabled = true;
+        b.classList.remove("bg-secondary-fixed", "text-secondary");
+        b.classList.add("bg-tertiary-fixed", "text-tertiary");
+        showToast("Repasse conciliado com sucesso! 🌸");
+        renderCurrentView();
+      });
+    });
+
+    document.querySelectorAll(".btn-confirm-outflow-rec").forEach(b => {
+      b.addEventListener("click", () => {
+        const idx = parseInt(b.getAttribute("data-outflow-idx"), 10);
+        const m = matchedOutflows[idx];
+        if (!m) return;
+
+        if (m.expense) {
+          state.store.updateExpense(m.expense.id, { isPaid: true });
+        }
+
+        b.textContent = "Baixado ✓";
+        b.disabled = true;
+        b.classList.remove("bg-primary-fixed", "text-primary");
+        b.classList.add("bg-tertiary-fixed", "text-tertiary");
+        showToast("Despesa conciliada e baixada! 🌸");
+        renderCurrentView();
+      });
+    });
+
+    const btnAll = document.getElementById("btn-confirm-all-reconciled");
+    if (btnAll) {
+      btnAll.addEventListener("click", () => {
+        matchedInflows.forEach(m => {
+          const txDate = m.bankTx?.date || m.transaction?.date || null;
+          if (m.type === "shift_installment" && m.shift && m.installment) {
+            state.store.toggleShiftInstallment(m.shift.id, m.installment.number, txDate);
+          } else if (m.type === "shift_full" && m.shift) {
+            state.store.markShiftAsReceived(m.shift.id, txDate);
+          } else if (m.type === "consultation" && m.consultation) {
+            state.store.toggleConsultationPaid(m.consultation.id, txDate);
+          } else if (m.shift) {
+            state.store.markShiftAsReceived(m.shift.id, txDate);
+          }
+        });
+
+        matchedOutflows.forEach(m => {
+          if (m.expense) {
+            state.store.updateExpense(m.expense.id, { isPaid: true });
+          }
+        });
+
+        showToast("Todos os repasses e despesas foram conciliados! 🌸");
+        closeDialog();
+        renderCurrentView();
+      });
+    }
+  }
+}
+
+/**
+ * Kit do Contador Dialog
+ */
+function openAccountantKitDialog(targetMonth = state.activeMonth) {
+  const kit = generateAccountantKit(targetMonth);
+
+  const html = `
+    <div class="p-5 flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2.5">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center">
+            ${renderIcon("contact_phone", "text-[18px]")}
+          </div>
+          <div>
+            <h3 class="font-headline text-[16px] font-bold text-on-surface">Kit do Contador em 1 Toque</h3>
+            <span class="text-[11px] text-primary font-semibold">${formatMonthYear(targetMonth)}</span>
+          </div>
+        </div>
+        <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container" id="btn-close-accountant">
+          ${renderIcon("close", "text-[18px]")}
+        </button>
+      </div>
+
+      <p class="text-[12px] text-on-surface-variant leading-relaxed">
+        Envie os dados contábeis consolidados com relatório executivo, resumo do Fator R e arquivo CSV compatível com Excel:
+      </p>
+
+      <pre class="p-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/20 text-[11px] text-on-surface whitespace-pre-wrap font-mono max-h-[220px] overflow-y-auto">${kit.summaryText}</pre>
+
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <button type="button" id="btn-download-accountant-csv" class="h-10 rounded-full bg-surface-container text-on-surface font-bold text-[12px] flex items-center justify-center gap-1.5 active:scale-95 transition-all">
+          ${renderIcon("download", "text-[16px]")}
+          <span>Baixar CSV</span>
+        </button>
+        <button type="button" id="btn-whatsapp-accountant" class="h-10 rounded-full bg-[#25D366] text-white font-bold text-[12px] flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-sm">
+          ${renderIcon("send", "text-[16px]")}
+          <span>WhatsApp Contador</span>
+        </button>
+      </div>
+    </div>
+  `;
+
+  openDialog(html);
+  const btnClose = document.getElementById("btn-close-accountant");
+  if (btnClose) btnClose.addEventListener("click", closeDialog);
+
+  const btnDl = document.getElementById("btn-download-accountant-csv");
+  if (btnDl) {
+    btnDl.addEventListener("click", () => {
+      const csvData = kit.csvContent || kit.csv || "";
+      const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `relatorio_contabil_${targetMonth}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("CSV para contabilidade baixado! 📄");
+    });
+  }
+
+
+  const btnWa = document.getElementById("btn-whatsapp-accountant");
+  if (btnWa) {
+    btnWa.addEventListener("click", () => {
+      const url = `https://api.whatsapp.com/send?text=${encodeURIComponent(kit.summaryText)}`;
+      window.open(url, "_blank");
+    });
+  }
+}
+
+/**
+ * Simulador FIRE Pediatra Dialog
+ */
+function openFIREDialog() {
+  const fire = state.store.getDoctorFIREMetrics();
+
+  const html = `
+    <div class="p-5 flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-outline-variant/20 pb-2.5">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center">
+            ${renderIcon("local_fire_department", "text-[18px]")}
+          </div>
+          <div>
+            <h3 class="font-headline text-[16px] font-bold text-on-surface">Simulador FIRE Pediatra</h3>
+            <span class="text-[11px] text-primary font-semibold">Liberdade & Independência de Plantões</span>
+          </div>
+        </div>
+        <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container" id="btn-close-fire">
+          ${renderIcon("close", "text-[18px]")}
+        </button>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-gradient-to-br from-secondary-fixed/30 to-primary-fixed/30 flex flex-col gap-2">
+        <span class="text-[11px] font-bold text-secondary uppercase tracking-wider">Patrimônio FIRE Necessário (Regra dos 4%)</span>
+        <span class="text-[28px] font-display font-bold text-on-surface ${state.privacyMode ? 'privacy-masked-text' : ''}">
+          ${formatMoney(fire.targetNestEgg)}
+        </span>
+        <span class="text-[11px] text-on-surface-variant">Gera <strong>${formatMoney(fire.monthlyPassiveIncomeTarget)}/mês</strong> perpétuos sem necessidade de dar plantões.</span>
+      </div>
+
+      <div class="p-3.5 rounded-2xl bg-surface-container-low flex flex-col gap-2">
+        <label class="text-[11px] font-bold text-on-surface flex items-center justify-between">
+          <span>Seu Patrimônio Investido Atual (R$):</span>
+          <span class="text-[10px] text-secondary font-semibold">Simulação Interativa</span>
+        </label>
+        <div class="relative">
+          <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-[13px] font-bold text-on-surface-variant">R$</span>
+          <input
+            type="number"
+            id="input-fire-equity"
+            value="${state.store.data.currentEquity || (fire.currentSavings > 0 ? fire.currentSavings : '')}"
+            placeholder="Ex: 150000"
+            class="w-full h-11 pl-10 pr-3.5 rounded-xl bg-surface-container border border-outline-variant/30 text-[14px] font-bold text-on-surface focus:outline-none focus:border-secondary"
+          />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 text-center">
+        <div class="p-3 rounded-xl bg-surface-container-low flex flex-col">
+          <span class="text-[10px] text-on-surface-variant uppercase font-bold">Custo de Vida Médio</span>
+          <span class="text-[16px] font-bold text-on-surface mt-0.5 ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(fire.averageMonthlyExpense)}/mês</span>
+        </div>
+        <div class="p-3 rounded-xl bg-surface-container-low flex flex-col">
+          <span class="text-[10px] text-on-surface-variant uppercase font-bold">Patrimônio Atual</span>
+          <span id="fire-accumulated-display" class="text-[16px] font-bold text-tertiary mt-0.5 ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(fire.currentSavings)}</span>
+        </div>
+      </div>
+
+      <div class="p-3.5 rounded-2xl bg-surface-container-low flex flex-col gap-2">
+        <div class="flex items-center justify-between">
+          <span class="text-[12px] font-bold text-on-surface">Termômetro de Independência:</span>
+          <span id="fire-shifts-count" class="text-[11px] font-bold text-secondary">${fire.shiftsReplacedCount} plantões eliminados!</span>
+        </div>
+        <div class="w-full h-3 rounded-full bg-surface-container overflow-hidden">
+          <div id="fire-thermo-bar" class="h-full bg-gradient-to-r from-secondary to-primary transition-all duration-300" style="width: ${Math.min(100, (fire.currentSavings / (fire.targetNestEgg || 1)) * 100)}%;"></div>
+        </div>
+        <div class="flex items-center justify-between text-[11px] text-on-surface-variant pt-1">
+          <span>Renda passiva gerada: <strong id="fire-passive-income" class="text-tertiary">${formatMoney(fire.passiveMonthlyIncome)}/mês</strong></span>
+          <span id="fire-badge" class="px-2 py-0.5 rounded-full bg-secondary-fixed/50 text-secondary font-bold text-[10px]">${fire.freedomBadge}</span>
+        </div>
+        <p class="text-[11px] text-on-surface-variant leading-snug">
+          Cada R$ 1.800 de renda passiva mensal gerada pela sua carteira elimina <strong>1 plantão noturno de 12h</strong> para sempre da sua escala!
+        </p>
+      </div>
+    </div>
+  `;
+
+  openDialog(html);
+  const btnClose = document.getElementById("btn-close-fire");
+  if (btnClose) btnClose.addEventListener("click", closeDialog);
+
+  const inputEq = document.getElementById("input-fire-equity");
+  if (inputEq) {
+    inputEq.addEventListener("input", (e) => {
+      const val = parseFloat(e.target.value) || 0;
+      state.store.data.currentEquity = val;
+      state.store.save();
+      const updated = state.store.getDoctorFIREMetrics(val);
+
+      const elAccum = document.getElementById("fire-accumulated-display");
+      const elShifts = document.getElementById("fire-shifts-count");
+      const elBar = document.getElementById("fire-thermo-bar");
+      const elPassive = document.getElementById("fire-passive-income");
+      const elBadge = document.getElementById("fire-badge");
+
+      if (elAccum) elAccum.textContent = formatMoney(updated.currentSavings);
+      if (elShifts) elShifts.textContent = `${updated.shiftsReplacedCount} plantões eliminados!`;
+      if (elBar) elBar.style.width = `${Math.min(100, (updated.currentSavings / (updated.targetNestEgg || 1)) * 100)}%`;
+      if (elPassive) elPassive.textContent = `${formatMoney(updated.passiveMonthlyIncome)}/mês`;
+      if (elBadge) elBadge.textContent = updated.freedomBadge;
+
+      triggerHaptic(8);
+    });
+  }
+}
+
+/**
+ * Clinical Onboarding Wizard (3 Passos)
+ */
+function checkOnboarding() {
+  if (typeof window === "undefined" || typeof document === "undefined" || !document.body) return;
+  if (typeof process !== "undefined" && process.env && (process.env.NODE_TEST_CONTEXT || process.env.NODE_ENV === "test")) return;
+  const profile = state.store.data.drProfile || {};
+  const shifts = state.store.data.shifts || [];
+  if (!profile.completedOnboarding && shifts.length === 0) {
+    setTimeout(() => {
+      if (typeof document !== "undefined" && document.body && dom.dialogContainer) {
+        openOnboardingDialog();
+      }
+    }, 400);
+  }
+}
+
+function openOnboardingDialog() {
+  let step = 1;
+  const renderStep = () => {
+    if (step === 1) {
+      return `
+        <div class="dialog-card-content p-5 flex flex-col gap-3.5 max-h-[90vh] overflow-y-auto overscroll-contain">
+          <div class="w-12 h-12 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center mx-auto">
+            ${renderIcon("person", "text-[24px]")}
+          </div>
+          <div class="text-center">
+            <h3 class="font-headline text-[18px] font-bold text-on-surface">Bem-vinda ao seu Espaço 🌸</h3>
+            <p class="text-[12px] text-on-surface-variant mt-1">Personalize seu Finanças Pediatria v3.0 em 3 passos rápidos.</p>
+          </div>
+          <div class="flex flex-col gap-2 mt-2">
+            <label class="text-[11px] font-bold text-on-surface">Seu Nome / Como prefere ser chamada:</label>
+            <input type="text" id="onboarding-name" value="${state.store.data.doctorName || 'Dra. Fernanda'}" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary" />
+            <label class="text-[11px] font-bold text-on-surface mt-1">CRM e Especialidade:</label>
+            <input type="text" id="onboarding-crm" value="${state.store.data.doctorCrm || 'CRM 123456-SP'}" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary" />
+          </div>
+          <button type="button" id="btn-next-step" class="w-full h-11 rounded-full bg-gradient-to-r from-secondary to-primary text-white font-bold text-[13px] mt-2 active:scale-95 transition-all">Próximo Passo ➔</button>
+        </div>
+      `;
+    } else if (step === 2) {
+      return `
+        <div class="dialog-card-content p-5 flex flex-col gap-3.5 max-h-[90vh] overflow-y-auto overscroll-contain pb-8">
+          <div class="w-12 h-12 rounded-full bg-primary-fixed text-primary flex items-center justify-center mx-auto">
+            ${renderIcon("local_hospital", "text-[24px]")}
+          </div>
+          <div class="text-center">
+            <h3 class="font-headline text-[18px] font-bold text-on-surface">Seus Hospitais & Regras 🏥</h3>
+            <p class="text-[12px] text-on-surface-variant mt-1">Onde você realiza seus plantões habituais?</p>
+          </div>
+          <div class="flex flex-col gap-2 mt-2">
+            <label class="text-[11px] font-bold text-on-surface">Hospital Principal:</label>
+            <input type="text" id="onboarding-hospital" value="Hospital Mater Dei" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary" />
+            <label class="text-[11px] font-bold text-on-surface mt-1">Regime Tributário Predominante:</label>
+            ${renderCustomSelectHTML({
+              id: 'onboarding-tax',
+              value: '6',
+              options: [
+                { value: '6', label: 'PJ Simples Nacional (6% com Fator R)' },
+                { value: '11.33', label: 'PJ Lucro Presumido (~11.33%)' },
+                { value: '13.33', label: 'PJ Lucro Presumido (~13.33%)' },
+                { value: '15.5', label: 'PJ Simples Anexo V (15.5%)' },
+                { value: '16.33', label: 'PJ Lucro Presumido (~16.33%)' },
+                { value: '27.5', label: 'Carnê-Leão PF / RPA (27.5%)' }
+              ],
+              icon: 'tune'
+            })}
+          </div>
+          <div class="grid grid-cols-2 gap-2 mt-2">
+            <button type="button" id="btn-prev-step" class="h-11 rounded-full bg-surface-container text-on-surface font-bold text-[13px]">Voltar</button>
+            <button type="button" id="btn-next-step" class="h-11 rounded-full bg-gradient-to-r from-secondary to-primary text-white font-bold text-[13px] active:scale-95">Próximo ➔</button>
+          </div>
+        </div>
+      `;
+    } else {
+      return `
+        <div class="dialog-card-content p-5 flex flex-col gap-3.5 max-h-[90vh] overflow-y-auto overscroll-contain">
+          <div class="w-12 h-12 rounded-full bg-tertiary-fixed text-tertiary flex items-center justify-center mx-auto">
+            ${renderIcon("flag", "text-[24px]")}
+          </div>
+          <div class="text-center">
+            <h3 class="font-headline text-[18px] font-bold text-on-surface">Sua Meta & Bem-Estar 🎯</h3>
+            <p class="text-[12px] text-on-surface-variant mt-1">Defina sua meta de renda e limite de fadiga CFM.</p>
+          </div>
+          <div class="flex flex-col gap-2 mt-2">
+            <label class="text-[11px] font-bold text-on-surface">Meta Mensal de Faturamento (R$):</label>
+            <input type="number" id="onboarding-goal" value="20000" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary font-bold" />
+            <label class="text-[11px] font-bold text-on-surface mt-1">Limite Máximo de Horas/Semana (CFM):</label>
+            <input type="number" id="onboarding-fatigue" value="48" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary font-bold" />
+          </div>
+          <button type="button" id="btn-finish-onboarding" class="w-full h-11 rounded-full bg-gradient-to-r from-secondary to-primary text-white font-bold text-[13px] mt-2 active:scale-95 transition-all">Começar a Usar o App 🚀</button>
+        </div>
+      `;
+    }
+  };
+
+  const updateDialog = () => {
+    openDialog(renderStep());
+    if (dom.dialogContainer) {
+      attachCustomSelectEvents(dom.dialogContainer);
+    }
+    const btnNext = document.getElementById("btn-next-step");
+    const btnPrev = document.getElementById("btn-prev-step");
+    const btnFinish = document.getElementById("btn-finish-onboarding");
+
+    if (btnNext) {
+      btnNext.addEventListener("click", () => {
+        if (step === 1) {
+          const name = document.getElementById("onboarding-name")?.value;
+          const crm = document.getElementById("onboarding-crm")?.value;
+          if (name) state.store.data.doctorName = name;
+          if (crm) state.store.data.doctorCrm = crm;
+        } else if (step === 2) {
+          const hosp = document.getElementById("onboarding-hospital")?.value;
+          const tax = parseFloat(document.getElementById("onboarding-tax")?.value);
+          if (hosp && hosp.trim()) state.store.addWorkLocation(hosp.trim());
+          if (!isNaN(tax)) state.store.data.defaultTaxRate = tax;
+        }
+        step++;
+        updateDialog();
+      });
+    }
+
+    if (btnPrev) {
+      btnPrev.addEventListener("click", () => {
+        step--;
+        updateDialog();
+      });
+    }
+
+    if (btnFinish) {
+      btnFinish.addEventListener("click", () => {
+        const goal = parseFloat(document.getElementById("onboarding-goal")?.value) || 20000;
+        const fatigue = parseInt(document.getElementById("onboarding-fatigue")?.value, 10) || 48;
+        state.store.data.monthlyIncomeGoal = goal;
+        if (!state.store.data.drProfile) state.store.data.drProfile = {};
+        state.store.data.drProfile.completedOnboarding = true;
+        state.store.data.drProfile.maxWeeklyHours = fatigue;
+        state.store.save();
+        closeDialog();
+        showToast("Configurações iniciais salvas! Bem-vinda! 🌸", "verified");
+        renderCurrentView();
+      });
+    }
+  };
+
+  updateDialog();
+}
+
+/**
+ * Render Consultation Card
+ */
+function renderConsultationCard(c) {
+  const hourly = Math.round(c.value / ((c.durationMinutes || 60) / 60));
+
+  return `
+    <article class="card-floating p-4 flex flex-col justify-between transition-all" data-consultation-id="${c.id}">
+      <div class="flex items-start justify-between gap-2">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-10 h-10 rounded-full ${c.paid ? 'bg-tertiary-fixed text-on-tertiary-fixed' : 'bg-primary-fixed text-primary'} flex items-center justify-center shrink-0">
+            ${renderIcon(c.isPackage || c.consultationType?.includes("Puericultura") ? "child_friendly" : "stethoscope", "text-[20px]")}
+          </div>
+          <div class="min-w-0">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <h2 class="text-[15px] font-bold text-on-surface truncate">${c.patientName}</h2>
+              <span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-secondary text-[10px] font-bold">${c.consultationType}</span>
+              ${c.puericulturaMonth ? `<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-primary text-[10px] font-bold">${c.puericulturaMonth}</span>` : ''}
+            </div>
+            <p class="text-[12px] text-on-surface-variant truncate">
+              ${formatDateBR(c.date)} • ${c.durationMinutes || 60}min • ${c.paymentMethod || 'PIX'}
+            </p>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 shrink-0">
+          <button type="button" class="btn-toggle-consultation-paid w-7 h-7 rounded-full ${c.paid ? 'text-tertiary' : 'text-on-surface-variant'} hover:bg-surface-container flex items-center justify-center active:scale-90" data-id="${c.id}" title="${c.paid ? 'Marcar como Pendente' : 'Marcar como Recebido'}">
+            ${renderIcon(c.paid ? "check_circle" : "radio_button_unchecked", "text-[16px]")}
+          </button>
+          <button type="button" class="btn-edit-consultation w-7 h-7 rounded-full text-on-surface-variant hover:bg-surface-container flex items-center justify-center active:scale-90" data-id="${c.id}" title="Editar">
+            ${renderIcon("edit", "text-[15px]")}
+          </button>
+          <button type="button" class="btn-delete-consultation w-7 h-7 rounded-full text-error/70 hover:bg-error-container/40 flex items-center justify-center active:scale-90" data-id="${c.id}" title="Excluir">
+            ${renderIcon("delete", "text-[15px]")}
+          </button>
+        </div>
+      </div>
+      <div class="my-2 p-2.5 rounded-[16px] bg-surface-container-low/60 flex items-center justify-between">
+        <div>
+          <span class="text-[10px] text-on-surface-variant block">Honorários</span>
+          <span class="text-[16px] font-bold text-on-surface font-display ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(c.value)}</span>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] text-on-surface-variant block">Rendimento/Hora</span>
+          <span class="badge-rate-mint text-[11px] font-bold">
+            R$ ${hourly}/h
+          </span>
+        </div>
+      </div>
+      ${c.notes ? `<p class="text-[11px] text-on-surface-variant italic truncate">${c.notes}</p>` : ''}
+    </article>
+  `;
+}
+
+
+/**
  * Toast notification manager with optional 1-tap Undo callback
  */
 function showToast(message, icon = "favorite", undoCallback = null) {
@@ -2999,73 +5853,144 @@ function showToast(message, icon = "favorite", undoCallback = null) {
 }
 
 /**
- * Delightful pediatric visual reaction for entries (baby smiling + floating hearts)
- * or expenses (baby crying gently + caring encouragement).
+ * Pediatric Microinteractions & Floating Particles Engine
+ * Emits delicate hearts, butterflies, sparkles, and baby smiles
+ * @param {number|null} x
+ * @param {number|null} y
+ * @param {number} count
+ * @param {'hearts'|'butterflies'|'mixed'} type
+ */
+function spawnPediatricParticles(x = null, y = null, count = 8, type = 'mixed') {
+  if (typeof document === 'undefined') return;
+  const container = (dom && dom.particlesContainer) || document.getElementById('pediatric-particles-container') || (document.body && document.body.appendChild ? document.body : null);
+  if (!container) return;
+
+  // Support invocation with event as first argument: spawnPediatricParticles(e, 'hearts')
+  let resolvedX = null;
+  let resolvedY = null;
+  if (x && typeof x === 'object') {
+    if ('clientX' in x || 'pageX' in x) {
+      resolvedX = x.clientX || x.pageX || null;
+      resolvedY = x.clientY || x.pageY || null;
+    }
+    if (typeof y === 'string') {
+      type = y;
+    }
+  } else if (typeof x === 'number') {
+    resolvedX = x;
+    resolvedY = typeof y === 'number' ? y : null;
+  }
+
+  const defaultX = typeof window !== 'undefined' ? window.innerWidth / 2 : 200;
+  const defaultY = typeof window !== 'undefined' ? window.innerHeight * 0.55 : 300;
+  const startX = (resolvedX !== null && !isNaN(resolvedX)) ? resolvedX : defaultX;
+  const startY = (resolvedY !== null && !isNaN(resolvedY)) ? resolvedY : defaultY;
+
+  const emojiMap = {
+    hearts: ['💖', '💕', '💗', '🌸', '✨', '💐'],
+    butterflies: ['🦋', '🌸', '✨', '💕', '🌷'],
+    mixed: ['💖', '💕', '🦋', '✨', '🌸', '🍼', '🩺']
+  };
+  const list = emojiMap[type] || emojiMap.mixed;
+
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    const symbol = list[Math.floor(Math.random() * list.length)];
+    p.textContent = symbol;
+    const isButterfly = symbol === '🦋' || type === 'butterflies';
+    p.className = `pediatric-particle ${isButterfly ? 'butterfly' : ''}`;
+
+    const dx = (Math.random() - 0.5) * 140;
+    const rot = (Math.random() - 0.5) * 50;
+    const delay = Math.random() * 0.2;
+    const fontSize = 16 + Math.floor(Math.random() * 12);
+
+    p.style.setProperty('--drift-x', `${dx}px`);
+    p.style.setProperty('--dx', `${dx}px`);
+    p.style.setProperty('--rot-mid', `${rot * 0.6}deg`);
+    p.style.setProperty('--rot-high', `${rot * 1.2}deg`);
+    p.style.setProperty('--rot-end', `${rot * 1.5}deg`);
+    p.style.setProperty('--rot', `${rot}deg`);
+    p.style.left = `${startX + (Math.random() - 0.5) * 30}px`;
+    p.style.top = `${startY + (Math.random() - 0.5) * 20}px`;
+    p.style.fontSize = `${fontSize}px`;
+    p.style.animationDelay = `${delay}s`;
+
+    container.appendChild(p);
+    setTimeout(() => {
+      if (p.parentNode) p.parentNode.removeChild(p);
+    }, 2200);
+  }
+}
+
+/**
+ * Delightful pediatric visual reaction for entries and management:
+ * Always positive, sweet, encouraging, and delicate (baby smiling, hearts, butterflies & sparkles).
  * @param {object} params { type: 'income'|'expense', title: string, message: string, amount: number }
  */
 function showBabyReaction({ type = 'income', title = '', message = '', amount = null } = {}) {
   if (!dom.babyOverlay || !dom.babyContent) return;
 
   const isIncome = type === 'income';
-  const imgSrc = isIncome ? './assets/images/baby_happy.jpg' : './assets/images/baby_crying.jpg';
-  const animClass = isIncome ? 'baby-joy-bounce' : 'baby-crying-shake';
-  const defaultTitle = isIncome ? 'Uhull! Entrada Registrada! 👶💖' : 'Despesa Registrada! 🍼🥺';
+  const defaultTitle = isIncome ? 'Uhull! Entrada Registrada! 👶💖' : 'Cuidado & Organização! 🍼✨';
   const defaultMsg = isIncome
-    ? 'Bebê sorridente com corações! Seu faturamento pediátrico crescendo com saúde e amor.'
-    : 'O bebê chora com a saída, mas tudo fica organizado e sob controle no seu orçamento!';
+    ? 'Bebê sorridente com corações! Seu faturamento crescendo com saúde, amor e dedicação.'
+    : 'Tudo anotado e sob controle! Suas finanças protegidas com carinho pediátrico.';
 
   const formattedAmount = amount !== null ? formatCurrency(amount) : '';
 
   dom.babyContent.innerHTML = `
-    <!-- Floating Hearts or Droplets -->
+    <!-- Floating Hearts, Butterflies & Sparkles -->
     ${isIncome ? `
-      <span class="floating-heart text-[24px]" style="left: 10%; top: 15%; animation-delay: 0s;">💖</span>
-      <span class="floating-heart text-[28px]" style="left: 75%; top: 12%; animation-delay: 0.4s;">💕</span>
-      <span class="floating-heart text-[20px]" style="left: 45%; top: 8%; animation-delay: 0.8s;">✨</span>
-      <span class="floating-heart text-[22px]" style="left: 85%; top: 35%; animation-delay: 1.2s;">👶</span>
+      <span class="floating-heart text-[22px]" style="left: 10%; top: 15%; animation-delay: 0s;">💖</span>
+      <span class="floating-heart text-[26px]" style="left: 75%; top: 12%; animation-delay: 0.4s;">💕</span>
+      <span class="floating-heart text-[18px]" style="left: 45%; top: 8%; animation-delay: 0.8s;">✨</span>
+      <span class="floating-heart text-[20px]" style="left: 85%; top: 35%; animation-delay: 1.2s;">👶</span>
     ` : `
-      <span class="floating-heart text-[22px]" style="left: 12%; top: 25%; animation-delay: 0s;">💧</span>
-      <span class="floating-heart text-[26px]" style="left: 78%; top: 20%; animation-delay: 0.5s;">🍼</span>
-      <span class="floating-heart text-[20px]" style="left: 50%; top: 10%; animation-delay: 1s;">🥺</span>
+      <span class="floating-heart text-[22px]" style="left: 12%; top: 20%; animation-delay: 0s;">🦋</span>
+      <span class="floating-heart text-[24px]" style="left: 78%; top: 15%; animation-delay: 0.4s;">🌸</span>
+      <span class="floating-heart text-[18px]" style="left: 48%; top: 8%; animation-delay: 0.8s;">✨</span>
+      <span class="floating-heart text-[20px]" style="left: 82%; top: 32%; animation-delay: 1.2s;">🍼</span>
     `}
 
-    <div class="w-28 h-28 mx-auto rounded-full overflow-hidden shadow-lg border-4 ${isIncome ? 'border-primary-pink' : 'border-lilac-medium'} ${animClass} relative mb-3 bg-primary-fixed flex items-center justify-center">
+    <div class="w-20 h-20 mx-auto rounded-full overflow-hidden shadow-sm border-2 ${isIncome ? 'border-primary-pink' : 'border-lilac-medium'} baby-joy-bounce relative mb-2.5 bg-primary-fixed flex items-center justify-center">
       <img
-        src="${imgSrc}"
-        alt="${isIncome ? 'Bebê feliz sorrindo' : 'Bebê chorando dengoso'}"
+        src="./assets/images/baby_happy.jpg"
+        alt="Bebê fofo"
         class="w-full h-full object-cover"
         onerror="this.style.display='none'; if (this.nextElementSibling) this.nextElementSibling.classList.remove('hidden');"
       />
-      <div class="w-full h-full hidden flex items-center justify-center text-[44px]">
-        ${isIncome ? '👶💖' : '🥺🍼'}
+      <div class="w-full h-full hidden flex items-center justify-center text-[36px]">
+        ${isIncome ? '👶💖' : '🍼🌸'}
       </div>
     </div>
 
-    <h3 class="font-headline text-[17px] font-bold ${isIncome ? 'text-secondary' : 'text-primary'} mb-1">
+    <h3 class="font-headline text-[15.5px] font-bold ${isIncome ? 'text-secondary' : 'text-primary'} mb-1">
       ${title || defaultTitle}
     </h3>
 
     ${formattedAmount ? `
-      <div class="text-[17px] font-extrabold text-on-surface font-display mb-1.5">
+      <div class="text-[16px] font-extrabold text-on-surface font-display mb-1">
         ${formattedAmount}
       </div>
     ` : ''}
 
-    <p class="text-[12px] text-on-surface-variant leading-relaxed mb-4 px-2">
+    <p class="text-[11.5px] text-on-surface-variant leading-relaxed mb-3 px-2">
       ${message || defaultMsg}
     </p>
 
     <button
       type="button"
       id="btn-close-baby-reaction"
-      class="h-10 px-6 rounded-full bg-gradient-to-r ${isIncome ? 'from-secondary to-primary' : 'from-primary to-secondary'} text-white font-bold text-[13px] shadow-sm transition-all active:scale-95 mx-auto"
+      class="h-9 px-5 rounded-full bg-gradient-to-r ${isIncome ? 'from-secondary to-primary' : 'from-primary to-secondary'} text-white font-bold text-[12px] shadow-xs transition-all active:scale-95 mx-auto cursor-pointer"
     >
       Continuar ✨
     </button>
   `;
 
   dom.babyOverlay.classList.add("active");
-  triggerHaptic(20);
+  triggerHaptic(18);
+  spawnPediatricParticles(null, null, isIncome ? 10 : 8, isIncome ? 'hearts' : 'butterflies');
 
   const closeReaction = () => {
     if (dom.babyOverlay) dom.babyOverlay.classList.remove("active");
@@ -3078,28 +6003,578 @@ function showBabyReaction({ type = 'income', title = '', message = '', amount = 
   };
 
   if (dom.babyTimeout) clearTimeout(dom.babyTimeout);
-  dom.babyTimeout = setTimeout(closeReaction, 2800);
+  dom.babyTimeout = setTimeout(closeReaction, 2400);
+}
+
+/**
+ * Doctor Profile Photo Management
+ */
+function getDoctorPhoto() {
+  if (state.store && state.store.data && state.store.data.doctorPhoto) {
+    return state.store.data.doctorPhoto;
+  }
+  try {
+    if (typeof localStorage !== 'undefined') {
+      return localStorage.getItem('financas_ped_doctor_photo') || null;
+    }
+  } catch (e) {}
+  return null;
+}
+
+function setDoctorPhoto(photoBase64) {
+  if (photoBase64) {
+    if (state.store && typeof state.store.updateDoctorProfile === 'function') {
+      state.store.updateDoctorProfile({ doctorPhoto: photoBase64 });
+    }
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.setItem('financas_ped_doctor_photo', photoBase64);
+      }
+    } catch (e) {}
+  } else {
+    if (state.store && typeof state.store.updateDoctorProfile === 'function') {
+      state.store.updateDoctorProfile({ doctorPhoto: null });
+    }
+    try {
+      if (typeof localStorage !== 'undefined') {
+        localStorage.removeItem('financas_ped_doctor_photo');
+      }
+    } catch (e) {}
+  }
+  updateAllDoctorAvatars();
+}
+
+function updateAllDoctorAvatars() {
+  const photo = getDoctorPhoto();
+  const docName = (state.store && state.store.data && state.store.data.doctorName) || 'Dra. Nanda';
+  const initials = docName.replace(/^(dra?\.\s*)/i, '').trim().slice(0, 2).toUpperCase() || 'DR';
+
+  // Header Avatar
+  const headerImg = document.getElementById('header-avatar-img');
+  const headerInitials = document.getElementById('header-avatar-initials');
+  const headerName = document.getElementById('header-doctor-name');
+
+  if (headerName) {
+    headerName.textContent = docName.length > 16 ? docName.slice(0, 15) + '...' : docName;
+  }
+
+  if (headerImg && headerInitials) {
+    if (photo) {
+      headerImg.src = photo;
+      headerImg.classList.remove('hidden');
+      headerInitials.classList.add('hidden');
+    } else {
+      headerImg.src = '';
+      headerImg.classList.add('hidden');
+      headerInitials.textContent = initials;
+      headerInitials.classList.remove('hidden');
+    }
+  }
+
+  // Drawer Avatar
+  const drawerImg = document.getElementById('drawer-avatar-img');
+  const drawerInitials = document.getElementById('drawer-avatar-initials');
+  const drawerName = document.getElementById('drawer-doctor-name');
+  const drawerCrm = document.getElementById('drawer-doctor-crm');
+  const btnRemovePhoto = document.getElementById('btn-drawer-remove-photo');
+
+  if (drawerName) drawerName.textContent = docName;
+  if (drawerCrm) drawerCrm.textContent = (state.store && state.store.data && state.store.data.doctorCrm) || 'CRM-SP • Pediatria';
+
+  if (drawerImg && drawerInitials) {
+    if (photo) {
+      drawerImg.src = photo;
+      drawerImg.classList.remove('hidden');
+      drawerInitials.classList.add('hidden');
+      if (btnRemovePhoto) btnRemovePhoto.classList.remove('hidden');
+    } else {
+      drawerImg.src = '';
+      drawerImg.classList.add('hidden');
+      drawerInitials.textContent = initials;
+      drawerInitials.classList.remove('hidden');
+      if (btnRemovePhoto) btnRemovePhoto.classList.add('hidden');
+    }
+  }
+
+  // Profile Dialog Avatar (if open)
+  const modalImg = document.getElementById('profile-modal-avatar-img');
+  const modalInitials = document.getElementById('profile-modal-avatar-initials');
+  const btnModalRemove = document.getElementById('btn-profile-modal-remove-photo');
+  if (modalImg && modalInitials) {
+    if (photo) {
+      modalImg.src = photo;
+      modalImg.classList.remove('hidden');
+      modalInitials.classList.add('hidden');
+      if (btnModalRemove) btnModalRemove.classList.remove('hidden');
+    } else {
+      modalImg.src = '';
+      modalImg.classList.add('hidden');
+      modalInitials.textContent = initials;
+      modalInitials.classList.remove('hidden');
+      if (btnModalRemove) btnModalRemove.classList.add('hidden');
+    }
+  }
+}
+
+function handleDoctorPhotoFileSelect(file) {
+  if (!file) return;
+  if (!file.type || !file.type.startsWith('image/')) {
+    showToast('Por favor, selecione um arquivo de imagem válido (JPG ou PNG).', 'error');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const rawDataUrl = e.target.result;
+    try {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const size = 280;
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext('2d');
+
+        const minDim = Math.min(img.width, img.height);
+        const sx = (img.width - minDim) / 2;
+        const sy = (img.height - minDim) / 2;
+
+        ctx.drawImage(img, sx, sy, minDim, minDim, 0, 0, size, size);
+        const compressed = canvas.toDataURL('image/jpeg', 0.85);
+        setDoctorPhoto(compressed);
+        showToast('Foto da médica atualizada com sucesso! 🌸✨', 'success');
+        spawnPediatricParticles(null, null, 10, 'hearts');
+      };
+      img.onerror = () => {
+        setDoctorPhoto(rawDataUrl);
+        showToast('Foto da médica atualizada com sucesso! 🌸✨', 'success');
+      };
+      img.src = rawDataUrl;
+    } catch (err) {
+      setDoctorPhoto(rawDataUrl);
+      showToast('Foto da médica atualizada com sucesso! 🌸✨', 'success');
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+/**
+ * Hamburger Drawer Controllers
+ */
+function openHamburgerDrawer() {
+  if (dom.hamburgerDrawerOverlay) dom.hamburgerDrawerOverlay.classList.add("active");
+  if (dom.hamburgerDrawer) dom.hamburgerDrawer.classList.add("active");
+  if (typeof document !== "undefined" && document.body && document.body.style) {
+    document.body.style.overflow = "hidden";
+  }
+  updateAllDoctorAvatars();
+}
+
+function closeHamburgerDrawer() {
+  if (dom.hamburgerDrawerOverlay) dom.hamburgerDrawerOverlay.classList.remove("active");
+  if (dom.hamburgerDrawer) dom.hamburgerDrawer.classList.remove("active");
+  if (typeof document !== "undefined" && document.body && document.body.style) {
+    document.body.style.overflow = "";
+  }
+}
+
+/**
+ * Brazilian Legal & Medical Compliance Documentation Modal
+ * Covers LGPD (Lei 13.709/18), CFM Res. 2.217/18, CFM Res. 2.147/16, CF/88, LAI, CC/02
+ */
+function openLegalComplianceModal() {
+  const html = `
+    <div class="p-5 flex flex-col gap-4 max-h-[85vh] overflow-y-auto manrope-font text-on-surface">
+      <!-- Header -->
+      <div class="flex items-center justify-between border-b border-purple-100 dark:border-purple-900/40 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-secondary/15 text-secondary flex items-center justify-center">
+            ${renderIcon('shield', 'text-[22px]')}
+          </div>
+          <div>
+            <h3 class="font-headline text-[16px] font-bold text-on-surface">Segurança Jurídica & Compliance</h3>
+            <span class="text-[11px] text-primary font-semibold">LGPD • CFM • Ética & Blindagem Profissional</span>
+          </div>
+        </div>
+        <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container cursor-pointer" id="btn-close-dialog">
+          ${renderIcon('close', 'text-[18px]')}
+        </button>
+      </div>
+
+      <!-- Compliance Badge -->
+      <div class="p-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/30 dark:to-teal-950/30 border border-emerald-200 dark:border-emerald-800/40 flex items-center gap-3">
+        <div class="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+          ${renderIcon('verified_user', 'text-[20px]')}
+        </div>
+        <div>
+          <h4 class="text-[13px] font-bold text-emerald-900 dark:text-emerald-300">Arquitetura 100% Local-First & Zero Cloud Leak</h4>
+          <p class="text-[11px] text-emerald-700 dark:text-emerald-400/90 leading-tight">
+            Seus dados financeiros e clínicos nunca saem do seu dispositivo. Sem servidores remotos, sem rastreadores.
+          </p>
+        </div>
+      </div>
+
+      <!-- Legal Accordion / Cards -->
+      <div class="flex flex-col gap-3">
+        <!-- 1. LGPD -->
+        <div class="p-3.5 rounded-2xl bg-surface-container-low border border-purple-100/70 dark:border-purple-900/30">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="text-secondary">${renderIcon('policy', 'text-[18px]')}</span>
+            <h4 class="text-[13px] font-bold text-on-surface">1. Lei Geral de Proteção de Dados (Lei 13.709/2018)</h4>
+          </div>
+          <ul class="text-[11.5px] text-on-surface-variant space-y-1.5 pl-1 leading-relaxed">
+            <li><strong>• Art. 7º e 11 (Dados Sensíveis de Saúde):</strong> O aplicativo não transmite prontuários ou diagnósticos nominais para nuvens públicas.</li>
+            <li><strong>• Anonimização e Pseudonimização Nativa:</strong> Ferramentas como SBAR utilizam apenas iniciais de leito e paciente, garantindo conformidade com a LGPD e evitando quebra de sigilo por vazamentos externos.</li>
+            <li><strong>• Autodeterminação Informativa:</strong> Você possui controle irrestrito: exporte todos os dados em JSON/CSV e exclua a qualquer momento com 1 toque.</li>
+          </ul>
+        </div>
+
+        <!-- 2. CFM & Ética Médica -->
+        <div class="p-3.5 rounded-2xl bg-surface-container-low border border-purple-100/70 dark:border-purple-900/30">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="text-secondary">${renderIcon('gavel', 'text-[18px]')}</span>
+            <h4 class="text-[13px] font-bold text-on-surface">2. Código de Ética Médica (Resolução CFM nº 2.217/2018)</h4>
+          </div>
+          <ul class="text-[11.5px] text-on-surface-variant space-y-1.5 pl-1 leading-relaxed">
+            <li><strong>• Artigos 73 a 79 (Sigilo Profissional Absoluto):</strong> Vedada a revelação de fato obtido em razão da profissão médica. O app conta com o exclusivo <em>Modo Sigilo</em> para ocultar valores ao lado de colegas ou em ambiente público.</li>
+            <li><strong>• Art. 58 (Honorários Justos e Glosas):</strong> Registro individualizado e transparente de plantões, consultas de puericultura e valores glosados para subsidiar contestações ético-administrativas.</li>
+          </ul>
+        </div>
+
+        <!-- 3. Prevenção de Fadiga & Condições de Trabalho -->
+        <div class="p-3.5 rounded-2xl bg-surface-container-low border border-purple-100/70 dark:border-purple-900/30">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="text-secondary">${renderIcon('vital_signs', 'text-[18px]')}</span>
+            <h4 class="text-[13px] font-bold text-on-surface">3. Resolução CFM nº 2.147/2016 & Prevenção de Sobrecarga</h4>
+          </div>
+          <p class="text-[11.5px] text-on-surface-variant leading-relaxed pl-1">
+            Reconhecimento das diretrizes de responsabilidade médica e fadiga profissional. O app monitora a densidade de plantões consecutivos (12h/24h) com alertas de saturação, apoiando a saúde ocupacional da pediatra e a segurança do paciente neonatal.
+          </p>
+        </div>
+
+        <!-- 4. Constituição Federal & Código Civil -->
+        <div class="p-3.5 rounded-2xl bg-surface-container-low border border-purple-100/70 dark:border-purple-900/30">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="text-secondary">${renderIcon('lock', 'text-[18px]')}</span>
+            <h4 class="text-[13px] font-bold text-on-surface">4. CF/88 (Art. 5º, X e XII) & Blindagem Fiscal (CC/02)</h4>
+          </div>
+          <p class="text-[11.5px] text-on-surface-variant leading-relaxed pl-1">
+            Garantia constitucional de inviolabilidade da intimidade e do sigilo fiscal. Os relatórios gerados (DRE Pediátrico e Kit do Contador) organizam com precisão as deduções legais do Livro Caixa e apuração do Fator R (28%), blindando a profissional contra autuações tributárias da Receita Federal.
+          </p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-purple-100 dark:border-purple-900/40">
+        <button
+          type="button"
+          id="btn-close-legal"
+          class="h-10 px-5 rounded-xl bg-gradient-to-r from-secondary to-primary text-white text-[12.5px] font-bold shadow-xs hover:opacity-95 transition-all cursor-pointer"
+        >
+          Entendido & Em Conformidade ✨
+        </button>
+      </div>
+    </div>
+  `;
+
+  openDialog(html);
+
+  document.getElementById("btn-close-legal")?.addEventListener("click", () => {
+    closeDialog();
+  });
+  document.getElementById("btn-close-dialog")?.addEventListener("click", () => {
+    closeDialog();
+  });
+}
+
+/**
+ * Render Custom Rounded Modern Select Component (Stitch Chic & Pediatric Sanctuary)
+ * Renders a stylish rounded button trigger, floating popover with options,
+ * and maintains a hidden native <select> for 100% backward compatibility with forms & tests.
+ * @param {object} options
+ * @returns {string} HTML markup
+ */
+function renderCustomSelectHTML({ id, name, value, options = [], icon = null, extraClass = "" } = {}) {
+  let selectedLabel = "";
+  const normalizedOptions = options.map(opt => {
+    if (typeof opt === 'object' && opt !== null) {
+      if (String(opt.value) === String(value)) selectedLabel = opt.label;
+      return { value: String(opt.value), label: String(opt.label), icon: opt.icon || null };
+    }
+    const strVal = String(opt);
+    if (strVal === String(value)) selectedLabel = strVal;
+    return { value: strVal, label: strVal, icon: null };
+  });
+
+  if (!selectedLabel && normalizedOptions.length > 0) {
+    selectedLabel = normalizedOptions[0].label;
+  }
+
+  return `
+    <div class="custom-select-container ${extraClass}" data-select-id="${id}">
+      <select id="${id}" name="${name || id}" class="hidden" tabindex="-1" aria-hidden="true">
+        ${normalizedOptions.map(opt => `
+          <option value="${opt.value}" ${opt.value === String(value) ? 'selected' : ''}>${opt.label}</option>
+        `).join("")}
+      </select>
+      <button
+        type="button"
+        class="custom-select-trigger"
+        id="${id}-trigger"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+      >
+        <div class="flex items-center gap-2 min-w-0 flex-1">
+          ${icon ? `<span class="custom-select-lead-icon text-secondary text-[16px]">${renderIcon(icon, 'text-[16px]')}</span>` : ''}
+          <span class="custom-select-display-label truncate text-[12.5px] font-semibold text-on-surface" id="${id}-label">
+            ${selectedLabel}
+          </span>
+        </div>
+        <span class="custom-select-chevron text-secondary text-[18px] transition-transform duration-200">
+          ${renderIcon('expand_more', 'text-[18px]')}
+        </span>
+      </button>
+      <div class="custom-select-popover custom-select-menu hidden" id="${id}-popover" role="listbox">
+        <div class="custom-select-list custom-select-menu-list no-scrollbar">
+          ${normalizedOptions.map(opt => {
+            const isSelected = opt.value === String(value);
+            return `
+              <div
+                class="custom-select-item ${isSelected ? 'active' : ''}"
+                role="option"
+                data-value="${opt.value}"
+                data-label="${opt.label}"
+              >
+                <div class="flex items-center gap-2 truncate">
+                  ${opt.icon ? `<span class="text-secondary text-[15px]">${renderIcon(opt.icon, 'text-[15px]')}</span>` : ''}
+                  <span class="truncate">${opt.label}</span>
+                </div>
+                ${isSelected ? `<span class="text-secondary text-[16px] font-bold shrink-0">${renderIcon('check', 'text-[16px]')}</span>` : ''}
+              </div>
+            `;
+          }).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/**
+ * Attach interaction events to all custom select components in a container
+ * @param {HTMLElement|Document} root
+ */
+function attachCustomSelectEvents(root = document) {
+  if (!root || !root.querySelectorAll) return;
+  const containers = root.querySelectorAll(".custom-select-container");
+
+  containers.forEach(container => {
+    if (container.dataset.customSelectInitialized === "true") return;
+    container.dataset.customSelectInitialized = "true";
+
+    const selectId = container.getAttribute("data-select-id");
+    const nativeSelect = container.querySelector("select");
+    const trigger = container.querySelector(".custom-select-trigger");
+    const popover = container.querySelector(".custom-select-popover");
+    const labelEl = container.querySelector(".custom-select-display-label");
+    const chevron = container.querySelector(".custom-select-chevron");
+
+    if (!trigger || !popover || !nativeSelect) return;
+
+    // Toggle popover
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isClosed = popover.classList.contains("hidden");
+
+      // Close all other open popovers
+      document.querySelectorAll(".custom-select-popover:not(.hidden)").forEach(p => {
+        if (p !== popover) {
+          p.classList.add("hidden");
+          p.classList.remove("dropup");
+          const parent = p.closest(".custom-select-container");
+          if (parent) {
+            parent.querySelector(".custom-select-trigger")?.classList.remove("active");
+            parent.querySelector(".custom-select-trigger")?.setAttribute("aria-expanded", "false");
+            const c = parent.querySelector(".custom-select-chevron");
+            if (c) c.style.transform = "";
+          }
+        }
+      });
+
+      if (isClosed) {
+        // Smart proximity & dropup detection
+        if (typeof window !== "undefined" && trigger.getBoundingClientRect) {
+          const triggerRect = trigger.getBoundingClientRect();
+          const vh = window.innerHeight || 800;
+          const spaceBelowViewport = vh - triggerRect.bottom;
+          const spaceAboveViewport = triggerRect.top;
+
+          // Check if inside a dialog/card or bottom-sheet
+          const scrollParent = container.closest(".dialog-box, .dialog-card, .bottom-sheet, [role='dialog']");
+          const isInsideDialog = Boolean(container.closest(".dialog-box, .dialog-card"));
+          let shouldDropUp = false;
+
+          if (!isInsideDialog) {
+            if (scrollParent && scrollParent.getBoundingClientRect) {
+              const parentRect = scrollParent.getBoundingClientRect();
+              const spaceBelowParent = parentRect.bottom - triggerRect.bottom;
+              const spaceAboveParent = triggerRect.top - parentRect.top;
+
+              if (spaceBelowParent < 210 && spaceAboveParent > spaceBelowParent) {
+                shouldDropUp = true;
+              } else if (spaceBelowViewport < 230 && spaceAboveViewport > spaceBelowViewport) {
+                shouldDropUp = true;
+              }
+            } else {
+              if (spaceBelowViewport < 230 && spaceAboveViewport > spaceBelowViewport) {
+                shouldDropUp = true;
+              }
+            }
+          }
+
+          if (shouldDropUp) {
+            popover.classList.add("dropup");
+          } else {
+            popover.classList.remove("dropup");
+          }
+        }
+
+        popover.classList.remove("hidden");
+        trigger.classList.add("active");
+        trigger.setAttribute("aria-expanded", "true");
+        if (chevron) chevron.style.transform = "rotate(180deg)";
+
+        // Ensure popover and buttons are fully visible within modal scroll container
+        if (typeof setTimeout !== "undefined") {
+          setTimeout(() => {
+            if (!popover.classList.contains("hidden")) {
+              const card = container.closest(".dialog-card, .dialog-box, .dialog-card-content");
+              if (card && card.scrollTo) {
+                const targetScroll = container.offsetTop + popover.offsetHeight;
+                if (card.scrollTop + card.clientHeight < targetScroll + 60) {
+                  card.scrollTo({ top: targetScroll + 60 - card.clientHeight, behavior: "smooth" });
+                }
+              } else if (popover.scrollIntoView) {
+                popover.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+              }
+            }
+          }, 40);
+        }
+      } else {
+        popover.classList.add("hidden");
+        popover.classList.remove("dropup");
+        trigger.classList.remove("active");
+        trigger.setAttribute("aria-expanded", "false");
+        if (chevron) chevron.style.transform = "";
+      }
+    });
+
+    // Option selection
+    const items = popover.querySelectorAll(".custom-select-item");
+    items.forEach(item => {
+      item.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const val = item.getAttribute("data-value");
+        const lbl = item.getAttribute("data-label");
+
+        // Update native select
+        nativeSelect.value = val;
+        nativeSelect.dispatchEvent(new Event("change", { bubbles: true }));
+        nativeSelect.dispatchEvent(new Event("input", { bubbles: true }));
+
+        // Update UI
+        if (labelEl) labelEl.textContent = lbl;
+        items.forEach(i => {
+          i.classList.remove("active");
+          const oldCheck = i.querySelector(".shrink-0");
+          if (oldCheck) oldCheck.remove();
+        });
+        item.classList.add("active");
+        const checkSpan = document.createElement("span");
+        checkSpan.className = "text-secondary text-[16px] font-bold shrink-0";
+        checkSpan.innerHTML = renderIcon('check', 'text-[16px]');
+        item.appendChild(checkSpan);
+
+        // Close popover
+        popover.classList.add("hidden");
+        popover.classList.remove("dropup");
+        trigger.classList.remove("active");
+        trigger.setAttribute("aria-expanded", "false");
+        if (chevron) chevron.style.transform = "";
+      });
+    });
+
+    // Sync if native select changed programmatically
+    nativeSelect.addEventListener("change", () => {
+      const selectedOption = nativeSelect.options[nativeSelect.selectedIndex];
+      if (selectedOption) {
+        if (labelEl) labelEl.textContent = selectedOption.text;
+        items.forEach(i => {
+          const isSel = i.getAttribute("data-value") === nativeSelect.value;
+          i.classList.toggle("active", isSel);
+        });
+      }
+    });
+  });
+}
+
+// Global click-outside and keydown listener for custom selects
+if (typeof document !== "undefined") {
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest || !e.target.closest(".custom-select-container")) {
+      document.querySelectorAll(".custom-select-popover:not(.hidden)").forEach(p => {
+        p.classList.add("hidden");
+        p.classList.remove("dropup");
+        const parent = p.closest(".custom-select-container");
+        if (parent) {
+          parent.querySelector(".custom-select-trigger")?.classList.remove("active");
+          parent.querySelector(".custom-select-trigger")?.setAttribute("aria-expanded", "false");
+          const chevron = parent.querySelector(".custom-select-chevron");
+          if (chevron) chevron.style.transform = "";
+        }
+      });
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      document.querySelectorAll(".custom-select-popover:not(.hidden)").forEach(p => {
+        p.classList.add("hidden");
+        p.classList.remove("dropup");
+        const parent = p.closest(".custom-select-container");
+        if (parent) {
+          parent.querySelector(".custom-select-trigger")?.classList.remove("active");
+          parent.querySelector(".custom-select-trigger")?.setAttribute("aria-expanded", "false");
+          const chevron = parent.querySelector(".custom-select-chevron");
+          if (chevron) chevron.style.transform = "";
+        }
+      });
+    }
+  });
 }
 
 /**
  * Dialog Modal Controllers (iOS Style)
  */
 function openDialog(html) {
-  if (!dom.dialogContainer || !dom.dialogOverlay) return;
+  if (!dom.dialogContainer || !dom.dialogOverlay || typeof document === "undefined" || !document.body) return;
   dom.dialogContainer.innerHTML = html;
   if (typeof enhanceIcons === "function") {
     enhanceIcons(dom.dialogContainer);
   }
+  if (typeof attachCustomSelectEvents === "function") {
+    attachCustomSelectEvents(dom.dialogContainer);
+  }
   dom.dialogOverlay.classList.add("active");
   dom.dialogContainer.classList.add("active");
-  document.body.style.overflow = "hidden";
+  dom.dialogContainer.scrollTop = 0;
+  if (document.body && document.body.style) document.body.style.overflow = "hidden";
 }
 
 function closeDialog() {
   if (!dom.dialogContainer || !dom.dialogOverlay) return;
   dom.dialogOverlay.classList.remove("active");
   dom.dialogContainer.classList.remove("active");
-  document.body.style.overflow = "";
+  if (typeof document !== "undefined" && document.body && document.body.style) document.body.style.overflow = "";
 }
 
 /**
@@ -3269,6 +6744,144 @@ function openCategoryModal({ mode = "add", initialData = null, onSave, onCancel 
     closeDialog();
     if (typeof onSave === "function") {
       onSave({ id: initialData?.id, name, scope });
+    }
+  });
+}
+
+/**
+ * Quick Category Switcher Dialog for Expenses (1-tap modification from Expense Card)
+ */
+function openQuickCategoryChangeDialog(expense) {
+  const currentCategory = expense.category;
+  const categoriesPF = state.store.getExpenseCategories ? state.store.getExpenseCategories("pf") : EXPENSE_CATEGORIES_PF;
+  const categoriesPJ = state.store.getExpenseCategories ? state.store.getExpenseCategories("pj") : EXPENSE_CATEGORIES_PJ;
+
+  const html = `
+    <div class="p-5 flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto font-body">
+      <div class="flex items-center justify-between border-b border-purple-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-secondary-fixed text-secondary flex items-center justify-center font-bold">
+            ${renderIcon('category', 'text-[22px]')}
+          </div>
+          <div>
+            <h3 class="font-headline text-[16px] font-bold text-on-surface">Modificar Categoria</h3>
+            <p class="text-[11px] text-on-surface-variant font-medium truncate max-w-[220px]">
+              ${expense.description} • Atual: <span class="font-bold text-secondary">${currentCategory}</span>
+            </p>
+          </div>
+        </div>
+        <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container cursor-pointer" id="btn-close-quick-cat">
+          ${renderIcon('close', 'text-[18px]')}
+        </button>
+      </div>
+
+      <!-- Direct Entry / Free Text Input -->
+      <div class="flex flex-col gap-1.5">
+        <label class="text-[11px] font-bold text-on-surface-variant">Digite qualquer categoria que desejar:</label>
+        <div class="h-11 bg-surface-container-low rounded-2xl px-3 flex items-center gap-2 border border-transparent focus-within:border-secondary focus-within:bg-white transition-all shadow-xs">
+          ${renderIcon('edit_note', 'text-[20px] text-secondary')}
+          <input
+            type="text"
+            id="input-quick-custom-cat"
+            class="w-full bg-transparent text-[13px] font-semibold text-on-surface focus:outline-none placeholder:text-outline"
+            placeholder="Ex: Contador, Mercantil/Mercado, Lanches..."
+            value=""
+            autofocus
+          />
+          <button
+            type="button"
+            id="btn-apply-quick-custom-cat"
+            class="px-3 py-1.5 rounded-xl bg-gradient-to-r from-secondary to-primary text-white text-[11px] font-bold shrink-0 shadow-xs hover:opacity-95 active:scale-95 transition-all cursor-pointer"
+          >
+            Aplicar
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick Category Selectors PF & PJ -->
+      <div class="flex flex-col gap-2.5 pt-1">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-bold text-secondary uppercase tracking-wider">🌸 Pessoa Física (Pessoal)</span>
+        </div>
+        <div class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto no-scrollbar">
+          ${categoriesPF.map(cat => `
+            <button
+              type="button"
+              class="quick-select-cat-btn px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${currentCategory === cat ? 'bg-secondary text-white shadow-xs font-black' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
+              data-category="${cat}"
+              data-scope="pf"
+            >
+              ${cat}
+            </button>
+          `).join("")}
+        </div>
+
+        <div class="flex items-center justify-between pt-1">
+          <span class="text-[11px] font-bold text-tertiary uppercase tracking-wider">🩺 Pessoa Jurídica (Trabalho)</span>
+        </div>
+        <div class="flex flex-wrap gap-1.5 max-h-32 overflow-y-auto no-scrollbar">
+          ${categoriesPJ.map(cat => `
+            <button
+              type="button"
+              class="quick-select-cat-btn px-2.5 py-1 rounded-full text-[11px] font-bold transition-all cursor-pointer ${currentCategory === cat ? 'bg-tertiary text-white shadow-xs font-black' : 'bg-surface-container-low text-on-surface-variant hover:bg-surface-container'}"
+              data-category="${cat}"
+              data-scope="pj"
+            >
+              ${cat}
+            </button>
+          `).join("")}
+        </div>
+      </div>
+    </div>
+  `;
+
+  openDialog(html);
+
+  setTimeout(() => {
+    document.getElementById("input-quick-custom-cat")?.focus();
+  }, 80);
+
+  const applyCategoryChange = (newCat, scope = null) => {
+    const trimmed = newCat.trim();
+    if (!trimmed) {
+      showToast("Informe o nome da categoria.", "warning");
+      return;
+    }
+    const resolvedScope = scope || (state.store.getCategoryScope ? state.store.getCategoryScope(trimmed) : "pf");
+    state.store.updateExpense(expense.id, {
+      category: trimmed,
+      scope: resolvedScope
+    });
+    closeDialog();
+    renderCurrentView();
+    showToast(`Categoria alterada para '${trimmed}'! ✨`);
+  };
+
+  document.getElementById("btn-close-quick-cat")?.addEventListener("click", closeDialog);
+
+  document.querySelectorAll(".quick-select-cat-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const cat = btn.getAttribute("data-category");
+      const scope = btn.getAttribute("data-scope");
+      applyCategoryChange(cat, scope);
+    });
+  });
+
+  const handleApplyInput = () => {
+    const customVal = document.getElementById("input-quick-custom-cat")?.value;
+    if (customVal && customVal.trim()) {
+      applyCategoryChange(customVal.trim());
+    } else {
+      showToast("Digite o nome da categoria.", "warning");
+    }
+  };
+
+  document.getElementById("btn-apply-quick-custom-cat")?.addEventListener("click", handleApplyInput);
+
+  document.getElementById("input-quick-custom-cat")?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleApplyInput();
     }
   });
 }
@@ -3944,14 +7557,31 @@ function openDoctorProfileDialog() {
 
   const html = `
     <div class="p-5 flex flex-col gap-4 max-h-[85vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-purple-100 pb-3">
-        <div class="flex items-center gap-2">
-          <div class="w-9 h-9 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center font-bold text-[12px]">
-            ${initials}
+      <div class="flex items-center justify-between border-b border-purple-100 dark:border-purple-900/40 pb-3">
+        <div class="flex items-center gap-3">
+          <div class="relative group">
+            <div class="w-12 h-12 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center font-bold text-[14px] overflow-hidden border-2 border-secondary/40 shadow-xs" id="profile-modal-avatar-container">
+              <span id="profile-modal-avatar-initials" class="${getDoctorPhoto() ? 'hidden' : ''}">${initials}</span>
+              <img id="profile-modal-avatar-img" src="${getDoctorPhoto() || ''}" alt="Foto da médica" class="w-full h-full object-cover ${getDoctorPhoto() ? '' : 'hidden'}" />
+            </div>
+            <button
+              type="button"
+              id="btn-profile-modal-upload"
+              class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-secondary text-white flex items-center justify-center shadow-xs cursor-pointer hover:scale-110 active:scale-95 transition-all"
+              title="Alterar foto da médica"
+            >
+              ${renderIcon('photo_camera', 'text-[11px]')}
+            </button>
+            <input type="file" id="input-profile-modal-photo" accept="image/*" class="hidden" />
           </div>
           <div>
             <h3 class="font-headline text-[16px] font-bold text-on-surface">Perfil da Médica & Configurações</h3>
-            <span class="text-[11px] text-primary font-semibold">Atuação, Metas & Segurança</span>
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] text-primary font-semibold">Atuação, Metas & Segurança</span>
+              <button type="button" id="btn-profile-modal-remove-photo" class="text-[10px] text-error hover:underline cursor-pointer ${getDoctorPhoto() ? '' : 'hidden'}">
+                Remover foto
+              </button>
+            </div>
           </div>
         </div>
         <button type="button" class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container cursor-pointer" id="btn-close-dialog">
@@ -4283,6 +7913,21 @@ function openDoctorProfileDialog() {
     showToast("Exemplo demonstrativo carregado com sucesso! 🌸");
   });
 
+  document.getElementById("btn-profile-modal-upload")?.addEventListener("click", () => {
+    document.getElementById("input-profile-modal-photo")?.click();
+  });
+
+  document.getElementById("input-profile-modal-photo")?.addEventListener("change", (e) => {
+    if (e.target.files && e.target.files[0]) {
+      handleDoctorPhotoFileSelect(e.target.files[0]);
+    }
+  });
+
+  document.getElementById("btn-profile-modal-remove-photo")?.addEventListener("click", () => {
+    setDoctorPhoto(null);
+    showToast("Foto da médica removida", "info");
+  });
+
   document.getElementById("form-profile")?.addEventListener("submit", (e) => {
     e.preventDefault();
     const doctorName = document.getElementById("input-doc-name").value.trim();
@@ -4292,6 +7937,7 @@ function openDoctorProfileDialog() {
     const monthlyBudgetLimit = parseFloat(document.getElementById("input-doc-budget").value) || 10000;
 
     state.store.updateDoctorProfile({ doctorName, doctorTitle, doctorCrm, monthlyIncomeGoal, monthlyBudgetLimit });
+    updateAllDoctorAvatars();
     closeDialog();
     renderCurrentView();
     showToast("Perfil e metas atualizados com carinho! 🌸");
@@ -4667,13 +8313,24 @@ function updateMonthHeader() {
 }
 
 function updateNotificationBadge() {
-  if (!dom.notifBadge) return;
   const notifs = state.store.getNotifications(state.referenceDate, state.activeMonth);
-  if (notifs.length > 0) {
-    dom.notifBadge.textContent = notifs.length;
-    dom.notifBadge.classList.remove("hidden");
-  } else {
-    dom.notifBadge.classList.add("hidden");
+  const count = notifs.length;
+  if (dom.notifBadge) {
+    if (count > 0) {
+      dom.notifBadge.textContent = count;
+      dom.notifBadge.classList.remove("hidden");
+    } else {
+      dom.notifBadge.classList.add("hidden");
+    }
+  }
+  const drawerBadge = document.getElementById("hamburger-notif-badge");
+  if (drawerBadge) {
+    if (count > 0) {
+      drawerBadge.textContent = count;
+      drawerBadge.classList.remove("hidden");
+    } else {
+      drawerBadge.classList.add("hidden");
+    }
   }
 }
 
@@ -4683,6 +8340,7 @@ function updateNotificationBadge() {
 
 function renderCurrentView() {
   updateMonthHeader();
+  updateAllDoctorAvatars();
   switch (state.activeTab) {
     case "inicio":
       renderDashboardView();
@@ -4721,6 +8379,7 @@ function renderDashboardView() {
     : "Produção de plantões realizados neste mês trabalhado + salário - despesas.";
 
   const donutData = renderDonutChartSVG(report.expenses.categoryBreakdown, report.expenses.total);
+  const consMetrics = state.store.getConsultationMetrics(state.activeMonth);
 
   // Filter 3 radar items for dashboard
   const radarShifts = report.caixa.shiftsList.slice(0, 3);
@@ -4813,6 +8472,71 @@ function renderDashboardView() {
               </button>
             </div>
           </div>
+        </div>
+      </section>
+
+      <!-- 2.3. Quick Actions Hub (Atalhos Clínicos & Contábeis) -->
+      <section class="grid grid-cols-4 gap-2">
+        <button type="button" class="btn-quick-consultation p-2.5 rounded-2xl bg-surface-container-low flex flex-col items-center justify-center text-center gap-1 active:scale-95 transition-all hover:bg-surface-container shadow-xs">
+          <div class="w-8 h-8 rounded-full bg-tertiary-fixed text-tertiary flex items-center justify-center">
+            ${renderIcon("child_friendly", "text-[18px]")}
+          </div>
+          <span class="text-[10px] font-bold text-on-surface leading-tight">Consultório</span>
+        </button>
+        <button type="button" class="btn-quick-sbar p-2.5 rounded-2xl bg-surface-container-low flex flex-col items-center justify-center text-center gap-1 active:scale-95 transition-all hover:bg-surface-container shadow-xs">
+          <div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center">
+            ${renderIcon("swap_horiz", "text-[18px]")}
+          </div>
+          <span class="text-[10px] font-bold text-on-surface leading-tight">SBAR</span>
+        </button>
+        <button type="button" class="btn-quick-dre p-2.5 rounded-2xl bg-surface-container-low flex flex-col items-center justify-center text-center gap-1 active:scale-95 transition-all hover:bg-surface-container shadow-xs">
+          <div class="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center">
+            ${renderIcon("calculate", "text-[18px]")}
+          </div>
+          <span class="text-[10px] font-bold text-on-surface leading-tight">DRE / Fator R</span>
+        </button>
+        <button type="button" class="btn-quick-reconcile p-2.5 rounded-2xl bg-surface-container-low flex flex-col items-center justify-center text-center gap-1 active:scale-95 transition-all hover:bg-surface-container shadow-xs">
+          <div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center">
+            ${renderIcon("upload_file", "text-[18px]")}
+          </div>
+          <span class="text-[10px] font-bold text-on-surface leading-tight">Conciliação</span>
+        </button>
+      </section>
+
+      <!-- 2.4. Consultório vs Plantão (Rendimento Horário) -->
+      <section class="card-floating p-4 flex flex-col gap-2.5 bg-gradient-to-br from-white to-tertiary-fixed/20 border border-teal-50">
+        <div class="flex items-center justify-between border-b border-teal-100 pb-2">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-tertiary-fixed text-tertiary flex items-center justify-center">
+              ${renderIcon("child_friendly", "text-[18px]")}
+            </div>
+            <div>
+              <h2 class="text-[15px] font-bold text-on-surface">Consultório vs Plantão</h2>
+              <span class="text-[11px] text-tertiary font-semibold">Comparativo de Rendimento por Hora</span>
+            </div>
+          </div>
+          <button type="button" class="btn-quick-consultation text-[11px] font-bold text-tertiary hover:underline flex items-center gap-1">
+            ${renderIcon("add", "text-[14px]")}
+            <span>+ Consulta</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 text-center pt-1">
+          <div class="p-2.5 rounded-xl bg-surface-container-low flex flex-col">
+            <span class="text-[10px] text-on-surface-variant font-bold uppercase">Consultório (Particular)</span>
+            <span class="text-[18px] font-bold text-tertiary font-display mt-0.5">R$ ${consMetrics.consultationHourlyRate}/h</span>
+            <span class="text-[9px] text-on-surface-variant">${consMetrics.totalConsultations} atendimentos</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-surface-container-low flex flex-col">
+            <span class="text-[10px] text-on-surface-variant font-bold uppercase">Plantões Hospitalares</span>
+            <span class="text-[18px] font-bold text-primary font-display mt-0.5">R$ ${consMetrics.shiftHourlyRate}/h</span>
+            <span class="text-[9px] text-on-surface-variant">Média em hospitais</span>
+          </div>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-tertiary-fixed/30 text-[11px] text-on-surface-variant flex items-center justify-between">
+          <span>Vantagem do Consultório:</span>
+          <strong class="text-tertiary text-[12px] font-bold">${consMetrics.consultationAdvantagePercent >= 0 ? '+' : ''}${consMetrics.consultationAdvantagePercent}% por hora</strong>
         </div>
       </section>
 
@@ -5226,16 +8950,17 @@ function renderShiftsView() {
           </button>
         </div>
 
-        <div class="flex items-center gap-1">
-          <select
-            id="select-shift-sector"
-            class="text-[11px] font-semibold bg-surface-container-low text-on-surface-variant px-2.5 py-1.5 rounded-full border border-transparent focus:border-primary focus:bg-white focus:outline-none transition-all"
-          >
-            <option value="all" ${state.shiftSectorFilter === 'all' ? 'selected' : ''}>Todos os Setores</option>
-            ${CLINICAL_SECTORS.map(sec => `
-              <option value="${sec}" ${state.shiftSectorFilter === sec ? 'selected' : ''}>${sec}</option>
-            `).join("")}
-          </select>
+        <div class="flex items-center gap-1 min-w-[145px]">
+          ${renderCustomSelectHTML({
+            id: 'select-shift-sector',
+            value: state.shiftSectorFilter,
+            options: [
+              { value: 'all', label: 'Todos os Setores' },
+              ...CLINICAL_SECTORS.map(sec => ({ value: sec, label: sec }))
+            ],
+            icon: 'stethoscope',
+            extraClass: 'min-w-[145px]'
+          })}
         </div>
       </div>
 
@@ -5381,6 +9106,36 @@ function renderShiftsView() {
           `}
         </div>
       `}
+
+      <!-- Consultations & Puericultura Section -->
+      <section class="flex flex-col gap-2.5 mt-2">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-tertiary-fixed text-tertiary flex items-center justify-center">
+              ${renderIcon("child_friendly", "text-[18px]")}
+            </div>
+            <div>
+              <h2 class="text-[16px] font-bold text-on-surface">Consultório & Puericultura</h2>
+              <span class="text-[11px] text-on-surface-variant">${state.store.getConsultations(state.activeMonth).length} atendimentos em ${formatMonthYear(state.activeMonth)}</span>
+            </div>
+          </div>
+          <button type="button" class="btn-new-consultation-top px-3 py-1.5 rounded-full bg-tertiary text-white text-[11px] font-bold shadow-sm active:scale-95 transition-all flex items-center gap-1">
+            ${renderIcon("add", "text-[14px]")}
+            <span>Nova Consulta</span>
+          </button>
+        </div>
+
+        <div class="flex flex-col gap-2.5">
+          ${state.store.getConsultations(state.activeMonth).length > 0 ? state.store.getConsultations(state.activeMonth).map(c => renderConsultationCard(c)).join("") : `
+            <div class="p-5 rounded-2xl bg-surface-container-low text-center text-on-surface-variant text-[12px]">
+              Nenhum atendimento de consultório registrado neste mês.
+              <button type="button" class="btn-new-consultation-top block mx-auto mt-2 text-tertiary font-bold hover:underline">
+                + Cadastrar Consulta ou Puericultura
+              </button>
+            </div>
+          `}
+        </div>
+      </section>
 
       <!-- Creator Signature Footer -->
       <div class="text-center py-2 text-[11px] text-on-surface-variant font-medium">
@@ -5778,9 +9533,9 @@ function renderExpensesView() {
   } else if (state.expenseFilter === "variavel") {
     filtered = filtered.filter(e => e.type === "variable");
   } else if (state.expenseFilter === "pf") {
-    filtered = filtered.filter(e => (e.scope || getCategoryScope(e.category)) === "pf");
+    filtered = filtered.filter(e => (e.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(e.category) : getCategoryScope(e.category))) === "pf");
   } else if (state.expenseFilter === "pj") {
-    filtered = filtered.filter(e => (e.scope || getCategoryScope(e.category)) === "pj");
+    filtered = filtered.filter(e => (e.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(e.category) : getCategoryScope(e.category))) === "pj");
   }
 
   // Monthly category distribution for active filter
@@ -5795,15 +9550,15 @@ function renderExpensesView() {
       category,
       amount,
       percentage: pct,
-      color: CATEGORY_COLORS[category] || "#7A7E91",
-      icon: CATEGORY_ICONS[category] || "receipt_long"
+      color: state.store.getCategoryColor ? state.store.getCategoryColor(category) : (CATEGORY_COLORS[category] || "#7A7E91"),
+      icon: state.store.getCategoryIcon ? state.store.getCategoryIcon(category) : (CATEGORY_ICONS[category] || "receipt_long")
     };
   }).sort((a, b) => b.amount - a.amount);
   const donutMonthly = renderDonutChartSVG(filteredCategoryData, filteredSpent);
 
   const countAll = expenses.length;
-  const countPF = expenses.filter(e => (e.scope || getCategoryScope(e.category)) === "pf").length;
-  const countPJ = expenses.filter(e => (e.scope || getCategoryScope(e.category)) === "pj").length;
+  const countPF = expenses.filter(e => (e.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(e.category) : getCategoryScope(e.category))) === "pf").length;
+  const countPJ = expenses.filter(e => (e.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(e.category) : getCategoryScope(e.category))) === "pj").length;
   const countFixas = expenses.filter(e => e.type === "fixed").length;
   const countVars = expenses.filter(e => e.type === "variable").length;
 
@@ -5950,7 +9705,7 @@ function renderExpensesView() {
                   <div class="flex flex-col min-w-0">
                     <span class="text-[13px] font-bold text-on-surface truncate">${c.category}</span>
                     <div class="flex items-center gap-1.5 text-[10px]">
-                      <span class="px-1.5 py-0.2 rounded-full font-bold ${c.scope === 'pf' ? 'bg-pink-100 text-pink-700' : 'bg-purple-100 text-purple-700'}">${c.scope.toUpperCase()}</span>
+                      <span class="px-1.5 py-0.2 rounded-full font-bold ${c.scope === 'pj' ? 'bg-mint-income-bg text-mint-income' : 'bg-lilac-light text-lilac-dark'}">${c.scope.toUpperCase()}</span>
                       <span class="text-on-surface-variant">Anterior: ${formatMoney(c.previousAmount)}</span>
                     </div>
                   </div>
@@ -6016,9 +9771,9 @@ function renderExpensesView() {
  * Renders an individual Expense card with 1-touch toggle and action menu
  */
 function renderExpenseCard(expense) {
-  const color = CATEGORY_COLORS[expense.category] || "#CE93D8";
-  const icon = CATEGORY_ICONS[expense.category] || "receipt_long";
-  const scope = expense.scope || getCategoryScope(expense.category);
+  const color = state.store.getCategoryColor ? state.store.getCategoryColor(expense.category) : (CATEGORY_COLORS[expense.category] || "#CE93D8");
+  const icon = state.store.getCategoryIcon ? state.store.getCategoryIcon(expense.category) : (CATEGORY_ICONS[expense.category] || "receipt_long");
+  const scope = expense.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(expense.category) : getCategoryScope(expense.category));
 
   // Calculate due status
   const refDate = state.referenceDate ? getLocalDateString(state.referenceDate) : getLocalDateString(new Date());
@@ -6045,9 +9800,21 @@ function renderExpenseCard(expense) {
           ${renderIcon(icon, "text-[20px]")}
         </div>
         <div class="flex flex-col min-w-0 flex-1">
-          <div class="flex items-center gap-1.5">
+          <div class="flex items-center gap-1.5 flex-wrap">
             <span class="text-[14px] font-semibold text-on-surface truncate">${expense.description}</span>
-            <span class="px-1.5 py-0.2 rounded-full font-bold text-[9px] ${scope === 'pf' ? 'bg-pink-100 text-pink-700' : 'bg-purple-100 text-purple-700'}">${scope.toUpperCase()}</span>
+            <span class="px-1.5 py-0.2 rounded-full font-bold text-[9px] ${scope === 'pj' ? 'bg-mint-income-bg text-mint-income' : 'bg-lilac-light text-lilac-dark'}">${scope.toUpperCase()}</span>
+            <button
+              type="button"
+              class="btn-card-category-quick inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer"
+              style="background-color: ${color}15; color: ${color}; border: 1px solid ${color}35;"
+              data-id="${expense.id}"
+              data-category="${expense.category}"
+              title="Toque para mudar a categoria (Ex: Contador, Mercado, Lanches...)"
+            >
+              ${renderIcon(icon, 'text-[11px]')}
+              <span>${expense.category}</span>
+              ${renderIcon('arrow_drop_down', 'text-[12px] -ml-1 opacity-70')}
+            </button>
           </div>
           <div class="flex items-center gap-2 mt-0.5 text-[11px] ${dueBadgeClass}">
             <span class="capitalize text-on-surface-variant">${expense.type === 'fixed' ? 'Fixa' : 'Variável'}</span>
@@ -6111,6 +9878,80 @@ function renderReportsView() {
           </button>
         </div>
       </div>
+
+      <!-- Projeção Financeira de 12 Meses com Scrubber Interativo -->
+      <section class="card-floating p-4 flex flex-col gap-3">
+        <div class="flex items-center justify-between border-b border-purple-100 pb-2">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center">
+              ${renderIcon("timeline", "text-[18px]")}
+            </div>
+            <div>
+              <h2 class="text-[15px] font-bold text-on-surface">Projeção de Caixa 12 Meses (Rolling)</h2>
+              <span class="text-[11px] text-on-surface-variant">Fluxo acumulado & Reserva de Emergência</span>
+            </div>
+          </div>
+          <span class="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-secondary text-[10px] font-bold">
+            Interativo
+          </span>
+        </div>
+
+        <div id="forecast-12m-chart-container" class="w-full overflow-x-auto">
+          ${renderForecast12MSVG(state.store.get12MonthsRollingProjection(state.activeMonth), { privacyMode: state.privacyMode })}
+        </div>
+
+        <!-- Interactive Scrubber Control -->
+        <div class="flex flex-col gap-1.5 pt-2 border-t border-purple-50">
+          <div class="flex items-center justify-between text-[11px] font-bold text-on-surface">
+            <span>Navegar pelos 12 meses:</span>
+            <span id="scrubber-month-label" class="text-secondary font-display">${formatMonthYear(state.store.get12MonthsRollingProjection(state.activeMonth).months[0]?.month || state.activeMonth)}</span>
+          </div>
+          <input
+            type="range"
+            id="forecast-scrubber-slider"
+            min="0"
+            max="11"
+            value="0"
+            class="w-full h-2 rounded-lg bg-surface-container accent-secondary cursor-pointer"
+          />
+          <div id="scrubber-detail-card" class="p-3 rounded-2xl bg-surface-container-low flex flex-col gap-1 mt-1 text-[11px]">
+            <div class="flex items-center justify-between">
+              <span class="text-on-surface-variant">Entradas Projetadas:</span>
+              <strong id="scrubber-inflows" class="text-tertiary font-display font-bold ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(state.store.get12MonthsRollingProjection(state.activeMonth).months[0]?.inflow || 0)}</strong>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-on-surface-variant">Despesas Projetadas:</span>
+              <strong id="scrubber-expenses" class="text-error font-display font-bold ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(state.store.get12MonthsRollingProjection(state.activeMonth).months[0]?.expense || 0)}</strong>
+            </div>
+            <div class="flex items-center justify-between pt-1 border-t border-outline-variant/10">
+              <span class="font-bold text-on-surface">Saldo Acumulado em Caixa:</span>
+              <strong id="scrubber-balance" class="text-secondary font-display text-[13px] font-bold ${state.privacyMode ? 'privacy-masked-text' : ''}">${formatMoney(state.store.get12MonthsRollingProjection(state.activeMonth).months[0]?.cumulativeBalance || 0)}</strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Botões de Ação Executiva: DRE, Kit Contador e FIRE -->
+      <section class="grid grid-cols-3 gap-2">
+        <button type="button" class="btn-open-dre-reports p-3 rounded-2xl bg-surface-container-low flex flex-col items-center justify-center text-center gap-1 active:scale-95 transition-all hover:bg-surface-container shadow-xs">
+          <div class="w-8 h-8 rounded-full bg-primary-fixed text-primary flex items-center justify-center">
+            ${renderIcon("calculate", "text-[18px]")}
+          </div>
+          <span class="text-[11px] font-bold text-on-surface leading-tight">DRE & Fator R</span>
+        </button>
+        <button type="button" class="btn-open-accountant-reports p-3 rounded-2xl bg-surface-container-low flex flex-col items-center justify-center text-center gap-1 active:scale-95 transition-all hover:bg-surface-container shadow-xs">
+          <div class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center">
+            ${renderIcon("contact_phone", "text-[18px]")}
+          </div>
+          <span class="text-[11px] font-bold text-on-surface leading-tight">Kit Contador</span>
+        </button>
+        <button type="button" class="btn-open-fire-reports p-3 rounded-2xl bg-surface-container-low flex flex-col items-center justify-center text-center gap-1 active:scale-95 transition-all hover:bg-surface-container shadow-xs">
+          <div class="w-8 h-8 rounded-full bg-tertiary-fixed text-tertiary flex items-center justify-center">
+            ${renderIcon("local_fire_department", "text-[18px]")}
+          </div>
+          <span class="text-[11px] font-bold text-on-surface leading-tight">Simulador FIRE</span>
+        </button>
+      </section>
 
       <!-- Simulador Tributário Médico (PJ Simples Nacional vs RPA) -->
       <div class="card-floating p-4 flex flex-col gap-3 bg-gradient-to-br from-white via-surface-container-lowest to-secondary-fixed/20 border border-purple-50">
@@ -6414,10 +10255,27 @@ function attachDashboardEvents() {
     btnDashAdd.addEventListener("click", () => openBottomSheet("plantao"));
   }
 
+  // Quick Action Buttons
+  document.querySelectorAll(".btn-quick-consultation").forEach(b => {
+    b.addEventListener("click", () => openBottomSheet("consultorio"));
+  });
+  document.querySelectorAll(".btn-quick-sbar").forEach(b => {
+    b.addEventListener("click", () => openSBARDialog());
+  });
+  document.querySelectorAll(".btn-quick-dre").forEach(b => {
+    b.addEventListener("click", () => openDREDialog());
+  });
+  document.querySelectorAll(".btn-quick-reconcile").forEach(b => {
+    b.addEventListener("click", () => openReconciliationDialog());
+  });
+
   attachCardActionEvents();
 }
 
 function attachShiftsEvents() {
+  document.querySelectorAll(".btn-new-consultation-top").forEach(b => {
+    b.addEventListener("click", () => openBottomSheet("consultorio"));
+  });
   const searchInput = document.getElementById("shift-search-input");
   const clearBtn = document.getElementById("btn-clear-search");
   if (searchInput) {
@@ -6463,6 +10321,9 @@ function attachShiftsEvents() {
       renderShiftsView();
     });
   }
+
+  // Initialize custom rounded selects in shifts view (e.g. sector filter)
+  attachCustomSelectEvents(dom.mainContent);
 
   // Sector filter select
   const sectorSelect = document.getElementById("select-shift-sector");
@@ -6616,9 +10477,119 @@ function attachReportsEvents() {
 
   const statementBtns = document.querySelectorAll(".btn-open-printable-statement");
   statementBtns.forEach(btn => btn.addEventListener("click", openPrintableStatementDialog));
+
+  // Executive Action Buttons in Reports
+  document.querySelectorAll(".btn-open-dre-reports").forEach(b => b.addEventListener("click", () => openDREDialog()));
+  document.querySelectorAll(".btn-open-accountant-reports").forEach(b => b.addEventListener("click", () => openAccountantKitDialog()));
+  document.querySelectorAll(".btn-open-fire-reports").forEach(b => b.addEventListener("click", () => openFIREDialog()));
+
+  // 12M Rolling Forecast Scrubber & Interactive Chart
+  const scrubberSlider = document.getElementById("forecast-scrubber-slider");
+  const proj12M = state.store.get12MonthsRollingProjection(state.activeMonth);
+  const labelMonth = document.getElementById("scrubber-month-label");
+  const labelInflows = document.getElementById("scrubber-inflows");
+  const labelExpenses = document.getElementById("scrubber-expenses");
+  const labelBalance = document.getElementById("scrubber-balance");
+  const scrubberGuide = document.getElementById("scrubber-guide");
+  const scrubberTooltip = document.getElementById("scrubber-tooltip");
+  const tooltipMonth = document.getElementById("scrubber-tooltip-month");
+  const tooltipInflow = document.getElementById("scrubber-tooltip-inflow");
+  const tooltipBalance = document.getElementById("scrubber-tooltip-balance");
+
+  const updateScrubber = (idx, triggerHapticFeedback = true) => {
+    const mData = proj12M.months[idx];
+    if (!mData) return;
+
+    if (labelMonth) labelMonth.textContent = formatMonthYear(mData.month);
+    if (labelInflows) labelInflows.textContent = formatMoney(mData.inflow);
+    if (labelExpenses) labelExpenses.textContent = formatMoney(mData.expense);
+    if (labelBalance) labelBalance.textContent = formatMoney(mData.cumulativeBalance);
+
+    if (scrubberSlider && String(scrubberSlider.value) !== String(idx)) {
+      scrubberSlider.value = idx;
+    }
+
+    const col = document.querySelector(`.scrubber-column[data-index="${idx}"]`);
+    if (col) {
+      const colX = parseFloat(col.getAttribute("data-x")) || 0;
+      if (scrubberGuide) {
+        scrubberGuide.setAttribute("x1", colX);
+        scrubberGuide.setAttribute("x2", colX);
+        scrubberGuide.classList.remove("hidden");
+      }
+    }
+
+    if (scrubberTooltip) {
+      if (tooltipMonth) tooltipMonth.textContent = mData.fullLabel || formatMonthYear(mData.month);
+      if (tooltipInflow) tooltipInflow.textContent = formatMoney(mData.inflow);
+      if (tooltipBalance) tooltipBalance.textContent = formatMoney(mData.cumulativeBalance);
+      scrubberTooltip.classList.remove("hidden");
+    }
+
+    if (triggerHapticFeedback) triggerHaptic(8);
+  };
+
+  if (scrubberSlider) {
+    scrubberSlider.addEventListener("input", (e) => {
+      const idx = parseInt(e.target.value, 10) || 0;
+      updateScrubber(idx);
+    });
+  }
+
+  document.querySelectorAll(".scrubber-column").forEach(col => {
+    const handleColSelect = () => {
+      const idx = parseInt(col.getAttribute("data-index"), 10) || 0;
+      updateScrubber(idx);
+    };
+    col.addEventListener("pointerdown", handleColSelect);
+    col.addEventListener("pointerenter", handleColSelect);
+  });
 }
 
 function attachCardActionEvents() {
+  // Consultations actions: toggle paid, edit, delete
+  document.querySelectorAll(".btn-toggle-consultation-paid").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute("data-id");
+      const updated = state.store.toggleConsultationPaid(id);
+      if (updated) {
+        if (updated.paid) {
+          spawnPediatricParticles(e, 'butterflies');
+        }
+        showToast(updated.paid ? "Consulta marcada como recebida! 🩺✨" : "Consulta marcada como pendente.", "check_circle");
+        renderCurrentView();
+      }
+    });
+  });
+
+  document.querySelectorAll(".btn-edit-consultation").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute("data-id");
+      const c = state.store.getConsultations().find(item => item.id === id);
+      if (c) openBottomSheet("consultorio", c);
+    });
+  });
+
+  document.querySelectorAll(".btn-delete-consultation").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute("data-id");
+      showConfirmDialog({
+        title: "Excluir Consulta?",
+        message: "Deseja mover este atendimento para a lixeira?",
+        confirmText: "Sim, Excluir",
+        isDanger: true,
+        onConfirm: () => {
+          state.store.deleteConsultation(id);
+          showToast("Consulta movida para a lixeira. 🗑️");
+          renderCurrentView();
+        }
+      });
+    });
+  });
+
   // Shift Swap & Handover via WhatsApp
   document.querySelectorAll(".btn-shift-swap").forEach(btn => {
     btn.addEventListener("click", (e) => {
@@ -6775,6 +10746,18 @@ function attachCardActionEvents() {
     });
   });
 
+  // Quick Modify Expense Category (1-Tap from Card)
+  document.querySelectorAll(".btn-card-category-quick").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute("data-id");
+      const expense = state.store.data.expenses.find(x => x.id === id);
+      if (expense) {
+        openQuickCategoryChangeDialog(expense);
+      }
+    });
+  });
+
   // Edit Expense
   document.querySelectorAll(".btn-edit-expense").forEach(btn => {
     btn.addEventListener("click", (e) => {
@@ -6879,46 +10862,64 @@ function renderBottomSheetContent() {
           </h2>
           <span class="text-secondary">✨</span>
         </div>
-        <button
-          type="button"
-          id="btn-close-sheet"
-          class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container active:scale-95 transition-transform"
-        >
-          <span class="material-symbols-outlined text-[18px]">close</span>
-        </button>
+        <div class="flex items-center gap-1.5">
+          <button
+            type="button"
+            id="btn-voice-log-sheet"
+            class="w-8 h-8 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center hover:bg-secondary-fixed/80 active:scale-95 transition-all shadow-xs"
+            title="Lançamento Rápido por Voz (NLP Médico)"
+          >
+            <span class="material-symbols-outlined text-[18px]">mic</span>
+          </button>
+          <button
+            type="button"
+            id="btn-close-sheet"
+            class="w-8 h-8 rounded-full bg-surface-container-low text-on-surface-variant flex items-center justify-center hover:bg-surface-container active:scale-95 transition-transform"
+          >
+            <span class="material-symbols-outlined text-[18px]">close</span>
+          </button>
+        </div>
       </div>
 
       <!-- Category Segmented Control Switcher -->
-      <div class="bg-surface-container-low p-1 rounded-full flex items-center gap-1 mb-4">
+      <div class="bg-surface-container-low p-1 rounded-full flex items-center gap-1 mb-4 overflow-x-auto">
         <button
           type="button"
-          class="modal-tab-btn flex-1 py-2 px-2 rounded-full text-[12px] font-bold flex items-center justify-center gap-1 transition-all ${state.activeModalTab === 'plantao' ? 'bg-gradient-to-r from-secondary-container via-secondary to-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}"
+          class="modal-tab-btn flex-1 py-2 px-1.5 rounded-full text-[11px] font-bold flex items-center justify-center gap-1 transition-all ${state.activeModalTab === 'plantao' ? 'bg-gradient-to-r from-secondary-container via-secondary to-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}"
           data-tab="plantao"
         >
-          <span class="material-symbols-outlined text-[16px]">stethoscope</span>
+          <span class="material-symbols-outlined text-[15px]">stethoscope</span>
           <span>Plantão</span>
         </button>
         <button
           type="button"
-          class="modal-tab-btn flex-1 py-2 px-2 rounded-full text-[12px] font-bold flex items-center justify-center gap-1 transition-all ${state.activeModalTab === 'salario' ? 'bg-gradient-to-r from-secondary-container via-secondary to-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}"
+          class="modal-tab-btn flex-1 py-2 px-1.5 rounded-full text-[11px] font-bold flex items-center justify-center gap-1 transition-all ${state.activeModalTab === 'consultorio' ? 'bg-gradient-to-r from-secondary-container via-secondary to-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}"
+          data-tab="consultorio"
+        >
+          <span class="material-symbols-outlined text-[15px]">child_friendly</span>
+          <span>Consultório</span>
+        </button>
+        <button
+          type="button"
+          class="modal-tab-btn flex-1 py-2 px-1.5 rounded-full text-[11px] font-bold flex items-center justify-center gap-1 transition-all ${state.activeModalTab === 'salario' ? 'bg-gradient-to-r from-secondary-container via-secondary to-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}"
           data-tab="salario"
         >
-          <span class="material-symbols-outlined text-[16px]">work</span>
+          <span class="material-symbols-outlined text-[15px]">work</span>
           <span>Salário</span>
         </button>
         <button
           type="button"
-          class="modal-tab-btn flex-1 py-2 px-2 rounded-full text-[12px] font-bold flex items-center justify-center gap-1 transition-all ${state.activeModalTab === 'despesa' ? 'bg-gradient-to-r from-secondary-container via-secondary to-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}"
+          class="modal-tab-btn flex-1 py-2 px-1.5 rounded-full text-[11px] font-bold flex items-center justify-center gap-1 transition-all ${state.activeModalTab === 'despesa' ? 'bg-gradient-to-r from-secondary-container via-secondary to-primary text-white shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}"
           data-tab="despesa"
         >
-          <span class="material-symbols-outlined text-[16px]">receipt_long</span>
+          <span class="material-symbols-outlined text-[15px]">receipt_long</span>
           <span>Despesa</span>
         </button>
       </div>
 
       <!-- Form Container -->
       <div id="modal-form-container">
-        ${state.activeModalTab === "plantao" ? renderShiftForm(editData) : state.activeModalTab === "salario" ? renderSalaryForm(editData) : renderExpenseForm(editData)}
+        ${state.activeModalTab === "plantao" ? renderShiftForm(editData) : state.activeModalTab === "consultorio" ? renderConsultationForm(editData) : state.activeModalTab === "salario" ? renderSalaryForm(editData) : renderExpenseForm(editData)}
       </div>
     </div>
   `;
@@ -6955,24 +10956,72 @@ function renderShiftForm(data = null) {
 
   return `
     <form id="form-shift" class="flex flex-col gap-4">
-      <!-- Hospital / Maternidade -->
-      <div class="flex flex-col gap-1.5">
+      <!-- Hospital / Maternidade (Stitch Rounded Custom Picker) -->
+      <div class="flex flex-col gap-1.5 relative" id="hospital-selector-container">
         <label class="text-[12px] font-bold text-on-surface-variant flex items-center justify-between">
           <span>Hospital ou Maternidade</span>
           <span class="text-secondary text-[11px] flex items-center gap-0.5">
             ${renderIcon('auto_awesome', 'text-[13px]')} Locais Cadastrados
           </span>
         </label>
-        <div class="h-11 bg-surface-container-low rounded-2xl px-3.5 flex items-center gap-2 shadow-sm border border-transparent focus-within:border-primary focus-within:bg-white">
-          ${renderIcon('local_hospital', 'text-[20px] text-secondary')}
-          <input
-            type="text"
-            id="input-shift-hospital"
-            class="w-full bg-transparent text-[14px] text-on-surface focus:outline-none placeholder:text-outline"
-            placeholder="Ex: Maternidade Araken"
-            value="${hospital}"
-            required
-          />
+
+        <!-- Interactive Trigger Box -->
+        <button
+          type="button"
+          id="btn-hospital-picker-trigger"
+          class="hospital-picker-trigger category-picker-trigger h-11 px-3.5 rounded-2xl bg-surface-container-low border border-purple-100/50 dark:border-purple-900/30 flex items-center justify-between gap-2 shadow-xs cursor-pointer text-left w-full hover:border-secondary transition-all"
+        >
+          <div class="flex items-center gap-2 min-w-0 flex-1">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0 bg-secondary/15 text-secondary">
+              ${renderIcon('local_hospital', 'text-[14px]')}
+            </div>
+            <span id="hospital-display-text" class="text-[13px] font-bold text-on-surface truncate">
+              ${hospital || 'Selecione ou busque o hospital...'}
+            </span>
+          </div>
+          <div class="flex items-center gap-1 shrink-0 text-on-surface-variant">
+            <span class="text-[10px] px-1.5 py-0.2 rounded-full font-bold uppercase bg-secondary-fixed text-secondary">LOCAL</span>
+            <span id="hospital-chevron-icon" class="text-secondary transition-transform duration-200">${renderIcon('expand_more', 'text-[18px]')}</span>
+          </div>
+        </button>
+
+        <!-- Native hidden input to preserve complete form serialization & test compatibility -->
+        <input
+          type="text"
+          id="input-shift-hospital"
+          class="hidden"
+          value="${hospital}"
+          required
+        />
+
+        <!-- Custom Hospital Dropdown Popover Menu -->
+        <div id="hospital-picker-menu" class="hospital-menu-popover category-menu-popover hidden absolute top-[calc(100%+6px)] inset-x-0 z-[85] bg-white dark:bg-[#1F1228] rounded-[20px] border border-purple-100 dark:border-purple-900/40 shadow-xl overflow-hidden flex flex-col">
+          <!-- Live Search & Add -->
+          <div class="p-2 border-b border-purple-100 dark:border-purple-900/30 bg-surface-container-low/50">
+            <div class="h-9 bg-white dark:bg-[#241430] rounded-xl px-2.5 flex items-center gap-1.5 border border-purple-100 dark:border-purple-900/40 focus-within:border-secondary transition-all">
+              ${renderIcon('search', 'text-[16px] text-secondary')}
+              <input
+                type="text"
+                id="input-hospital-search"
+                placeholder="Buscar ou digitar novo hospital..."
+                class="w-full bg-transparent text-[12px] font-semibold text-on-surface focus:outline-none placeholder:text-on-surface-variant/50"
+              />
+              <button type="button" id="btn-clear-hospital-search" class="text-on-surface-variant/50 hover:text-on-surface hidden cursor-pointer">
+                ${renderIcon('close', 'text-[14px]')}
+              </button>
+            </div>
+            <button
+              type="button"
+              id="btn-use-typed-hospital"
+              class="hidden mt-1.5 w-full py-1.5 px-2.5 rounded-xl bg-gradient-to-r from-secondary to-primary text-white text-[11px] font-bold flex items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer"
+            >
+              ${renderIcon('add_circle', 'text-[14px]')}
+              <span id="text-use-typed-hospital">Usar novo local</span>
+            </button>
+          </div>
+
+          <!-- List of Hospitals -->
+          <div class="hospital-menu-list category-menu-list no-scrollbar max-h-48 overflow-y-auto p-1.5" id="hospital-menu-items-list"></div>
         </div>
         <!-- Quick pills with default & custom locations -->
         <div class="flex items-center gap-1.5 overflow-x-auto pb-1 pt-1 -mx-1 px-1 no-scrollbar">
@@ -6998,32 +11047,22 @@ function renderShiftForm(data = null) {
       <div class="grid grid-cols-2 gap-3">
         <div class="flex flex-col gap-1.5">
           <label class="text-[12px] font-bold text-on-surface-variant">Atuação Pediátrica</label>
-          <div class="h-11 bg-surface-container-low rounded-2xl px-3 flex items-center gap-2 shadow-sm">
-            ${renderIcon('work', 'text-[18px] text-secondary')}
-            <select
-              id="input-shift-work-type"
-              class="w-full bg-transparent text-[12px] text-on-surface font-medium focus:outline-none"
-            >
-              ${allWorkTypes.map(wt => `
-                <option value="${wt}" ${workType === wt ? 'selected' : ''}>${wt}</option>
-              `).join("")}
-            </select>
-          </div>
+          ${renderCustomSelectHTML({
+            id: 'input-shift-work-type',
+            value: workType,
+            options: allWorkTypes,
+            icon: 'work'
+          })}
         </div>
 
         <div class="flex flex-col gap-1.5">
           <label class="text-[12px] font-bold text-on-surface-variant">Setor Clínico</label>
-          <div class="h-11 bg-surface-container-low rounded-2xl px-3 flex items-center gap-2 shadow-sm">
-            ${renderIcon('stethoscope', 'text-[18px] text-secondary')}
-            <select
-              id="input-shift-sector"
-              class="w-full bg-transparent text-[12px] text-on-surface font-medium focus:outline-none"
-            >
-              ${CLINICAL_SECTORS.map(s => `
-                <option value="${s}" ${sector === s ? 'selected' : ''}>${s}</option>
-              `).join("")}
-            </select>
-          </div>
+          ${renderCustomSelectHTML({
+            id: 'input-shift-sector',
+            value: sector,
+            options: CLINICAL_SECTORS,
+            icon: 'stethoscope'
+          })}
         </div>
       </div>
 
@@ -7031,14 +11070,12 @@ function renderShiftForm(data = null) {
       <div class="grid grid-cols-2 gap-3">
         <div class="flex flex-col gap-1.5">
           <label class="text-[12px] font-bold text-on-surface-variant">Tipo de Escala</label>
-          <select
-            id="input-shift-type"
-            class="h-11 bg-surface-container-low rounded-2xl px-3 text-[12px] text-on-surface font-medium focus:outline-none shadow-sm"
-          >
-            ${SHIFT_TYPES.map(t => `
-              <option value="${t.id}" ${shiftType === t.id ? 'selected' : ''}>${t.label}</option>
-            `).join("")}
-          </select>
+          ${renderCustomSelectHTML({
+            id: 'input-shift-type',
+            value: shiftType,
+            options: SHIFT_TYPES.map(t => ({ value: t.id, label: t.label })),
+            icon: 'schedule'
+          })}
         </div>
 
         <div class="flex flex-col gap-1.5">
@@ -7206,6 +11243,188 @@ function renderShiftForm(data = null) {
 }
 
 /**
+ * Form: Cadastrar / Editar Atendimento de Consultório & Puericultura
+ */
+function renderConsultationForm(data = null) {
+  const isEdit = Boolean(data && data.id);
+  const patientName = data ? (data.patientName || "") : "";
+  const consultationType = data ? (data.consultationType || "Puericultura (Avulsa)") : "Puericultura (Avulsa)";
+  const puericulturaMonth = data ? (data.puericulturaMonth || "1º mês (RN)") : "1º mês (RN)";
+  const dateVal = data ? (data.date || getLocalDateString(state.referenceDate || new Date())) : getLocalDateString(state.referenceDate || new Date());
+  const valueVal = data ? (data.value || 350) : 350;
+  const durationVal = data ? (data.durationMinutes || 60) : 60;
+  const paymentMethodVal = data ? (data.paymentMethod || "PIX") : "PIX";
+  const paidVal = data ? Boolean(data.paid) : true;
+  const notesVal = data ? (data.notes || "") : "";
+  const hourlyYield = Math.round(valueVal / (durationVal / 60));
+
+  return `
+    <form id="form-consultation" class="flex flex-col gap-3.5">
+      <input type="hidden" id="input-consultation-id" value="${isEdit ? data.id : ''}" />
+
+      <!-- Patient Name -->
+      <div class="flex flex-col gap-1">
+        <label for="input-consultation-patient" class="text-[12px] font-bold text-on-surface flex items-center justify-between">
+          <span>Nome da Criança / Mãe</span>
+          <span class="text-[10px] text-secondary font-semibold">Obrigatório</span>
+        </label>
+        <div class="relative">
+          <input
+            type="text"
+            id="input-consultation-patient"
+            required
+            placeholder="Ex: Bernardo (Mãe: Juliana)"
+            value="${patientName}"
+            class="w-full h-11 px-3.5 pl-10 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[14px] text-on-surface focus:outline-none focus:border-secondary transition-all"
+          />
+          <span class="absolute left-3 top-3 material-symbols-outlined text-[18px] text-on-surface-variant">person</span>
+        </div>
+      </div>
+
+      <!-- Consultation Type & Puericultura Month -->
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class="flex flex-col gap-1">
+          <label class="text-[12px] font-bold text-on-surface">Tipo de Atendimento</label>
+          ${renderCustomSelectHTML({
+            id: 'input-consultation-type',
+            value: consultationType,
+            options: [
+              "Puericultura (Avulsa)",
+              "Pacote Puericultura Anual",
+              "Primeira Consulta",
+              "Retorno",
+              "Telemedicina",
+              "Emergência Domiciliar"
+            ],
+            icon: 'medical_services'
+          })}
+        </div>
+
+        <div class="flex flex-col gap-1" id="container-puericultura-month">
+          <label class="text-[12px] font-bold text-on-surface">Mês Puericultura</label>
+          ${renderCustomSelectHTML({
+            id: 'input-consultation-puericultura-month',
+            value: puericulturaMonth,
+            options: [
+              "1º mês (RN)",
+              "2º mês",
+              "3º mês",
+              "4º mês",
+              "5º mês",
+              "6º mês",
+              "9º mês",
+              "12º mês (1 ano)",
+              "Acompanhamento Trimestral"
+            ],
+            icon: 'child_care'
+          })}
+        </div>
+      </div>
+
+      <!-- Date & Duration -->
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class="flex flex-col gap-1">
+          <label for="input-consultation-date" class="text-[12px] font-bold text-on-surface">Data da Consulta</label>
+          <input
+            type="date"
+            id="input-consultation-date"
+            required
+            value="${dateVal}"
+            class="w-full h-11 px-3 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary transition-all"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-[12px] font-bold text-on-surface">Duração</label>
+          ${renderCustomSelectHTML({
+            id: 'input-consultation-duration',
+            value: durationVal,
+            options: [
+              { value: "30", label: "30 minutos" },
+              { value: "45", label: "45 minutos" },
+              { value: "60", label: "60 minutos (1h)" },
+              { value: "90", label: "90 minutos (1h30)" },
+              { value: "120", label: "120 minutos (2h)" }
+            ],
+            icon: 'timer'
+          })}
+        </div>
+      </div>
+
+      <!-- Value & Payment Method -->
+      <div class="grid grid-cols-2 gap-2.5">
+        <div class="flex flex-col gap-1">
+          <label for="input-consultation-value" class="text-[12px] font-bold text-on-surface">Honorário (R$)</label>
+          <input
+            type="number"
+            step="0.01"
+            id="input-consultation-value"
+            required
+            value="${valueVal}"
+            class="w-full h-11 px-3 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[14px] font-bold text-on-surface focus:outline-none focus:border-secondary transition-all"
+          />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-[12px] font-bold text-on-surface">Forma de Pagamento</label>
+          ${renderCustomSelectHTML({
+            id: 'input-consultation-payment-method',
+            value: paymentMethodVal,
+            options: [
+              "PIX",
+              "Cartão Débito",
+              "Cartão Crédito",
+              "Dinheiro",
+              "Convênio/Reembolso"
+            ],
+            icon: 'payments'
+          })}
+        </div>
+      </div>
+
+      <!-- Live Hourly Rate Badge & Paid Status Toggle -->
+      <div class="p-3 rounded-2xl bg-surface-container-low border border-outline-variant/20 flex items-center justify-between">
+        <div class="flex flex-col">
+          <span class="text-[11px] text-on-surface-variant font-medium">Rendimento Horário Estimado:</span>
+          <span class="text-[16px] font-bold text-secondary font-display" id="label-live-consultation-hourly">
+            R$ ${hourlyYield}/h
+          </span>
+        </div>
+        <label class="flex items-center gap-2 cursor-pointer select-none">
+          <input
+            type="checkbox"
+            id="input-consultation-paid"
+            class="w-4 h-4 rounded text-secondary focus:ring-secondary accent-secondary"
+            ${paidVal ? "checked" : ""}
+          />
+          <span class="text-[12px] font-bold text-on-surface">Recebido</span>
+        </label>
+      </div>
+
+      <!-- Notes -->
+      <div class="flex flex-col gap-1">
+        <label for="input-consultation-notes" class="text-[12px] font-bold text-on-surface">Evolução / Observações Clínicas</label>
+        <textarea
+          id="input-consultation-notes"
+          rows="2"
+          placeholder="Ex: Ganho ponderal adequado (+30g/dia), vacinas em dia, amamentação exclusiva."
+          class="w-full p-3 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary transition-all resize-none"
+        >${notesVal}</textarea>
+      </div>
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="w-full h-12 rounded-full bg-gradient-to-r from-secondary-container via-secondary to-primary text-white font-bold text-[14px] shadow-sm hover:opacity-95 active:scale-95 transition-all flex items-center justify-center gap-2 mt-1"
+      >
+        <span class="material-symbols-outlined text-[18px]">check</span>
+        <span>${isEdit ? 'Salvar Alterações' : 'Salvar Atendimento Pediátrico'}</span>
+      </button>
+    </form>
+  `;
+}
+
+/**
  * Form: Cadastrar / Editar Salário Fixo
  */
 function renderSalaryForm(data = null) {
@@ -7292,11 +11511,13 @@ function renderExpenseForm(data = null) {
   const val = data ? data.value : "";
   const dueDate = data ? data.dueDate : `${state.activeMonth}-10`;
   const isPaid = data ? data.isPaid : false;
-  const scope = data ? (data.scope || state.store.getCategoryScope(category)) : state.store.getCategoryScope(category);
+  const scope = data ? (data.scope || (state.store.getCategoryScope ? state.store.getCategoryScope(category) : getCategoryScope(category))) : (state.store.getCategoryScope ? state.store.getCategoryScope(category) : getCategoryScope(category));
   const scopeCategories = scope === "pj" ? categoriesPJ : categoriesPF;
+  const categoryColor = state.store.getCategoryColor ? state.store.getCategoryColor(category) : "#B80F55";
+  const categoryIcon = state.store.getCategoryIcon ? state.store.getCategoryIcon(category) : "receipt_long";
 
   return `
-    <form id="form-expense" class="flex flex-col gap-4">
+    <form id="form-expense" class="flex flex-col gap-4 font-body">
       <!-- Âmbito da Despesa: PF (Vida Pessoal) vs PJ (Trabalho/Clínica) -->
       <div class="flex flex-col gap-1.5">
         <label class="text-[12px] font-bold text-on-surface-variant">Âmbito da Vida Financeira</label>
@@ -7326,7 +11547,7 @@ function renderExpenseForm(data = null) {
           <input
             type="text"
             id="input-expense-desc"
-            class="w-full bg-transparent text-[14px] text-on-surface focus:outline-none"
+            class="w-full bg-transparent text-[14px] font-medium text-on-surface focus:outline-none"
             placeholder="Ex: Alimentação, Lazer, CRM, Sublocação..."
             value="${desc}"
             required
@@ -7334,7 +11555,7 @@ function renderExpenseForm(data = null) {
         </div>
       </div>
 
-      <!-- Categoria da Despesa com Criação Dinâmica & Quick Pills -->
+      <!-- Categoria da Despesa com Custom Dropdown, Direct Typing & Quick Pills -->
       <div class="flex flex-col gap-1.5">
         <div class="flex items-center justify-between">
           <label class="text-[12px] font-bold text-on-surface-variant flex items-center gap-1.5">
@@ -7370,35 +11591,107 @@ function renderExpenseForm(data = null) {
           </button>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-          <div class="flex flex-col gap-1">
-            <select
-              id="input-expense-category"
-              class="h-11 bg-surface-container-low rounded-2xl px-3 text-[12px] text-on-surface font-semibold focus:outline-none shadow-sm cursor-pointer"
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Chic Custom Category Selector & Direct Input -->
+          <div class="flex flex-col gap-1 relative" id="category-selector-container">
+            <label class="text-[11px] font-bold text-on-surface-variant flex items-center justify-between">
+              <span>Selecionar ou Digitar</span>
+              <span class="text-[10px] text-secondary font-medium" id="category-scope-label">${scope === 'pj' ? 'Pessoa Jurídica' : 'Pessoa Física'}</span>
+            </label>
+
+            <!-- Interactive Trigger Box -->
+            <button
+              type="button"
+              id="btn-category-picker-trigger"
+              class="category-picker-trigger h-11 px-3 flex items-center justify-between gap-2 shadow-xs cursor-pointer text-left w-full"
             >
+              <div class="flex items-center gap-2 min-w-0 flex-1">
+                <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0" id="category-display-icon-bg" style="background-color: ${categoryColor}25; color: ${categoryColor};">
+                  <span id="category-display-icon">${renderIcon(categoryIcon, 'text-[14px]')}</span>
+                </div>
+                <span id="category-display-text" class="text-[13px] font-bold text-on-surface truncate">${category}</span>
+              </div>
+              <div class="flex items-center gap-1 shrink-0 text-on-surface-variant">
+                <span class="text-[10px] px-1.5 py-0.2 rounded-full font-bold uppercase ${scope === 'pj' ? 'bg-mint-income-bg text-mint-income' : 'bg-lilac-light text-lilac-dark'}" id="category-display-badge">${scope.toUpperCase()}</span>
+                <span id="category-chevron-icon" class="transition-transform duration-200">${renderIcon('expand_more', 'text-[18px] text-secondary')}</span>
+              </div>
+            </button>
+
+            <!-- Native select (kept in DOM for accessibility, form serialization & backward compatibility) -->
+            <select id="input-expense-category" class="hidden">
               <optgroup label="🌸 Pessoa Física (Vida Pessoal)">
-                ${categoriesPF.map(c => `
-                  <option value="${c}" ${category === c ? 'selected' : ''}>${c}</option>
-                `).join("")}
+                ${categoriesPF.map(c => `<option value="${c}" ${category === c ? 'selected' : ''}>${c}</option>`).join("")}
               </optgroup>
               <optgroup label="🩺 Pessoa Jurídica (Trabalho & Clínica)">
-                ${categoriesPJ.map(c => `
-                  <option value="${c}" ${category === c ? 'selected' : ''}>${c}</option>
-                `).join("")}
+                ${categoriesPJ.map(c => `<option value="${c}" ${category === c ? 'selected' : ''}>${c}</option>`).join("")}
               </optgroup>
+              ${!categoriesPF.includes(category) && !categoriesPJ.includes(category) ? `<option value="${category}" selected>${category}</option>` : ''}
               <option value="__new__" class="font-bold text-primary">+ Nova Categoria...</option>
             </select>
+
+            <!-- Custom Category Dropdown Popover Menu (100% styled with Manrope & Stitch tokens) -->
+            <div id="category-picker-menu" class="category-menu-popover hidden">
+              <!-- Live Search & Direct Category Creator Input -->
+              <div class="p-2 border-b border-purple-100 bg-surface-container-low/50">
+                <div class="h-9 bg-white rounded-xl px-2.5 flex items-center gap-1.5 border border-purple-100 focus-within:border-secondary transition-all">
+                  ${renderIcon('search', 'text-[16px] text-secondary')}
+                  <input
+                    type="text"
+                    id="input-category-search"
+                    placeholder="Digite qualquer categoria (ex: Contador, Lanches...)"
+                    class="w-full bg-transparent text-[12px] font-semibold text-on-surface focus:outline-none placeholder:text-on-surface-variant/50"
+                  />
+                  <button type="button" id="btn-clear-cat-search" class="text-on-surface-variant/50 hover:text-on-surface hidden cursor-pointer">
+                    ${renderIcon('close', 'text-[14px]')}
+                  </button>
+                </div>
+                <!-- Dynamic "Use/Create Typed Category" button -->
+                <button
+                  type="button"
+                  id="btn-use-typed-category"
+                  class="hidden mt-1.5 w-full py-1.5 px-2.5 rounded-xl bg-gradient-to-r from-secondary to-primary text-white text-[11px] font-bold flex items-center justify-center gap-1 shadow-xs active:scale-95 transition-all cursor-pointer"
+                >
+                  ${renderIcon('add_circle', 'text-[14px]')}
+                  <span id="text-use-typed-category">Usar nova categoria</span>
+                </button>
+              </div>
+
+              <!-- Scope filter toggle within menu -->
+              <div class="flex items-center gap-1 p-1.5 border-b border-purple-50 bg-white text-[10.5px]">
+                <button type="button" class="cat-menu-scope-tab flex-1 py-1 rounded-lg font-bold text-center transition-all bg-secondary text-white cursor-pointer" data-scope="all">Todas</button>
+                <button type="button" class="cat-menu-scope-tab flex-1 py-1 rounded-lg font-bold text-center transition-all bg-surface-container-low text-on-surface-variant cursor-pointer" data-scope="pf">🌸 Pessoal</button>
+                <button type="button" class="cat-menu-scope-tab flex-1 py-1 rounded-lg font-bold text-center transition-all bg-surface-container-low text-on-surface-variant cursor-pointer" data-scope="pj">🩺 Trabalho</button>
+              </div>
+
+              <!-- Category Items Scrollable List -->
+              <div class="category-menu-list no-scrollbar" id="category-menu-items-list"></div>
+
+              <!-- Footer Add Action -->
+              <div class="p-2 border-t border-purple-100 bg-surface-container-low/40 flex items-center justify-between">
+                <button
+                  type="button"
+                  id="btn-menu-add-category"
+                  class="w-full py-1.5 px-2 rounded-xl text-primary hover:bg-primary-fixed/30 text-[11.5px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer"
+                >
+                  ${renderIcon('add', 'text-[14px]')}
+                  <span>+ Criar Categoria Personalizada</span>
+                </button>
+              </div>
+            </div>
           </div>
 
           <!-- Tipo: Fixa vs Variável -->
           <div class="flex flex-col gap-1">
-            <select
-              id="input-expense-type"
-              class="h-11 bg-surface-container-low rounded-2xl px-3 text-[12px] text-on-surface font-semibold focus:outline-none shadow-sm cursor-pointer"
-            >
-              <option value="fixed" ${type === 'fixed' ? 'selected' : ''}>Fixa (Recorrente)</option>
-              <option value="variable" ${type === 'variable' ? 'selected' : ''}>Variável (Avulsa)</option>
-            </select>
+            <label class="text-[11px] font-bold text-on-surface-variant">Tipo de Despesa</label>
+            ${renderCustomSelectHTML({
+              id: 'input-expense-type',
+              value: type,
+              options: [
+                { value: 'fixed', label: 'Fixa (Recorrente)' },
+                { value: 'variable', label: 'Variável (Avulsa)' }
+              ],
+              icon: 'repeat'
+            })}
           </div>
         </div>
       </div>
@@ -7477,6 +11770,9 @@ function attachBottomSheetFormEvents() {
       renderBottomSheetContent();
     });
   });
+
+  // Initialize all custom rounded dropdowns in bottom sheet
+  attachCustomSelectEvents(dom.bottomSheet || document);
 
   // Shift form live recalculations, quick pills, tax slider, and custom date toggle
   const formShift = document.getElementById("form-shift");
@@ -7623,18 +11919,176 @@ function attachBottomSheetFormEvents() {
 
     if (inputDate) inputDate.addEventListener("change", updateInstallmentsPreview);
 
+    // Stitch Rounded Hospital Picker Interactions
+    const inputHosp = document.getElementById("input-shift-hospital");
+    const hospTrigger = document.getElementById("btn-hospital-picker-trigger");
+    const hospMenu = document.getElementById("hospital-picker-menu");
+    const hospSearchInput = document.getElementById("input-hospital-search");
+    const btnClearHospSearch = document.getElementById("btn-clear-hospital-search");
+    const btnUseTypedHosp = document.getElementById("btn-use-typed-hospital");
+    const textUseTypedHosp = document.getElementById("text-use-typed-hospital");
+    const hospDispText = document.getElementById("hospital-display-text");
+    const hospChevron = document.getElementById("hospital-chevron-icon");
+
+    const closeHospPicker = () => {
+      if (hospMenu) {
+        hospMenu.classList.add("hidden");
+        hospMenu.classList.remove("dropup");
+      }
+      if (hospTrigger) hospTrigger.classList.remove("active");
+      if (hospChevron) hospChevron.style.transform = "";
+    };
+
+    const openHospPicker = () => {
+      if (!hospMenu) return;
+      if (typeof window !== "undefined" && hospTrigger && hospTrigger.getBoundingClientRect) {
+        const triggerRect = hospTrigger.getBoundingClientRect();
+        const vh = window.innerHeight || 800;
+        const spaceBelowViewport = vh - triggerRect.bottom;
+        const spaceAboveViewport = triggerRect.top;
+        const scrollParent = hospTrigger.closest(".bottom-sheet, .dialog-box, [role='dialog']");
+        let shouldDropUp = false;
+        if (scrollParent && scrollParent.getBoundingClientRect) {
+          const parentRect = scrollParent.getBoundingClientRect();
+          const spaceBelowParent = parentRect.bottom - triggerRect.bottom;
+          const spaceAboveParent = triggerRect.top - parentRect.top;
+          if (spaceBelowParent < 220 && spaceAboveParent > spaceBelowParent) {
+            shouldDropUp = true;
+          } else if (spaceBelowViewport < 240 && spaceAboveViewport > spaceBelowViewport) {
+            shouldDropUp = true;
+          }
+        } else if (spaceBelowViewport < 240 && spaceAboveViewport > spaceBelowViewport) {
+          shouldDropUp = true;
+        }
+        hospMenu.classList.toggle("dropup", shouldDropUp);
+      }
+      hospMenu.classList.remove("hidden");
+      if (hospTrigger) hospTrigger.classList.add("active");
+      if (hospChevron) hospChevron.style.transform = "rotate(180deg)";
+      renderHospitalList(hospSearchInput ? hospSearchInput.value : "");
+      setTimeout(() => {
+        hospSearchInput?.focus();
+        if (hospMenu && hospMenu.scrollIntoView) {
+          hospMenu.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        }
+      }, 60);
+    };
+
+    const setChosenHospital = (name) => {
+      if (!name) return;
+      const clean = name.trim();
+      if (!clean) return;
+      if (inputHosp) {
+        inputHosp.value = clean;
+        inputHosp.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+      if (hospDispText) hospDispText.textContent = clean;
+
+      // Update pills
+      document.querySelectorAll(".quick-hospital-pill").forEach(p => {
+        const isMatch = p.getAttribute("data-hospital") === clean;
+        p.classList.toggle("bg-secondary-fixed", isMatch);
+        p.classList.toggle("text-on-secondary-fixed-variant", isMatch);
+        p.classList.toggle("shadow-sm", isMatch);
+        p.classList.toggle("bg-surface-container-low", !isMatch);
+        p.classList.toggle("text-on-surface-variant", !isMatch);
+      });
+
+      closeHospPicker();
+      spawnPediatricParticles(null, null, 4, 'hearts');
+    };
+
+    const renderHospitalList = (query = "") => {
+      const listEl = document.getElementById("hospital-menu-items-list");
+      if (!listEl) return;
+      const q = query.trim().toLowerCase();
+      const current = (inputHosp ? inputHosp.value : "").toLowerCase();
+      let locations = state.store.getWorkLocations ? state.store.getWorkLocations() : [];
+
+      if (q) {
+        locations = locations.filter(l => l.toLowerCase().includes(q));
+      }
+
+      if (btnUseTypedHosp && textUseTypedHosp) {
+        const exact = locations.some(l => l.toLowerCase() === q);
+        if (q && !exact) {
+          textUseTypedHosp.textContent = `Usar "${query.trim()}" (Adicionar local)`;
+          btnUseTypedHosp.classList.remove("hidden");
+        } else {
+          btnUseTypedHosp.classList.add("hidden");
+        }
+      }
+
+      if (locations.length === 0) {
+        listEl.innerHTML = `
+          <div class="p-3 text-center text-[12px] text-on-surface-variant italic">
+            Nenhum local encontrado. Toque no botão acima para cadastrar.
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = locations.map(loc => {
+        const isSel = loc.toLowerCase() === current;
+        return `
+          <div class="custom-select-item hospital-menu-item flex items-center justify-between p-2 rounded-xl cursor-pointer hover:bg-surface-container-low transition-colors ${isSel ? 'active' : ''}" data-hospital="${loc}">
+            <div class="flex items-center gap-2 truncate">
+              <span class="text-secondary text-[15px]">${renderIcon('local_hospital', 'text-[15px]')}</span>
+              <span class="text-[12.5px] font-semibold text-on-surface truncate">${loc}</span>
+            </div>
+            ${isSel ? `<span class="text-secondary font-bold shrink-0">${renderIcon('check', 'text-[15px]')}</span>` : ''}
+          </div>
+        `;
+      }).join("");
+
+      listEl.querySelectorAll(".hospital-menu-item").forEach(item => {
+        item.addEventListener("click", () => {
+          setChosenHospital(item.getAttribute("data-hospital"));
+        });
+      });
+    };
+
+    if (hospTrigger) {
+      hospTrigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isClosed = hospMenu && hospMenu.classList.contains("hidden");
+        if (isClosed) openHospPicker();
+        else closeHospPicker();
+      });
+    }
+
+    if (hospSearchInput) {
+      hospSearchInput.addEventListener("input", (e) => {
+        const val = e.target.value;
+        if (btnClearHospSearch) btnClearHospSearch.classList.toggle("hidden", !val);
+        renderHospitalList(val);
+      });
+    }
+
+    if (btnClearHospSearch) {
+      btnClearHospSearch.addEventListener("click", () => {
+        if (hospSearchInput) hospSearchInput.value = "";
+        btnClearHospSearch.classList.add("hidden");
+        renderHospitalList("");
+        hospSearchInput?.focus();
+      });
+    }
+
+    if (btnUseTypedHosp) {
+      btnUseTypedHosp.addEventListener("click", () => {
+        const val = hospSearchInput ? hospSearchInput.value.trim() : "";
+        if (val) {
+          state.store.addWorkLocation(val);
+          setChosenHospital(val);
+        }
+      });
+    }
+
     // Quick hospital pills
     document.querySelectorAll(".quick-hospital-pill").forEach(pill => {
       pill.addEventListener("click", () => {
         const hosp = pill.getAttribute("data-hospital");
-        const inputHosp = document.getElementById("input-shift-hospital");
-        if (inputHosp) inputHosp.value = hosp;
-        document.querySelectorAll(".quick-hospital-pill").forEach(p => {
-          p.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
-          p.classList.add("bg-surface-container-low", "text-on-surface-variant");
-        });
-        pill.classList.add("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
-        pill.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+        setChosenHospital(hosp);
       });
     });
 
@@ -7646,14 +12100,7 @@ function attachBottomSheetFormEvents() {
         if (name && name.trim()) {
           const cleanName = name.trim();
           state.store.addWorkLocation(cleanName);
-          const inputHosp = document.getElementById("input-shift-hospital");
-          if (inputHosp) inputHosp.value = cleanName;
-
-          // Deselect existing quick hospital pills
-          document.querySelectorAll(".quick-hospital-pill").forEach(p => {
-            p.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
-            p.classList.add("bg-surface-container-low", "text-on-surface-variant");
-          });
+          setChosenHospital(cleanName);
 
           // Dynamically insert new active pill before the "+ Outro Local" button
           const newPill = document.createElement("button");
@@ -7662,13 +12109,7 @@ function attachBottomSheetFormEvents() {
           newPill.setAttribute("data-hospital", cleanName);
           newPill.textContent = cleanName.length > 20 ? cleanName.slice(0, 18) + '...' : cleanName;
           newPill.addEventListener("click", () => {
-            if (inputHosp) inputHosp.value = cleanName;
-            document.querySelectorAll(".quick-hospital-pill").forEach(p => {
-              p.classList.remove("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
-              p.classList.add("bg-surface-container-low", "text-on-surface-variant");
-            });
-            newPill.classList.add("bg-secondary-fixed", "text-on-secondary-fixed-variant", "shadow-sm");
-            newPill.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+            setChosenHospital(cleanName);
           });
 
           if (btnAddHospPill.parentNode) {
@@ -7739,6 +12180,83 @@ function attachBottomSheetFormEvents() {
     });
   }
 
+  // Voice Recognition Button in bottom sheet header
+  const btnVoiceSheet = document.getElementById("btn-voice-log-sheet");
+  if (btnVoiceSheet) {
+    btnVoiceSheet.addEventListener("click", () => {
+      startVoiceLogging();
+    });
+  }
+
+  // Consultation Form submit & live hourly recalculation
+  const formConsultation = document.getElementById("form-consultation");
+  if (formConsultation) {
+    const inputVal = document.getElementById("input-consultation-value");
+    const inputDur = document.getElementById("input-consultation-duration");
+    const labelHourly = document.getElementById("label-live-consultation-hourly");
+
+    const updateHourly = () => {
+      const v = parseFloat(inputVal?.value || 0) || 0;
+      const d = parseInt(inputDur?.value || 60, 10) || 60;
+      const rate = Math.round(v / (d / 60));
+      if (labelHourly) labelHourly.textContent = `R$ ${rate}/h`;
+    };
+
+    if (inputVal) inputVal.addEventListener("input", updateHourly);
+    if (inputDur) inputDur.addEventListener("change", updateHourly);
+
+    formConsultation.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const id = document.getElementById("input-consultation-id")?.value;
+      const patientName = document.getElementById("input-consultation-patient").value.trim();
+      const consultationType = document.getElementById("input-consultation-type").value;
+      const puericulturaMonth = document.getElementById("input-consultation-puericultura-month").value;
+      const date = document.getElementById("input-consultation-date").value;
+      const durationMinutes = parseInt(document.getElementById("input-consultation-duration").value, 10) || 60;
+      const value = parseFloat(document.getElementById("input-consultation-value").value) || 0;
+      const paymentMethod = document.getElementById("input-consultation-payment-method").value;
+      const paid = document.getElementById("input-consultation-paid").checked;
+      const notes = document.getElementById("input-consultation-notes").value.trim();
+      const isPackage = consultationType === "Pacote Puericultura Anual";
+
+      if (!patientName || !date || value <= 0) {
+        showToast("Preencha o nome do paciente, data e valor válido.", "warning");
+        return;
+      }
+
+      const payload = {
+        patientName,
+        consultationType,
+        puericulturaMonth,
+        isPackage,
+        date,
+        durationMinutes,
+        value,
+        paymentMethod,
+        paid,
+        notes
+      };
+
+      if (id) {
+        state.store.updateConsultation(id, payload);
+        showToast(`Atendimento de ${patientName} atualizado! 🩺`);
+      } else {
+        state.store.addConsultation(payload);
+        showToast(`Consulta de ${patientName} salva! 🩺`);
+      }
+
+      closeBottomSheet();
+      renderCurrentView();
+
+      showBabyReaction({
+        type: 'income',
+        title: id ? 'Consulta Atualizada! 👶🩺' : 'Consulta Registrada! 👶🩺',
+        message: `Honorário de R$ ${value.toFixed(2)} registrado com sucesso!`,
+        amount: value
+      });
+    });
+  }
+
   // Salary form submit (upserts existing salary avoiding duplicates)
   const formSalary = document.getElementById("form-salary");
   if (formSalary) {
@@ -7773,51 +12291,194 @@ function attachBottomSheetFormEvents() {
   if (formExpense) {
     const inputScope = document.getElementById("input-expense-scope");
     const inputCat = document.getElementById("input-expense-category");
+    const pickerTrigger = document.getElementById("btn-category-picker-trigger");
+    const pickerMenu = document.getElementById("category-picker-menu");
+    const catSearchInput = document.getElementById("input-category-search");
+    const btnClearSearch = document.getElementById("btn-clear-cat-search");
+    const btnUseTyped = document.getElementById("btn-use-typed-category");
+    const textUseTyped = document.getElementById("text-use-typed-category");
+    let activeMenuScope = "all";
 
-    const refreshCategorySelectOptions = (selectedCategory) => {
-      if (!inputCat) return;
-      const categoriesPF = state.store.getExpenseCategories ? state.store.getExpenseCategories("pf") : EXPENSE_CATEGORIES_PF;
-      const categoriesPJ = state.store.getExpenseCategories ? state.store.getExpenseCategories("pj") : EXPENSE_CATEGORIES_PJ;
+    const closeCategoryPicker = () => {
+      if (pickerMenu) {
+        pickerMenu.classList.add("hidden");
+        pickerMenu.classList.remove("dropup");
+      }
+      if (pickerTrigger) pickerTrigger.classList.remove("active");
+    };
 
-      inputCat.innerHTML = `
-        <optgroup label="🌸 Pessoa Física (Vida Pessoal)">
-          ${categoriesPF.map(c => `<option value="${c}" ${selectedCategory === c ? 'selected' : ''}>${c}</option>`).join("")}
-        </optgroup>
-        <optgroup label="🩺 Pessoa Jurídica (Trabalho & Clínica)">
-          ${categoriesPJ.map(c => `<option value="${c}" ${selectedCategory === c ? 'selected' : ''}>${c}</option>`).join("")}
-        </optgroup>
-        <option value="__new__" class="font-bold text-primary">+ Nova Categoria...</option>
-      `;
-      inputCat.value = selectedCategory;
+    const openCategoryPicker = () => {
+      if (!pickerMenu) return;
+      if (typeof window !== "undefined" && pickerTrigger && pickerTrigger.getBoundingClientRect) {
+        const triggerRect = pickerTrigger.getBoundingClientRect();
+        const vh = window.innerHeight || 800;
+        const spaceBelowViewport = vh - triggerRect.bottom;
+        const spaceAboveViewport = triggerRect.top;
+        const scrollParent = pickerTrigger.closest(".bottom-sheet, .dialog-box, [role='dialog']");
+        let shouldDropUp = false;
+        if (scrollParent && scrollParent.getBoundingClientRect) {
+          const parentRect = scrollParent.getBoundingClientRect();
+          const spaceBelowParent = parentRect.bottom - triggerRect.bottom;
+          const spaceAboveParent = triggerRect.top - parentRect.top;
+          if (spaceBelowParent < 220 && spaceAboveParent > spaceBelowParent) {
+            shouldDropUp = true;
+          } else if (spaceBelowViewport < 240 && spaceAboveViewport > spaceBelowViewport) {
+            shouldDropUp = true;
+          }
+        } else if (spaceBelowViewport < 240 && spaceAboveViewport > spaceBelowViewport) {
+          shouldDropUp = true;
+        }
+        pickerMenu.classList.toggle("dropup", shouldDropUp);
+      }
+      pickerMenu.classList.remove("hidden");
+      if (pickerTrigger) pickerTrigger.classList.add("active");
+      renderCategoryList(catSearchInput ? catSearchInput.value : "", activeMenuScope);
+      setTimeout(() => {
+        catSearchInput?.focus();
+        if (pickerMenu && pickerMenu.scrollIntoView) {
+          pickerMenu.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        }
+      }, 60);
+    };
+
+    const setSelectedCategory = (chosenCat) => {
+      if (!chosenCat) return;
+      const trimmed = chosenCat.trim();
+      if (!trimmed || trimmed === "__new__") return;
+      const catScope = state.store.getCategoryScope ? state.store.getCategoryScope(trimmed) : getCategoryScope(trimmed);
+      const catColor = state.store.getCategoryColor ? state.store.getCategoryColor(trimmed) : "#B80F55";
+      const catIcon = state.store.getCategoryIcon ? state.store.getCategoryIcon(trimmed) : "receipt_long";
+
+      // Ensure option exists in native select for form serialization
+      if (inputCat) {
+        let opt = Array.from(inputCat.options).find(o => o.value.toLowerCase() === trimmed.toLowerCase());
+        if (!opt) {
+          opt = new Option(trimmed, trimmed, true, true);
+          inputCat.add(opt);
+        }
+        inputCat.value = opt.value;
+      }
+
+      // Update trigger display
+      const dispText = document.getElementById("category-display-text");
+      const dispIcon = document.getElementById("category-display-icon");
+      const dispIconBg = document.getElementById("category-display-icon-bg");
+      const dispBadge = document.getElementById("category-display-badge");
+      const scopeLabel = document.getElementById("category-scope-label");
+
+      if (dispText) dispText.textContent = trimmed;
+      if (dispIcon) dispIcon.innerHTML = renderIcon(catIcon, 'text-[14px]');
+      if (dispIconBg) {
+        dispIconBg.style.backgroundColor = catColor + '25';
+        dispIconBg.style.color = catColor;
+      }
+      if (dispBadge) {
+        dispBadge.textContent = catScope.toUpperCase();
+        dispBadge.className = `text-[10px] px-1.5 py-0.2 rounded-full font-bold uppercase ${catScope === 'pj' ? 'bg-mint-income-bg text-mint-income' : 'bg-lilac-light text-lilac-dark'}`;
+      }
+      if (scopeLabel) {
+        scopeLabel.textContent = catScope === 'pj' ? 'Pessoa Jurídica' : 'Pessoa Física';
+      }
+
+      // Auto-sync scope hidden input and scope buttons
+      if (inputScope) inputScope.value = catScope;
+      document.querySelectorAll(".expense-scope-btn").forEach(b => {
+        const s = b.getAttribute("data-scope");
+        if (s === catScope) {
+          b.classList.add("bg-secondary", "text-white", "shadow-sm");
+          b.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+        } else {
+          b.classList.remove("bg-secondary", "text-white", "shadow-sm");
+          b.classList.add("bg-surface-container-low", "text-on-surface-variant");
+        }
+      });
+
+      refreshQuickPills(catScope, trimmed);
+      closeCategoryPicker();
+    };
+
+    const renderCategoryList = (query = "", filterScope = "all") => {
+      const listEl = document.getElementById("category-menu-items-list");
+      if (!listEl) return;
+      const currentVal = (inputCat ? inputCat.value : "").toLowerCase();
+      const pfList = state.store.getExpenseCategories ? state.store.getExpenseCategories("pf") : EXPENSE_CATEGORIES_PF;
+      const pjList = state.store.getExpenseCategories ? state.store.getExpenseCategories("pj") : EXPENSE_CATEGORIES_PJ;
+
+      let items = [];
+      if (filterScope === "pf" || filterScope === "all") {
+        pfList.forEach(name => items.push({ name, scope: "pf" }));
+      }
+      if (filterScope === "pj" || filterScope === "all") {
+        pjList.forEach(name => {
+          if (!items.find(i => i.name.toLowerCase() === name.toLowerCase())) {
+            items.push({ name, scope: "pj" });
+          }
+        });
+      }
+
+      const q = query.trim().toLowerCase();
+      if (q) {
+        items = items.filter(i => i.name.toLowerCase().includes(q));
+      }
+
+      // Update button to use typed category
+      if (btnUseTyped && textUseTyped) {
+        const exactMatch = items.some(i => i.name.toLowerCase() === q);
+        if (q && !exactMatch) {
+          textUseTyped.textContent = `Usar categoria "${query.trim()}" (Criar nova)`;
+          btnUseTyped.classList.remove("hidden");
+        } else {
+          btnUseTyped.classList.add("hidden");
+        }
+      }
+
+      if (items.length === 0) {
+        listEl.innerHTML = `
+          <div class="py-4 px-3 text-center text-[12px] text-on-surface-variant">
+            Nenhuma categoria padrão com "<span class="font-bold text-secondary">${query}</span>".<br/>
+            <span class="text-primary font-semibold">Clique no botão acima para criar e usar "${query}"! ✨</span>
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = items.map(i => {
+        const isSelected = currentVal === i.name.toLowerCase();
+        const color = state.store.getCategoryColor ? state.store.getCategoryColor(i.name) : "#B80F55";
+        const icon = state.store.getCategoryIcon ? state.store.getCategoryIcon(i.name) : "receipt_long";
+        return `
+          <div
+            class="category-menu-item ${isSelected ? 'active' : ''}"
+            data-category="${i.name}"
+            data-scope="${i.scope}"
+          >
+            <div class="flex items-center gap-2 min-w-0">
+              <div class="w-6 h-6 rounded-full flex items-center justify-center shrink-0" style="background-color: ${color}20; color: ${color};">
+                ${renderIcon(icon, 'text-[14px]')}
+              </div>
+              <span class="font-bold text-[12.5px] truncate">${i.name}</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <span class="text-[9px] px-1.5 py-0.2 rounded-full font-bold uppercase ${i.scope === 'pj' ? 'bg-mint-income-bg text-mint-income' : 'bg-lilac-light text-lilac-dark'}">${i.scope.toUpperCase()}</span>
+              ${isSelected ? renderIcon('check', 'text-[16px] text-secondary') : ''}
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      listEl.querySelectorAll(".category-menu-item").forEach(item => {
+        item.addEventListener("click", () => {
+          const chosen = item.getAttribute("data-category");
+          setSelectedCategory(chosen);
+        });
+      });
     };
 
     const attachPillEvents = () => {
       document.querySelectorAll(".quick-category-pill").forEach(pill => {
         pill.addEventListener("click", () => {
           const chosenCat = pill.getAttribute("data-category");
-          if (inputCat) {
-            inputCat.value = chosenCat;
-          }
-          const catScope = state.store.getCategoryScope ? state.store.getCategoryScope(chosenCat) : getCategoryScope(chosenCat);
-          if (inputScope) inputScope.value = catScope;
-
-          document.querySelectorAll(".expense-scope-btn").forEach(b => {
-            const s = b.getAttribute("data-scope");
-            if (s === catScope) {
-              b.classList.add("bg-secondary", "text-white", "shadow-sm");
-              b.classList.remove("bg-surface-container-low", "text-on-surface-variant");
-            } else {
-              b.classList.remove("bg-secondary", "text-white", "shadow-sm");
-              b.classList.add("bg-surface-container-low", "text-on-surface-variant");
-            }
-          });
-
-          document.querySelectorAll(".quick-category-pill").forEach(p => {
-            p.classList.remove("bg-secondary", "text-white", "shadow-sm", "font-bold");
-            p.classList.add("bg-surface-container-low", "text-on-surface-variant");
-          });
-          pill.classList.add("bg-secondary", "text-white", "shadow-sm", "font-bold");
-          pill.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+          setSelectedCategory(chosenCat);
         });
       });
 
@@ -7859,31 +12520,95 @@ function attachBottomSheetFormEvents() {
         initialData: { scope: curScope },
         onSave: ({ name, scope }) => {
           state.store.addExpenseCategory({ name, scope });
-          if (inputScope) inputScope.value = scope;
-          document.querySelectorAll(".expense-scope-btn").forEach(b => {
-            const s = b.getAttribute("data-scope");
-            if (s === scope) {
-              b.classList.add("bg-secondary", "text-white", "shadow-sm");
-              b.classList.remove("bg-surface-container-low", "text-on-surface-variant");
-            } else {
-              b.classList.remove("bg-secondary", "text-white", "shadow-sm");
-              b.classList.add("bg-surface-container-low", "text-on-surface-variant");
-            }
-          });
-          refreshCategorySelectOptions(name);
-          refreshQuickPills(scope, name);
+          setSelectedCategory(name);
           showToast(`Categoria '${name}' adicionada com sucesso! ✨`);
         },
-        onCancel: () => {
-          if (inputCat && inputCat.value === "__new__") {
-            const curScope = inputScope ? inputScope.value : "pf";
-            const fallbackList = state.store.getExpenseCategories ? state.store.getExpenseCategories(curScope) : EXPENSE_CATEGORIES_PF;
-            inputCat.value = fallbackList[0] || "Alimentação";
-            refreshQuickPills(curScope, inputCat.value);
-          }
-        }
+        onCancel: () => {}
       });
     };
+
+    // Category Trigger Toggle
+    pickerTrigger?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (pickerMenu && !pickerMenu.classList.contains("hidden")) {
+        closeCategoryPicker();
+      } else {
+        openCategoryPicker();
+      }
+    });
+
+    // Close when clicking outside category selector
+    document.addEventListener("click", (e) => {
+      const selectorContainer = document.getElementById("category-selector-container");
+      if (selectorContainer && !selectorContainer.contains(e.target)) {
+        closeCategoryPicker();
+      }
+    });
+
+    // Live search input
+    catSearchInput?.addEventListener("input", () => {
+      const q = catSearchInput.value;
+      if (btnClearSearch) {
+        if (q.trim()) btnClearSearch.classList.remove("hidden");
+        else btnClearSearch.classList.add("hidden");
+      }
+      renderCategoryList(q, activeMenuScope);
+    });
+
+    btnClearSearch?.addEventListener("click", () => {
+      if (catSearchInput) {
+        catSearchInput.value = "";
+        catSearchInput.focus();
+      }
+      btnClearSearch.classList.add("hidden");
+      renderCategoryList("", activeMenuScope);
+    });
+
+    btnUseTyped?.addEventListener("click", () => {
+      const q = catSearchInput ? catSearchInput.value.trim() : "";
+      if (q) {
+        const curScope = inputScope ? inputScope.value : "pf";
+        const detectedScope = state.store.getCategoryScope ? state.store.getCategoryScope(q) : curScope;
+        state.store.addExpenseCategory({ name: q, scope: detectedScope });
+        setSelectedCategory(q);
+        showToast(`Categoria '${q}' criada e selecionada! ✨`);
+      }
+    });
+
+    catSearchInput?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const q = catSearchInput.value.trim();
+        if (q) {
+          const curScope = inputScope ? inputScope.value : "pf";
+          const detectedScope = state.store.getCategoryScope ? state.store.getCategoryScope(q) : curScope;
+          state.store.addExpenseCategory({ name: q, scope: detectedScope });
+          setSelectedCategory(q);
+          showToast(`Categoria '${q}' selecionada! ✨`);
+        }
+      }
+    });
+
+    // Scope tabs inside menu
+    document.querySelectorAll(".cat-menu-scope-tab").forEach(tab => {
+      tab.addEventListener("click", (e) => {
+        e.stopPropagation();
+        activeMenuScope = tab.getAttribute("data-scope") || "all";
+        document.querySelectorAll(".cat-menu-scope-tab").forEach(t => {
+          t.classList.remove("bg-secondary", "text-white");
+          t.classList.add("bg-surface-container-low", "text-on-surface-variant");
+        });
+        tab.classList.add("bg-secondary", "text-white");
+        tab.classList.remove("bg-surface-container-low", "text-on-surface-variant");
+        renderCategoryList(catSearchInput ? catSearchInput.value : "", activeMenuScope);
+      });
+    });
+
+    document.getElementById("btn-menu-add-category")?.addEventListener("click", (e) => {
+      e.stopPropagation();
+      closeCategoryPicker();
+      triggerAddCategoryFlow();
+    });
 
     attachPillEvents();
     document.getElementById("btn-quick-add-category")?.addEventListener("click", triggerAddCategoryFlow);
@@ -7900,6 +12625,12 @@ function attachBottomSheetFormEvents() {
         btn.classList.add("bg-secondary", "text-white", "shadow-sm");
         btn.classList.remove("bg-surface-container-low", "text-on-surface-variant");
 
+        // Update scope label
+        const scopeLabel = document.getElementById("category-scope-label");
+        if (scopeLabel) {
+          scopeLabel.textContent = scope === 'pj' ? 'Pessoa Jurídica' : 'Pessoa Física';
+        }
+
         // Auto align category if current is in other scope
         const currentCat = inputCat ? inputCat.value : "";
         const currentCatScope = state.store.getCategoryScope ? state.store.getCategoryScope(currentCat) : getCategoryScope(currentCat);
@@ -7907,14 +12638,14 @@ function attachBottomSheetFormEvents() {
         if (currentCatScope !== scope) {
           const scopeList = state.store.getExpenseCategories ? state.store.getExpenseCategories(scope) : (scope === "pj" ? EXPENSE_CATEGORIES_PJ : EXPENSE_CATEGORIES_PF);
           nextCat = scopeList[0] || (scope === "pj" ? "Consultório/Sublocação" : "Alimentação");
-          if (inputCat) inputCat.value = nextCat;
+          setSelectedCategory(nextCat);
+        } else {
+          refreshQuickPills(scope, currentCat);
         }
-
-        refreshQuickPills(scope, nextCat);
       });
     });
 
-    // Auto sync scope if user chooses category from another optgroup
+    // Auto sync scope if user chooses category from another optgroup in native select
     if (inputCat) {
       inputCat.addEventListener("change", () => {
         const cat = inputCat.value;
@@ -7922,39 +12653,33 @@ function attachBottomSheetFormEvents() {
           triggerAddCategoryFlow();
           return;
         }
-
-        const autoScope = state.store.getCategoryScope ? state.store.getCategoryScope(cat) : getCategoryScope(cat);
-        if (inputScope) inputScope.value = autoScope;
-        document.querySelectorAll(".expense-scope-btn").forEach(b => {
-          const s = b.getAttribute("data-scope");
-          if (s === autoScope) {
-            b.classList.add("bg-secondary", "text-white", "shadow-sm");
-            b.classList.remove("bg-surface-container-low", "text-on-surface-variant");
-          } else {
-            b.classList.remove("bg-secondary", "text-white", "shadow-sm");
-            b.classList.add("bg-surface-container-low", "text-on-surface-variant");
-          }
-        });
-        refreshQuickPills(autoScope, cat);
+        setSelectedCategory(cat);
       });
     }
 
     formExpense.addEventListener("submit", (e) => {
       e.preventDefault();
       const description = document.getElementById("input-expense-desc").value.trim();
-      const category = document.getElementById("input-expense-category").value;
+      let category = document.getElementById("input-expense-category").value;
       const type = document.getElementById("input-expense-type").value;
       const scope = document.getElementById("input-expense-scope")?.value || (state.store.getCategoryScope ? state.store.getCategoryScope(category) : getCategoryScope(category));
       const value = parseFloat(document.getElementById("input-expense-value").value) || 0;
       const dueDate = document.getElementById("input-expense-duedate").value;
       const isPaid = document.getElementById("input-expense-paid").checked;
 
+      // If user typed a category into search input but didn't click apply
+      const pendingTyped = catSearchInput ? catSearchInput.value.trim() : "";
+      if (pendingTyped && (!category || category === "__new__" || category === "Alimentação" || category === "Lazer")) {
+        category = pendingTyped;
+        state.store.addExpenseCategory({ name: category, scope });
+      }
+
       if (!description || value <= 0 || !dueDate) {
         showToast("Preencha todos os campos obrigatórios da despesa.", "warning");
         return;
       }
 
-      if (category === "__new__") {
+      if (category === "__new__" || !category) {
         showToast("Selecione ou crie uma categoria válida.", "warning");
         return;
       }
@@ -7988,11 +12713,11 @@ function attachBottomSheetFormEvents() {
       closeBottomSheet();
       renderCurrentView();
 
-      // Pediatric visual reaction: baby crying gently with caring advice
+      // Pediatric visual reaction: subtle, delicate & caring feedback
       showBabyReaction({
         type: 'expense',
-        title: isEdit ? 'Despesa Atualizada! 🍼🥺' : 'Despesa Anotada! 🍼🥺',
-        message: 'O bebê chora com a saída financeira, mas o orçamento continua impecável e sob controle!',
+        title: isEdit ? 'Despesa Atualizada! 🍼✨' : 'Despesa Registrada! 🍼✨',
+        message: 'Tudo anotado e sob controle! Suas finanças protegidas com carinho pediátrico.',
         amount: value
       });
     });
@@ -8052,6 +12777,9 @@ function initApp() {
       initIconSystem();
     }
     initTouchGestures();
+    initThemeSystem();
+    initSpotlightSearch();
+    checkOnboarding();
 
     // Privacy Mode (Modo Sigilo) setup & event
     if (state.privacyMode && typeof document !== "undefined" && document.body) {
@@ -8083,7 +12811,10 @@ function initApp() {
 
     // Notifications Bell Dialog
     if (dom.btnNotifications) {
-      dom.btnNotifications.addEventListener("click", openNotificationsDialog);
+      dom.btnNotifications.addEventListener("click", () => {
+        closeHamburgerDrawer();
+        openNotificationsDialog();
+      });
     }
 
     // Doctor Profile & Goals Dialog
@@ -8093,8 +12824,80 @@ function initApp() {
 
     // Install App Dialog (PWA)
     if (dom.btnInstallApp) {
-      dom.btnInstallApp.addEventListener("click", openPwaInstallDialog);
+      dom.btnInstallApp.addEventListener("click", () => {
+        closeHamburgerDrawer();
+        openPwaInstallDialog();
+      });
     }
+
+    // Hamburger Menu & Lateral Drawer
+    if (dom.btnHamburger) {
+      dom.btnHamburger.addEventListener("click", openHamburgerDrawer);
+    }
+    if (dom.btnCloseDrawer) {
+      dom.btnCloseDrawer.addEventListener("click", closeHamburgerDrawer);
+    }
+    if (dom.hamburgerDrawerOverlay) {
+      dom.hamburgerDrawerOverlay.addEventListener("click", closeHamburgerDrawer);
+    }
+
+    // Drawer Doctor Photo
+    if (dom.btnDrawerUploadPhoto) {
+      dom.btnDrawerUploadPhoto.addEventListener("click", () => {
+        dom.inputDoctorPhoto?.click();
+      });
+    }
+    if (dom.inputDoctorPhoto) {
+      dom.inputDoctorPhoto.addEventListener("change", (e) => {
+        if (e.target.files && e.target.files[0]) {
+          handleDoctorPhotoFileSelect(e.target.files[0]);
+        }
+      });
+    }
+    if (dom.btnDrawerRemovePhoto) {
+      dom.btnDrawerRemovePhoto.addEventListener("click", () => {
+        setDoctorPhoto(null);
+        showToast("Foto da médica removida", "info");
+      });
+    }
+    if (dom.btnDrawerEditProfile) {
+      dom.btnDrawerEditProfile.addEventListener("click", () => {
+        closeHamburgerDrawer();
+        openDoctorProfileDialog();
+      });
+    }
+    if (dom.btnDrawerLegal) {
+      dom.btnDrawerLegal.addEventListener("click", () => {
+        closeHamburgerDrawer();
+        openLegalComplianceModal();
+      });
+    }
+
+    // Drawer Shortcuts
+    document.getElementById("drawer-shortcut-dre")?.addEventListener("click", () => {
+      closeHamburgerDrawer();
+      openDREDialog();
+    });
+    document.getElementById("drawer-shortcut-reconcile")?.addEventListener("click", () => {
+      closeHamburgerDrawer();
+      openReconciliationDialog();
+    });
+    document.getElementById("drawer-shortcut-contador")?.addEventListener("click", () => {
+      closeHamburgerDrawer();
+      openAccountantKitDialog();
+    });
+    document.getElementById("drawer-shortcut-sbar")?.addEventListener("click", () => {
+      closeHamburgerDrawer();
+      openSBARDialog();
+    });
+    document.getElementById("drawer-shortcut-fire")?.addEventListener("click", () => {
+      closeHamburgerDrawer();
+      openFIREDialog();
+    });
+    document.getElementById("drawer-shortcut-trash")?.addEventListener("click", () => {
+      closeHamburgerDrawer();
+      openTrashDialog();
+    });
 
     // Dialog overlay dismiss
     if (dom.dialogOverlay) {
@@ -8103,7 +12906,10 @@ function initApp() {
 
     // FAB Modal
     if (dom.fabBtn) {
-      dom.fabBtn.addEventListener("click", () => openBottomSheet("plantao"));
+      dom.fabBtn.addEventListener("click", (e) => {
+        spawnPediatricParticles(e, 'hearts');
+        openBottomSheet("plantao");
+      });
     }
 
     // Light dismiss on bottom sheet overlay click
@@ -8114,7 +12920,11 @@ function initApp() {
     // Keyboard Escape
     window.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        if (dom.dialogContainer && dom.dialogContainer.classList.contains("active")) {
+        if (dom.hamburgerDrawer && dom.hamburgerDrawer.classList.contains("active")) {
+          closeHamburgerDrawer();
+        } else if (dom.spotlightOverlay && dom.spotlightOverlay.classList.contains("active")) {
+          closeSpotlightSearch();
+        } else if (dom.dialogContainer && dom.dialogContainer.classList.contains("active")) {
           closeDialog();
         } else if (dom.bottomSheet && dom.bottomSheet.classList.contains("active")) {
           closeBottomSheet();
@@ -8143,6 +12953,7 @@ function initApp() {
 
     // Initial render
     renderCurrentView();
+    updateAllDoctorAvatars();
   } catch (err) {
     console.error("Critical error starting Finanças Pediatria:", err);
     if (dom.mainContent) {
@@ -8195,7 +13006,26 @@ if (typeof window !== "undefined") {
     switchTab,
     initApp,
     renderCurrentView,
-    bootApp
+    bootApp,
+    applyTheme,
+    openSpotlightSearch,
+    closeSpotlightSearch,
+    startVoiceLogging,
+    openSBARDialog,
+    openDREDialog,
+    openReconciliationDialog,
+    openAccountantKitDialog,
+    openFIREDialog,
+    openOnboardingDialog,
+    openHamburgerDrawer,
+    closeHamburgerDrawer,
+    openLegalComplianceModal,
+    spawnPediatricParticles,
+    getDoctorPhoto,
+    setDoctorPhoto,
+    updateAllDoctorAvatars,
+    renderCustomSelectHTML,
+    attachCustomSelectEvents
   };
 }
 

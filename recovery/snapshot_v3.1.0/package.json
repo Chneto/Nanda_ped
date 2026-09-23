@@ -1,0 +1,22 @@
+{
+  "name": "financas-pediatria",
+  "version": "3.1.0",
+  "description": "Controle Financeiro PWA Mobile-First para Médica Pediatra",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build_bundle.js",
+    "test": "node scripts/build_bundle.js && node --test tests/*.test.js",
+    "restore": "node scripts/restore_v3.0.0.js"
+  },
+  "keywords": [
+    "pediatria",
+    "medicina",
+    "plantoes",
+    "controle-financeiro",
+    "pwa",
+    "mobile-first"
+  ],
+  "author": "FChNeto",
+  "license": "MIT"
+}
