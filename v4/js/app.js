@@ -11,6 +11,7 @@ import {
   formatMonthYear,
   getLocalDateString,
   getMacroGroupForCategory,
+  MACRO_GROUPS,
   APP_CREATOR,
   APP_VERSION
 } from './store.js';
@@ -20,7 +21,8 @@ import {
   renderForecastChart,
   renderDonutExpenses,
   renderComparisonVisual,
-  renderMonthCalendarVisual
+  renderMonthCalendarVisual,
+  renderNetBalanceVisual
 } from './charts.js';
 
 export class PediatricApp {
@@ -29,6 +31,8 @@ export class PediatricApp {
     this.currentTab = 'home'; // 'home' | 'income' | 'expenses'
     this.activeModalTab = 'shift'; // 'shift' | 'expense' | 'salary'
     this.prefilledHospital = '';
+    this.activeExpenseFilter = 'all'; // 'all' | macro group id
+
 
     this.initDOM();
     this.bindEvents();
@@ -113,11 +117,25 @@ export class PediatricApp {
         return;
       }
 
+      // Perfil no Cabeçalho (Avatar e Saudação Médica)
+      const headerProfile = e.target.closest('#btn-header-profile');
+      if (headerProfile) {
+        this.openProfileModal();
+        return;
+      }
+
       // 6. Itens do Drawer
       const drawerItemProfile = e.target.closest('#drawer-item-profile');
       if (drawerItemProfile) {
         this.closeDrawer();
         this.openProfileModal();
+        return;
+      }
+
+      const drawerItemCategories = e.target.closest('#drawer-item-categories');
+      if (drawerItemCategories) {
+        this.closeDrawer();
+        this.openCategoriesModal();
         return;
       }
 
@@ -152,6 +170,88 @@ export class PediatricApp {
         const fileInput = document.getElementById('backup-file-input');
         if (fileInput) fileInput.click();
         return;
+      }
+
+      // Filtro de Macro-Grupos na Aba de Despesas
+      const macroFilterBtn = e.target.closest('[data-macro-filter]');
+      if (macroFilterBtn) {
+        const filterId = macroFilterBtn.getAttribute('data-macro-filter');
+        this.activeExpenseFilter = filterId;
+        this.render();
+        return;
+      }
+
+      // Silk Select: Toggle do Menu Dropdown / Dropup
+      const selectTrigger = e.target.closest('.silk-select-trigger');
+      if (selectTrigger) {
+        const container = selectTrigger.closest('.silk-select-container');
+        const menu = container ? container.querySelector('.silk-select-menu') : null;
+        if (menu) {
+          const wasOpen = menu.classList.contains('open');
+          document.querySelectorAll('.silk-select-menu.open').forEach(m => m.classList.remove('open'));
+          document.querySelectorAll('.silk-select-trigger.open').forEach(t => t.classList.remove('open'));
+          if (!wasOpen) {
+            menu.classList.add('open');
+            selectTrigger.classList.add('open');
+          }
+        }
+        return;
+      }
+
+      // Silk Select: Seleção de Item
+      const selectItem = e.target.closest('.silk-select-item');
+      if (selectItem) {
+        const val = selectItem.getAttribute('data-value');
+        const label = selectItem.getAttribute('data-label') || val;
+        const icon = selectItem.getAttribute('data-icon') || '';
+        const color = selectItem.getAttribute('data-color') || '';
+        const container = selectItem.closest('.silk-select-container');
+        if (container) {
+          const input = container.querySelector('input[type="hidden"]');
+          if (input) input.value = val;
+          const labelSpan = container.querySelector('.trigger-label');
+          if (labelSpan) labelSpan.textContent = label;
+          const iconSpan = container.querySelector('.trigger-icon');
+          if (iconSpan && icon) {
+            iconSpan.innerHTML = getIconSvg(icon, { size: 16, color: color || '#EC407A' });
+            if (color) iconSpan.style.backgroundColor = `${color}15`;
+          }
+          container.querySelectorAll('.silk-select-item').forEach(i => i.classList.remove('selected'));
+          selectItem.classList.add('selected');
+
+          const menu = container.querySelector('.silk-select-menu');
+          if (menu) menu.classList.remove('open');
+          const trig = container.querySelector('.silk-select-trigger');
+          if (trig) trig.classList.remove('open');
+        }
+        return;
+      }
+
+      // Acordeão de Subcategorias no Modal de Categorização
+      const macroCardHeader = e.target.closest('.macro-category-header');
+      if (macroCardHeader) {
+        const card = macroCardHeader.closest('.macro-category-card');
+        if (card) {
+          const list = card.querySelector('.macro-subcat-list');
+          if (list) list.classList.toggle('open');
+        }
+        return;
+      }
+
+      // Botão "Filtrar no Extrato" vindo do Modal de Categorização
+      const btnFilterMacroFromModal = e.target.closest('[data-filter-macro-from-modal]');
+      if (btnFilterMacroFromModal) {
+        const macroId = btnFilterMacroFromModal.getAttribute('data-filter-macro-from-modal');
+        this.activeExpenseFilter = macroId;
+        this.closeModal();
+        this.switchTab('expenses');
+        return;
+      }
+
+      // Clicou fora de qualquer Silk Select: fecha menus
+      if (!e.target.closest('.silk-select-container')) {
+        document.querySelectorAll('.silk-select-menu.open').forEach(m => m.classList.remove('open'));
+        document.querySelectorAll('.silk-select-trigger.open').forEach(t => t.classList.remove('open'));
       }
 
       // 7. Fechar Modais (Overlay ou Botão Fechar)
@@ -544,7 +644,127 @@ export class PediatricApp {
   }
 
   // -------------------------------------------------------------
-  // MODAL HUB DE FINANÇAS VISUAL
+  // MODAL DE CATEGORIZAÇÃO DAS DESPESAS POR TIPO (MACRO-GRUPOS)
+  // -------------------------------------------------------------
+  openCategoriesModal() {
+    const modal = document.getElementById('action-modal');
+    if (!modal) return;
+    modal.classList.add('open');
+
+    const body = document.getElementById('modal-body-content');
+    const tabs = document.querySelector('.modal-header-tabs');
+    if (tabs) tabs.style.display = 'none';
+
+    const currentMonth = this.store.data.preferences.activeMonth || getLocalDateString().slice(0, 7);
+    const summary = this.store.getMonthSummary(currentMonth, 'caixa');
+    const monthExpenses = this.store.data.expenses.filter(e => e.date.startsWith(currentMonth));
+
+    let macroCardsHtml = '';
+    MACRO_GROUPS.forEach(mg => {
+      const groupExpenses = monthExpenses.filter(e => {
+        const g = getMacroGroupForCategory(e.category);
+        return g.id === mg.id;
+      });
+      const groupTotal = groupExpenses.reduce((s, e) => s + e.value, 0);
+      const groupPct = summary.totalExpenses > 0 ? (groupTotal / summary.totalExpenses) * 100 : 0;
+
+      // Subcategorias dentro deste grupo
+      const subcatMap = {};
+      groupExpenses.forEach(e => {
+        subcatMap[e.category] = (subcatMap[e.category] || 0) + e.value;
+      });
+      const subcatRows = Object.keys(subcatMap).map(cName => `
+        <div class="macro-subcat-item">
+          <span>${cName}</span>
+          <strong>${formatCurrency(subcatMap[cName])}</strong>
+        </div>
+      `).join('');
+
+      macroCardsHtml += `
+        <div class="macro-category-card">
+          <div class="macro-category-header" title="Toque para ver detalhes">
+            <div class="macro-category-left">
+              <div class="macro-category-icon" style="background: ${mg.bgColor}; color: ${mg.color};">
+                ${getIconSvg(mg.icon, { size: 22, color: mg.color })}
+              </div>
+              <div class="macro-category-info">
+                <h4>${mg.name}</h4>
+                <span>${groupExpenses.length} ${groupExpenses.length === 1 ? 'gasto' : 'gastos'} computados</span>
+              </div>
+            </div>
+            <div class="macro-category-right">
+              <span class="macro-category-val">${formatCurrency(groupTotal)}</span>
+              <span class="macro-category-pct">${groupPct.toFixed(1)}% do orçamento</span>
+            </div>
+          </div>
+
+          <div class="macro-progress-track">
+            <div class="macro-progress-fill" style="width: ${groupPct.toFixed(1)}%; background: ${mg.color};"></div>
+          </div>
+
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 4px;">
+            <button class="section-action-btn" data-filter-macro-from-modal="${mg.id}" style="font-size: 0.72rem; padding: 4px 10px;">
+              Filtrar no Extrato
+            </button>
+            <span style="font-size: 0.72rem; color: var(--text-muted); cursor: pointer;">
+              ${Object.keys(subcatMap).length > 0 ? 'Ver subcategorias ▼' : 'Sem despesas neste grupo'}
+            </span>
+          </div>
+
+          ${Object.keys(subcatMap).length > 0 ? `
+            <div class="macro-subcat-list">
+              ${subcatRows}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    });
+
+    body.innerHTML = `
+      <div style="padding: 6px 0;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
+          <div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.18rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+              ${getIconSvg('layers', { size: 22, color: '#EC407A' })}
+              Categorização de Gastos por Tipo
+            </h3>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">
+              Macro-Grupos inspirados em bancos digitais (${formatMonthYear(currentMonth).split(' de ')[0]})
+            </p>
+          </div>
+          <button class="btn-modal-close" style="border: none; background: transparent; cursor: pointer; color: var(--text-muted);">
+            ${getIconSvg('close', { size: 20 })}
+          </button>
+        </div>
+
+        <div style="margin-bottom: 14px; background: var(--hero-gradient); border: 1px solid var(--rose-gold); border-radius: var(--radius-md); padding: 14px 16px; display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span style="font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Total Despesas</span>
+            <div style="font-family: var(--font-heading); font-size: 1.35rem; font-weight: 800; color: var(--coral-expense);">
+              ${formatCurrency(summary.totalExpenses)}
+            </div>
+          </div>
+          <button class="section-action-btn" id="btn-modal-goto-expenses" style="background: var(--bg-card); color: var(--primary-pink); border-color: var(--rose-gold);">
+            + Nova Despesa
+          </button>
+        </div>
+
+        <div class="macro-cards-container">
+          ${macroCardsHtml}
+        </div>
+      </div>
+    `;
+
+    const btnGoExp = document.getElementById('btn-modal-goto-expenses');
+    if (btnGoExp) {
+      btnGoExp.onclick = () => {
+        this.openModal('expense');
+      };
+    }
+  }
+
+  // -------------------------------------------------------------
+  // MODAL HUB DE FINANÇAS VISUAL (5 REPRESENTAÇÕES VISUAIS)
   // -------------------------------------------------------------
   openHubModal() {
     const modal = document.getElementById('action-modal');
@@ -561,16 +781,26 @@ export class PediatricApp {
     body.innerHTML = `
       <div style="padding: 6px 0;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px;">
-          <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
-            ${getIconSvg('analytics', { size: 22, color: '#EC407A' })}
-            Hub de Finanças Visual
-          </h3>
+          <div>
+            <h3 style="font-family: var(--font-heading); font-size: 1.18rem; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+              ${getIconSvg('analytics', { size: 22, color: '#EC407A' })}
+              Hub de Finanças Visual
+            </h3>
+            <p style="font-size: 0.78rem; color: var(--text-muted);">
+              Gráficos completos e representações visuais de ${formatMonthYear(currentMonth).split(' de ')[0]}
+            </p>
+          </div>
           <button class="btn-modal-close" style="border: none; background: transparent; cursor: pointer; color: var(--text-muted);">
             ${getIconSvg('close', { size: 20 })}
           </button>
         </div>
 
-        <!-- 1. Comparativo Caixa Real vs Produção Represada -->
+        <!-- 1. Balanço Líquido e Taxa de Poupança -->
+        <div style="margin-bottom: 18px;">
+          <div id="hub-net-balance-container"></div>
+        </div>
+
+        <!-- 2. Comparativo Caixa Real vs Produção Represada -->
         <div style="margin-bottom: 18px;">
           <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;">
             Comparativo de Liquidez
@@ -578,22 +808,46 @@ export class PediatricApp {
           <div id="hub-comparison-container"></div>
         </div>
 
-        <!-- 2. Mini-Calendário Visual do Mês -->
+        <!-- 3. Distribuição de Gastos Donut -->
+        <div style="margin-bottom: 18px;">
+          <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;">
+            Distribuição de Gastos
+          </h4>
+          <div id="hub-donut-container"></div>
+        </div>
+
+        <!-- 4. Mini-Calendário Visual do Mês -->
         <div style="margin-bottom: 18px;">
           <div id="hub-calendar-container"></div>
         </div>
 
-        <!-- 3. Previsão de 6 Meses -->
+        <!-- 5. Previsão de 6 Meses -->
         <div>
           <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;">
-            Projeção de 6 Meses
+            Projeção de 6 Meses de Fluxo
           </h4>
           <div id="hub-forecast-container"></div>
         </div>
       </div>
     `;
 
+    renderNetBalanceVisual('hub-net-balance-container', summary, formatMonthYear(currentMonth));
     renderComparisonVisual('hub-comparison-container', summary.totalIncome, summary.workedThisMonthTotal, formatMonthYear(currentMonth));
+    
+    const chartViewMode = this.store.data.preferences.chartViewMode || 'macro';
+    const donutData = chartViewMode === 'macro' ? summary.macroBreakdown : summary.categoryBreakdown;
+    renderDonutExpenses(
+      'hub-donut-container',
+      donutData,
+      summary.totalExpenses,
+      chartViewMode,
+      (newMode) => {
+        this.store.data.preferences.chartViewMode = newMode;
+        this.store.save();
+        this.openHubModal();
+      }
+    );
+
     renderMonthCalendarVisual('hub-calendar-container', currentMonth, this.store.data.shifts, this.store.data.expenses);
     const forecast = this.store.getForecast6Months(currentMonth);
     renderForecastChart('hub-forecast-container', forecast);
@@ -746,12 +1000,35 @@ export class PediatricApp {
           <div class="drawer-menu-list">
             <button class="drawer-menu-item" id="drawer-item-profile">
               ${getIconSvg('user', { size: 20, color: '#EC407A' })}
-              <span>Editar Perfil Médico</span>
+              <div style="display: flex; flex-direction: column; text-align: left; gap: 2px;">
+                <span>Editar Perfil Médico</span>
+                <small style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">CRM, Especialidade e Bolsa</small>
+              </div>
+              <div style="margin-left: auto; color: var(--text-muted);">
+                ${getIconSvg('chevron_right', { size: 16 })}
+              </div>
+            </button>
+
+            <button class="drawer-menu-item" id="drawer-item-categories">
+              ${getIconSvg('layers', { size: 20, color: '#FF7043' })}
+              <div style="display: flex; flex-direction: column; text-align: left; gap: 2px;">
+                <span>Categorização por Tipo</span>
+                <small style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">6 Macro-Grupos (Alimentação, etc.)</small>
+              </div>
+              <div style="margin-left: auto; color: var(--text-muted);">
+                ${getIconSvg('chevron_right', { size: 16 })}
+              </div>
             </button>
 
             <button class="drawer-menu-item" id="drawer-item-hub">
               ${getIconSvg('analytics', { size: 20, color: '#26A69A' })}
-              <span>Hub de Finanças Visual</span>
+              <div style="display: flex; flex-direction: column; text-align: left; gap: 2px;">
+                <span>Hub de Finanças Visual</span>
+                <small style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">5 Representações gráficas ricas</small>
+              </div>
+              <div style="margin-left: auto; color: var(--text-muted);">
+                ${getIconSvg('chevron_right', { size: 16 })}
+              </div>
             </button>
 
             <button class="drawer-menu-item" id="drawer-item-theme">
@@ -1032,10 +1309,41 @@ export class PediatricApp {
   // -------------------------------------------------------------
   // ABA: DESPESAS (COM TODAS AS CATEGORIAS & SPARKLINES)
   // -------------------------------------------------------------
+  // -------------------------------------------------------------
+  // ABA: DESPESAS (COM TODAS AS CATEGORIAS, FILTROS & SPARKLINES)
+  // -------------------------------------------------------------
   renderExpensesTab(summary, currentMonth) {
-    const monthExpenses = this.store.data.expenses
+    const allMonthExpenses = this.store.data.expenses
       .filter(e => e.date.startsWith(currentMonth))
       .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // Filtro por Macro-Grupo ativo
+    const activeFilter = this.activeExpenseFilter || 'all';
+    const monthExpenses = activeFilter === 'all'
+      ? allMonthExpenses
+      : allMonthExpenses.filter(e => getMacroGroupForCategory(e.category).id === activeFilter);
+
+    const filteredTotal = monthExpenses.reduce((s, e) => s + e.value, 0);
+
+    // Barra de Filtros por Macro-Grupo (Estilo Apps Bancários)
+    const filterPillsHtml = `
+      <div class="macro-filter-bar">
+        <button class="macro-filter-pill ${activeFilter === 'all' ? 'active' : ''}" data-macro-filter="all">
+          <span>Todas</span>
+          <span class="pill-count">${allMonthExpenses.length}</span>
+        </button>
+        ${MACRO_GROUPS.map(mg => {
+          const count = allMonthExpenses.filter(e => getMacroGroupForCategory(e.category).id === mg.id).length;
+          return `
+            <button class="macro-filter-pill ${activeFilter === mg.id ? 'active' : ''}" data-macro-filter="${mg.id}">
+              ${getIconSvg(mg.icon, { size: 14, color: mg.color })}
+              <span>${mg.name}</span>
+              ${count > 0 ? `<span class="pill-count">${count}</span>` : ''}
+            </button>
+          `;
+        }).join('')}
+      </div>
+    `;
 
     let expensesHtml = '';
     if (monthExpenses.length === 0) {
@@ -1044,7 +1352,7 @@ export class PediatricApp {
           <div class="empty-icon-circle">
             ${getIconSvg('cart', { size: 28, color: '#FF7043' })}
           </div>
-          <p class="empty-text">Nenhuma despesa para este mês</p>
+          <p class="empty-text">Nenhuma despesa encontrada ${activeFilter !== 'all' ? 'neste macro-grupo' : 'para este mês'}</p>
           <span class="empty-sub">Toque em "+ Nova Despesa" para cadastrar</span>
         </div>
       `;
@@ -1084,12 +1392,15 @@ export class PediatricApp {
               <div class="sparkline-track">
                 <div class="sparkline-fill" style="width: ${pctOfTotal.toFixed(1)}%; background: ${catInfo.color};"></div>
               </div>
-              <span class="sparkline-pct">${pctOfTotal.toFixed(1)}%</span>
+              <span class="sparkline-pct">${pctOfTotal.toFixed(1)}% do mês</span>
             </div>
           </div>
         `;
       }).join('');
     }
+
+    const activeMacroObj = MACRO_GROUPS.find(m => m.id === activeFilter);
+    const filterTitle = activeFilter === 'all' ? 'Lançamentos' : `Gastos em ${activeMacroObj.name}`;
 
     return `
       <!-- Resumo de Despesas -->
@@ -1102,17 +1413,33 @@ export class PediatricApp {
           <button class="section-action-btn" id="btn-add-expense-quick">+ Nova Despesa</button>
         </div>
         <div style="font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: var(--coral-expense); margin-bottom: 4px;">
-          ${formatCurrency(summary.totalExpenses)}
+          ${formatCurrency(activeFilter === 'all' ? summary.totalExpenses : filteredTotal)}
         </div>
         <span style="font-size: 0.78rem; color: var(--text-muted);">
-          Despesas do mês incluindo compras parceladas vigentes
+          ${activeFilter === 'all' ? 'Despesas do mês incluindo compras parceladas vigentes' : `Filtrado por ${activeMacroObj.name} (${monthExpenses.length} itens)`}
         </span>
+      </section>
+
+      <!-- Barra de Filtros Estilo Apps Bancários -->
+      <section class="card-section" style="padding-bottom: 8px;">
+        <div class="section-header" style="margin-bottom: 8px;">
+          <h3 style="font-size: 0.86rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+            ${getIconSvg('filter', { size: 16, color: '#EC407A' })}
+            Filtrar por Macro-Grupo
+          </h3>
+          ${activeFilter !== 'all' ? `
+            <button class="section-action-btn" data-macro-filter="all" style="font-size: 0.72rem; padding: 4px 8px;">
+              Limpar Filtro
+            </button>
+          ` : ''}
+        </div>
+        ${filterPillsHtml}
       </section>
 
       <!-- Lista Detalhada de Despesas -->
       <section class="card-section">
         <div class="section-header">
-          <h2>Lançamentos de ${formatMonthYear(currentMonth).split(' de ')[0]}</h2>
+          <h2>${filterTitle} (${formatMonthYear(currentMonth).split(' de ')[0]})</h2>
           <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">
             ${monthExpenses.length} itens
           </span>
@@ -1121,6 +1448,80 @@ export class PediatricApp {
           ${expensesHtml}
         </div>
       </section>
+    `;
+  }
+
+  // -------------------------------------------------------------
+  // SISTEMA SILK SELECT: RENDERIZADOR DE DROPDOWN & DROPUP
+  // -------------------------------------------------------------
+  renderCustomSelect({ id, name, value, options, isDropup = false, grouped = false, placeholder = 'Selecione...' }) {
+    let selectedOption = null;
+    if (grouped) {
+      for (const grp of options) {
+        const found = grp.items.find(i => i.value === value);
+        if (found) { selectedOption = found; break; }
+      }
+    } else {
+      selectedOption = options.find(i => i.value === value);
+    }
+
+    const currentLabel = selectedOption ? selectedOption.label : placeholder;
+    const currentIcon = selectedOption ? (selectedOption.icon || 'tag') : 'tag';
+    const currentColor = selectedOption ? (selectedOption.color || '#EC407A') : '#EC407A';
+
+    let menuContent = '';
+    if (grouped) {
+      menuContent = options.map(grp => `
+        <div class="silk-select-group-header" style="color: ${grp.color};">
+          ${getIconSvg(grp.icon, { size: 14, color: grp.color })}
+          <span>${grp.groupName}</span>
+        </div>
+        ${grp.items.map(item => `
+          <div class="silk-select-item ${item.value === value ? 'selected' : ''}" data-value="${item.value}" data-label="${item.label}" data-icon="${item.icon}" data-color="${item.color}">
+            <div class="silk-select-item-left">
+              <span class="silk-select-badge" style="background: ${item.color}15; color: ${item.color};">
+                ${getIconSvg(item.icon, { size: 14, color: item.color })}
+              </span>
+              <span>${item.label}</span>
+            </div>
+            ${item.value === value ? getIconSvg('check', { size: 14, color: '#EC407A' }) : ''}
+          </div>
+        `).join('')}
+      `).join('');
+    } else {
+      menuContent = options.map(item => `
+        <div class="silk-select-item ${item.value === value ? 'selected' : ''}" data-value="${item.value}" data-label="${item.label}" data-icon="${item.icon || 'tag'}" data-color="${item.color || '#EC407A'}">
+          <div class="silk-select-item-left">
+            ${item.icon ? `
+              <span class="silk-select-badge" style="background: ${item.color || '#EC407A'}15; color: ${item.color || '#EC407A'};">
+                ${getIconSvg(item.icon, { size: 14, color: item.color || '#EC407A' })}
+              </span>
+            ` : ''}
+            <span>${item.label}</span>
+          </div>
+          ${item.value === value ? getIconSvg('check', { size: 14, color: '#EC407A' }) : ''}
+        </div>
+      `).join('');
+    }
+
+    return `
+      <div class="silk-select-container ${isDropup ? 'silk-dropup' : ''}" id="container-select-${id}">
+        <input type="hidden" name="${name}" id="input-${id}" value="${value}" />
+        <div class="silk-select-trigger" data-silk-select="${id}" tabindex="0">
+          <div class="trigger-content">
+            <span class="trigger-icon" style="background: ${currentColor}15; color: ${currentColor};">
+              ${getIconSvg(currentIcon, { size: 16, color: currentColor })}
+            </span>
+            <span class="trigger-label">${currentLabel}</span>
+          </div>
+          <span class="trigger-arrow">
+            ${getIconSvg('chevron_down', { size: 18 })}
+          </span>
+        </div>
+        <div class="silk-select-menu ${isDropup ? 'dropup' : ''}" id="menu-${id}">
+          ${menuContent}
+        </div>
+      </div>
     `;
   }
 
@@ -1140,6 +1541,22 @@ export class PediatricApp {
     if (this.activeModalTab === 'shift') {
       const today = getLocalDateString();
       const defaultHospital = this.prefilledHospital || 'Maternidade Araken';
+
+      const shiftTypeOptions = [
+        { value: 'Sala de Parto', label: 'Sala de Parto (D+60 80% / D+90 20%)', icon: 'baby', color: '#EC407A' },
+        { value: '12h Noturno', label: '12h Noturno (Plantão Noturno)', icon: 'moon', color: '#AB47BC' },
+        { value: '12h Diurno', label: '12h Diurno (Plantão Diurno)', icon: 'sun', color: '#FFA726' },
+        { value: '24h', label: '24h (Plantão 24 Horas)', icon: 'hospital', color: '#26A69A' },
+        { value: 'Sobreaviso', label: 'Sobreaviso (Disponibilidade Médica)', icon: 'stethoscope', color: '#42A5F5' }
+      ];
+
+      const customShiftTypeSelect = this.renderCustomSelect({
+        id: 'shift-type',
+        name: 'shiftType',
+        value: 'Sala de Parto',
+        options: shiftTypeOptions,
+        isDropup: false
+      });
 
       body.innerHTML = `
         <form id="form-new-shift">
@@ -1162,13 +1579,7 @@ export class PediatricApp {
             </div>
             <div class="form-group">
               <label>Tipo de Plantão</label>
-              <select name="shiftType" class="form-select">
-                <option value="12h Noturno">12h Noturno</option>
-                <option value="12h Diurno">12h Diurno</option>
-                <option value="24h">24h</option>
-                <option value="Sala de Parto" selected>Sala de Parto</option>
-                <option value="Sobreaviso">Sobreaviso</option>
-              </select>
+              ${customShiftTypeSelect}
             </div>
           </div>
 
@@ -1197,11 +1608,12 @@ export class PediatricApp {
         const fd = new FormData(form);
         const net = parseFloat(fd.get('netValue')) || 0;
         const gross = parseFloat(fd.get('grossValue')) || net;
+        const shiftType = fd.get('shiftType') || document.getElementById('input-shift-type')?.value || 'Sala de Parto';
 
         this.store.saveShift({
           hospital: fd.get('hospital'),
           date: fd.get('date'),
-          shiftType: fd.get('shiftType'),
+          shiftType,
           netValue: net,
           grossValue: gross
         });
@@ -1211,9 +1623,53 @@ export class PediatricApp {
       };
     } else if (this.activeModalTab === 'expense') {
       const today = getLocalDateString();
-      const categoriesOptions = this.store.data.categories.map(c => `
-        <option value="${c.name}">${c.name}</option>
-      `).join('');
+
+      // Opções agrupadas pelos 6 Macro-Grupos com ícones e cores
+      const groupedCategoryOptions = MACRO_GROUPS.map(mg => {
+        const catItems = mg.categories.map(cName => {
+          const cDef = this.store.data.categories.find(c => c.name === cName) || { icon: 'tag', color: mg.color };
+          return {
+            value: cName,
+            label: cName,
+            icon: cDef.icon || 'tag',
+            color: cDef.color || mg.color
+          };
+        });
+        return {
+          groupName: mg.name,
+          icon: mg.icon,
+          color: mg.color,
+          items: catItems
+        };
+      });
+
+      const customCategorySelect = this.renderCustomSelect({
+        id: 'expense-category',
+        name: 'category',
+        value: 'Mercantil',
+        options: groupedCategoryOptions,
+        grouped: true,
+        isDropup: true // Dropup no formulário para ergonomia anti-crop
+      });
+
+      const installmentOptions = [
+        { value: '2', label: '2x Parcelas', icon: 'credit_card', color: '#8D6E63' },
+        { value: '3', label: '3x Parcelas', icon: 'credit_card', color: '#8D6E63' },
+        { value: '4', label: '4x Parcelas', icon: 'credit_card', color: '#8D6E63' },
+        { value: '5', label: '5x Parcelas', icon: 'credit_card', color: '#8D6E63' },
+        { value: '6', label: '6x Parcelas', icon: 'credit_card', color: '#8D6E63' },
+        { value: '10', label: '10x Parcelas', icon: 'credit_card', color: '#8D6E63' },
+        { value: '12', label: '12x Parcelas', icon: 'credit_card', color: '#8D6E63' },
+        { value: '24', label: '24x Parcelas', icon: 'credit_card', color: '#8D6E63' }
+      ];
+
+      const customInstallmentSelect = this.renderCustomSelect({
+        id: 'expense-installments',
+        name: 'totalInstallments',
+        value: '3',
+        options: installmentOptions,
+        isDropup: true
+      });
 
       body.innerHTML = `
         <form id="form-new-expense">
@@ -1224,10 +1680,8 @@ export class PediatricApp {
 
           <div class="form-row">
             <div class="form-group">
-              <label>Categoria</label>
-              <select name="category" class="form-select">
-                ${categoriesOptions}
-              </select>
+              <label>Categoria (por Macro-Grupo)</label>
+              ${customCategorySelect}
             </div>
             <div class="form-group">
               <label>Valor (R$)</label>
@@ -1250,16 +1704,7 @@ export class PediatricApp {
               <label style="font-size: 0.78rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 4px;">
                 Número de Parcelas
               </label>
-              <select name="totalInstallments" class="form-select">
-                <option value="2">2x</option>
-                <option value="3">3x</option>
-                <option value="4">4x</option>
-                <option value="5">5x</option>
-                <option value="6">6x</option>
-                <option value="10">10x</option>
-                <option value="12">12x</option>
-                <option value="24">24x</option>
-              </select>
+              ${customInstallmentSelect}
             </div>
           </div>
 
@@ -1278,11 +1723,13 @@ export class PediatricApp {
         e.preventDefault();
         const fd = new FormData(form);
         const isInst = checkInst.checked;
-        const totalInst = isInst ? parseInt(fd.get('totalInstallments'), 10) : 1;
+        const totalInstVal = fd.get('totalInstallments') || document.getElementById('input-expense-installments')?.value || '2';
+        const totalInst = isInst ? parseInt(totalInstVal, 10) : 1;
+        const categoryVal = fd.get('category') || document.getElementById('input-expense-category')?.value || 'Mercantil';
 
         this.store.saveExpense({
           description: fd.get('description'),
-          category: fd.get('category'),
+          category: categoryVal,
           value: parseFloat(fd.get('value')) || 0,
           date: fd.get('date'),
           isInstallment: isInst,
@@ -1294,6 +1741,18 @@ export class PediatricApp {
       };
     } else if (this.activeModalTab === 'salary') {
       const curSal = this.store.data.residencySalary;
+
+      const activeStatusOptions = [
+        { value: 'true', label: 'Bolsa Ativa', icon: 'check', color: '#26A69A' },
+        { value: 'false', label: 'Pausada', icon: 'close', color: '#FF7043' }
+      ];
+
+      const customActiveSelect = this.renderCustomSelect({
+        id: 'salary-active',
+        name: 'active',
+        value: curSal.active ? 'true' : 'false',
+        options: activeStatusOptions
+      });
 
       body.innerHTML = `
         <form id="form-salary">
@@ -1309,10 +1768,7 @@ export class PediatricApp {
             </div>
             <div class="form-group">
               <label>Status</label>
-              <select name="active" class="form-select">
-                <option value="true" ${curSal.active ? 'selected' : ''}>Ativo</option>
-                <option value="false" ${!curSal.active ? 'selected' : ''}>Pausado</option>
-              </select>
+              ${customActiveSelect}
             </div>
           </div>
 
@@ -1324,10 +1780,11 @@ export class PediatricApp {
       form.onsubmit = (e) => {
         e.preventDefault();
         const fd = new FormData(form);
+        const activeVal = fd.get('active') || document.getElementById('input-salary-active')?.value || 'true';
         this.store.updateResidencySalary({
           value: fd.get('value'),
           dayOfMonth: fd.get('dayOfMonth'),
-          active: fd.get('active') === 'true'
+          active: activeVal === 'true'
         });
 
         this.closeModal();
