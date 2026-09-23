@@ -107,5 +107,81 @@ function buildV2Bundle() {
   }
 }
 
+// 3. Constrói Bundle v4.0 (Silk & Rose Gold)
+function buildV4Bundle() {
+  const v4Dir = path.join(rootDir, 'v4', 'js');
+  const iconsPath = path.join(v4Dir, 'icons.js');
+  const storePath = path.join(v4Dir, 'store.js');
+  const chartsPath = path.join(v4Dir, 'charts.js');
+  const appPath = path.join(v4Dir, 'app.js');
+  const bundlePath = path.join(v4Dir, 'bundle.js');
+
+  let iconsCode = cleanModule(fs.readFileSync(iconsPath, 'utf8'));
+  let storeCode = cleanModule(fs.readFileSync(storePath, 'utf8'));
+  let chartsCode = cleanModule(fs.readFileSync(chartsPath, 'utf8'));
+  let appCode = cleanModule(fs.readFileSync(appPath, 'utf8'));
+
+  const bundle = `/**
+ * Finanças Pediatria v4.0 - Silk & Rose Gold Standalone Bundle
+ * Self-contained for zero-CORS file:// protocol and offline execution
+ * Autor Imutável: FChNeto (APP_CREATOR = 'FChNeto')
+ */
+(function() {
+  'use strict';
+
+  // --- ICONS SYSTEM ---
+  ${iconsCode}
+
+  // Fallback global de ícones para o escopo do window
+  if (typeof window !== 'undefined') {
+    window.getIconSvg = getIconSvg;
+    window.getIcon = getIcon;
+  }
+
+  // --- STORE ENGINE ---
+  ${storeCode}
+
+  // --- CHARTS ENGINE ---
+  ${chartsCode}
+
+  // --- APPLICATION LOGIC ---
+  ${appCode}
+})();
+`;
+
+  fs.writeFileSync(bundlePath, bundle, 'utf8');
+  console.log('v4 bundle escrito em:', bundlePath);
+
+  // Espelha para /v4.0/
+  const v40Dir = path.join(rootDir, 'v4.0');
+  const v4SourceDir = path.join(rootDir, 'v4');
+  if (fs.existsSync(v40Dir)) {
+    // Sincroniza arquivos de topo
+    ['index.html', 'manifest.json', 'sw.js'].forEach(file => {
+      const src = path.join(v4SourceDir, file);
+      const dst = path.join(v40Dir, file);
+      if (fs.existsSync(src)) fs.copyFileSync(src, dst);
+    });
+
+    // Sincroniza css/styles.css
+    const cssSrc = path.join(v4SourceDir, 'css', 'styles.css');
+    const cssDst = path.join(v40Dir, 'css', 'styles.css');
+    if (fs.existsSync(cssSrc)) fs.copyFileSync(cssSrc, cssDst);
+
+    // Sincroniza módulos js
+    ['icons.js', 'store.js', 'charts.js', 'app.js'].forEach(file => {
+      const src = path.join(v4SourceDir, 'js', file);
+      const dst = path.join(v40Dir, 'js', file);
+      if (fs.existsSync(src)) fs.copyFileSync(src, dst);
+    });
+
+    // Grava o bundle na pasta v4.0/js
+    const v40BundlePath = path.join(v40Dir, 'js', 'bundle.js');
+    fs.writeFileSync(v40BundlePath, bundle, 'utf8');
+    console.log('v4.0 espelhado com sucesso em:', v40BundlePath);
+  }
+}
+
 buildRootBundle();
 buildV2Bundle();
+buildV4Bundle();

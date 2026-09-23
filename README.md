@@ -1,15 +1,18 @@
-# 🌸 Finanças Pediatria — Gestão Financeira Pediátrica v3.1 (PWA)
+# 🌸 Finanças Pediatria — Gestão Financeira Pediátrica v4.0 & v3.1 (PWA)
 
 ![Finanças Pediatria Showcase](./assets/images/showcase.png)
 
-[![Versão](https://img.shields.io/badge/Versão-3.1.1-EC407A?style=for-the-badge&logo=apple)](./RELEASE_NOTES.md)
-[![Testes Automatizados](https://img.shields.io/badge/Testes-84%20Pass-26A69A?style=for-the-badge&logo=node.js)](./tests/)
+[![Versão](https://img.shields.io/badge/Versão-4.0.0%20%7C%203.1.1-EC407A?style=for-the-badge&logo=apple)](./RELEASE_NOTES.md)
+[![Testes Automatizados](https://img.shields.io/badge/Testes-104%20Pass-26A69A?style=for-the-badge&logo=node.js)](./tests/)
 [![PWA Ready](https://img.shields.io/badge/PWA-Offline--First-AB47BC?style=for-the-badge&logo=pwa)](./manifest.json)
 [![Licença MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-blue?style=for-the-badge)](./LICENSE)
 [![Criado por](https://img.shields.io/badge/Criado%20por-FChNeto-F48FB1?style=for-the-badge)](#-autoria--créditos)
 
-> **Aplicação Web Mobile-First (PWA) de Controle Financeiro de Alta Performance criada sob medida para Médicas Pediatras.**  
-> Gerenciamento inteligente com **Pediatric Dark Sanctuary (Google Stitch)**, **Seletores Dropdown Arredondados e Modernos**, **Menu Hambúrguer & Gaveta Lateral Despoluída**, **Upload de Foto da Médica**, **Microinterações com Partículas Pediátricas**, **Central de Conformidade Jurídica (LGPD, CFM 2.217/18, CFM 2.147/16, CF/88)**, **Módulo Nativo de Consultório & Puericultura do 1º Ano**, **Plantões Médicos Fracionados (80% D+60 / 20% D+90)**, **DRE Médica & Otimizador Dinâmico do Fator R (28%)**, **Passagem de Plantão SBAR**, **Conciliação Bancária OFX/CSV**, **Kit do Contador em 1 Toque** e **Simulador FIRE**.
+> **Aplicação Web Mobile-First (PWA) de Controle Financeiro criada sob medida para a Médica Pediatra Dra. Fernanda Ch.**  
+> Disponível em 3 variantes canônicas no repositório:
+> - **`/v4/` & `/v4.0/` — Silk & Rose Gold (Nova Versão):** Frontend profundamente refinado com estética acolhedora, bordas hiper-arredondadas (30px), chips rápidos para Maternidade Araken e Leide Morais, botões dedicados diretos (+ Nova Despesa e + Novo Plantão), 6 Macro-Grupos inteligentes de despesas com alternador interativo no gráfico de rosca, mini-barras sparklines de impacto no orçamento, e Menu Hambúrguer avançado (com perfil, Hub de Finanças Visual e Formatação de Dados em 2 etapas com backup preventivo automático).
+> - **`/v2.0/` — Sanctuary Minimalist:** Versão ultra-enxuta, sem poluição visual, com 3 abas essenciais, 22 categorias obrigatórias e persistência tripla no iOS.
+> - **`/` — Master Executive (v3.x):** Versão avançada com consultório de puericultura, DRE médica, Fator R (28%), SBAR clínico, conciliação bancária OFX/CSV e simulador FIRE.
 
 ---
 
