@@ -3,7 +3,7 @@
 > **Guia Obrigatório para Modelos de Linguagem, Subagentes de IA e Engenheiros de Software.**  
 > **Aplicação:** Finanças Pediatria  
 > **Autor Imutável:** **FChNeto** (`APP_CREATOR = 'FChNeto'`)  
-> **Status de Confiabilidade:** 94 Testes Automatizados Aprovados (0 Falhas)  
+> **Status de Confiabilidade:** 107 Testes Automatizados Aprovados (0 Falhas)  
 
 ---
 
@@ -13,9 +13,10 @@ Todo agente autônomo (ou desenvolvedor) que atuar neste repositório DEVE opera
 
 1. **A Médica em Primeiro Lugar:** O software é utilizado por uma Médica Pediatra (**Dra. Fernanda Ch.**) em rotina hospitalar exaustiva (UTI neonatal, sala de parto, enfermarias pediátricas, consultório particular). A aplicação deve transmitir paz visual, clareza absoluta, rapidez de lançamento e zero frustração técnica.
 2. **Assinatura e Autoria do Criador:** O valor `APP_CREATOR = 'FChNeto'` é uma constante canônica e imutável. Deve permanecer nos metadados, rodapés, telas de créditos, documentações e suítes de testes.
-3. **Duas Variantes do Produto no Repositório:**
-   - **`/v2.0/` — Sanctuary Minimalist:** Aplicação higienizada, enxuta, sem qualquer poluição visual, com 3 abas essenciais (Início, Ganhos, Despesas), 22 categorias canônicas de despesas, regras D+60 (80%) e D+90 (20%), compras parceladas e persistência tripla no iOS.
+3. **Variantes do Produto no Repositório:**
+   - **`/v2.0/` — Sanctuary Minimalist:** Aplicação higienizada, enxuta, sem qualquer poluição visual, com 3 abas essenciais (Início, Ganhos, Despesas), 22 categorias canônicas de despesas, regras D+60 (75%) e D+90 (25%), compras parceladas e persistência tripla no iOS.
    - **`/` — Master Executive (v3.x):** Aplicação executiva expandida com consultório de puericultura, DRE médica, Fator R (28%), SBAR clínico LGPD, conciliação OFX/CSV, simulador FIRE e entrada por voz.
+   - **`/v4/` (e `/v4.0/`) — Silk & Rose Gold:** Frontend delicado, hiper-arredondado, 6 macro-grupos de despesas, pré-seleção rápida de maternidades e menu hambúrguer com formatação segura e edição de perfil.
 4. **Respeito aos Testes Automatizados:** Nenhuma alteração pode ser dada como concluída sem a execução prévia e aprovação de **100% dos testes** em `node --test tests/*.test.js`. É **estritamente proibido** desativar, deletar ou afrouxar asserções de testes para mascarar erros de código.
 
 ---
@@ -70,10 +71,10 @@ Todo agente autônomo (ou desenvolvedor) que atuar neste repositório DEVE opera
 
 ## 🩺 3. Regras de Negócio & Cálculos Financeiros Invioláveis
 
-### A) Plantões em Sala de Parto (D+60 e D+90)
+### A) Plantões em Sala de Parto (75% D+60 e 25% D+90)
 - Ao cadastrar um plantão médico:
-  - **80% do valor líquido:** Creditado no mês correspondente a **D+60 (2 meses após a data trabalhada)**.
-  - **20% do valor líquido restante:** Creditado no mês correspondente a **D+90 (3 meses após a data trabalhada)**.
+  - **75% do valor líquido:** Creditado no mês correspondente a **D+60 (2 meses após a data trabalhada)**.
+  - **25% do valor líquido restante:** Creditado no mês correspondente a **D+90 (3 meses após a data trabalhada)**.
 - O utilitário `addMonthsToDateString(date, months)` deve tratar o fechamento de meses (ex: 31 de Março + 2 meses = 31 de Maio; 31 de Março + 3 meses = 30 de Junho).
 
 ### B) As 22 Categorias Obrigatórias de Despesas
@@ -116,15 +117,18 @@ A versão v2.0 pré-configura e garante a presença das 22 categorias requisitad
 Antes de realizar qualquer commit ou declarar uma tarefa concluída, o agente deve executar:
 
 ```bash
-# 1. Execução de toda a suíte de testes (94 testes)
+# 1. Execução de toda a suíte de testes (107 testes)
 node --test tests/*.test.js
 
 # 2. Execução específica da suíte v2.0
 node --test tests/v2_suite.test.js
+
+# 3. Execução específica da suíte v4.0
+node --test tests/v4_suite.test.js
 ```
 
 ### Critérios de Aceite:
-- Total de testes: **94**
+- Total de testes: **107**
 - Falhas: **0**
 - Cancelados: **0**
 - Tempo de execução: **< 1 segundo**

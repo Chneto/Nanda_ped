@@ -1,7 +1,7 @@
-﻿/**
+/**
  * Finanças Pediatria v2.0 - Core Storage & Financial Engine
  * Arquitetura de Persistência Tripla para iOS (IndexedDB + LocalStorage + Storage Persistence API)
- * Regras Pediátricas: Salário Residência + Plantões Sala de Parto (80% D+60 / 20% D+90)
+ * Regras Pediátricas: Salário Residência + Plantões Sala de Parto (75% D+60 / 25% D+90)
  * Criado por: FChNeto (APP_CREATOR)
  */
 
@@ -333,7 +333,7 @@ export class PediatricStore {
 
   /**
    * Cadastra ou atualiza um plantão em Sala de Parto
-   * Aplica rigorosamente a regra médica: 80% em 2 meses (D+60) e 20% no 3º mês (D+90)
+   * Aplica rigorosamente a regra médica: 75% em 2 meses (D+60) e 25% no 3º mês (D+90)
    */
   saveShift({
     id = null,
@@ -348,11 +348,11 @@ export class PediatricStore {
     const net = parseFloat(netValue) || gross;
     const shiftDate = date || getLocalDateString();
 
-    const expectedDate80 = addMonthsToDateString(shiftDate, 2); // D+60 (2 meses)
-    const expectedDate20 = addMonthsToDateString(shiftDate, 3); // D+90 (3 meses)
+    const expectedDate75 = addMonthsToDateString(shiftDate, 2); // D+60 (2 meses)
+    const expectedDate25 = addMonthsToDateString(shiftDate, 3); // D+90 (3 meses)
 
-    const val80 = Math.round((net * 0.8) * 100) / 100;
-    const val20 = Math.round((net - val80) * 100) / 100;
+    const val75 = Math.round((net * 0.75) * 100) / 100;
+    const val25 = Math.round((net - val75) * 100) / 100;
 
     const existingIndex = id ? this.data.shifts.findIndex(s => s.id === id) : -1;
     const existing = existingIndex >= 0 ? this.data.shifts[existingIndex] : null;
@@ -366,16 +366,16 @@ export class PediatricStore {
       netValue: net,
       notes: notes.trim(),
       installment1: {
-        percentage: 80,
-        value: val80,
-        expectedDate: expectedDate80,
+        percentage: 75,
+        value: val75,
+        expectedDate: expectedDate75,
         status: existing?.installment1?.status || 'pending',
         paidDate: existing?.installment1?.paidDate || null
       },
       installment2: {
-        percentage: 20,
-        value: val20,
-        expectedDate: expectedDate20,
+        percentage: 25,
+        value: val25,
+        expectedDate: expectedDate25,
         status: existing?.installment2?.status || 'pending',
         paidDate: existing?.installment2?.paidDate || null
       },
@@ -541,7 +541,7 @@ export class PediatricStore {
       // Regime de Caixa: busca parcelas com expectedDate caindo no targetMonth
       this.data.shifts.forEach(shift => {
         let matched = false;
-        // Parcela 1 (80%)
+        // Parcela 1 (75%)
         if (shift.installment1 && shift.installment1.expectedDate.startsWith(targetMonth)) {
           matched = true;
           if (shift.installment1.status === 'received') {
@@ -550,7 +550,7 @@ export class PediatricStore {
             shiftInflowPending += shift.installment1.value;
           }
         }
-        // Parcela 2 (20%)
+        // Parcela 2 (25%)
         if (shift.installment2 && shift.installment2.expectedDate.startsWith(targetMonth)) {
           matched = true;
           if (shift.installment2.status === 'received') {

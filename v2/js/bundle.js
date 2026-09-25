@@ -101,10 +101,10 @@ function getIcon(name, extraClass = "", size = 20) {
   }
 
   // --- STORE ENGINE ---
-  ﻿/**
+  /**
  * Finanças Pediatria v2.0 - Core Storage & Financial Engine
  * Arquitetura de Persistência Tripla para iOS (IndexedDB + LocalStorage + Storage Persistence API)
- * Regras Pediátricas: Salário Residência + Plantões Sala de Parto (80% D+60 / 20% D+90)
+ * Regras Pediátricas: Salário Residência + Plantões Sala de Parto (75% D+60 / 25% D+90)
  * Criado por: FChNeto (APP_CREATOR)
  */
 
@@ -436,7 +436,7 @@ class PediatricStore {
 
   /**
    * Cadastra ou atualiza um plantão em Sala de Parto
-   * Aplica rigorosamente a regra médica: 80% em 2 meses (D+60) e 20% no 3º mês (D+90)
+   * Aplica rigorosamente a regra médica: 75% em 2 meses (D+60) e 25% no 3º mês (D+90)
    */
   saveShift({
     id = null,
@@ -451,11 +451,11 @@ class PediatricStore {
     const net = parseFloat(netValue) || gross;
     const shiftDate = date || getLocalDateString();
 
-    const expectedDate80 = addMonthsToDateString(shiftDate, 2); // D+60 (2 meses)
-    const expectedDate20 = addMonthsToDateString(shiftDate, 3); // D+90 (3 meses)
+    const expectedDate75 = addMonthsToDateString(shiftDate, 2); // D+60 (2 meses)
+    const expectedDate25 = addMonthsToDateString(shiftDate, 3); // D+90 (3 meses)
 
-    const val80 = Math.round((net * 0.8) * 100) / 100;
-    const val20 = Math.round((net - val80) * 100) / 100;
+    const val75 = Math.round((net * 0.75) * 100) / 100;
+    const val25 = Math.round((net - val75) * 100) / 100;
 
     const existingIndex = id ? this.data.shifts.findIndex(s => s.id === id) : -1;
     const existing = existingIndex >= 0 ? this.data.shifts[existingIndex] : null;
@@ -469,16 +469,16 @@ class PediatricStore {
       netValue: net,
       notes: notes.trim(),
       installment1: {
-        percentage: 80,
-        value: val80,
-        expectedDate: expectedDate80,
+        percentage: 75,
+        value: val75,
+        expectedDate: expectedDate75,
         status: existing?.installment1?.status || 'pending',
         paidDate: existing?.installment1?.paidDate || null
       },
       installment2: {
-        percentage: 20,
-        value: val20,
-        expectedDate: expectedDate20,
+        percentage: 25,
+        value: val25,
+        expectedDate: expectedDate25,
         status: existing?.installment2?.status || 'pending',
         paidDate: existing?.installment2?.paidDate || null
       },
@@ -644,7 +644,7 @@ class PediatricStore {
       // Regime de Caixa: busca parcelas com expectedDate caindo no targetMonth
       this.data.shifts.forEach(shift => {
         let matched = false;
-        // Parcela 1 (80%)
+        // Parcela 1 (75%)
         if (shift.installment1 && shift.installment1.expectedDate.startsWith(targetMonth)) {
           matched = true;
           if (shift.installment1.status === 'received') {
@@ -653,7 +653,7 @@ class PediatricStore {
             shiftInflowPending += shift.installment1.value;
           }
         }
-        // Parcela 2 (20%)
+        // Parcela 2 (25%)
         if (shift.installment2 && shift.installment2.expectedDate.startsWith(targetMonth)) {
           matched = true;
           if (shift.installment2.status === 'received') {
@@ -1527,7 +1527,7 @@ class PediatricApp {
             <div class="installments-timeline">
               <div class="installment-box" style="${isInst1ThisMonth ? 'border-left: 2px solid var(--mint-income); padding-left: 4px;' : ''}">
                 <div class="inst-header">
-                  <span>80% (D+60)</span>
+                  <span>75% (D+60)</span>
                   <span>${formatDateBR(s.installment1?.expectedDate)}</span>
                 </div>
                 <div class="inst-val">${formatCurrency(s.installment1?.value)}</div>
@@ -1543,7 +1543,7 @@ class PediatricApp {
 
               <div class="installment-box" style="${isInst2ThisMonth ? 'border-left: 2px solid var(--mint-income); padding-left: 4px;' : ''}">
                 <div class="inst-header">
-                  <span>20% (D+90)</span>
+                  <span>25% (D+90)</span>
                   <span>${formatDateBR(s.installment2?.expectedDate)}</span>
                 </div>
                 <div class="inst-val">${formatCurrency(s.installment2?.value)}</div>
@@ -1595,7 +1595,7 @@ class PediatricApp {
           <button class="section-action-btn" id="btn-add-shift-quick">+ Novo Plantão</button>
         </div>
         <div style="margin-bottom: 12px; font-size: 0.78rem; color: var(--text-muted);">
-          Regra Pediátrica: <strong>80% pago em 2 meses (D+60)</strong> e <strong>20% no 3º mês (D+90)</strong>.
+          Regra Pediátrica: <strong>75% pago em 2 meses (D+60)</strong> e <strong>25% no 3º mês (D+90)</strong>.
         </div>
         ${shiftsHtml}
       </section>
@@ -1735,7 +1735,7 @@ class PediatricApp {
           </div>
 
           <div style="background: var(--lilac-light); padding: 10px 12px; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--lilac-dark); margin-bottom: 12px;">
-            ✨ O sistema dividirá automaticamente este plantão em: <strong>80% em 2 meses</strong> e <strong>20% em 3 meses</strong>.
+            ✨ O sistema dividirá automaticamente este plantão em: <strong>75% em 2 meses</strong> e <strong>25% em 3 meses</strong>.
           </div>
 
           <button type="submit" class="submit-btn">Salvar Plantão</button>

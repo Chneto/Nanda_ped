@@ -24,22 +24,22 @@ import {
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 
-test('Payment Formula: 80% D+60 and 20% D+90 installment calculation', () => {
+test('Payment Formula: 75% D+60 and 25% D+90 installment calculation', () => {
   const shiftDate = '2026-09-15';
   const netValue = 1500.00;
 
   const installments = calculateShiftInstallments(shiftDate, netValue);
   assert.equal(installments.length, 2, 'Should generate exactly 2 installments');
 
-  // Installment 1: 80% at D+60 (2026-11-15)
-  assert.equal(installments[0].percent, 80);
+  // Installment 1: 75% at D+60 (2026-11-15)
+  assert.equal(installments[0].percent, 75);
   assert.equal(installments[0].dueDate, '2026-11-15');
-  assert.equal(installments[0].value, 1200.00);
+  assert.equal(installments[0].value, 1125.00);
 
-  // Installment 2: 20% at D+90 (2026-12-15)
-  assert.equal(installments[1].percent, 20);
+  // Installment 2: 25% at D+90 (2026-12-15)
+  assert.equal(installments[1].percent, 25);
   assert.equal(installments[1].dueDate, '2026-12-15');
-  assert.equal(installments[1].value, 300.00);
+  assert.equal(installments[1].value, 375.00);
 
   // Rounding check with odd value
   const oddInstallments = calculateShiftInstallments('2026-09-10', 1333.33);
@@ -52,7 +52,7 @@ test('Payment Formula: 80% D+60 and 20% D+90 installment calculation', () => {
   assert.equal(customInstallments[0].value, 1500);
 });
 
-test('Shift Creation & Cash Attribution with 80% D+60 and 20% D+90', () => {
+test('Shift Creation & Cash Attribution with 75% D+60 and 25% D+90', () => {
   const store = new PediatricStore();
   store.resetToDefault();
 
@@ -70,30 +70,30 @@ test('Shift Creation & Cash Attribution with 80% D+60 and 20% D+90', () => {
   assert.ok(Array.isArray(shift.installments));
   assert.equal(shift.installments.length, 2);
   assert.equal(shift.installments[0].dueDate, '2026-11-10');
-  assert.equal(shift.installments[0].value, 1504); // 80% of 1880
+  assert.equal(shift.installments[0].value, 1410); // 75% of 1880
   assert.equal(shift.installments[1].dueDate, '2026-12-10');
-  assert.equal(shift.installments[1].value, 376); // 20% of 1880
+  assert.equal(shift.installments[1].value, 470); // 25% of 1880
 
   // Check Monthly Report for Cash (Caixa)
   // September 2026 should NOT receive shift cash
   const repSep = store.getMonthlyReport('2026-09', new Date('2026-09-15'));
   assert.equal(repSep.caixa.shiftsTotalNet, 0, 'No cash received in month worked');
 
-  // November 2026 receives 80% (1504)
+  // November 2026 receives 75% (1410)
   const repNov = store.getMonthlyReport('2026-11', new Date('2026-09-15'));
-  assert.equal(repNov.caixa.shiftsTotalNet, 1504, 'November receives 80% installment');
+  assert.equal(repNov.caixa.shiftsTotalNet, 1410, 'November receives 75% installment');
 
-  // December 2026 receives 20% (376)
+  // December 2026 receives 25% (470)
   const repDec = store.getMonthlyReport('2026-12', new Date('2026-09-15'));
-  assert.equal(repDec.caixa.shiftsTotalNet, 376, 'December receives 20% installment');
+  assert.equal(repDec.caixa.shiftsTotalNet, 470, 'December receives 25% installment');
 
   // Check Forecast
   const forecast = store.getShiftInflowForecast('2026-09');
   assert.equal(forecast.length, 4);
   assert.equal(forecast[2].monthStr, '2026-11');
-  assert.equal(forecast[2].shiftInflow, 1504);
+  assert.equal(forecast[2].shiftInflow, 1410);
   assert.equal(forecast[3].monthStr, '2026-12');
-  assert.equal(forecast[3].shiftInflow, 376);
+  assert.equal(forecast[3].shiftInflow, 470);
 });
 
 test('Tax Rate Slider (6% to 20%) calculation', () => {
@@ -438,7 +438,7 @@ test('D+60 Scoped CSV Export includes D+60 installment in target month with dela
   });
 
   assert.ok(csvNov.includes('Maternidade Araken'), 'Must include September shift in November CSV because of D+60 installment');
-  assert.ok(csvNov.includes('(80%)'), 'Must specify 80% installment in November');
+  assert.ok(csvNov.includes('(75%)'), 'Must specify 75% installment in November');
   assert.ok(csvNov.includes('Em Atraso'), 'Must flag D+60 installment as Em Atraso on Nov 15 since it was due Nov 10');
 
   // Toggle installment 1 as received on November 12

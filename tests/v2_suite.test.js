@@ -85,7 +85,7 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
     assert.ok(DEFAULT_CATEGORIES.length >= 22);
   });
 
-  test('Cálculo Rigoroso de Plantões em Sala de Parto: 80% D+60 e 20% D+90', () => {
+  test('Cálculo Rigoroso de Plantões em Sala de Parto: 75% D+60 e 25% D+90', () => {
     const shift = store.saveShift({
       hospital: 'Maternidade Araken',
       date: '2026-06-10',
@@ -98,15 +98,15 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
     assert.equal(shift.hospital, 'Maternidade Araken');
     assert.equal(shift.netValue, 2000);
 
-    // Parcela 1: 80% com vencimento em 2 meses (D+60)
-    assert.equal(shift.installment1.percentage, 80);
-    assert.equal(shift.installment1.value, 1600);
+    // Parcela 1: 75% com vencimento em 2 meses (D+60)
+    assert.equal(shift.installment1.percentage, 75);
+    assert.equal(shift.installment1.value, 1500);
     assert.equal(shift.installment1.expectedDate, '2026-08-10');
     assert.equal(shift.installment1.status, 'pending');
 
-    // Parcela 2: 20% com vencimento em 3 meses (D+90)
-    assert.equal(shift.installment2.percentage, 20);
-    assert.equal(shift.installment2.value, 400);
+    // Parcela 2: 25% com vencimento em 3 meses (D+90)
+    assert.equal(shift.installment2.percentage, 25);
+    assert.equal(shift.installment2.value, 500);
     assert.equal(shift.installment2.expectedDate, '2026-09-10');
     assert.equal(shift.installment2.status, 'pending');
   });
@@ -168,8 +168,8 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
     store.updateResidencySalary({ value: 4000, active: true });
 
     // Plantão realizado em Junho/2026 de 2000
-    // Parcela 80% (1600) cai em Agosto/2026
-    // Parcela 20% (400) cai em Setembro/2026
+    // Parcela 75% (1500) cai em Agosto/2026
+    // Parcela 25% (500) cai em Setembro/2026
     store.saveShift({
       hospital: 'Hospital da Criança',
       date: '2026-06-15',
@@ -185,14 +185,14 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
     });
 
     // 1. Verificação de Agosto/2026 no Regime de Caixa:
-    // Entradas = 4000 (residência) + 1600 (80% do plantão de junho) = 5600
+    // Entradas = 4000 (residência) + 1500 (75% do plantão de junho) = 5500
     // Despesas = 1000
-    // Saldo = 4600
+    // Saldo = 4500
     const summaryCaixaAgo = store.getMonthSummary('2026-08', 'caixa');
     assert.equal(summaryCaixaAgo.residencyIncome, 4000);
-    assert.equal(summaryCaixaAgo.totalIncome, 5600);
+    assert.equal(summaryCaixaAgo.totalIncome, 5500);
     assert.equal(summaryCaixaAgo.totalExpenses, 1000);
-    assert.equal(summaryCaixaAgo.balance, 4600);
+    assert.equal(summaryCaixaAgo.balance, 4500);
 
     // 2. Verificação de Junho/2026 no Regime de Competência:
     // Produção = 4000 (residência) + 2000 (plantão realizado no mês) = 6000
