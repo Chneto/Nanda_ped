@@ -2,7 +2,7 @@
  * Finanças Pediatria v4.0 - Core Storage & Financial Engine
  * Design System & Arquitetura "Silk & Rose Gold"
  * Persistência Tripla para iOS Safari (IndexedDB + LocalStorage + Storage Persistence API)
- * Regras Pediátricas Canônicas: Bolsa Residência + Plantões Sala de Parto (80% D+60 / 20% D+90)
+ * Regras Pediátricas Canônicas: Bolsa Residência + Plantões Sala de Parto (75% D+60 / 25% D+90)
  * Categorização Inteligente em 6 Macro-Grupos de Despesas (Nubank/Revolut-inspired)
  * Autor Imutável: FChNeto (APP_CREATOR = 'FChNeto')
  */
@@ -369,7 +369,7 @@ export class PediatricStore {
   }
 
   // -------------------------------------------------------------
-  // OPERAÇÕES DE PLANTÕES (80% D+60 / 20% D+90)
+  // OPERAÇÕES DE PLANTÕES (75% D+60 / 25% D+90)
   // -------------------------------------------------------------
   saveShift(shift) {
     if (!shift.id) {
@@ -379,9 +379,9 @@ export class PediatricStore {
     const net = parseFloat(shift.netValue) || 0;
     const gross = parseFloat(shift.grossValue) || net;
 
-    // Divisão com precisão de centavos: 80% D+60 e 20% D+90
-    const val80 = Math.round(net * 0.8 * 100) / 100;
-    const val20 = Math.round((net - val80) * 100) / 100;
+    // Divisão com precisão de centavos: 75% D+60 e 25% D+90
+    const val75 = Math.round(net * 0.75 * 100) / 100;
+    const val25 = Math.round((net - val75) * 100) / 100;
 
     const workedDate = shift.date || getLocalDateString();
     const expectedD60 = addMonthsToDateString(workedDate, 2);
@@ -396,15 +396,15 @@ export class PediatricStore {
       netValue: net,
       notes: shift.notes || '',
       installment1: {
-        percentage: 80,
-        value: val80,
+        percentage: 75,
+        value: val75,
         expectedDate: shift.installment1?.expectedDate || expectedD60,
         status: shift.installment1?.status || 'pending',
         paidDate: shift.installment1?.paidDate || null
       },
       installment2: {
-        percentage: 20,
-        value: val20,
+        percentage: 25,
+        value: val25,
         expectedDate: shift.installment2?.expectedDate || expectedD90,
         status: shift.installment2?.status || 'pending',
         paidDate: shift.installment2?.paidDate || null

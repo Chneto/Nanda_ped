@@ -343,7 +343,7 @@ export function calculateExpectedPaymentDate(shiftDate, lagMonths = 3, customPay
 
 /**
  * Calculates installments according to pediatric rule:
- * 80% in 60 days (D+60), remaining 20% in 30 days after that (D+90). Total 100% in 90 days.
+ * 75% in 60 days (D+60), remaining 25% in 30 days after that (D+90). Total 100% in 90 days.
  * @param {string} shiftDate 'YYYY-MM-DD'
  * @param {number} netValue
  * @param {string|null} customPaymentDate
@@ -365,13 +365,13 @@ export function calculateShiftInstallments(shiftDate, netValue, customPaymentDat
   }
   const d60 = addMonths(shiftDate, 2);
   const d90 = addMonths(shiftDate, 3);
-  const part1 = Math.round(numNet * 0.80 * 100) / 100;
+  const part1 = Math.round(numNet * 0.75 * 100) / 100;
   const part2 = Math.round((numNet - part1) * 100) / 100;
 
   return [
     {
       number: 1,
-      percent: 80,
+      percent: 75,
       dueDate: d60,
       value: part1,
       status: "pending",
@@ -379,7 +379,7 @@ export function calculateShiftInstallments(shiftDate, netValue, customPaymentDat
     },
     {
       number: 2,
-      percent: 20,
+      percent: 25,
       dueDate: d90,
       value: part2,
       status: "pending",
@@ -497,7 +497,7 @@ export function evaluateShiftStatus(shift, referenceDate = new Date()) {
 
     return {
       status: "pending",
-      label: `Previsão: 80% D+60 • 20% D+90`,
+      label: `Previsão: 75% D+60 • 25% D+90`,
       delayDays: 0,
       isDelayed: false
     };
@@ -2531,7 +2531,7 @@ export class PediatricStore {
         `"${s.shiftType}"`,
         `"${Number(s.grossValue || 0).toFixed(2).replace('.', ',')}"`,
         `"${Number(s.netValue || 0).toFixed(2).replace('.', ',')}"`,
-        `"${s.splitPayment ? 'D+60 (80%) / D+90 (20%)' : `D+${(s.paymentLagMonths || 3) * 30}`}"`,
+        `"${s.splitPayment ? 'D+60 (75%) / D+90 (25%)' : `D+${(s.paymentLagMonths || 3) * 30}`}"`,
         `"${dueLabel}"`,
         `"${statusLabel}"`,
         `"${s.paidDate ? formatDateBR(s.paidDate) : '-'}"`,

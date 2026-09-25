@@ -72,10 +72,10 @@ A interface segue a estética acolhedora, sofisticada e limpa desenvolvida para 
 
 ### B) Cálculo e Parcelamento de Plantões Médicos
 1. **Fórmula Realista de Recebimento:**
-   - **80% do valor líquido:** Creditado em **60 dias (D+60)**.
-   - **20% restantes:** Creditados **30 dias após (D+90)**.
+   - **75% do valor líquido:** Creditado em **60 dias (D+60)**.
+   - **25% restantes:** Creditados **30 dias após (D+90)**.
 2. **Atribuição no Fluxo de Caixa:**
-   - O Regime de Caixa projeta 80% no mês D+60 e 20% no mês D+90.
+   - O Regime de Caixa projeta 75% no mês D+60 e 25% no mês D+90.
    - Projeção de 12 meses distribui as parcelas com exatidão matemática.
 
 ### C) Projeção Rolante de 12 Meses & Touch Scrubber
