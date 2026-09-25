@@ -112,7 +112,7 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
     assert.ok(store.data.hospitals.includes('Maternidade Leide Morais'));
   });
 
-  test('v4 Regra Canônica de Plantão em Sala de Parto: 80% D+60 e 20% D+90', () => {
+  test('v4 Regra Canônica de Plantão em Sala de Parto: 75% D+60 e 25% D+90', () => {
     const shift = store.saveShift({
       hospital: 'Maternidade Araken',
       date: '2026-04-10',
@@ -126,9 +126,9 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
 
     // Valida exatidão de centavos
     assert.equal(shift.installment1.value + shift.installment2.value, 2150.50);
-    assert.equal(shift.installment1.percentage, 80);
+    assert.equal(shift.installment1.percentage, 75);
     assert.equal(shift.installment1.expectedDate, '2026-06-10'); // +2 meses
-    assert.equal(shift.installment2.percentage, 20);
+    assert.equal(shift.installment2.percentage, 25);
     assert.equal(shift.installment2.expectedDate, '2026-07-10'); // +3 meses
 
     // Toggle de status
@@ -160,7 +160,7 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
   test('v4 Resumo Mensal com Breakdown por Macro-Grupos e Categorias', () => {
     store.updateResidencySalary({ value: 4106.09, active: true });
 
-    // Plantão realizado em Março/2026 (Parcela 80% cai em Maio/2026)
+    // Plantão realizado em Março/2026 (Parcela 75% cai em Maio/2026)
     store.saveShift({
       hospital: 'Maternidade Leide Morais',
       date: '2026-03-20',
@@ -183,10 +183,10 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
 
     const summary = store.getMonthSummary('2026-05', 'caixa');
     assert.equal(summary.residencyIncome, 4106.09);
-    assert.equal(summary.shiftIncome, 1600); // 80% de 2000
-    assert.equal(summary.totalIncome, 5706.09);
+    assert.equal(summary.shiftIncome, 1500); // 75% de 2000
+    assert.equal(summary.totalIncome, 5606.09);
     assert.equal(summary.totalExpenses, 750);
-    assert.equal(summary.balance, 4956.09);
+    assert.equal(summary.balance, 4856.09);
 
     // Valida MacroBreakdown
     assert.equal(summary.macroBreakdown.length, 2);

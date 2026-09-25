@@ -1239,7 +1239,7 @@ export class PediatricApp {
 
             <div class="shift-installments-box">
               <div class="installment-col">
-                <span class="inst-title">80% em D+60 (${formatDateBR(s.installment1.expectedDate)})</span>
+                <span class="inst-title">75% em D+60 (${formatDateBR(s.installment1.expectedDate)})</span>
                 <strong class="inst-val">${formatCurrency(s.installment1.value)}</strong>
                 <button
                   class="inst-status-btn ${s.installment1.status}"
@@ -1252,7 +1252,7 @@ export class PediatricApp {
               </div>
 
               <div class="installment-col">
-                <span class="inst-title">20% em D+90 (${formatDateBR(s.installment2.expectedDate)})</span>
+                <span class="inst-title">25% em D+90 (${formatDateBR(s.installment2.expectedDate)})</span>
                 <strong class="inst-val">${formatCurrency(s.installment2.value)}</strong>
                 <button
                   class="inst-status-btn ${s.installment2.status}"
@@ -1543,7 +1543,7 @@ export class PediatricApp {
       const defaultHospital = this.prefilledHospital || 'Maternidade Araken';
 
       const shiftTypeOptions = [
-        { value: 'Sala de Parto', label: 'Sala de Parto (D+60 80% / D+90 20%)', icon: 'baby', color: '#EC407A' },
+        { value: 'Sala de Parto', label: 'Sala de Parto (D+60 75% / D+90 25%)', icon: 'baby', color: '#EC407A' },
         { value: '12h Noturno', label: '12h Noturno (Plantão Noturno)', icon: 'moon', color: '#AB47BC' },
         { value: '12h Diurno', label: '12h Diurno (Plantão Diurno)', icon: 'sun', color: '#FFA726' },
         { value: '24h', label: '24h (Plantão 24 Horas)', icon: 'hospital', color: '#26A69A' },
@@ -1595,7 +1595,7 @@ export class PediatricApp {
           </div>
 
           <div style="background: var(--lilac-light); padding: 12px 14px; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--lilac-accent); margin-bottom: 14px; border: 1px solid rgba(171, 71, 188, 0.2);">
-            ✨ Divisão automática do plantão médico: <strong>80% em 2 meses (D+60)</strong> e <strong>20% em 3 meses (D+90)</strong>.
+            ✨ Divisão automática do plantão médico: <strong>75% em 2 meses (D+60)</strong> e <strong>25% em 3 meses (D+90)</strong>.
           </div>
 
           <button type="submit" class="submit-btn">Salvar Plantão</button>

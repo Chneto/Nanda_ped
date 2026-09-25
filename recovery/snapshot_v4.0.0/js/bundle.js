@@ -120,7 +120,7 @@ function getIcon(name, extraClass = "", size = 20) {
  * Finanças Pediatria v4.0 - Core Storage & Financial Engine
  * Design System & Arquitetura "Silk & Rose Gold"
  * Persistência Tripla para iOS Safari (IndexedDB + LocalStorage + Storage Persistence API)
- * Regras Pediátricas Canônicas: Bolsa Residência + Plantões Sala de Parto (80% D+60 / 20% D+90)
+ * Regras Pediátricas Canônicas: Bolsa Residência + Plantões Sala de Parto (75% D+60 / 25% D+90)
  * Categorização Inteligente em 6 Macro-Grupos de Despesas (Nubank/Revolut-inspired)
  * Autor Imutável: FChNeto (APP_CREATOR = 'FChNeto')
  */
@@ -487,7 +487,7 @@ class PediatricStore {
   }
 
   // -------------------------------------------------------------
-  // OPERAÇÕES DE PLANTÕES (80% D+60 / 20% D+90)
+  // OPERAÇÕES DE PLANTÕES (75% D+60 / 25% D+90)
   // -------------------------------------------------------------
   saveShift(shift) {
     if (!shift.id) {
@@ -497,9 +497,9 @@ class PediatricStore {
     const net = parseFloat(shift.netValue) || 0;
     const gross = parseFloat(shift.grossValue) || net;
 
-    // Divisão com precisão de centavos: 80% D+60 e 20% D+90
-    const val80 = Math.round(net * 0.8 * 100) / 100;
-    const val20 = Math.round((net - val80) * 100) / 100;
+    // Divisão com precisão de centavos: 75% D+60 e 25% D+90
+    const val75 = Math.round(net * 0.75 * 100) / 100;
+    const val25 = Math.round((net - val75) * 100) / 100;
 
     const workedDate = shift.date || getLocalDateString();
     const expectedD60 = addMonthsToDateString(workedDate, 2);
@@ -514,15 +514,15 @@ class PediatricStore {
       netValue: net,
       notes: shift.notes || '',
       installment1: {
-        percentage: 80,
-        value: val80,
+        percentage: 75,
+        value: val75,
         expectedDate: shift.installment1?.expectedDate || expectedD60,
         status: shift.installment1?.status || 'pending',
         paidDate: shift.installment1?.paidDate || null
       },
       installment2: {
-        percentage: 20,
-        value: val20,
+        percentage: 25,
+        value: val25,
         expectedDate: shift.installment2?.expectedDate || expectedD90,
         status: shift.installment2?.status || 'pending',
         paidDate: shift.installment2?.paidDate || null
@@ -2583,7 +2583,7 @@ class PediatricApp {
 
             <div class="shift-installments-box">
               <div class="installment-col">
-                <span class="inst-title">80% em D+60 (${formatDateBR(s.installment1.expectedDate)})</span>
+                <span class="inst-title">75% em D+60 (${formatDateBR(s.installment1.expectedDate)})</span>
                 <strong class="inst-val">${formatCurrency(s.installment1.value)}</strong>
                 <button
                   class="inst-status-btn ${s.installment1.status}"
@@ -2596,7 +2596,7 @@ class PediatricApp {
               </div>
 
               <div class="installment-col">
-                <span class="inst-title">20% em D+90 (${formatDateBR(s.installment2.expectedDate)})</span>
+                <span class="inst-title">25% em D+90 (${formatDateBR(s.installment2.expectedDate)})</span>
                 <strong class="inst-val">${formatCurrency(s.installment2.value)}</strong>
                 <button
                   class="inst-status-btn ${s.installment2.status}"
@@ -2887,7 +2887,7 @@ class PediatricApp {
       const defaultHospital = this.prefilledHospital || 'Maternidade Araken';
 
       const shiftTypeOptions = [
-        { value: 'Sala de Parto', label: 'Sala de Parto (D+60 80% / D+90 20%)', icon: 'baby', color: '#EC407A' },
+        { value: 'Sala de Parto', label: 'Sala de Parto (D+60 75% / D+90 25%)', icon: 'baby', color: '#EC407A' },
         { value: '12h Noturno', label: '12h Noturno (Plantão Noturno)', icon: 'moon', color: '#AB47BC' },
         { value: '12h Diurno', label: '12h Diurno (Plantão Diurno)', icon: 'sun', color: '#FFA726' },
         { value: '24h', label: '24h (Plantão 24 Horas)', icon: 'hospital', color: '#26A69A' },
@@ -2939,7 +2939,7 @@ class PediatricApp {
           </div>
 
           <div style="background: var(--lilac-light); padding: 12px 14px; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--lilac-accent); margin-bottom: 14px; border: 1px solid rgba(171, 71, 188, 0.2);">
-            ✨ Divisão automática do plantão médico: <strong>80% em 2 meses (D+60)</strong> e <strong>20% em 3 meses (D+90)</strong>.
+            ✨ Divisão automática do plantão médico: <strong>75% em 2 meses (D+60)</strong> e <strong>25% em 3 meses (D+90)</strong>.
           </div>
 
           <button type="submit" class="submit-btn">Salvar Plantão</button>

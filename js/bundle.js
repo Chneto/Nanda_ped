@@ -600,7 +600,7 @@ function calculateExpectedPaymentDate(shiftDate, lagMonths = 3, customPaymentDat
 
 /**
  * Calculates installments according to pediatric rule:
- * 80% in 60 days (D+60), remaining 20% in 30 days after that (D+90). Total 100% in 90 days.
+ * 75% in 60 days (D+60), remaining 25% in 30 days after that (D+90). Total 100% in 90 days.
  * @param {string} shiftDate 'YYYY-MM-DD'
  * @param {number} netValue
  * @param {string|null} customPaymentDate
@@ -622,13 +622,13 @@ function calculateShiftInstallments(shiftDate, netValue, customPaymentDate = nul
   }
   const d60 = addMonths(shiftDate, 2);
   const d90 = addMonths(shiftDate, 3);
-  const part1 = Math.round(numNet * 0.80 * 100) / 100;
+  const part1 = Math.round(numNet * 0.75 * 100) / 100;
   const part2 = Math.round((numNet - part1) * 100) / 100;
 
   return [
     {
       number: 1,
-      percent: 80,
+      percent: 75,
       dueDate: d60,
       value: part1,
       status: "pending",
@@ -636,7 +636,7 @@ function calculateShiftInstallments(shiftDate, netValue, customPaymentDate = nul
     },
     {
       number: 2,
-      percent: 20,
+      percent: 25,
       dueDate: d90,
       value: part2,
       status: "pending",
@@ -754,7 +754,7 @@ function evaluateShiftStatus(shift, referenceDate = new Date()) {
 
     return {
       status: "pending",
-      label: `Previsão: 80% D+60 • 20% D+90`,
+      label: `Previsão: 75% D+60 • 25% D+90`,
       delayDays: 0,
       isDelayed: false
     };
@@ -2788,7 +2788,7 @@ class PediatricStore {
         `"${s.shiftType}"`,
         `"${Number(s.grossValue || 0).toFixed(2).replace('.', ',')}"`,
         `"${Number(s.netValue || 0).toFixed(2).replace('.', ',')}"`,
-        `"${s.splitPayment ? 'D+60 (80%) / D+90 (20%)' : `D+${(s.paymentLagMonths || 3) * 30}`}"`,
+        `"${s.splitPayment ? 'D+60 (75%) / D+90 (25%)' : `D+${(s.paymentLagMonths || 3) * 30}`}"`,
         `"${dueLabel}"`,
         `"${statusLabel}"`,
         `"${s.paidDate ? formatDateBR(s.paidDate) : '-'}"`,
@@ -9417,7 +9417,7 @@ function renderShiftCard(shift, isCompact = false) {
         <div class="mb-3 p-2.5 rounded-2xl bg-surface-container-low border border-purple-100 flex flex-col gap-1.5 text-[11px]">
           <div class="flex items-center justify-between text-[10px] text-on-surface-variant font-bold pb-0.5">
             <span class="flex items-center gap-1 text-primary">
-              ${renderIcon("payments", "text-[14px]")} Repasses do Plantão (80% D+60 / 20% D+90)
+              ${renderIcon("payments", "text-[14px]")} Repasses do Plantão (75% D+60 / 25% D+90)
             </span>
           </div>
           <div class="grid grid-cols-2 gap-1.5">
@@ -11158,22 +11158,22 @@ function renderShiftForm(data = null) {
         </div>
       </div>
 
-      <!-- Previsão das Parcelas (80% D+60 e 20% D+90) -->
+      <!-- Previsão das Parcelas (75% D+60 e 25% D+90) -->
       <div class="bg-gradient-to-br from-primary-fixed/40 via-surface-container-low to-secondary-fixed/40 p-3.5 rounded-2xl shadow-[0_4px_16px_rgba(126,74,138,0.06)] flex flex-col gap-2">
         <div class="flex items-center justify-between">
           <span class="text-[11px] font-bold text-primary flex items-center gap-1">
             ${renderIcon("payments", "text-[16px]")} Previsão das Parcelas (Regra Pediátrica):
           </span>
-          <span class="text-[10px] text-on-surface-variant font-semibold">80% D+60 • 20% D+90</span>
+          <span class="text-[10px] text-on-surface-variant font-semibold">75% D+60 • 25% D+90</span>
         </div>
         <div class="grid grid-cols-2 gap-2 pt-0.5">
           <div class="bg-white/90 p-2.5 rounded-xl flex flex-col border border-purple-100 shadow-sm">
-            <span class="text-[10px] font-bold text-on-surface-variant">1ª Parcela (80% em 60 dias)</span>
+            <span class="text-[10px] font-bold text-on-surface-variant">1ª Parcela (75% em 60 dias)</span>
             <span class="text-[14px] font-extrabold text-secondary font-display" id="label-install-1-val">R$ 0,00</span>
             <span class="text-[10px] text-on-surface-variant truncate" id="label-install-1-date">Previsão: --/--/----</span>
           </div>
           <div class="bg-white/90 p-2.5 rounded-xl flex flex-col border border-purple-100 shadow-sm">
-            <span class="text-[10px] font-bold text-on-surface-variant">2ª Parcela (20% em 90 dias)</span>
+            <span class="text-[10px] font-bold text-on-surface-variant">2ª Parcela (25% em 90 dias)</span>
             <span class="text-[14px] font-extrabold text-primary font-display" id="label-install-2-val">R$ 0,00</span>
             <span class="text-[10px] text-on-surface-variant truncate" id="label-install-2-date">Previsão: --/--/----</span>
           </div>
@@ -11194,7 +11194,7 @@ function renderShiftForm(data = null) {
             class="text-[11px] font-bold text-secondary hover:underline flex items-center gap-0.5"
           >
             ${renderIcon("tune", "text-[14px]")}
-            <span>${hasCustomDate ? 'Usar Regra 80/20 Padrão' : 'Data Manual Específica'}</span>
+            <span>${hasCustomDate ? 'Usar Regra 75/25 Padrão' : 'Data Manual Específica'}</span>
           </button>
         </div>
 
@@ -12174,7 +12174,7 @@ function attachBottomSheetFormEvents() {
       showBabyReaction({
         type: 'income',
         title: isEdit ? 'Plantão Atualizado! 👶💖' : 'Plantão Salvo no Radar! 👶💖',
-        message: 'Previsão de recebimento calculada: 80% em 60 dias (D+60) e 20% em 90 dias (D+90)!',
+        message: 'Previsão de recebimento calculada: 75% em 60 dias (D+60) e 25% em 90 dias (D+90)!',
         amount: netValue
       });
     });

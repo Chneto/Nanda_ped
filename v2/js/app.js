@@ -517,7 +517,7 @@ class PediatricApp {
             <div class="installments-timeline">
               <div class="installment-box" style="${isInst1ThisMonth ? 'border-left: 2px solid var(--mint-income); padding-left: 4px;' : ''}">
                 <div class="inst-header">
-                  <span>80% (D+60)</span>
+                  <span>75% (D+60)</span>
                   <span>${formatDateBR(s.installment1?.expectedDate)}</span>
                 </div>
                 <div class="inst-val">${formatCurrency(s.installment1?.value)}</div>
@@ -533,7 +533,7 @@ class PediatricApp {
 
               <div class="installment-box" style="${isInst2ThisMonth ? 'border-left: 2px solid var(--mint-income); padding-left: 4px;' : ''}">
                 <div class="inst-header">
-                  <span>20% (D+90)</span>
+                  <span>25% (D+90)</span>
                   <span>${formatDateBR(s.installment2?.expectedDate)}</span>
                 </div>
                 <div class="inst-val">${formatCurrency(s.installment2?.value)}</div>
@@ -585,7 +585,7 @@ class PediatricApp {
           <button class="section-action-btn" id="btn-add-shift-quick">+ Novo Plantão</button>
         </div>
         <div style="margin-bottom: 12px; font-size: 0.78rem; color: var(--text-muted);">
-          Regra Pediátrica: <strong>80% pago em 2 meses (D+60)</strong> e <strong>20% no 3º mês (D+90)</strong>.
+          Regra Pediátrica: <strong>75% pago em 2 meses (D+60)</strong> e <strong>25% no 3º mês (D+90)</strong>.
         </div>
         ${shiftsHtml}
       </section>
@@ -725,7 +725,7 @@ class PediatricApp {
           </div>
 
           <div style="background: var(--lilac-light); padding: 10px 12px; border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--lilac-dark); margin-bottom: 12px;">
-            ✨ O sistema dividirá automaticamente este plantão em: <strong>80% em 2 meses</strong> e <strong>20% em 3 meses</strong>.
+            ✨ O sistema dividirá automaticamente este plantão em: <strong>75% em 2 meses</strong> e <strong>25% em 3 meses</strong>.
           </div>
 
           <button type="submit" class="submit-btn">Salvar Plantão</button>
