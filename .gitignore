@@ -1,4 +1,4 @@
-﻿# Dependências (caso venham a ser instaladas)
+# Dependências (caso venham a ser instaladas)
 node_modules/
 package-lock.json
 
@@ -32,6 +32,7 @@ yarn-error.log*
 
 # Pastas de trabalho temporárias ou de design bruto
 .system_generated/
+.agents/
 stitch_pediatrician_shift_financial_manager/
 tmp/
 temp/
