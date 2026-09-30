@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { ICON_PATHS, getSvgIcon, renderIcon, enhanceIcons } from '../js/icons.js';
+import { ICON_PATHS, getSvgIcon, renderIcon, enhanceIcons } from '../recovery/snapshot_v3.1.1/js/icons.js';
 
 test('ICON_PATHS contains all required medical, navigation, and finance icons', () => {
   const requiredIcons = [

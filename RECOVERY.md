@@ -1,6 +1,7 @@
-# 🔄 RECOVERY — Finanças Pediatria (Guia de Restauração v4_Cloud, v4.0.0, v3.1.1, v3.1.0 & v2.0)
+# 🔄 RECOVERY — Finanças Pediatria (Guia de Restauração v5.0.0, v4_Cloud, v4.0.0, v3.1.1, v3.1.0 & v2.0)
 
 > **Pontos de Restauração Oficiais Disponíveis:**  
+> - **v5.0.0 (Silk & Rose Gold Standalone — Zero-Lock, Instant Cache Refresh, Anti-Crop & High-Contrast Buttons)**: 118 testes aprovados (`recovery/snapshot_v5.0/`).  
 > - **V4_Cloud (Vercel & Supabase Cloud Native — Silk Gate Auth, RLS Estrito, Sync LWW & Offline First)**: 606 testes aprovados (`recovery/snapshot_v4_cloud/`).  
 > - **v4.0.0 (Silk & Rose Gold — Macro-Grupos, Maternidades Rápidas, Silk Selects & Visual Hub)**: 107 testes aprovados (`recovery/snapshot_v4.0.0/`).  
 > - **v2.0.0 (Nova Versão Pura, Higienizada & Sem Poluição)**: 94 testes aprovados (`recovery/snapshot_v2.0/`).  

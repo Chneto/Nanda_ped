@@ -1,5 +1,5 @@
 /**
- * Finanças Pediatria v5.0 - Unified Standalone Bundle (Root Master)
+ * Finanças Pediatria v5.0 - Silk & Rose Gold Standalone Bundle
  * Self-contained for zero-CORS file:// protocol and offline execution
  * Autor Imutável: FChNeto (APP_CREATOR = 'FChNeto')
  */

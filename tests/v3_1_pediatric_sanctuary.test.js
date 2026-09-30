@@ -3,13 +3,13 @@ import assert from 'node:assert/strict';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { PediatricStore } from '../js/store.js';
+import { PediatricStore } from '../recovery/snapshot_v3.1.1/js/store.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 
 test('Pediatric Dark Sanctuary CSS Tokens and Contrast Safeguards', () => {
-  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8');
+  const css = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'css', 'styles.css'), 'utf8');
 
   // 1. Dark Mode Background & Text Tokens (Crisp Feminine Plum / Wine Sanctuary)
   assert.ok(css.includes('--bg-main: #150D1C'), 'Dark mode must define deep plum background #150D1C');
@@ -36,7 +36,7 @@ test('Pediatric Dark Sanctuary CSS Tokens and Contrast Safeguards', () => {
 });
 
 test('index.html layout decluttering, hamburger drawer, and doctor photo markup', () => {
-  const html = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+  const html = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'index.html'), 'utf8');
 
   // 1. Decluttered Top Bar
   assert.ok(html.includes('id="btn-hamburger"'), 'Header must contain btn-hamburger button');
@@ -88,7 +88,7 @@ test('PediatricStore supports doctorPhoto in profile update and data persistence
 });
 
 test('Bundle includes new v3.1 functions for Custom Select, Drawer, Particles, and Legal Compliance', () => {
-  const bundle = fs.readFileSync(path.join(rootDir, 'js', 'bundle.js'), 'utf8');
+  const bundle = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'js', 'bundle.js'), 'utf8');
 
   assert.ok(bundle.includes('renderCustomSelectHTML'), 'Bundle must export renderCustomSelectHTML');
   assert.ok(bundle.includes('attachCustomSelectEvents'), 'Bundle must export attachCustomSelectEvents');
@@ -108,7 +108,7 @@ test('Bundle includes new v3.1 functions for Custom Select, Drawer, Particles, a
 });
 
 test('Audit: Custom Selectors and Hospital Picker Integration across Views and Modals', () => {
-  const appJs = fs.readFileSync(path.join(rootDir, 'js', 'app.js'), 'utf8');
+  const appJs = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'js', 'app.js'), 'utf8');
 
   // 1. Shifts View sector filter uses custom rounded select
   assert.ok(appJs.includes("id: 'select-shift-sector'"), 'Shifts view must render custom select for sector filter');
@@ -132,8 +132,8 @@ test('Audit: Custom Selectors and Hospital Picker Integration across Views and M
 });
 
 test('Audit: Dark Mode Contrast and Chart Safeguards', () => {
-  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8');
-  const chartsJs = fs.readFileSync(path.join(rootDir, 'js', 'charts.js'), 'utf8');
+  const css = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'css', 'styles.css'), 'utf8');
+  const chartsJs = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'js', 'charts.js'), 'utf8');
 
   // 1. Error tokens in dark mode
   assert.ok(css.includes('--error: #FF6E6E'), 'Dark mode must define high-contrast --error');
@@ -151,8 +151,8 @@ test('Audit: Dark Mode Contrast and Chart Safeguards', () => {
 });
 
 test('Audit: Microinteractions and Pediatric Particles Robustness', () => {
-  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8');
-  const appJs = fs.readFileSync(path.join(rootDir, 'js', 'app.js'), 'utf8');
+  const css = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'css', 'styles.css'), 'utf8');
+  const appJs = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'js', 'app.js'), 'utf8');
 
   // 1. CSS Keyframe variable fallbacks
   assert.ok(css.includes('--drift-x') && css.includes('--dx'), 'floatFlutterUp must support both --drift-x and --dx');

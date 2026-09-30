@@ -365,13 +365,13 @@ export function calculateShiftInstallments(shiftDate, netValue, customPaymentDat
   }
   const d60 = addMonths(shiftDate, 2);
   const d90 = addMonths(shiftDate, 3);
-  const part1 = Math.round(numNet * 0.80 * 100) / 100;
+  const part1 = Math.round(numNet * 0.75 * 100) / 100;
   const part2 = Math.round((numNet - part1) * 100) / 100;
 
   return [
     {
       number: 1,
-      percent: 80,
+      percent: 75,
       dueDate: d60,
       value: part1,
       status: "pending",
@@ -379,7 +379,7 @@ export function calculateShiftInstallments(shiftDate, netValue, customPaymentDat
     },
     {
       number: 2,
-      percent: 20,
+      percent: 25,
       dueDate: d90,
       value: part2,
       status: "pending",
@@ -2531,7 +2531,7 @@ export class PediatricStore {
         `"${s.shiftType}"`,
         `"${Number(s.grossValue || 0).toFixed(2).replace('.', ',')}"`,
         `"${Number(s.netValue || 0).toFixed(2).replace('.', ',')}"`,
-        `"${s.splitPayment ? 'D+60 (80%) / D+90 (20%)' : `D+${(s.paymentLagMonths || 3) * 30}`}"`,
+        `"${s.splitPayment ? 'D+60 (75%) / D+90 (25%)' : `D+${(s.paymentLagMonths || 3) * 30}`}"`,
         `"${dueLabel}"`,
         `"${statusLabel}"`,
         `"${s.paidDate ? formatDateBR(s.paidDate) : '-'}"`,

@@ -9,7 +9,7 @@
 ## 📌 1. Identidade do Produto & Metadados
 
 - **Nome da Aplicação:** Finanças Pediatria
-- **Versão Vigente:** `V4_Cloud` (Vercel & Supabase Cloud Native em `/V4_Cloud/`), `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Versão Master Executiva) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
+- **Versão Vigente:** `5.0.0` (Silk & Rose Gold Standalone em `/v5/` e `/`), `V4_Cloud` (Vercel & Supabase Cloud Native em `/V4_Cloud/`), `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Versão Master Executiva) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
 - **Autor / Criador:** **FChNeto** (Constante imutável no código: `APP_CREATOR = 'FChNeto'`; exibida no rodapé, cabeçalho e modais).
 - **Público-Alvo:** Médica Pediatra (atuação em maternidades, enfermarias, pronto-socorro infantil, UTI neonatal e consultório particular de puericultura).
 - **Proposta de Valor:** Controle financeiro médico de alta performance, acolhedor e seguro. Na **V4_Cloud**, a aplicação conta com arquitetura autônoma Cloud-Native pronta para Vercel e Supabase PostgreSQL: tela de boas-vindas acolhedora ("Silk Gate") com autenticação Google OAuth em 1 toque, Magic Link sem senha por e-mail, Modo Convidada / Offline Hospital sem internet (IndexedDB local-first resiliente), sincronização automática bidirecional com Last-Write-Wins (LWW), Row Level Security (RLS) estrito com cláusula `TO authenticated` e `auth.uid() = user_id` em 100% das tabelas, regras canônicas de 75% D+60 e 25% D+90, 6 macro-grupos e 22 categorias canônicas (606 testes automatizados aprovados na suíte V4_Cloud, mantendo os 107 testes da suíte raiz 100% verdes).

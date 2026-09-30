@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 
 test('CSS Anti-Crop & Modal Scroll Safeguards', () => {
-  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8');
+  const css = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'css', 'styles.css'), 'utf8');
 
   // 1. .dialog-box and .dialog-card must have scrollable overflow and 90vh max-height
   assert.ok(css.includes('.dialog-box') && css.includes('.dialog-card'), 'CSS must define .dialog-box and .dialog-card');
@@ -39,7 +39,7 @@ test('CSS Anti-Crop & Modal Scroll Safeguards', () => {
 });
 
 test('JS Custom Select Architecture & Onboarding Anti-Crop Integration', () => {
-  const appJs = fs.readFileSync(path.join(rootDir, 'js', 'app.js'), 'utf8');
+  const appJs = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'js', 'app.js'), 'utf8');
 
   // 1. renderCustomSelectHTML includes custom-select-menu classes
   assert.ok(appJs.includes('custom-select-menu'), 'renderCustomSelectHTML must output custom-select-menu class');
@@ -67,8 +67,8 @@ test('JS Custom Select Architecture & Onboarding Anti-Crop Integration', () => {
 });
 
 test('Audit: All Modals and Dropdowns Have Scroll Protections', () => {
-  const appJs = fs.readFileSync(path.join(rootDir, 'js', 'app.js'), 'utf8');
-  const indexHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+  const appJs = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'js', 'app.js'), 'utf8');
+  const indexHtml = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'index.html'), 'utf8');
 
   // 1. index.html dialog-container has dialog-card
   assert.ok(indexHtml.includes('id="dialog-container"') && indexHtml.includes('dialog-card'), 'index.html must have dialog-card on #dialog-container');
@@ -92,8 +92,8 @@ test('Audit: All Modals and Dropdowns Have Scroll Protections', () => {
 });
 
 test('Modal In-Flow Expansion & Non-Clipping Guarantees', () => {
-  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8');
-  const appJs = fs.readFileSync(path.join(rootDir, 'js', 'app.js'), 'utf8');
+  const css = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'css', 'styles.css'), 'utf8');
+  const appJs = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'js', 'app.js'), 'utf8');
 
   // 1. .dialog-card .custom-select-popover must be position: relative !important
   assert.ok(

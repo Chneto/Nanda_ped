@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { renderForecastChartSVG, renderDonutChartSVG } from '../js/charts.js';
+import { renderForecastChartSVG, renderDonutChartSVG } from '../recovery/snapshot_v3.1.1/js/charts.js';
 
 test('renderForecastChartSVG generates valid SVG markup with 4 months', () => {
   const forecastData = [

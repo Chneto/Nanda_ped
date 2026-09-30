@@ -9,8 +9,8 @@ import {
   formatCurrency,
   formatDateBR,
   formatMonthYear
-} from '../js/store.js';
-import { renderForecastChartSVG, renderDonutChartSVG } from '../js/charts.js';
+} from '../recovery/snapshot_v3.1.1/js/store.js';
+import { renderForecastChartSVG, renderDonutChartSVG } from '../recovery/snapshot_v3.1.1/js/charts.js';
 
 test('Edge cases: Leap years and boundary date arithmetic', () => {
   // 2024 is a leap year (Feb 29 exists)

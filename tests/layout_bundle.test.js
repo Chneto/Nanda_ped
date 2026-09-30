@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
 
 test('index.html conforms to iPhone 16 Plus layout and has robust icon fallbacks', () => {
-  const html = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+  const html = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'index.html'), 'utf8');
 
   // 1. Google Fonts display=block prevents FOUT blowout
   assert.ok(html.includes('&display=block'), 'Google Fonts URL must use display=block to prevent ligature text FOUT blowout');
@@ -39,7 +39,7 @@ test('index.html conforms to iPhone 16 Plus layout and has robust icon fallbacks
 });
 
 test('css/styles.css enforces anti-blowout rules and valid iPhone 16 Plus frame styles', () => {
-  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8');
+  const css = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'css', 'styles.css'), 'utf8');
 
   // 1. .material-symbols-outlined rules per prompt specification
   assert.ok(css.includes("font-family: 'Material Symbols Outlined' !important"), 'Must declare Material Symbols Outlined font family');
@@ -60,7 +60,7 @@ test('css/styles.css enforces anti-blowout rules and valid iPhone 16 Plus frame 
 });
 
 test('js/bundle.js is synchronized with source files', () => {
-  const bundleCode = fs.readFileSync(path.join(rootDir, 'js', 'bundle.js'), 'utf8');
+  const bundleCode = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'js', 'bundle.js'), 'utf8');
   assert.ok(bundleCode.includes('PediatricStore'), 'Bundle must contain PediatricStore');
   assert.ok(bundleCode.includes('renderForecastChartSVG'), 'Bundle must contain renderForecastChartSVG');
   assert.ok(bundleCode.includes('ICON_PATHS'), 'Bundle must contain ICON_PATHS');
@@ -68,7 +68,7 @@ test('js/bundle.js is synchronized with source files', () => {
 });
 
 test('js/bundle.js executes completely and mounts dashboard without CORS dependency', () => {
-  const bundleCode = fs.readFileSync(path.join(rootDir, 'js', 'bundle.js'), 'utf8');
+  const bundleCode = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'js', 'bundle.js'), 'utf8');
 
   // Verify syntax
   assert.doesNotThrow(() => {

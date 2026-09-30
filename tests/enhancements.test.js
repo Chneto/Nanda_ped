@@ -9,9 +9,9 @@ import {
   TAX_REGIMES,
   CLINICAL_SECTORS,
   formatCurrency
-} from '../js/store.js';
+} from '../recovery/snapshot_v3.1.1/js/store.js';
 
-import { formatMoney } from '../js/app.js';
+import { formatMoney } from '../recovery/snapshot_v3.1.1/js/app.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');

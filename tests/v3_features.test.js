@@ -19,11 +19,11 @@ import {
   reconcileBankTransactions,
   generateAccountantKit,
   PediatricSanctuaryDB
-} from '../js/store.js';
+} from '../recovery/snapshot_v3.1.1/js/store.js';
 
 import {
   renderForecast12MSVG
-} from '../js/charts.js';
+} from '../recovery/snapshot_v3.1.1/js/charts.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -356,10 +356,10 @@ test('V3 Feature 9: Brazilian Medical NLP Voice Parser', (t) => {
 });
 
 test('V3 Feature 10: iOS Safari Auto-Zoom Shielding & Viewport Protection', (t) => {
-  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8');
+  const css = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'css', 'styles.css'), 'utf8');
   assert.ok(css.includes('font-size: 16px !important'), "CSS must enforce 16px font-size on inputs to prevent iOS auto-zoom");
 
-  const html = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+  const html = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'index.html'), 'utf8');
   assert.ok(html.includes('interactive-widget=resizes-content'), "Viewport meta must include interactive-widget=resizes-content");
   assert.ok(html.includes('btn-theme-toggle'), "Header must include dark mode toggle button");
   assert.ok(html.includes('spotlight-overlay'), "HTML must include spotlight search modal overlay");

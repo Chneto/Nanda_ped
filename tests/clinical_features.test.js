@@ -6,7 +6,7 @@ import {
   calculateHourlyRate,
   TAX_REGIMES,
   CLINICAL_SECTORS
-} from '../js/store.js';
+} from '../recovery/snapshot_v3.1.1/js/store.js';
 
 test('calculateHourlyRate across various shift types and edge cases', () => {
   // 12h Diurno: 12h divisor

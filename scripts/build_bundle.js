@@ -16,7 +16,7 @@ function cleanModule(code) {
     .replace(/^export\s+default\s+/gm, '');
 }
 
-// 1. Constrói Bundle Raiz (v3.x Master)
+// 1. Constrói Bundle Raiz (v5.0 Silk & Rose Gold Master)
 function buildRootBundle() {
   const iconsPath = path.join(rootDir, 'js', 'icons.js');
   const storePath = path.join(rootDir, 'js', 'store.js');
@@ -26,18 +26,25 @@ function buildRootBundle() {
 
   let iconsCode = cleanModule(fs.readFileSync(iconsPath, 'utf8'));
   let storeCode = cleanModule(fs.readFileSync(storePath, 'utf8'));
-  let chartsCode = cleanModule(chartsPath ? fs.readFileSync(chartsPath, 'utf8') : '');
+  let chartsCode = cleanModule(fs.existsSync(chartsPath) ? fs.readFileSync(chartsPath, 'utf8') : '');
   let appCode = cleanModule(fs.readFileSync(appPath, 'utf8'));
 
   const bundle = `/**
- * Finanças Pediatria - Unified Standalone Bundle (v3.x Master)
+ * Finanças Pediatria v5.0 - Unified Standalone Bundle (Root Master)
  * Self-contained for zero-CORS file:// protocol and offline execution
+ * Autor Imutável: FChNeto (APP_CREATOR = 'FChNeto')
  */
 (function() {
   'use strict';
 
   // --- ICONS SYSTEM ---
   ${iconsCode}
+
+  // Fallback global de ícones para o escopo do window
+  if (typeof window !== 'undefined') {
+    window.getIconSvg = getIconSvg;
+    window.getIcon = getIcon;
+  }
 
   // --- STORE ENGINE ---
   ${storeCode}
@@ -47,6 +54,17 @@ function buildRootBundle() {
 
   // --- APPLICATION LOGIC ---
   ${appCode}
+
+  // Auto-inicialização imediata e segura
+  if (typeof window !== 'undefined') {
+    if (!window.app && typeof PediatricApp !== 'undefined') {
+      try {
+        window.app = new PediatricApp();
+      } catch (e) {
+        console.warn('Auto-init PediatricApp:', e);
+      }
+    }
+  }
 })();
 `;
 
@@ -57,6 +75,7 @@ function buildRootBundle() {
 // 2. Constrói Bundle v2.0 (Sanctuary Minimalist)
 function buildV2Bundle() {
   const v2Dir = path.join(rootDir, 'v2.0', 'js');
+  if (!fs.existsSync(v2Dir)) return;
   const iconsPath = path.join(v2Dir, 'icons.js');
   const storePath = path.join(v2Dir, 'store.js');
   const chartsPath = path.join(v2Dir, 'charts.js');
@@ -110,6 +129,7 @@ function buildV2Bundle() {
 // 3. Constrói Bundle v4.0 (Silk & Rose Gold)
 function buildV4Bundle() {
   const v4Dir = path.join(rootDir, 'v4', 'js');
+  if (!fs.existsSync(v4Dir)) return;
   const iconsPath = path.join(v4Dir, 'icons.js');
   const storePath = path.join(v4Dir, 'store.js');
   const chartsPath = path.join(v4Dir, 'charts.js');
@@ -156,32 +176,112 @@ function buildV4Bundle() {
   const v40Dir = path.join(rootDir, 'v4.0');
   const v4SourceDir = path.join(rootDir, 'v4');
   if (fs.existsSync(v40Dir)) {
-    // Sincroniza arquivos de topo
     ['index.html', 'manifest.json', 'sw.js'].forEach(file => {
       const src = path.join(v4SourceDir, file);
       const dst = path.join(v40Dir, file);
       if (fs.existsSync(src)) fs.copyFileSync(src, dst);
     });
 
-    // Sincroniza css/styles.css
     const cssSrc = path.join(v4SourceDir, 'css', 'styles.css');
     const cssDst = path.join(v40Dir, 'css', 'styles.css');
     if (fs.existsSync(cssSrc)) fs.copyFileSync(cssSrc, cssDst);
 
-    // Sincroniza módulos js
     ['icons.js', 'store.js', 'charts.js', 'app.js'].forEach(file => {
       const src = path.join(v4SourceDir, 'js', file);
       const dst = path.join(v40Dir, 'js', file);
       if (fs.existsSync(src)) fs.copyFileSync(src, dst);
     });
 
-    // Grava o bundle na pasta v4.0/js
     const v40BundlePath = path.join(v40Dir, 'js', 'bundle.js');
     fs.writeFileSync(v40BundlePath, bundle, 'utf8');
     console.log('v4.0 espelhado com sucesso em:', v40BundlePath);
   }
 }
 
+// 4. Constrói Bundle v5.0 (Silk & Rose Gold Standalone)
+function buildV5Bundle() {
+  const v5Dir = path.join(rootDir, 'v5', 'js');
+  if (!fs.existsSync(v5Dir)) return;
+  const iconsPath = path.join(v5Dir, 'icons.js');
+  const storePath = path.join(v5Dir, 'store.js');
+  const chartsPath = path.join(v5Dir, 'charts.js');
+  const appPath = path.join(v5Dir, 'app.js');
+  const bundlePath = path.join(v5Dir, 'bundle.js');
+
+  let iconsCode = cleanModule(fs.readFileSync(iconsPath, 'utf8'));
+  let storeCode = cleanModule(fs.readFileSync(storePath, 'utf8'));
+  let chartsCode = cleanModule(fs.readFileSync(chartsPath, 'utf8'));
+  let appCode = cleanModule(fs.readFileSync(appPath, 'utf8'));
+
+  const bundle = `/**
+ * Finanças Pediatria v5.0 - Silk & Rose Gold Standalone Bundle
+ * Self-contained for zero-CORS file:// protocol and offline execution
+ * Autor Imutável: FChNeto (APP_CREATOR = 'FChNeto')
+ */
+(function() {
+  'use strict';
+
+  // --- ICONS SYSTEM ---
+  ${iconsCode}
+
+  // Fallback global de ícones para o escopo do window
+  if (typeof window !== 'undefined') {
+    window.getIconSvg = getIconSvg;
+    window.getIcon = getIcon;
+  }
+
+  // --- STORE ENGINE ---
+  ${storeCode}
+
+  // --- CHARTS ENGINE ---
+  ${chartsCode}
+
+  // --- APPLICATION LOGIC ---
+  ${appCode}
+
+  // Auto-inicialização imediata e segura
+  if (typeof window !== 'undefined') {
+    if (!window.app && typeof PediatricApp !== 'undefined') {
+      try {
+        window.app = new PediatricApp();
+      } catch (e) {
+        console.warn('Auto-init PediatricApp:', e);
+      }
+    }
+  }
+})();
+`;
+
+  fs.writeFileSync(bundlePath, bundle, 'utf8');
+  console.log('v5 bundle escrito em:', bundlePath);
+
+  // Espelha para /V5/ (Case-Insensitive safety)
+  const V5Dir = path.join(rootDir, 'V5');
+  const v5SourceDir = path.join(rootDir, 'v5');
+  if (fs.existsSync(V5Dir)) {
+    ['index.html', 'manifest.json', 'sw.js'].forEach(file => {
+      const src = path.join(v5SourceDir, file);
+      const dst = path.join(V5Dir, file);
+      if (fs.existsSync(src)) fs.copyFileSync(src, dst);
+    });
+
+    const cssSrc = path.join(v5SourceDir, 'css', 'styles.css');
+    const cssDst = path.join(V5Dir, 'css', 'styles.css');
+    if (fs.existsSync(cssSrc)) fs.copyFileSync(cssSrc, cssDst);
+
+    ['icons.js', 'store.js', 'charts.js', 'app.js'].forEach(file => {
+      const src = path.join(v5SourceDir, 'js', file);
+      const dst = path.join(V5Dir, 'js', file);
+      if (fs.existsSync(src)) fs.copyFileSync(src, dst);
+    });
+
+    const V5BundlePath = path.join(V5Dir, 'js', 'bundle.js');
+    fs.writeFileSync(V5BundlePath, bundle, 'utf8');
+    console.log('V5 espelhado com sucesso em:', V5BundlePath);
+  }
+}
+
 buildRootBundle();
 buildV2Bundle();
 buildV4Bundle();
+buildV5Bundle();

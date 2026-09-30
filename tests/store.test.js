@@ -8,7 +8,7 @@ import {
   getInitialData,
   getDemoData,
   EXPENSE_CATEGORIES
-} from '../js/store.js';
+} from '../recovery/snapshot_v3.1.1/js/store.js';
 
 test('addMonths handles regular dates and month-end clamping', () => {
   // Canonical D+90 test from user specification

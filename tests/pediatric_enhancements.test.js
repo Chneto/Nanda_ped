@@ -19,7 +19,7 @@ import {
   DEFAULT_WORK_TYPES,
   APP_CREATOR,
   evaluateShiftStatus
-} from '../js/store.js';
+} from '../recovery/snapshot_v3.1.1/js/store.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -393,11 +393,11 @@ test('Trash & Undo Recovery mechanism in PediatricStore', () => {
 });
 
 test('Safe Area & Top Margin Protection', () => {
-  const css = fs.readFileSync(path.join(rootDir, 'css', 'styles.css'), 'utf8').replace(/\r\n/g, '\n');
+  const css = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'css', 'styles.css'), 'utf8').replace(/\r\n/g, '\n');
   assert.ok(css.includes('--safe-top: max(env(safe-area-inset-top, 0px), 52px);'), 'Must enforce minimum 52px safe-top');
   assert.ok(css.includes('.glass-header {\n  padding-top: var(--safe-top) !important;'), 'Glass header must enforce safe-top with !important');
 
-  const html = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+  const html = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'index.html'), 'utf8');
   assert.ok(html.includes('pt-safe') && html.includes('glass-header') && html.includes('pb-2.5'), 'Header must have pt-safe and pb-2.5');
   assert.ok(!html.includes('glass-header px-4 py-2'), 'py-2 must be removed so safe area is preserved');
   assert.ok(html.includes('id="baby-reaction-overlay"'), 'Must have baby-reaction-overlay element');
@@ -408,12 +408,12 @@ test('App Brand & Immutable Creator Signature (FChNeto)', () => {
   assert.equal(APP_CREATOR.signature, 'Criado por FChNeto');
   assert.equal(APP_CREATOR.app, 'Finanças Pediatria');
 
-  const manifest = JSON.parse(fs.readFileSync(path.join(rootDir, 'manifest.json'), 'utf8'));
+  const manifest = JSON.parse(fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'manifest.json'), 'utf8'));
   assert.equal(manifest.name, 'Finanças Pediatria');
   assert.equal(manifest.short_name, 'Finanças Pediatria');
   assert.ok(manifest.description.includes('FChNeto'));
 
-  const html = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+  const html = fs.readFileSync(path.join(rootDir, 'recovery', 'snapshot_v3.1.1', 'index.html'), 'utf8');
   assert.ok(html.includes('<title>Finanças Pediatria</title>'));
   assert.ok(html.includes('Finanças Pediatria'));
 });
