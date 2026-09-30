@@ -129,10 +129,21 @@ body {
   overflow-x: hidden;
 }
 
-/* Blindagem contra auto-zoom destrutivo do Safari iOS */
-input, select, textarea, button {
+/* Blindagem contra auto-zoom destrutivo do Safari iOS e resets consistentes */
+input, select, textarea {
   font-family: inherit;
   font-size: 16px;
+}
+
+button {
+  font-family: inherit;
+  font-size: 16px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
 }
 
 #app-container {

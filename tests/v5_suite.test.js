@@ -272,4 +272,48 @@ describe('Finanças Pediatria v5.0 - Silk & Rose Gold Engine Tests', () => {
     assert.ok(css.includes('.silk-select-menu'));
     assert.ok(css.includes('position: relative !important'));
   });
+
+  test('v5 Verificação de Cache Invalidation e Headers Vercel', () => {
+    const vercelConfig = JSON.parse(fs.readFileSync(path.join(rootDir, 'vercel.json'), 'utf8'));
+    const cssHeader = vercelConfig.headers.find(h => h.source === '/css/(.*)');
+    const jsHeader = vercelConfig.headers.find(h => h.source === '/js/(.*)');
+
+    assert.ok(cssHeader, 'Header de /css/(.*) deve existir');
+    assert.ok(jsHeader, 'Header de /js/(.*) deve existir');
+
+    const cssCacheVal = cssHeader.headers.find(h => h.key === 'Cache-Control')?.value;
+    const jsCacheVal = jsHeader.headers.find(h => h.key === 'Cache-Control')?.value;
+
+    assert.ok(cssCacheVal.includes('must-revalidate'), 'CSS não deve ficar travado com immutable sem revalidação');
+    assert.ok(jsCacheVal.includes('must-revalidate'), 'JS não deve ficar travado com immutable sem revalidação');
+
+    // Verifica cache-busting nos HTMLs
+    const rootHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
+    const v5Html = fs.readFileSync(path.join(rootDir, 'v5', 'index.html'), 'utf8');
+
+    assert.ok(rootHtml.includes('styles.css?v=5.0.0'));
+    assert.ok(rootHtml.includes('bundle.js?v=5.0.0'));
+    assert.ok(v5Html.includes('styles.css?v=5.0.0'));
+    assert.ok(v5Html.includes('bundle.js?v=5.0.0'));
+
+    // Service worker cache name
+    const swCode = fs.readFileSync(path.join(rootDir, 'v5', 'sw.js'), 'utf8');
+    assert.ok(swCode.includes('financas-ped-v5-silk-2.0'));
+  });
+
+  test('v5 Integridade de Eventos e Modais no App Bundle', () => {
+    const appCode = fs.readFileSync(path.join(rootDir, 'v5', 'js', 'app.js'), 'utf8');
+
+    // Verifica listeners essenciais
+    assert.ok(appCode.includes('btn-quick-add-expense'));
+    assert.ok(appCode.includes('btn-quick-add-shift'));
+    assert.ok(appCode.includes('data-quick-hospital'));
+    assert.ok(appCode.includes('btn-nav-hub'));
+    assert.ok(appCode.includes('data-action="view-expenses"'));
+    assert.ok(appCode.includes('data-action="edit-salary"'));
+    assert.ok(appCode.includes('btn-reset-transactions'));
+    assert.ok(appCode.includes('btn-reset-factory'));
+    assert.ok(appCode.includes('btn-modal-close'));
+    assert.ok(appCode.includes('initPediatricApp'));
+  });
 });

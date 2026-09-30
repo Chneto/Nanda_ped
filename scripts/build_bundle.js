@@ -18,6 +18,33 @@ function cleanModule(code) {
 
 // 1. Constrói Bundle Raiz (v5.0 Silk & Rose Gold Master)
 function buildRootBundle() {
+  const v5Dir = path.join(rootDir, 'v5');
+  
+  // Sincroniza v5 para a raiz do repositório
+  if (fs.existsSync(v5Dir)) {
+    ['index.html', 'manifest.json', 'sw.js'].forEach(file => {
+      const src = path.join(v5Dir, file);
+      const dst = path.join(rootDir, file);
+      if (fs.existsSync(src)) fs.copyFileSync(src, dst);
+    });
+
+    const cssSrc = path.join(v5Dir, 'css', 'styles.css');
+    const cssDst = path.join(rootDir, 'css', 'styles.css');
+    if (fs.existsSync(cssSrc)) {
+      fs.mkdirSync(path.join(rootDir, 'css'), { recursive: true });
+      fs.copyFileSync(cssSrc, cssDst);
+    }
+
+    ['icons.js', 'store.js', 'charts.js', 'app.js'].forEach(file => {
+      const src = path.join(v5Dir, 'js', file);
+      const dst = path.join(rootDir, 'js', file);
+      if (fs.existsSync(src)) {
+        fs.mkdirSync(path.join(rootDir, 'js'), { recursive: true });
+        fs.copyFileSync(src, dst);
+      }
+    });
+  }
+
   const iconsPath = path.join(rootDir, 'js', 'icons.js');
   const storePath = path.join(rootDir, 'js', 'store.js');
   const chartsPath = path.join(rootDir, 'js', 'charts.js');
