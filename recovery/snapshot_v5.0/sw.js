@@ -4,12 +4,14 @@
  * Autor Imutável: FChNeto (APP_CREATOR = 'FChNeto')
  */
 
-const CACHE_NAME = 'financas-ped-v5-silk-1.0';
+const CACHE_NAME = 'financas-ped-v5-silk-2.0';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './css/styles.css',
+  './css/styles.css?v=5.0.0',
   './js/bundle.js',
+  './js/bundle.js?v=5.0.0',
   './manifest.json',
   './assets/icons/favicon.png',
   './assets/icons/apple-touch-icon.png',

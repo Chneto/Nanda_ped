@@ -178,6 +178,50 @@ export class PediatricApp {
         return;
       }
 
+      // Hub Agenda Button in Bottom Nav
+      const navHubBtn = e.target.closest('#btn-nav-hub');
+      if (navHubBtn) {
+        this.openHubModal();
+        return;
+      }
+
+      // Action buttons: "Ver Todas" on Home Tab
+      const viewExpensesBtn = e.target.closest('[data-action="view-expenses"]');
+      if (viewExpensesBtn) {
+        this.switchTab('expenses');
+        return;
+      }
+
+      // Action button: "Editar" on Salary Card
+      const editSalaryBtn = e.target.closest('[data-action="edit-salary"]');
+      if (editSalaryBtn) {
+        this.openModal('salary');
+        return;
+      }
+
+      // Reset Data Action Buttons
+      const resetTxBtn = e.target.closest('#btn-reset-transactions');
+      if (resetTxBtn) {
+        this.store.resetAllData({ keepProfile: true, downloadBackup: true });
+        this.closeModal();
+        this.showToast('Lançamentos zerados. Perfil da médica preservado! 🩺✨');
+        return;
+      }
+
+      const resetFacBtn = e.target.closest('#btn-reset-factory');
+      if (resetFacBtn) {
+        this.store.resetAllData({ keepProfile: false, downloadBackup: true });
+        this.closeModal();
+        this.showToast('Aplicativo restaurado ao estado inicial com sucesso! 🌸');
+        return;
+      }
+
+      const resetCancelBtn = e.target.closest('#btn-reset-cancel');
+      if (resetCancelBtn) {
+        this.closeModal();
+        return;
+      }
+
       // Filtro de Macro-Grupos na Aba de Despesas
       const macroFilterBtn = e.target.closest('[data-macro-filter]');
       if (macroFilterBtn) {
@@ -981,6 +1025,9 @@ export class PediatricApp {
     const modalHtml = `
       <div class="modal-overlay" id="action-modal">
         <div class="modal-card">
+          <button class="btn-modal-close" style="position: absolute; top: 16px; right: 16px; border: none; background: transparent; cursor: pointer; color: var(--text-muted); z-index: 15;" title="Fechar">
+            ${getIconSvg('close', { size: 20 })}
+          </button>
           <div class="modal-handle-bar"></div>
           <div class="modal-tabs-header">
             <button class="modal-tab-btn ${this.activeModalTab === 'shift' ? 'active' : ''}" data-modal-tab="shift">
@@ -1055,7 +1102,7 @@ export class PediatricApp {
       <section class="card-section">
         <div class="section-header">
           <h2>${getIconSvg('pie_chart', { size: 18, color: '#EC407A' })} Despesas por Macro-Grupos</h2>
-          <button class="section-action-btn" onclick="window.app.switchTab('expenses')">Ver Todas</button>
+          <button class="section-action-btn" data-action="view-expenses">Ver Todas</button>
         </div>
         <div id="home-donut-chart-container"></div>
       </section>
@@ -1169,7 +1216,7 @@ export class PediatricApp {
       <section class="card-section" style="background: var(--hero-gradient); border-color: var(--rose-gold);">
         <div class="section-header">
           <h2>${getIconSvg('payments', { size: 18, color: '#EC407A' })} Bolsa Residência Médica</h2>
-          <button class="section-action-btn" onclick="window.app.openModal('salary')">Editar</button>
+          <button class="section-action-btn" data-action="edit-salary">Editar</button>
         </div>
         <div style="display: flex; align-items: baseline; justify-content: space-between;">
           <div>
@@ -1317,7 +1364,12 @@ export class PediatricApp {
     if (!modal) return;
     const body = modal.querySelector('.modal-card-body');
     const header = modal.querySelector('.modal-tabs-header');
-    if (header) header.style.display = 'flex';
+    if (header) {
+      header.style.display = 'flex';
+      header.querySelectorAll('.modal-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-modal-tab') === this.activeModalTab);
+      });
+    }
 
     if (this.activeModalTab === 'shift') {
       const today = getLocalDateString();
