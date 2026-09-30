@@ -1,79 +1,69 @@
-// Finanças Pediatria V4 Cloud Service Worker - Offline Resilience - Criado por FChNeto
-const CACHE_NAME = 'nanda-v4-cloud-v1';
+/**
+ * Service Worker para Finanças Pediatria v4.0
+ * Cache-first para assets estáticos e suporte 100% offline com tolerância a falhas
+ */
 
-const STATIC_ASSETS = [
-  './',
+const CACHE_NAME = 'pediatria-v4-cache-v1';
+const ASSETS_TO_CACHE = [
   './index.html',
-  './manifest.json',
   './css/styles.css',
-  './js/config.js',
+  './js/app.js',
+  './js/store.js',
+  './js/charts.js',
+  './js/icons.js',
+  './js/bundle.js',
+  './manifest.json',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
-  './assets/icons/apple-touch-icon.png',
-  './assets/icons/favicon.png'
+  './assets/icons/apple-touch-icon.png'
 ];
 
-// Install: Cache core application shell safely
-self.addEventListener('install', (event) => {
-  event.waitUntil(
+self.addEventListener('install', (e) => {
+  e.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
-      for (const asset of STATIC_ASSETS) {
+      for (const asset of ASSETS_TO_CACHE) {
         try {
           await cache.add(asset);
         } catch (err) {
-          // Log warning and continue caching remaining assets
-          console.warn(`[V4_Cloud SW] Cache skip for asset (${asset}):`, err);
+          // Continua mesmo se algum asset individual falhar
         }
       }
     }).then(() => self.skipWaiting())
   );
 });
 
-// Activate: Purge older cache versions and claim clients
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
-        keys.filter((key) => key !== CACHE_NAME && key.startsWith('nanda-v4-cloud')).map((key) => caches.delete(key))
+        keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))
       );
     }).then(() => self.clients.claim())
   );
 });
 
-// Fetch: Network resilience with local cache fallback
-self.addEventListener('fetch', (event) => {
-  // Only handle GET requests
-  if (event.request.method !== 'GET') return;
+self.addEventListener('fetch', (e) => {
+  if (e.request.method !== 'GET') return;
 
-  const url = new URL(event.request.url);
-
-  // Strictly ignore cross-origin requests (Supabase REST, Auth, Realtime, Google OAuth)
-  // Let client SDK and IndexedDB sync engine handle cross-origin network operations
-  if (url.origin !== self.location.origin) {
-    return;
-  }
-
-  // Same-origin asset handling
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request).then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
+  e.respondWith(
+    caches.match(e.request).then((cachedResponse) => {
+      if (cachedResponse) {
+        return cachedResponse;
+      }
+      return fetch(e.request).then((networkResponse) => {
+        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+          return networkResponse;
         }
+        const responseToCache = networkResponse.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(e.request, responseToCache);
+        });
         return networkResponse;
-      }).catch((fetchError) => {
-        // If navigation fails (user is offline), fallback to index.html SPA entrypoint
-        if (event.request.mode === 'navigate' || event.request.headers.get('accept')?.includes('text/html')) {
+      }).catch(() => {
+        if (e.request.headers.get('accept')?.includes('text/html')) {
           return caches.match('./index.html');
         }
-        throw fetchError;
       });
-
-      // Return cached asset immediately for 0ms speed; fallback to network
-      return cachedResponse || fetchPromise;
     })
   );
 });
