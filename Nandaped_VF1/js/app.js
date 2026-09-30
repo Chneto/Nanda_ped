@@ -164,6 +164,9 @@ export class PediatricApp {
           if (error) {
             this.ui.showToast(`Falha no login com Google: ${error.message}`, 'error');
             if (label) label.textContent = 'Entrar com Google';
+            if (error.isNotConfigured) {
+              this.openCloudConfigModal();
+            }
           }
         } catch (err) {
           this.ui.showToast('Erro inesperado ao conectar ao Google.', 'error');
@@ -201,6 +204,9 @@ export class PediatricApp {
               feedback.classList.remove('hidden');
             }
             if (label) label.textContent = 'Enviar Link Mágico';
+            if (error.isNotConfigured) {
+              this.openCloudConfigModal();
+            }
           } else {
             if (feedback) {
               feedback.textContent = '✨ Link mágico enviado com sucesso! Verifique sua caixa de entrada.';

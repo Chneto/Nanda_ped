@@ -23,7 +23,7 @@ export const DEFAULT_CATEGORIES = [
   { id: 'cat_internet', name: 'Internet', icon: 'wifi', color: '#29B6F6' },
   { id: 'cat_combustivel', name: 'Combustível', icon: 'fuel', color: '#FF7043' },
   { id: 'cat_qualificacao', name: 'Qualificação/Congresso/Pós', icon: 'qualification', color: '#8E24AA' },
-  { id: 'cat_cosmeticos', name: 'Cosméticos', icon: 'cosmetics', color: '#F06292' },
+  { id: 'cat_fisioterapia', name: 'Fisioterapia', icon: 'fisioterapia', color: '#26A69A' },
   { id: 'cat_agua', name: 'Água', icon: 'water', color: '#26C6DA' },
   { id: 'cat_lanches', name: 'Lanches', icon: 'snack', color: '#FFCA28' },
   { id: 'cat_doacao', name: 'Doação', icon: 'donation', color: '#E91E63' },

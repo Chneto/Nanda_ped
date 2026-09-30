@@ -90,7 +90,7 @@ A versão v2.0 pré-configura e garante a presença das 22 categorias requisitad
 9. `Internet`
 10. `Combustível`
 11. `Qualificação/Congresso/Pós`
-12. `Cosméticos`
+12. `Fisioterapia`
 13. `Água`
 14. `Lanches`
 15. `Doação`

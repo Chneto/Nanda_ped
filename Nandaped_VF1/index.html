@@ -46,8 +46,8 @@
     <section id="silk-gate-screen" class="silk-gate-wrapper" aria-label="Ingresso Silk Gate">
       <div class="silk-gate-card">
         
-        <!-- Botão de Configuração de Credenciais Ocultado (Zero Poluição Visual) -->
-        <button id="btn-gate-gear" class="silk-gate-gear-btn hidden" style="display: none !important;" type="button" aria-label="Configurações de Conexão Supabase" title="Configurar Supabase">
+        <!-- Botão de Configuração de Credenciais Supabase -->
+        <button id="btn-gate-gear" class="silk-gate-gear-btn" type="button" aria-label="Configurações de Conexão Supabase" title="Configurar Supabase">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"/>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -154,8 +154,8 @@
             <span>Continuar sem login / Modo Hospital</span>
           </button>
 
-          <!-- Link para Configurações da Nuvem (Oculto da Interface) -->
-          <button id="btn-open-cloud-config" class="btn-silk-text hidden" style="display: none !important;" type="button">
+          <!-- Link para Configurações da Nuvem -->
+          <button id="btn-open-cloud-config" class="btn-silk-text" type="button">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="3"/>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -472,8 +472,8 @@
     <!-- 3. MODAIS COM ARQUITETURA IN-FLOW EXPANSION ANTI-CROP               -->
     <!-- ==================================================================== -->
 
-    <!-- Modal 1: Configurações da Nuvem Supabase (Ocultado da UI da Médica) -->
-    <div id="modal-cloud-config" class="modal-backdrop hidden" style="display: none !important;" role="dialog" aria-modal="true" aria-labelledby="cloud-config-title">
+    <!-- Modal 1: Configurações da Nuvem Supabase -->
+    <div id="modal-cloud-config" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="cloud-config-title">
       <div class="modal-sheet">
         <header class="modal-header">
           <div class="modal-title-wrap">
@@ -1022,7 +1022,7 @@
             <span>Sincronizar com Nuvem Agora</span>
           </button>
 
-          <button class="drawer-item hidden" id="drawer-item-cloud" style="display: none !important;" type="button">
+          <button class="drawer-item" id="drawer-item-cloud" type="button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#AB47BC" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
             <span>Configurações do Supabase</span>
           </button>

@@ -59,7 +59,7 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
       'Internet',
       'Combustível',
       'Qualificação/Congresso/Pós',
-      'Cosméticos',
+      'Fisioterapia',
       'Água',
       'Lanches',
       'Doação',

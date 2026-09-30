@@ -26,7 +26,7 @@ export const DEFAULT_CATEGORIES = [
   { id: 'cat_internet', name: 'Internet', icon: 'wifi', color: '#29B6F6' },
   { id: 'cat_combustivel', name: 'Combustível', icon: 'fuel', color: '#FF7043' },
   { id: 'cat_qualificacao', name: 'Qualificação/Congresso/Pós', icon: 'qualification', color: '#8E24AA' },
-  { id: 'cat_cosmeticos', name: 'Cosméticos', icon: 'cosmetics', color: '#F06292' },
+  { id: 'cat_fisioterapia', name: 'Fisioterapia', icon: 'fisioterapia', color: '#26A69A' },
   { id: 'cat_agua', name: 'Água', icon: 'water', color: '#26C6DA' },
   { id: 'cat_lanches', name: 'Lanches', icon: 'snack', color: '#FFCA28' },
   { id: 'cat_doacao', name: 'Doação', icon: 'donation', color: '#E91E63' },
@@ -80,7 +80,7 @@ export const MACRO_GROUPS = [
     icon: 'sparkles',
     color: '#EC407A',
     bgColor: '#FCE4EC',
-    categories: ['Remédios', 'Academia', 'Cosméticos', 'Beleza/Salão', 'Produtos de beleza']
+    categories: ['Remédios', 'Academia', 'Fisioterapia', 'Beleza/Salão', 'Produtos de beleza']
   },
   {
     id: 'macro_lazer_outros',
@@ -106,8 +106,12 @@ export const DEFAULT_HOSPITALS = [
  */
 export function getMacroGroupForCategory(categoryName) {
   if (!categoryName) return MACRO_GROUPS[5];
+  const trimmed = categoryName.trim().toLowerCase();
+  if (trimmed === 'cosméticos' || trimmed === 'cosmeticos') {
+    return MACRO_GROUPS[4]; // Saúde & Autocuidado
+  }
   for (const group of MACRO_GROUPS) {
-    if (group.categories.some(c => c.toLowerCase() === categoryName.trim().toLowerCase())) {
+    if (group.categories.some(c => c.toLowerCase() === trimmed)) {
       return group;
     }
   }

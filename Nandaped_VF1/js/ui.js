@@ -490,7 +490,6 @@ export class PediatricUI {
               name="netValue" 
               class="silk-input" 
               value="${defaultNet}" 
-              required 
               placeholder="0,00"
             />
           </div>
@@ -534,13 +533,16 @@ export class PediatricUI {
       </form>
     `;
 
+    const grossInput = document.getElementById('shift-gross-input');
     const netInput = document.getElementById('shift-net-input');
     const dateInput = document.getElementById('shift-date-input');
 
     const updatePreview = () => {
-      const netVal = parseFloat(netInput?.value) || 0;
+      const rawNet = parseFloat(netInput?.value) || 0;
+      const rawGross = parseFloat(grossInput?.value) || 0;
+      const effectiveNet = rawNet > 0 ? rawNet : rawGross;
       const dateVal = dateInput?.value || getLocalDateString();
-      const calc = calculateShiftInstallments(netVal, dateVal);
+      const calc = calculateShiftInstallments(effectiveNet, dateVal);
 
       const val75El = document.getElementById('preview-val-75');
       const date75El = document.getElementById('preview-date-75');
@@ -554,6 +556,7 @@ export class PediatricUI {
     };
 
     if (netInput) netInput.addEventListener('input', updatePreview);
+    if (grossInput) grossInput.addEventListener('input', updatePreview);
     if (dateInput) dateInput.addEventListener('change', updatePreview);
 
     const form = document.getElementById('form-new-shift');
@@ -566,10 +569,12 @@ export class PediatricUI {
         const shiftType = fd.get('shiftType') || '12h Noturno';
         const grossValue = parseFloat(fd.get('grossValue')) || 0;
         const netValue = parseFloat(fd.get('netValue')) || 0;
+        const effectiveNet = netValue > 0 ? netValue : grossValue;
+        const effectiveGross = grossValue > 0 ? grossValue : effectiveNet;
         const notes = fd.get('notes')?.trim() || '';
 
-        if (netValue <= 0) {
-          this.showToast('Informe um valor líquido válido para o plantão.', 'warning');
+        if (effectiveNet <= 0) {
+          this.showToast('Informe ao menos o valor bruto ou o valor líquido do plantão.', 'warning');
           return;
         }
 
@@ -577,8 +582,8 @@ export class PediatricUI {
           hospital,
           date,
           shiftType,
-          grossValue: grossValue > 0 ? grossValue : netValue,
-          netValue,
+          grossValue: effectiveGross,
+          netValue: effectiveNet,
           notes
         });
 
@@ -594,10 +599,15 @@ export class PediatricUI {
     if (!container) return;
 
     const todayStr = getLocalDateString();
+    const allCategories = (this.store && typeof this.store.getAllCategories === 'function')
+      ? this.store.getAllCategories()
+      : CANONICAL_CATEGORIES.map(name => ({ name }));
 
-    const categoryOptionsHtml = CANONICAL_CATEGORIES.map(cat => {
-      const macro = getMacroGroupForCategory(cat);
-      return `<option value="${escapeHtml(cat)}" data-macro="${escapeHtml(macro.name)}">${escapeHtml(cat)} (${escapeHtml(macro.name)})</option>`;
+    const categoryOptionsHtml = allCategories.map(catObj => {
+      const cat = typeof catObj === 'string' ? catObj : catObj.name;
+      const macro = getMacroGroupForCategory(cat, this.store?.data?.customCategories);
+      const isCustomBadge = catObj.isCustom ? ' (Personalizada)' : '';
+      return `<option value="${escapeHtml(cat)}" data-macro="${escapeHtml(macro.name)}">${escapeHtml(cat)} (${escapeHtml(macro.name)})${isCustomBadge}</option>`;
     }).join('');
 
     container.innerHTML = `
@@ -642,7 +652,10 @@ export class PediatricUI {
         </div>
 
         <div class="input-field-group">
-          <label for="expense-category-select" class="silk-input-label">Categoria Canônica (22 Categorias)</label>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label for="expense-category-select" class="silk-input-label" style="margin: 0;">Categoria Canônica</label>
+            <button type="button" id="btn-quick-new-category" class="btn-silk-text" style="font-size: 0.78rem; padding: 2px 6px; color: var(--rose-primary, #EC407A); font-weight: 600;">+ Nova Categoria</button>
+          </div>
           <select id="expense-category-select" name="category" class="silk-input">
             ${categoryOptionsHtml}
           </select>
@@ -681,6 +694,13 @@ export class PediatricUI {
         const selected = catSelect.value;
         const macro = getMacroGroupForCategory(selected);
         macroBadge.textContent = `Macro-Grupo: ${macro.name}`;
+      });
+    }
+
+    const btnQuickCat = document.getElementById('btn-quick-new-category');
+    if (btnQuickCat) {
+      btnQuickCat.addEventListener('click', () => {
+        this.openModal('#modal-categories');
       });
     }
 
@@ -875,19 +895,97 @@ export class PediatricUI {
     const container = document.getElementById('categories-modal-body');
     if (!container) return;
 
-    container.innerHTML = MACRO_GROUPS.map(mg => `
-      <div class="category-group-card" style="margin-bottom: 12px; padding: 14px; border-radius: var(--radius-card, 16px); background: var(--bg-card, #FFF9FA); border: 1px solid var(--silk-border, #FCE4EC);">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-          <strong style="color: ${mg.color || '#333'}; font-size: 0.95rem;">${escapeHtml(mg.name)}</strong>
-          <span class="silk-badge" style="background: rgba(236, 64, 122, 0.1); color: #EC407A; font-size: 0.75rem; padding: 2px 8px; border-radius: 12px;">${mg.categories.length} categorias</span>
+    const customCats = (this.store?.data?.customCategories || []);
+    const macroOptions = MACRO_GROUPS.map(mg => `<option value="${escapeHtml(mg.name)}">${escapeHtml(mg.name)}</option>`).join('');
+
+    const formHtml = `
+      <div class="category-create-card" style="margin-bottom: 16px; padding: 14px; border-radius: var(--radius-card, 16px); background: var(--bg-card, #FFF9FA); border: 1.5px dashed var(--rose-primary, #EC407A);">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+          <span style="font-size: 1.1rem;">✨</span>
+          <strong style="font-size: 0.95rem; color: var(--text-main, #333);">Criar Nova Categoria / Subcategoria</strong>
         </div>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-          ${mg.categories.map(c => `
-            <span style="font-size: 0.8rem; background: var(--bg-body, #FFF); border: 1px solid var(--silk-border, #F8BBD0); border-radius: 12px; padding: 3px 8px; color: var(--text-main, #333);">${escapeHtml(c)}</span>
-          `).join('')}
-        </div>
+        <form id="form-new-custom-category" style="display: flex; flex-direction: column; gap: 10px;">
+          <div class="input-field-group" style="margin-bottom: 0;">
+            <label for="new-cat-name-input" class="silk-input-label">Nome da Categoria</label>
+            <input type="text" id="new-cat-name-input" name="name" class="silk-input" placeholder="Ex: Fisioterapia Respiratória, Pilates, Congresso SBP" required />
+          </div>
+          <div class="input-field-group" style="margin-bottom: 0;">
+            <label for="new-cat-macro-select" class="silk-input-label">Macro-Grupo Vinculado</label>
+            <select id="new-cat-macro-select" name="macroGroup" class="silk-input">
+              ${macroOptions}
+            </select>
+          </div>
+          <button type="submit" class="btn-silk-primary" style="height: 42px; font-size: 0.88rem; margin-top: 4px;">
+            <span>Adicionar Categoria</span>
+          </button>
+        </form>
       </div>
-    `).join('');
+    `;
+
+    const groupsHtml = MACRO_GROUPS.map(mg => {
+      const groupCategories = [...new Set([
+        ...mg.categories,
+        ...customCats.filter(c => (c.macroGroup || c.macro_group) === mg.name).map(c => c.name)
+      ])];
+
+      return `
+        <div class="category-group-card" style="margin-bottom: 12px; padding: 14px; border-radius: var(--radius-card, 16px); background: var(--bg-card, #FFF9FA); border: 1px solid var(--silk-border, #FCE4EC);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <strong style="color: ${mg.color || '#333'}; font-size: 0.95rem;">${escapeHtml(mg.name)}</strong>
+            <span class="silk-badge" style="background: rgba(236, 64, 122, 0.1); color: #EC407A; font-size: 0.75rem; padding: 2px 8px; border-radius: 12px;">${groupCategories.length} categorias</span>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+            ${groupCategories.map(c => {
+              const isCustom = customCats.some(cust => cust.name.toLowerCase() === c.toLowerCase());
+              return `
+                <span style="font-size: 0.8rem; background: ${isCustom ? 'rgba(236,64,122,0.1)' : 'var(--bg-body, #FFF)'}; border: 1px solid ${isCustom ? '#EC407A' : 'var(--silk-border, #F8BBD0)'}; border-radius: 12px; padding: 3px 8px; color: var(--text-main, #333); display: inline-flex; align-items: center; gap: 4px;">
+                  ${escapeHtml(c)}
+                  ${isCustom ? `<button type="button" class="btn-del-custom-cat" data-cat-name="${escapeHtml(c)}" style="border: none; background: transparent; cursor: pointer; color: #EF5350; font-size: 11px; padding: 0 2px; line-height: 1;" title="Excluir categoria">✕</button>` : ''}
+                </span>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = formHtml + groupsHtml;
+
+    const formNewCat = document.getElementById('form-new-custom-category');
+    if (formNewCat) {
+      formNewCat.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const nameInput = document.getElementById('new-cat-name-input');
+        const macroSelect = document.getElementById('new-cat-macro-select');
+        const name = nameInput?.value?.trim();
+        const macroGroup = macroSelect?.value || 'Pessoal, Lazer & Outros';
+
+        if (!name) {
+          this.showToast('Informe o nome da categoria.', 'warning');
+          return;
+        }
+
+        if (this.store && typeof this.store.addCategory === 'function') {
+          this.store.addCategory({ name, macroGroup });
+          this.showToast(`Categoria "${name}" criada com sucesso! ✨`, 'success');
+          this.renderCategoriesModalContent();
+          this.renderExpenseModalContent();
+        }
+      });
+    }
+
+    container.querySelectorAll('.btn-del-custom-cat').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const catName = btn.getAttribute('data-cat-name');
+        if (catName && this.store && typeof this.store.deleteCustomCategory === 'function') {
+          this.store.deleteCustomCategory(catName);
+          this.showToast(`Categoria "${catName}" removida.`, 'info');
+          this.renderCategoriesModalContent();
+          this.renderExpenseModalContent();
+        }
+      });
+    });
   }
 
   // ==========================================================================

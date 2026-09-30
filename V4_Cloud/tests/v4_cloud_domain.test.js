@@ -154,7 +154,7 @@ describe('Finanças Pediatria V4_Cloud — Medical Domain Logic Engine Suite', (
       const required = [
         'Passagens', 'Mercantil', 'Academia', 'Estudo', 'Cursos',
         'Presentes', 'Aluguel', 'Energia', 'Internet', 'Combustível',
-        'Qualificação/Congresso/Pós', 'Cosméticos', 'Água', 'Lanches',
+        'Qualificação/Congresso/Pós', 'Fisioterapia', 'Água', 'Lanches',
         'Doação', 'Refeição', 'Beleza/Salão', 'Uber', 'Remédios',
         'Compras Parceladas', 'Saídas', 'Delivery', 'Produtos de beleza'
       ];
@@ -192,7 +192,8 @@ describe('Finanças Pediatria V4_Cloud — Medical Domain Logic Engine Suite', (
       // 5. Saúde & Autocuidado
       assert.equal(getMacroGroupForCategory('Remédios').name, 'Saúde & Autocuidado');
       assert.equal(getMacroGroupForCategory('Academia').name, 'Saúde & Autocuidado');
-      assert.equal(getMacroGroupForCategory('Cosméticos').name, 'Saúde & Autocuidado');
+      assert.equal(getMacroGroupForCategory('Fisioterapia').name, 'Saúde & Autocuidado');
+      assert.equal(getMacroGroupForCategory('Cosméticos').name, 'Saúde & Autocuidado'); // Alias compatibilidade
       assert.equal(getMacroGroupForCategory('Beleza/Salão').name, 'Saúde & Autocuidado');
       assert.equal(getMacroGroupForCategory('Produtos de beleza').name, 'Saúde & Autocuidado');
 

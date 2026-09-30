@@ -62,7 +62,7 @@ A versão v2.0 pré-configura e categoriza rigorosamente os 22 tipos de gastos s
 | **Internet** | 🌐 Azul Claro | Conexão banda larga essencial para estudos médicos e telemedicina. |
 | **Combustível** | ⛽ Laranja Queimado | Deslocamento entre hospitais, maternidades e consultório. |
 | **Qualificação/Congresso/Pós** | 🩺 Roxo Real | Inscrições no Congresso Brasileiro de Pediatria (SBP), pós-graduações e títulos de especialista. |
-| **Cosméticos** | 💄 Rosa Claro | Produtos de higiene e cuidados pessoais pós-plantão. |
+| **Fisioterapia** | 🩺 Verde Água | Sessões de fisioterapia, pilates e reabilitação postural. |
 | **Água** | 💧 Ciano | Tarifa de saneamento e água. |
 | **Lanches** | 🥪 Amarelo Ouro | Alimentação rápida e café durante plantões noturnos. |
 | **Doação** | 💖 Rosa Escuro | Contribuições sociais e causas beneficentes infantis. |

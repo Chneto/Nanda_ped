@@ -61,7 +61,7 @@ describe('Finanças Pediatria v5.0 - Silk & Rose Gold Engine Tests', () => {
     const requiredCategories = [
       'Passagens', 'Mercantil', 'Academia', 'Estudo', 'Cursos',
       'Presentes', 'Aluguel', 'Energia', 'Internet', 'Combustível',
-      'Qualificação/Congresso/Pós', 'Cosméticos', 'Água', 'Lanches',
+      'Qualificação/Congresso/Pós', 'Fisioterapia', 'Água', 'Lanches',
       'Doação', 'Refeição', 'Beleza/Salão', 'Uber', 'Remédios',
       'Compras Parceladas', 'Saídas', 'Delivery', 'Produtos de beleza'
     ];
@@ -101,7 +101,8 @@ describe('Finanças Pediatria v5.0 - Silk & Rose Gold Engine Tests', () => {
     // 5. Saúde & Autocuidado
     assert.equal(getMacroGroupForCategory('Remédios').name, 'Saúde & Autocuidado');
     assert.equal(getMacroGroupForCategory('Academia').name, 'Saúde & Autocuidado');
-    assert.equal(getMacroGroupForCategory('Cosméticos').name, 'Saúde & Autocuidado');
+    assert.equal(getMacroGroupForCategory('Fisioterapia').name, 'Saúde & Autocuidado');
+    assert.equal(getMacroGroupForCategory('Cosméticos').name, 'Saúde & Autocuidado'); // Alias compatibilidade
     assert.equal(getMacroGroupForCategory('Beleza/Salão').name, 'Saúde & Autocuidado');
     assert.equal(getMacroGroupForCategory('Produtos de beleza').name, 'Saúde & Autocuidado');
 

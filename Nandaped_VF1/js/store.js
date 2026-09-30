@@ -33,7 +33,7 @@ export const CANONICAL_CATEGORIES = [
   'Internet',
   'Combustível',
   'Qualificação/Congresso/Pós',
-  'Cosméticos',
+  'Fisioterapia',
   'Água',
   'Lanches',
   'Doação',
@@ -59,7 +59,7 @@ export const DEFAULT_CATEGORIES = [
   { id: 'cat_internet', name: 'Internet', icon: 'wifi', color: '#29B6F6' },
   { id: 'cat_combustivel', name: 'Combustível', icon: 'fuel', color: '#FF7043' },
   { id: 'cat_qualificacao', name: 'Qualificação/Congresso/Pós', icon: 'qualification', color: '#8E24AA' },
-  { id: 'cat_cosmeticos', name: 'Cosméticos', icon: 'cosmetics', color: '#F06292' },
+  { id: 'cat_fisioterapia', name: 'Fisioterapia', icon: 'fisioterapia', color: '#F06292' },
   { id: 'cat_agua', name: 'Água', icon: 'water', color: '#26C6DA' },
   { id: 'cat_lanches', name: 'Lanches', icon: 'snack', color: '#FFCA28' },
   { id: 'cat_doacao', name: 'Doação', icon: 'donation', color: '#E91E63' },
@@ -117,7 +117,7 @@ export const MACRO_GROUPS = [
     icon: 'sparkles',
     color: '#EC407A',
     bgColor: '#FCE4EC',
-    categories: ['Remédios', 'Academia', 'Cosméticos', 'Beleza/Salão', 'Produtos de beleza']
+    categories: ['Remédios', 'Academia', 'Fisioterapia', 'Beleza/Salão', 'Produtos de beleza']
   },
   {
     id: 'macro_lazer_outros',
@@ -135,7 +135,7 @@ export const MACRO_GROUPS_RECORD = {
   'Transporte & Mobilidade': ['Combustível', 'Uber', 'Passagens'],
   'Moradia & Contas': ['Aluguel', 'Energia', 'Água', 'Internet'],
   'Formação & Carreira': ['Estudo', 'Cursos', 'Qualificação/Congresso/Pós'],
-  'Saúde & Autocuidado': ['Remédios', 'Academia', 'Cosméticos', 'Beleza/Salão', 'Produtos de beleza'],
+  'Saúde & Autocuidado': ['Remédios', 'Academia', 'Fisioterapia', 'Beleza/Salão', 'Produtos de beleza'],
   'Pessoal, Lazer & Outros': ['Presentes', 'Saídas', 'Compras Parceladas', 'Doação']
 };
 
@@ -211,17 +211,23 @@ export function getMacroGroupForCategory(categoryName, customCategories = []) {
   // 1. Check custom categories
   if (Array.isArray(customCategories)) {
     const custom = customCategories.find(c => (c.name || '').toLowerCase() === trimmed);
-    if (custom && custom.macro_group) {
+    if (custom && (custom.macro_group || custom.macroGroup)) {
+      const macroGroupName = custom.macro_group || custom.macroGroup;
       const match = MACRO_GROUPS.find(g => 
-        g.name.toLowerCase() === custom.macro_group.toLowerCase() ||
-        g.id.toLowerCase() === custom.macro_group.toLowerCase() ||
-        (g.aliases && g.aliases.some(a => a.toLowerCase() === custom.macro_group.toLowerCase()))
+        g.name.toLowerCase() === macroGroupName.toLowerCase() ||
+        g.id.toLowerCase() === macroGroupName.toLowerCase() ||
+        (g.aliases && g.aliases.some(a => a.toLowerCase() === macroGroupName.toLowerCase()))
       );
       if (match) return match;
     }
   }
 
-  // 2. Check canonical macro-groups
+  // 2. Backward compatibility alias for Cosméticos
+  if (trimmed === 'cosméticos' || trimmed === 'cosmeticos') {
+    return MACRO_GROUPS.find(g => g.id === 'macro_saude_beleza') || MACRO_GROUPS[4];
+  }
+
+  // 3. Check canonical macro-groups
   for (const group of MACRO_GROUPS) {
     if (group.categories.some(c => c.toLowerCase() === trimmed)) {
       return group;
@@ -524,8 +530,10 @@ export class PediatricStore {
   // --------------------------------------------------------------------------
   saveShift(shift) {
     const id = shift.id || `shift_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-    const net = Math.round((parseFloat(shift.netValue ?? shift.net_value) || 0) * 100) / 100;
-    const gross = Math.round((parseFloat(shift.grossValue ?? shift.gross_value) || net) * 100) / 100;
+    const rawNet = parseFloat(shift.netValue ?? shift.net_value) || 0;
+    const rawGross = parseFloat(shift.grossValue ?? shift.gross_value) || 0;
+    const net = Math.round((rawNet > 0 ? rawNet : rawGross) * 100) / 100;
+    const gross = Math.round((rawGross > 0 ? rawGross : net) * 100) / 100;
     const workedDate = shift.date || getLocalDateString();
 
     const installments = calculateShiftInstallments(net, workedDate);
@@ -627,6 +635,70 @@ export class PediatricStore {
   deleteExpense(id) {
     this.data.expenses = this.data.expenses.filter(e => e.id !== id);
     this.save();
+  }
+
+  // --------------------------------------------------------------------------
+  // CATEGORIES & CUSTOM CATEGORIES MANAGEMENT
+  // --------------------------------------------------------------------------
+  addCategory({ name, macroGroup = 'Pessoal, Lazer & Outros', icon = 'tag', color = '#EC407A' }) {
+    if (!name || typeof name !== 'string' || !name.trim()) return null;
+    const trimmedName = name.trim();
+
+    if (!Array.isArray(this.data.customCategories)) {
+      this.data.customCategories = [];
+    }
+    if (!Array.isArray(this.data.categories)) {
+      this.data.categories = [...DEFAULT_CATEGORIES];
+    }
+
+    const existingCustom = this.data.customCategories.find(c => (c.name || '').toLowerCase() === trimmedName.toLowerCase());
+    if (existingCustom) return existingCustom;
+
+    const id = `cat_custom_${Date.now()}_${Math.random().toString(36).substring(2, 6)}`;
+    const newCat = {
+      id,
+      name: trimmedName,
+      macro_group: macroGroup,
+      macroGroup: macroGroup,
+      icon: icon || 'tag',
+      color: color || '#EC407A',
+      isCustom: true
+    };
+
+    this.data.customCategories.push(newCat);
+    this.data.categories.push(newCat);
+
+    const targetMacro = MACRO_GROUPS.find(m => m.name === macroGroup || m.id === macroGroup || (m.aliases && m.aliases.includes(macroGroup)));
+    if (targetMacro && !targetMacro.categories.includes(trimmedName)) {
+      targetMacro.categories.push(trimmedName);
+    }
+
+    this.save();
+    return newCat;
+  }
+
+  deleteCustomCategory(categoryName) {
+    if (!categoryName) return;
+    const trimmed = categoryName.trim().toLowerCase();
+    if (Array.isArray(this.data.customCategories)) {
+      this.data.customCategories = this.data.customCategories.filter(c => (c.name || '').toLowerCase() !== trimmed);
+    }
+    if (Array.isArray(this.data.categories)) {
+      this.data.categories = this.data.categories.filter(c => (c.name || '').toLowerCase() !== trimmed);
+    }
+    MACRO_GROUPS.forEach(m => {
+      m.categories = m.categories.filter(c => c.toLowerCase() !== trimmed);
+    });
+    this.save();
+  }
+
+  getAllCategories() {
+    const custom = Array.isArray(this.data.customCategories) ? this.data.customCategories : [];
+    const defaults = Array.isArray(this.data.categories) ? this.data.categories : DEFAULT_CATEGORIES;
+    const map = new Map();
+    defaults.forEach(c => map.set(c.name.toLowerCase(), c));
+    custom.forEach(c => map.set(c.name.toLowerCase(), c));
+    return Array.from(map.values());
   }
 
   // --------------------------------------------------------------------------

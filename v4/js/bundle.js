@@ -51,6 +51,9 @@ const SVG_ICONS = {
   fuel: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"/><path d="M15 10h2a2 2 0 0 1 2 2v3a2 2 0 0 0 2 2 2 2 0 0 0 2-2V9l-3-3"/><rect x="6" y="6" width="6" height="5"/></svg>',
   qualification: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>',
   cosmetics: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 11-4-7-4 7"/><path d="M15 4v16"/><path d="M8 14v6"/><path d="M5 18h6"/></svg>',
+  fisioterapia: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg>',
+  healing: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z"/><path d="m8.5 8.5 7 7"/><path d="M12 4v4m-2-2h4"/></svg>',
+  physical_therapy: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/></svg>',
   water: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>',
   snack: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>',
   donation: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>',
@@ -144,7 +147,7 @@ const DEFAULT_CATEGORIES = [
   { id: 'cat_internet', name: 'Internet', icon: 'wifi', color: '#29B6F6' },
   { id: 'cat_combustivel', name: 'Combustível', icon: 'fuel', color: '#FF7043' },
   { id: 'cat_qualificacao', name: 'Qualificação/Congresso/Pós', icon: 'qualification', color: '#8E24AA' },
-  { id: 'cat_cosmeticos', name: 'Cosméticos', icon: 'cosmetics', color: '#F06292' },
+  { id: 'cat_fisioterapia', name: 'Fisioterapia', icon: 'fisioterapia', color: '#26A69A' },
   { id: 'cat_agua', name: 'Água', icon: 'water', color: '#26C6DA' },
   { id: 'cat_lanches', name: 'Lanches', icon: 'snack', color: '#FFCA28' },
   { id: 'cat_doacao', name: 'Doação', icon: 'donation', color: '#E91E63' },
@@ -198,7 +201,7 @@ const MACRO_GROUPS = [
     icon: 'sparkles',
     color: '#EC407A',
     bgColor: '#FCE4EC',
-    categories: ['Remédios', 'Academia', 'Cosméticos', 'Beleza/Salão', 'Produtos de beleza']
+    categories: ['Remédios', 'Academia', 'Fisioterapia', 'Beleza/Salão', 'Produtos de beleza']
   },
   {
     id: 'macro_lazer_outros',
@@ -224,8 +227,12 @@ const DEFAULT_HOSPITALS = [
  */
 function getMacroGroupForCategory(categoryName) {
   if (!categoryName) return MACRO_GROUPS[5];
+  const trimmed = categoryName.trim().toLowerCase();
+  if (trimmed === 'cosméticos' || trimmed === 'cosmeticos') {
+    return MACRO_GROUPS[4]; // Saúde & Autocuidado
+  }
   for (const group of MACRO_GROUPS) {
-    if (group.categories.some(c => c.toLowerCase() === categoryName.trim().toLowerCase())) {
+    if (group.categories.some(c => c.toLowerCase() === trimmed)) {
       return group;
     }
   }
