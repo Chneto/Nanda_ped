@@ -46,8 +46,8 @@
     <section id="silk-gate-screen" class="silk-gate-wrapper" aria-label="Ingresso Silk Gate">
       <div class="silk-gate-card">
         
-        <!-- Botão de Configuração de Credenciais Flutuante (Canto Superior Direito) -->
-        <button id="btn-gate-gear" class="silk-gate-gear-btn" type="button" aria-label="Configurações de Conexão Supabase" title="Configurar Supabase">
+        <!-- Botão de Configuração de Credenciais Ocultado (Zero Poluição Visual) -->
+        <button id="btn-gate-gear" class="silk-gate-gear-btn hidden" style="display: none !important;" type="button" aria-label="Configurações de Conexão Supabase" title="Configurar Supabase">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="3"/>
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -78,6 +78,15 @@
         <!-- Ações de Ingresso -->
         <div class="silk-gate-actions">
           
+          <!-- Botão de Acesso Direto Imediato (Zero Burocracia) -->
+          <button id="btn-enter-direct" class="btn-silk-primary" type="button" style="margin-bottom: 12px; font-size: 16px; font-weight: 700; height: 52px; background: linear-gradient(135deg, #EC407A 0%, #F48FB1 100%); color: #fff; box-shadow: 0 8px 24px rgba(236, 64, 122, 0.25);">
+            <span>🌸 Acessar Santuário Financeiro</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+
           <!-- Botão Oficial Google OAuth (1 Toque) -->
           <button id="btn-google-auth" class="btn-silk-google" type="button" aria-label="Entrar com Google">
             <svg class="google-logo-svg" width="20" height="20" viewBox="0 0 24 24">
@@ -145,8 +154,8 @@
             <span>Continuar sem login / Modo Hospital</span>
           </button>
 
-          <!-- Link Discreto para Configurações da Nuvem -->
-          <button id="btn-open-cloud-config" class="btn-silk-text" type="button">
+          <!-- Link para Configurações da Nuvem (Oculto da Interface) -->
+          <button id="btn-open-cloud-config" class="btn-silk-text hidden" style="display: none !important;" type="button">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="3"/>
               <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -463,8 +472,8 @@
     <!-- 3. MODAIS COM ARQUITETURA IN-FLOW EXPANSION ANTI-CROP               -->
     <!-- ==================================================================== -->
 
-    <!-- Modal 1: Configurações da Nuvem Supabase -->
-    <div id="modal-cloud-config" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="cloud-config-title">
+    <!-- Modal 1: Configurações da Nuvem Supabase (Ocultado da UI da Médica) -->
+    <div id="modal-cloud-config" class="modal-backdrop hidden" style="display: none !important;" role="dialog" aria-modal="true" aria-labelledby="cloud-config-title">
       <div class="modal-sheet">
         <header class="modal-header">
           <div class="modal-title-wrap">
@@ -1013,7 +1022,7 @@
             <span>Sincronizar com Nuvem Agora</span>
           </button>
 
-          <button class="drawer-item" id="drawer-item-cloud" type="button">
+          <button class="drawer-item hidden" id="drawer-item-cloud" style="display: none !important;" type="button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#AB47BC" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
             <span>Configurações do Supabase</span>
           </button>
@@ -1067,6 +1076,14 @@
       <p style="margin-top: 12px; font-size: 0.85rem; color: #7E7485;">Criado por FChNeto</p>
     </div>
   </noscript>
+
+  <!-- Credenciais Oficiais Pré-Configuradas Supabase PostgreSQL (Anon Key Pública) -->
+  <script>
+    window.__ENV__ = window.__ENV__ || {
+      SUPABASE_URL: "https://rdqbhafebdfhsfdlqjdr.supabase.co",
+      SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkcWJoYWZlYmRmaHNmZGxxamRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2Mjg0MzgsImV4cCI6MjEwNjIwNDQzOH0.yQZjUrP7hshAYPDWmXXLW6Z_s38ge_6fU6CrN1Ba0TA"
+    };
+  </script>
 
   <!-- SDK Oficial do Supabase para Execução SPA em Módulos Nativos -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

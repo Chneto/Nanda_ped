@@ -78,6 +78,15 @@
         <!-- Ações de Ingresso -->
         <div class="silk-gate-actions">
           
+          <!-- Botão de Acesso Direto Imediato (Zero Burocracia) -->
+          <button id="btn-enter-direct" class="btn-silk-primary" type="button" style="margin-bottom: 12px; font-size: 16px; font-weight: 700; height: 52px; background: linear-gradient(135deg, #EC407A 0%, #F48FB1 100%); color: #fff; box-shadow: 0 8px 24px rgba(236, 64, 122, 0.25);">
+            <span>🌸 Acessar Santuário Financeiro</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+
           <!-- Botão Oficial Google OAuth (1 Toque) -->
           <button id="btn-google-auth" class="btn-silk-google" type="button" aria-label="Entrar com Google">
             <svg class="google-logo-svg" width="20" height="20" viewBox="0 0 24 24">
@@ -1067,6 +1076,14 @@
       <p style="margin-top: 12px; font-size: 0.85rem; color: #7E7485;">Criado por FChNeto</p>
     </div>
   </noscript>
+
+  <!-- Credenciais Oficiais Pré-Configuradas Supabase PostgreSQL (Anon Key Pública) -->
+  <script>
+    window.__ENV__ = window.__ENV__ || {
+      SUPABASE_URL: "https://rdqbhafebdfhsfdlqjdr.supabase.co",
+      SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkcWJoYWZlYmRmaHNmZGxxamRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2Mjg0MzgsImV4cCI6MjEwNjIwNDQzOH0.yQZjUrP7hshAYPDWmXXLW6Z_s38ge_6fU6CrN1Ba0TA"
+    };
+  </script>
 
   <!-- SDK Oficial do Supabase para Execução SPA em Módulos Nativos -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

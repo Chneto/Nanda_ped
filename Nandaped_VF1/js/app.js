@@ -221,6 +221,19 @@ export class PediatricApp {
       });
     }
 
+    const btnEnterDirect = document.getElementById('btn-enter-direct');
+    if (btnEnterDirect) {
+      btnEnterDirect.addEventListener('click', () => {
+        setGuestMode(true);
+        this.routeAuthView(null);
+        this.ui.showToast('Bem-vinda, Dra. Fernanda! Santuário financeiro ativo. 🩺🌸', 'success');
+        this.ui.render();
+        try {
+          syncNow().catch(e => console.log('[Sync Background]', e.message));
+        } catch (e) {}
+      });
+    }
+
     const btnGuest = document.getElementById('btn-guest-mode');
     if (btnGuest) {
       btnGuest.addEventListener('click', () => {
