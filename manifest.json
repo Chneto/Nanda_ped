@@ -1,8 +1,8 @@
 {
-  "name": "Finanças Pediatria V4 Cloud — Dra. Fernanda",
-  "short_name": "Nanda Cloud",
-  "description": "Controle financeiro pediátrico com nuvem Supabase, regras D+60 (75%) e D+90 (25%), macro-grupos e interface Silk & Rose Gold - Criado por FChNeto",
-  "id": "nanda-financas-pediatria-v4-cloud",
+  "name": "Finanças Pediatria",
+  "short_name": "Finanças Pediatria",
+  "description": "Controle financeiro pediátrico com regras D+60 (75%) e D+90 (25%), macro-grupos e interface Silk & Rose Gold - Criado por FChNeto",
+  "id": "nanda-financas-pediatria",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

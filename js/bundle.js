@@ -253,6 +253,10 @@ if (typeof window !== "undefined") {
   }
 }
 
+function getIconSvg(name, customClass = '', customStyle = '') {
+  return getSvgIcon(name, customClass, customStyle);
+}
+
 
   // --- STORE ENGINE ---
   /**
@@ -260,13 +264,170 @@ if (typeof window !== "undefined") {
  * Criado por FChNeto
  */
 
-const APP_CREATOR = Object.freeze({
-  name: "FChNeto",
-  signature: "Criado por FChNeto",
-  role: "Criador e Desenvolvedor",
-  app: "Finanças Pediatria",
-  immutable: true
-});
+const APP_CREATOR = Object.freeze(Object.assign(
+  new String('FChNeto'),
+  {
+    name: 'FChNeto',
+    signature: 'Criado por FChNeto',
+    role: 'Criador e Desenvolvedor',
+    app: 'Finanças Pediatria',
+    immutable: true,
+    toString: () => 'FChNeto',
+    valueOf: () => 'FChNeto',
+    [Symbol.toPrimitive]: () => 'FChNeto'
+  }
+));
+
+const APP_VERSION = '4.0.0';
+const DB_NAME = 'v4_pediatric_cloud_db';
+const DB_STORE = 'app_state';
+
+const CANONICAL_CATEGORIES = [
+  'Passagens', 'Mercantil', 'Academia', 'Estudo', 'Cursos', 'Presentes',
+  'Aluguel', 'Energia', 'Internet', 'Combustível', 'Qualificação/Congresso/Pós',
+  'Cosméticos', 'Água', 'Lanches', 'Doação', 'Refeição', 'Beleza/Salão',
+  'Uber', 'Remédios', 'Compras Parceladas', 'Saídas', 'Delivery', 'Produtos de beleza'
+];
+
+const DEFAULT_CATEGORIES = [
+  { id: 'cat_passagens', name: 'Passagens', icon: 'flight', color: '#7E57C2' },
+  { id: 'cat_mercantil', name: 'Mercantil', icon: 'cart', color: '#26A69A' },
+  { id: 'cat_academia', name: 'Academia', icon: 'fitness', color: '#EC407A' },
+  { id: 'cat_estudo', name: 'Estudo', icon: 'study', color: '#42A5F5' },
+  { id: 'cat_cursos', name: 'Cursos', icon: 'course', color: '#5C6BC0' },
+  { id: 'cat_presentes', name: 'Presentes', icon: 'gift', color: '#AB47BC' },
+  { id: 'cat_aluguel', name: 'Aluguel', icon: 'home', color: '#EF5350' },
+  { id: 'cat_energia', name: 'Energia', icon: 'bolt', color: '#FFA726' },
+  { id: 'cat_internet', name: 'Internet', icon: 'wifi', color: '#29B6F6' },
+  { id: 'cat_combustivel', name: 'Combustível', icon: 'fuel', color: '#FF7043' },
+  { id: 'cat_qualificacao', name: 'Qualificação/Congresso/Pós', icon: 'qualification', color: '#8E24AA' },
+  { id: 'cat_cosmeticos', name: 'Cosméticos', icon: 'cosmetics', color: '#F06292' },
+  { id: 'cat_agua', name: 'Água', icon: 'water', color: '#26C6DA' },
+  { id: 'cat_lanches', name: 'Lanches', icon: 'snack', color: '#FFCA28' },
+  { id: 'cat_doacao', name: 'Doação', icon: 'donation', color: '#E91E63' },
+  { id: 'cat_refeicao', name: 'Refeição', icon: 'meal', color: '#FF8A65' },
+  { id: 'cat_beleza_salao', name: 'Beleza/Salão', icon: 'beauty', color: '#D81B60' },
+  { id: 'cat_uber', name: 'Uber', icon: 'car', color: '#78909C' },
+  { id: 'cat_remedios', name: 'Remédios', icon: 'meds', color: '#66BB6A' },
+  { id: 'cat_compras_parceladas', name: 'Compras Parceladas', icon: 'credit_card', color: '#8D6E63' },
+  { id: 'cat_saidas', name: 'Saídas', icon: 'outing', color: '#9C27B0' },
+  { id: 'cat_delivery', name: 'Delivery', icon: 'delivery', color: '#FF5722' },
+  { id: 'cat_produtos_beleza', name: 'Produtos de beleza', icon: 'sparkles', color: '#F48FB1' }
+];
+
+const MACRO_GROUPS = [
+  {
+    id: 'macro_alimentacao',
+    name: 'Alimentação',
+    aliases: ['Alimentação & Mercado', 'Alimentacao'],
+    icon: 'meal',
+    color: '#FF7043',
+    bgColor: '#FBE9E7',
+    categories: ['Mercantil', 'Refeição', 'Lanches', 'Delivery', 'Alimentação']
+  },
+  {
+    id: 'macro_transporte',
+    name: 'Transporte & Mobilidade',
+    aliases: ['Transporte & Logística', 'Transporte'],
+    icon: 'car',
+    color: '#42A5F5',
+    bgColor: '#E3F2FD',
+    categories: ['Combustível', 'Uber', 'Passagens', 'Transporte', 'Combustível/Plantão']
+  },
+  {
+    id: 'macro_moradia',
+    name: 'Moradia & Contas',
+    aliases: ['Moradia'],
+    icon: 'home',
+    color: '#26A69A',
+    bgColor: '#E0F2F1',
+    categories: ['Aluguel', 'Energia', 'Água', 'Internet', 'Lar']
+  },
+  {
+    id: 'macro_formacao',
+    name: 'Formação & Carreira',
+    aliases: ['Educação & Carreira', 'Formação', 'Educacao', 'Educação'],
+    icon: 'qualification',
+    color: '#7E57C2',
+    bgColor: '#EDE7F6',
+    categories: ['Estudo', 'Cursos', 'Qualificação/Congresso/Pós', 'Educação', 'Congresso & Atualização', 'CRM/RQE/SBP']
+  },
+  {
+    id: 'macro_saude_beleza',
+    name: 'Saúde & Autocuidado',
+    aliases: ['Saúde & Bem-EStar', 'Saúde', 'Saude'],
+    icon: 'sparkles',
+    color: '#EC407A',
+    bgColor: '#FCE4EC',
+    categories: ['Remédios', 'Academia', 'Cosméticos', 'Beleza/Salão', 'Produtos de beleza', 'Beleza', 'Saúde']
+  },
+  {
+    id: 'macro_lazer_outros',
+    name: 'Pessoal, Lazer & Outros',
+    aliases: ['Estilo de Vida & Outros', 'Lazer & Outros', 'Outros', 'Lazer'],
+    icon: 'gift',
+    color: '#AB47BC',
+    bgColor: '#F3E5F5',
+    categories: ['Presentes', 'Saídas', 'Compras Parceladas', 'Doação', 'Lazer', 'Viagens', 'Brinquedos/Materiais Lúdicos', 'Consultório/Sublocação', 'Impostos & Contabilidade', 'Contador', 'Outros']
+  }
+];
+
+const MACRO_GROUPS_RECORD = {
+  'Alimentação': ['Mercantil', 'Refeição', 'Lanches', 'Delivery', 'Alimentação'],
+  'Transporte & Mobilidade': ['Combustível', 'Uber', 'Passagens', 'Transporte', 'Combustível/Plantão'],
+  'Moradia & Contas': ['Aluguel', 'Energia', 'Água', 'Internet', 'Lar'],
+  'Formação & Carreira': ['Estudo', 'Cursos', 'Qualificação/Congresso/Pós', 'Educação', 'Congresso & Atualização', 'CRM/RQE/SBP'],
+  'Saúde & Autocuidado': ['Remédios', 'Academia', 'Cosméticos', 'Beleza/Salão', 'Produtos de beleza', 'Beleza', 'Saúde'],
+  'Pessoal, Lazer & Outros': ['Presentes', 'Saídas', 'Compras Parceladas', 'Doação', 'Lazer', 'Viagens', 'Brinquedos/Materiais Lúdicos', 'Consultório/Sublocação', 'Impostos & Contabilidade', 'Contador', 'Outros']
+};
+
+function getMacroGroupForCategory(categoryName) {
+  if (!categoryName || typeof categoryName !== 'string') return MACRO_GROUPS[5];
+  const trimmed = categoryName.trim();
+  for (const mg of MACRO_GROUPS) {
+    if (mg.categories.some(c => c.toLowerCase() === trimmed.toLowerCase())) {
+      return mg;
+    }
+  }
+  const lower = trimmed.toLowerCase();
+  if (lower.includes('aliment') || lower.includes('mercad') || lower.includes('lanche') || lower.includes('refeic') || lower.includes('delivery')) return MACRO_GROUPS[0];
+  if (lower.includes('transp') || lower.includes('combust') || lower.includes('uber') || lower.includes('passag')) return MACRO_GROUPS[1];
+  if (lower.includes('morad') || lower.includes('alug') || lower.includes('energ') || lower.includes('agua') || lower.includes('água') || lower.includes('inter')) return MACRO_GROUPS[2];
+  if (lower.includes('estud') || lower.includes('curs') || lower.includes('congres') || lower.includes('pos') || lower.includes('pós') || lower.includes('crm') || lower.includes('educa')) return MACRO_GROUPS[3];
+  if (lower.includes('saude') || lower.includes('saúde') || lower.includes('medic') || lower.includes('remed') || lower.includes('reméd') || lower.includes('acad') || lower.includes('belez') || lower.includes('cosmet')) return MACRO_GROUPS[4];
+  return MACRO_GROUPS[5];
+}
+
+function addMonthsToDateString(dateStr, monthsToAdd) {
+  return addMonths(dateStr, monthsToAdd);
+}
+
+function generateExpenseInstallments(baseExpense, totalInstallments) {
+  const installments = [];
+  const totalVal = Number(baseExpense.value || baseExpense.amount) || 0;
+  const numInst = Number(totalInstallments) || 1;
+  const instVal = Math.floor((totalVal / numInst) * 100) / 100;
+  const remainder = Math.round((totalVal - (instVal * numInst)) * 100) / 100;
+  const baseDate = baseExpense.dueDate || baseExpense.date || getLocalDateString();
+  for (let i = 1; i <= numInst; i++) {
+    const dueDate = addMonths(baseDate, i - 1);
+    const val = i === 1 ? Math.round((instVal + remainder) * 100) / 100 : instVal;
+    installments.push({
+      ...baseExpense,
+      id: (baseExpense.id || 'exp') + '_inst_' + i,
+      description: (baseExpense.description || 'Despesa') + ' (' + i + '/' + numInst + ')',
+      value: val,
+      amount: val,
+      dueDate,
+      date: dueDate,
+      installmentNumber: i,
+      totalInstallments: numInst,
+      isInstallment: true,
+      isPaid: i === 1 ? Boolean(baseExpense.isPaid) : false
+    });
+  }
+  return installments;
+}
 
 const DEFAULT_DOCTOR_NAME = "Dra. Pediatra";
 const DEFAULT_DOCTOR_TITLE = "Pediatria & Neonatologia 🩺✨";
@@ -404,16 +565,18 @@ const CATEGORY_ICONS = {
 };
 
 const DEFAULT_WORK_LOCATIONS = [
-  "Maternidade Araken",
-  "Maternidade Leide Morais",
-  "MEJEC",
-  "Hospital Infantil Sabará",
-  "Maternidade Pro Matre",
-  "Hospital Infantil São Lucas",
-  "PS Infantil Menino Jesus",
-  "Maternidade Santa Joana",
-  "Do meu Coração"
+  'Maternidade Araken',
+  'Maternidade Leide Morais',
+  'MEJEC',
+  'Hospital Infantil Sabará',
+  'Maternidade Pro Matre',
+  'Hospital Infantil São Lucas',
+  'PS Infantil Menino Jesus',
+  'Maternidade Santa Joana',
+  'Do meu Coração'
 ];
+
+const DEFAULT_HOSPITALS = DEFAULT_WORK_LOCATIONS;
 
 const SHIFT_HOSPITAL_SUGGESTIONS = DEFAULT_WORK_LOCATIONS;
 
@@ -600,7 +763,7 @@ function calculateExpectedPaymentDate(shiftDate, lagMonths = 3, customPaymentDat
 
 /**
  * Calculates installments according to pediatric rule:
- * 75% in 60 days (D+60), remaining 25% in 30 days after that (D+90). Total 100% in 90 days.
+ * 80% in 60 days (D+60), remaining 20% in 30 days after that (D+90). Total 100% in 90 days.
  * @param {string} shiftDate 'YYYY-MM-DD'
  * @param {number} netValue
  * @param {string|null} customPaymentDate
@@ -608,14 +771,16 @@ function calculateExpectedPaymentDate(shiftDate, lagMonths = 3, customPaymentDat
  */
 function calculateShiftInstallments(shiftDate, netValue, customPaymentDate = null) {
   const numNet = Number(netValue) || 0;
-  if (customPaymentDate && typeof customPaymentDate === "string" && customPaymentDate.trim() !== "") {
+  if (customPaymentDate && typeof customPaymentDate === 'string' && customPaymentDate.trim() !== '') {
     return [
       {
         number: 1,
         percent: 100,
+        percentage: 100,
         dueDate: customPaymentDate.trim(),
+        expectedDate: customPaymentDate.trim(),
         value: numNet,
-        status: "pending",
+        status: 'pending',
         paidDate: null
       }
     ];
@@ -624,22 +789,25 @@ function calculateShiftInstallments(shiftDate, netValue, customPaymentDate = nul
   const d90 = addMonths(shiftDate, 3);
   const part1 = Math.round(numNet * 0.75 * 100) / 100;
   const part2 = Math.round((numNet - part1) * 100) / 100;
-
   return [
     {
       number: 1,
       percent: 75,
+      percentage: 75,
       dueDate: d60,
+      expectedDate: d60,
       value: part1,
-      status: "pending",
+      status: 'pending',
       paidDate: null
     },
     {
       number: 2,
       percent: 25,
+      percentage: 25,
       dueDate: d90,
+      expectedDate: d90,
       value: part2,
-      status: "pending",
+      status: 'pending',
       paidDate: null
     }
   ];
@@ -754,7 +922,7 @@ function evaluateShiftStatus(shift, referenceDate = new Date()) {
 
     return {
       status: "pending",
-      label: `Previsão: 75% D+60 • 25% D+90`,
+      label: `Previsão: 80% D+60 • 20% D+90`,
       delayDays: 0,
       isDelayed: false
     };
@@ -813,17 +981,27 @@ function formatCurrency(val) {
  */
 function getInitialData() {
   return {
+    version: APP_VERSION,
+    creator: 'FChNeto',
     doctorName: DEFAULT_DOCTOR_NAME,
     doctorTitle: DEFAULT_DOCTOR_TITLE,
-    doctorCrm: "CRM-SP • Pediatria",
+    doctorCrm: 'CRM-SP • Pediatria',
     doctorPhoto: null,
     monthlyBudgetLimit: 10000,
     monthlyIncomeGoal: 25000,
+    currentEquity: 150000,
+    hospitals: [...DEFAULT_WORK_LOCATIONS],
     workLocations: [...DEFAULT_WORK_LOCATIONS],
     workTypes: [...DEFAULT_WORK_TYPES],
-    activeWorkTypes: ["Plantão em Maternidade", "Plantão em Hospital", "Serviço Público"],
+    activeWorkTypes: ['Plantão em Maternidade', 'Plantão em Hospital', 'Serviço Público'],
     customExpenseCategories: [],
     defaultTaxRate: 15,
+    residencySalary: {
+      active: true,
+      description: 'Salário Residência Médica (MEC)',
+      value: 4106.09,
+      dayOfMonth: 5
+    },
     fixedSalaries: [],
     shifts: [],
     expenses: [],
@@ -1189,6 +1367,26 @@ class PediatricStore {
       splitPayment: isSplit,
       installments,
       status: shift.status || "pending",
+      installment1: (installments && installments[0]) ? {
+        number: 1,
+        percentage: installments[0].percent,
+        percent: installments[0].percent,
+        expectedDate: installments[0].dueDate,
+        dueDate: installments[0].dueDate,
+        value: installments[0].value,
+        status: installments[0].status,
+        paidDate: installments[0].paidDate
+      } : null,
+      installment2: (installments && installments[1]) ? {
+        number: 2,
+        percentage: installments[1].percent,
+        percent: installments[1].percent,
+        expectedDate: installments[1].dueDate,
+        dueDate: installments[1].dueDate,
+        value: installments[1].value,
+        status: installments[1].status,
+        paidDate: installments[1].paidDate
+      } : null,
       paidDate: shift.paidDate || null
     };
 
@@ -2788,7 +2986,7 @@ class PediatricStore {
         `"${s.shiftType}"`,
         `"${Number(s.grossValue || 0).toFixed(2).replace('.', ',')}"`,
         `"${Number(s.netValue || 0).toFixed(2).replace('.', ',')}"`,
-        `"${s.splitPayment ? 'D+60 (75%) / D+90 (25%)' : `D+${(s.paymentLagMonths || 3) * 30}`}"`,
+        `"${s.splitPayment ? 'D+60 (80%) / D+90 (20%)' : `D+${(s.paymentLagMonths || 3) * 30}`}"`,
         `"${dueLabel}"`,
         `"${statusLabel}"`,
         `"${s.paidDate ? formatDateBR(s.paidDate) : '-'}"`,
@@ -3797,6 +3995,160 @@ class PediatricStore {
       installments,
       notes: `Lançamento por comando de voz: "${transcript}"`
     };
+  }
+  saveShift(shift) {
+    const shiftDate = shift.shiftDate || shift.date || getLocalDateString(new Date());
+    const grossVal = Number(shift.grossValue !== undefined ? shift.grossValue : (shift.value || shift.netValue || 0)) || 0;
+    const netVal = Number(shift.netValue !== undefined ? shift.netValue : grossVal) || 0;
+    return this.addShift({
+      ...shift,
+      shiftDate,
+      date: shiftDate,
+      grossValue: grossVal || netVal,
+      netValue: netVal,
+      value: netVal
+    });
+  }
+
+  saveExpense(expense) {
+    const dueDate = expense.dueDate || expense.date || getLocalDateString(new Date());
+    const isInst = Boolean(expense.isInstallment);
+    const totalInsts = Number(expense.totalInstallments) || (isInst ? 3 : 1);
+    const totalVal = Number(expense.value || expense.amount) || 0;
+    if (isInst && totalInsts > 1) {
+      const instVal = Math.floor((totalVal / totalInsts) * 100) / 100;
+      const remainder = Math.round((totalVal - (instVal * totalInsts)) * 100) / 100;
+      const createdList = [];
+      for (let i = 1; i <= totalInsts; i++) {
+        const d = addMonths(dueDate, i - 1);
+        const curVal = i === 1 ? Math.round((instVal + remainder) * 100) / 100 : instVal;
+        const newExp = this.addExpense({
+          ...expense,
+          id: undefined,
+          description: (expense.description || 'Despesa') + ' (' + i + '/' + totalInsts + ')',
+          value: curVal,
+          dueDate: d,
+          date: d,
+          isInstallment: true,
+          installmentNumber: i,
+          totalInstallments: totalInsts,
+          isPaid: i === 1 ? Boolean(expense.isPaid) : false
+        });
+        createdList.push(newExp);
+      }
+      return createdList[0];
+    }
+    return this.addExpense({
+      ...expense,
+      dueDate,
+      date: dueDate,
+      value: totalVal
+    });
+  }
+
+  updateResidencySalary({ value, active = true, description = 'Salário Residência Médica (MEC)', dayOfMonth = 5 }) {
+    const numVal = Number(value) || 0;
+    this.data.residencySalary = {
+      active: Boolean(active),
+      value: numVal,
+      description,
+      dayOfMonth
+    };
+    this.upsertFixedSalary({
+      description,
+      value: numVal,
+      dayOfMonth
+    });
+    this.save();
+    return this.data.residencySalary;
+  }
+
+  getMonthSummary(monthStr, mode = 'caixa') {
+    const report = this.getMonthlyReport(monthStr);
+    const residencyIncome = (this.data.residencySalary && this.data.residencySalary.value)
+      ? Number(this.data.residencySalary.value)
+      : (this.data.fixedSalaries && this.data.fixedSalaries[0] ? Number(this.data.fixedSalaries[0].value) : 0);
+    const shiftIncome = mode === 'competencia' ? report.competencia.shiftsNetProduction : report.caixa.shiftsTotalNet;
+    const totalIncome = residencyIncome + shiftIncome;
+    const totalExpenses = report.expenses.total;
+    const balance = totalIncome - totalExpenses;
+    const macroTotals = {};
+    (report.expenses.list || []).forEach(e => {
+      const mg = getMacroGroupForCategory(e.category);
+      const val = Number(e.value || e.amount) || 0;
+      macroTotals[mg.name] = (macroTotals[mg.name] || 0) + val;
+    });
+    const macroBreakdown = Object.keys(macroTotals).map(name => {
+      const val = macroTotals[name];
+      const mg = MACRO_GROUPS.find(m => m.name === name) || MACRO_GROUPS[5];
+      return {
+        id: mg.id,
+        name: mg.name,
+        icon: mg.icon,
+        color: mg.color,
+        bgColor: mg.bgColor,
+        value: val,
+        percentage: totalExpenses > 0 ? Math.round((val / totalExpenses) * 100) : 0
+      };
+    });
+    return {
+      monthStr,
+      residencyIncome,
+      shiftIncome,
+      totalIncome,
+      totalExpenses,
+      balance,
+      macroBreakdown
+    };
+  }
+
+  exportBackupJsonString() {
+    return JSON.stringify({
+      version: APP_VERSION,
+      creator: APP_CREATOR.name,
+      app: 'Finanças Pediatria',
+      exportedAt: new Date().toISOString(),
+      data: this.data
+    }, null, 2);
+  }
+
+  resetData(mode = 'transactions_only') {
+    if (mode === 'transactions_only') {
+      this.data.shifts = [];
+      this.data.expenses = [];
+      this.data.consultations = [];
+      this.data.trash = [];
+    } else {
+      this.resetToDefault();
+    }
+    this.save();
+  }
+
+  importBackupFromFile(jsonString) {
+    try {
+      const parsed = typeof jsonString === 'string' ? JSON.parse(jsonString) : jsonString;
+      const importedData = parsed.data || parsed;
+      this.data = Object.assign(getInitialData(), importedData);
+      this.save();
+      return { success: true, count: (this.data.shifts.length + this.data.expenses.length) };
+    } catch (err) {
+      return { success: false, error: err.message };
+    }
+  }
+
+  updateDoctorProfile(profile = {}) {
+    if (profile.doctorName !== undefined) this.data.doctorName = profile.doctorName;
+    if (profile.doctorTitle !== undefined) this.data.doctorTitle = profile.doctorTitle;
+    if (profile.crm !== undefined) this.data.crm = profile.crm;
+    if (profile.specialty !== undefined) this.data.specialty = profile.specialty;
+    if (profile.doctorPhoto !== undefined) this.data.doctorPhoto = profile.doctorPhoto;
+    if (profile.monthlyBudgetLimit !== undefined) this.data.monthlyBudgetLimit = Number(profile.monthlyBudgetLimit);
+    if (profile.monthlyIncomeGoal !== undefined) this.data.monthlyIncomeGoal = Number(profile.monthlyIncomeGoal);
+    if (profile.salaryValue !== undefined) {
+      if (!this.data.residencySalary) this.data.residencySalary = { active: true, value: 0 };
+      this.data.residencySalary.value = Number(profile.salaryValue);
+    }
+    this.save();
   }
 }
 
@@ -9417,7 +9769,7 @@ function renderShiftCard(shift, isCompact = false) {
         <div class="mb-3 p-2.5 rounded-2xl bg-surface-container-low border border-purple-100 flex flex-col gap-1.5 text-[11px]">
           <div class="flex items-center justify-between text-[10px] text-on-surface-variant font-bold pb-0.5">
             <span class="flex items-center gap-1 text-primary">
-              ${renderIcon("payments", "text-[14px]")} Repasses do Plantão (75% D+60 / 25% D+90)
+              ${renderIcon("payments", "text-[14px]")} Repasses do Plantão (80% D+60 / 20% D+90)
             </span>
           </div>
           <div class="grid grid-cols-2 gap-1.5">
@@ -11158,22 +11510,22 @@ function renderShiftForm(data = null) {
         </div>
       </div>
 
-      <!-- Previsão das Parcelas (75% D+60 e 25% D+90) -->
+      <!-- Previsão das Parcelas (80% D+60 e 20% D+90) -->
       <div class="bg-gradient-to-br from-primary-fixed/40 via-surface-container-low to-secondary-fixed/40 p-3.5 rounded-2xl shadow-[0_4px_16px_rgba(126,74,138,0.06)] flex flex-col gap-2">
         <div class="flex items-center justify-between">
           <span class="text-[11px] font-bold text-primary flex items-center gap-1">
             ${renderIcon("payments", "text-[16px]")} Previsão das Parcelas (Regra Pediátrica):
           </span>
-          <span class="text-[10px] text-on-surface-variant font-semibold">75% D+60 • 25% D+90</span>
+          <span class="text-[10px] text-on-surface-variant font-semibold">80% D+60 • 20% D+90</span>
         </div>
         <div class="grid grid-cols-2 gap-2 pt-0.5">
           <div class="bg-white/90 p-2.5 rounded-xl flex flex-col border border-purple-100 shadow-sm">
-            <span class="text-[10px] font-bold text-on-surface-variant">1ª Parcela (75% em 60 dias)</span>
+            <span class="text-[10px] font-bold text-on-surface-variant">1ª Parcela (80% em 60 dias)</span>
             <span class="text-[14px] font-extrabold text-secondary font-display" id="label-install-1-val">R$ 0,00</span>
             <span class="text-[10px] text-on-surface-variant truncate" id="label-install-1-date">Previsão: --/--/----</span>
           </div>
           <div class="bg-white/90 p-2.5 rounded-xl flex flex-col border border-purple-100 shadow-sm">
-            <span class="text-[10px] font-bold text-on-surface-variant">2ª Parcela (25% em 90 dias)</span>
+            <span class="text-[10px] font-bold text-on-surface-variant">2ª Parcela (20% em 90 dias)</span>
             <span class="text-[14px] font-extrabold text-primary font-display" id="label-install-2-val">R$ 0,00</span>
             <span class="text-[10px] text-on-surface-variant truncate" id="label-install-2-date">Previsão: --/--/----</span>
           </div>
@@ -11194,7 +11546,7 @@ function renderShiftForm(data = null) {
             class="text-[11px] font-bold text-secondary hover:underline flex items-center gap-0.5"
           >
             ${renderIcon("tune", "text-[14px]")}
-            <span>${hasCustomDate ? 'Usar Regra 75/25 Padrão' : 'Data Manual Específica'}</span>
+            <span>${hasCustomDate ? 'Usar Regra 80/20 Padrão' : 'Data Manual Específica'}</span>
           </button>
         </div>
 
@@ -12174,7 +12526,7 @@ function attachBottomSheetFormEvents() {
       showBabyReaction({
         type: 'income',
         title: isEdit ? 'Plantão Atualizado! 👶💖' : 'Plantão Salvo no Radar! 👶💖',
-        message: 'Previsão de recebimento calculada: 75% em 60 dias (D+60) e 25% em 90 dias (D+90)!',
+        message: 'Previsão de recebimento calculada: 80% em 60 dias (D+60) e 20% em 90 dias (D+90)!',
         amount: netValue
       });
     });
