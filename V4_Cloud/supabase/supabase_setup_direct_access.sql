@@ -231,6 +231,5 @@ CREATE INDEX IF NOT EXISTS idx_shifts_cash_regime_dates ON public.shifts (user_i
 -- 5. CONFIRMAÇÃO AUTOMÁTICA DE USUÁRIOS EXISTENTES (ACESSO DIRETO)
 -- ==============================================================================
 UPDATE auth.users
-SET email_confirmed_at = COALESCE(email_confirmed_at, NOW()),
-    confirmed_at = COALESCE(confirmed_at, NOW())
+SET email_confirmed_at = COALESCE(email_confirmed_at, NOW())
 WHERE email_confirmed_at IS NULL;
