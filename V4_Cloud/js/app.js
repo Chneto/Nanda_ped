@@ -44,7 +44,8 @@ import {
   signInWithMagicLink,
   signOut,
   getSession,
-  onAuthStateChange
+  onAuthStateChange,
+  processOAuthCallback
 } from './supabaseClient.js';
 
 import {
@@ -82,7 +83,31 @@ export class PediatricApp {
       initSupabase(); // Inicializa fallback degradado offline
     }
 
-    // 2. Escuta mudanças no estado de autenticação do Supabase
+    // 2. Processa retorno de OAuth (PKCE code ou token) se presente na URL
+    const hasOAuthInUrl = typeof window !== 'undefined' && (
+      (window.location?.search && (window.location.search.includes('code=') || window.location.search.includes('error='))) ||
+      (window.location?.hash && (window.location.hash.includes('access_token') || window.location.hash.includes('error=')))
+    );
+
+    if (hasOAuthInUrl) {
+      const labelGoogle = document.getElementById('label-google-auth');
+      if (labelGoogle) labelGoogle.textContent = 'Autenticando Dra. Fernanda... 🌸';
+      try {
+        const callbackResult = await processOAuthCallback();
+        if (callbackResult?.session) {
+          this.currentSession = callbackResult.session;
+          this.ui.showToast('Login com Google realizado com sucesso! Bem-vinda, Dra. Fernanda! 🩺🌸', 'success');
+        } else if (callbackResult?.error) {
+          this.ui.showToast(`Aviso de autenticação: ${callbackResult.error.message}`, 'warning', 6000);
+        }
+      } catch (e) {
+        console.warn('[App] Erro ao processar retorno OAuth:', e);
+      } finally {
+        if (labelGoogle) labelGoogle.textContent = 'Entrar com Google';
+      }
+    }
+
+    // 3. Escuta mudanças no estado de autenticação do Supabase
     onAuthStateChange(async (event, session) => {
       this.currentSession = session;
       this.routeAuthView(session);
@@ -100,9 +125,9 @@ export class PediatricApp {
       }
     });
 
-    // 3. Verifica sessão atual ou se usuário ativou Modo Convidada / Local
+    // 4. Verifica sessão atual ou se usuário ativou Modo Convidada / Local
     try {
-      const session = await getSession();
+      const session = this.currentSession || await getSession();
       this.currentSession = session;
       this.routeAuthView(session);
     } catch {

@@ -330,6 +330,7 @@ export function initSupabase(customUrl, customKey) {
     try {
       _supabaseClient = createClientFn(url, key, {
         auth: {
+          flowType: 'pkce',
           persistSession: true,
           autoRefreshToken: true,
           detectSessionInUrl: true,
@@ -382,6 +383,7 @@ export async function initSupabaseAsync(customUrl, customKey) {
     try {
       _supabaseClient = createClientFn(url, key, {
         auth: {
+          flowType: 'pkce',
           persistSession: true,
           autoRefreshToken: true,
           detectSessionInUrl: true,
@@ -661,16 +663,121 @@ export function parseOAuthHash(hashString) {
 }
 
 /**
- * Remove fragmentos de token da URL do navegador via history.replaceState
+ * Remove fragmentos de token e parâmetros OAuth (?code=, ?error=) da URL via history.replaceState
  */
 export function clearOAuthHashFromUrl() {
-  if (typeof window !== 'undefined' && window.history?.replaceState && window.location?.hash) {
-    const hash = window.location.hash;
-    if (hash.includes('access_token') || hash.includes('error_description') || hash.includes('type=recovery')) {
-      const cleanUrl = window.location.pathname + window.location.search;
+  if (typeof window !== 'undefined' && window.history?.replaceState && window.location) {
+    const hash = window.location.hash || '';
+    let search = window.location.search || '';
+    let searchModified = false;
+
+    if (search) {
+      try {
+        const cleanSearch = search.startsWith('?') ? search.substring(1) : search;
+        const params = new URLSearchParams(cleanSearch);
+        const paramsToRemove = ['code', 'error', 'error_description', 'error_code', 'state'];
+        for (const p of paramsToRemove) {
+          if (params.has(p)) {
+            params.delete(p);
+            searchModified = true;
+          }
+        }
+        if (searchModified) {
+          const newSearchStr = params.toString();
+          search = newSearchStr ? `?${newSearchStr}` : '';
+          window.location.search = search;
+        }
+      } catch (e) {}
+    }
+
+    if (hash.includes('access_token') || hash.includes('error') || hash.includes('type=recovery') || searchModified) {
+      window.location.hash = '';
+      const cleanUrl = (window.location.pathname || '/') + search;
       window.history.replaceState(null, '', cleanUrl);
     }
   }
+}
+
+/**
+ * Processa explicitamente o retorno de autenticação OAuth / PKCE se presente na URL
+ * @returns {Promise<{ session?: object, error?: object } | null>}
+ */
+export async function processOAuthCallback() {
+  if (typeof window === 'undefined') return null;
+
+  const searchParams = new URLSearchParams(window.location?.search || '');
+  const rawHash = window.location?.hash ? (window.location.hash.startsWith('#') ? window.location.hash.substring(1) : window.location.hash) : '';
+  const hashParams = new URLSearchParams(rawHash);
+
+  // 1. Tratamento de erro retornado pelo provedor OAuth
+  const error = searchParams.get('error') || hashParams.get('error');
+  const errorDescription = searchParams.get('error_description') || hashParams.get('error_description');
+  if (error || errorDescription) {
+    clearOAuthHashFromUrl();
+    const errMsg = decodeURIComponent(errorDescription || error || 'Falha na autenticação OAuth.');
+    return { error: new Error(errMsg) };
+  }
+
+  // 2. Extrai parâmetro code do PKCE e realiza troca explícita pela sessão
+  const code = searchParams.get('code');
+  if (code) {
+    let client = getSupabase();
+    if (!client || client.isOfflineFallback) {
+      try {
+        client = await initSupabaseAsync();
+      } catch (e) {}
+    }
+
+    if (client && !client.isOfflineFallback && client.auth?.exchangeCodeForSession) {
+      try {
+        const { data, error: exError } = await client.auth.exchangeCodeForSession(code);
+        clearOAuthHashFromUrl();
+        if (exError) {
+          console.warn('[SupabaseClient] Erro no exchangeCodeForSession:', exError.message);
+          return { error: exError };
+        }
+        if (data?.session) {
+          if (data.session.user) {
+            try {
+              await ensureProfile(data.session.user);
+            } catch (pErr) {}
+          }
+          return { session: data.session };
+        }
+      } catch (err) {
+        clearOAuthHashFromUrl();
+        console.warn('[SupabaseClient] Exceção no exchangeCodeForSession:', err);
+        return { error: err };
+      }
+    }
+  }
+
+  // 3. Se houver tokens no hash (#access_token=)
+  const accessToken = hashParams.get('access_token');
+  const refreshToken = hashParams.get('refresh_token');
+  if (accessToken && refreshToken) {
+    let client = getSupabase();
+    if (client && !client.isOfflineFallback && client.auth?.setSession) {
+      try {
+        const { data, error: setErr } = await client.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken
+        });
+        clearOAuthHashFromUrl();
+        if (setErr) {
+          return { error: setErr };
+        }
+        if (data?.session) {
+          return { session: data.session };
+        }
+      } catch (err) {
+        clearOAuthHashFromUrl();
+        return { error: err };
+      }
+    }
+  }
+
+  return null;
 }
 
 /**
