@@ -10,7 +10,7 @@
  * 5. Auto-Provisionamento de Perfil: Garante a existência do registro médico em public.profiles.
  */
 
-import { getConfig, isOfflineMode, isGuestMode, APP_CREATOR, STORAGE_KEYS } from './config.js';
+import { getConfig, isOfflineMode, setOfflineMode, isGuestMode, setGuestMode, APP_CREATOR, STORAGE_KEYS } from './config.js';
 
 export { APP_CREATOR };
 
@@ -420,6 +420,11 @@ export function getSupabase() {
  * @returns {Promise<{ data: object|null, error: object|null }>}
  */
 export async function signInWithGoogle() {
+  if (isGuestMode() || isOfflineMode()) {
+    setOfflineMode(false);
+    setGuestMode(false);
+  }
+
   let client = getSupabase();
   if (!client || client.isOfflineFallback) {
     try {
@@ -482,6 +487,11 @@ export async function signInWithMagicLink(email) {
       data: null,
       error: new Error('Por favor, informe um e-mail válido para receber o Link Mágico.')
     };
+  }
+
+  if (isGuestMode() || isOfflineMode()) {
+    setOfflineMode(false);
+    setGuestMode(false);
   }
 
   let client = getSupabase();

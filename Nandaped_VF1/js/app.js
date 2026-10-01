@@ -22,6 +22,8 @@ import {
   getConfig,
   saveConfig,
   clearConfig,
+  DEFAULT_SUPABASE_URL,
+  DEFAULT_SUPABASE_ANON_KEY,
   isOfflineMode,
   setOfflineMode,
   isGuestMode,
@@ -462,8 +464,8 @@ export class PediatricApp {
     const anonInput = document.getElementById('input-supabase-anon');
     const feedback = document.getElementById('cloud-test-feedback');
 
-    if (urlInput) urlInput.value = config.supabaseUrl || '';
-    if (anonInput) anonInput.value = config.supabaseAnonKey || '';
+    if (urlInput) urlInput.value = config.supabaseUrl || DEFAULT_SUPABASE_URL || '';
+    if (anonInput) anonInput.value = config.supabaseAnonKey || DEFAULT_SUPABASE_ANON_KEY || '';
     if (feedback) feedback.classList.add('hidden');
 
     this.ui.openModal('#modal-cloud-config');

@@ -10,7 +10,7 @@
  * 5. Auto-Provisionamento de Perfil: Garante a existência do registro médico em public.profiles.
  */
 
-import { getConfig, isOfflineMode, isGuestMode, APP_CREATOR, STORAGE_KEYS } from './config.js';
+import { getConfig, isOfflineMode, setOfflineMode, isGuestMode, setGuestMode, APP_CREATOR, STORAGE_KEYS } from './config.js';
 
 export { APP_CREATOR };
 
@@ -408,8 +408,31 @@ export function getSupabase() {
  * @returns {Promise<{ data: object|null, error: object|null }>}
  */
 export async function signInWithGoogle() {
-  const client = getSupabase();
+  if (isGuestMode() || isOfflineMode()) {
+    setOfflineMode(false);
+    setGuestMode(false);
+  }
+
+  let client = getSupabase();
   if (!client || client.isOfflineFallback) {
+    try {
+      client = await initSupabaseAsync();
+    } catch (e) {}
+  }
+
+  if (!client || client.isOfflineFallback) {
+    const config = getConfig();
+    const isUnconfigured = !config.supabaseUrl || !config.supabaseAnonKey;
+    const msg = isUnconfigured
+      ? 'Modo Offline: Supabase não configurado. Por favor, configure a URL do Projeto e a Chave Pública Anon (⚙️) antes de conectar via Google.'
+      : 'Modo Offline: Autenticação via Google indisponível sem conexão à internet.';
+    const error = new Error(msg);
+    if (isUnconfigured) error.isNotConfigured = true;
+    console.warn('[SupabaseClient]', error.message);
+    return { data: null, error };
+  }
+
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
     const error = new Error('Modo Offline: Não é possível conectar via Google sem conexão à internet.');
     console.warn('[SupabaseClient]', error.message);
     return { data: null, error };
@@ -454,8 +477,31 @@ export async function signInWithMagicLink(email) {
     };
   }
 
-  const client = getSupabase();
+  if (isGuestMode() || isOfflineMode()) {
+    setOfflineMode(false);
+    setGuestMode(false);
+  }
+
+  let client = getSupabase();
   if (!client || client.isOfflineFallback) {
+    try {
+      client = await initSupabaseAsync();
+    } catch (e) {}
+  }
+
+  if (!client || client.isOfflineFallback) {
+    const config = getConfig();
+    const isUnconfigured = !config.supabaseUrl || !config.supabaseAnonKey;
+    const msg = isUnconfigured
+      ? 'Modo Offline: Supabase não configurado. Por favor, configure a URL do Projeto e a Chave Pública Anon (⚙️) antes de enviar o Link Mágico.'
+      : 'Modo Offline: Envio de Link Mágico indisponível sem conexão à internet.';
+    const error = new Error(msg);
+    if (isUnconfigured) error.isNotConfigured = true;
+    console.warn('[SupabaseClient]', error.message);
+    return { data: null, error };
+  }
+
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
     const error = new Error('Modo Offline: Envio de Link Mágico indisponível sem conexão à internet.');
     console.warn('[SupabaseClient]', error.message);
     return { data: null, error };
