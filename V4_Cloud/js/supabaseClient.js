@@ -174,6 +174,28 @@ export function createDegradedClient() {
       return { data: null, error: err };
     },
 
+    signInWithPassword: async () => {
+      const config = getConfig();
+      const isUnconfigured = !config.supabaseUrl || !config.supabaseAnonKey;
+      const msg = isUnconfigured
+        ? 'Modo Offline: Supabase não configurado. Por favor, configure a URL do Projeto e a Chave Pública Anon (⚙️) antes de conectar com e-mail e senha.'
+        : 'Modo Offline: Login por e-mail e senha indisponível sem conexão à internet.';
+      const err = new Error(msg);
+      if (isUnconfigured) err.isNotConfigured = true;
+      return { data: null, error: err };
+    },
+
+    signUp: async () => {
+      const config = getConfig();
+      const isUnconfigured = !config.supabaseUrl || !config.supabaseAnonKey;
+      const msg = isUnconfigured
+        ? 'Modo Offline: Supabase não configurado. Por favor, configure a URL do Projeto e a Chave Pública Anon (⚙️) antes de cadastrar.'
+        : 'Modo Offline: Cadastro por e-mail e senha indisponível sem conexão à internet.';
+      const err = new Error(msg);
+      if (isUnconfigured) err.isNotConfigured = true;
+      return { data: null, error: err };
+    },
+
     signOut: async () => {
       if (typeof localStorage !== 'undefined') {
         try {
@@ -539,6 +561,155 @@ export async function signInWithMagicLink(email) {
     return { data, error };
   } catch (err) {
     console.error('[SupabaseClient] Exceção no signInWithMagicLink:', err);
+    return { data: null, error: err };
+  }
+}
+
+/**
+ * Realiza autenticação direta por e-mail e senha
+ * @param {string} email - Endereço de e-mail
+ * @param {string} password - Senha (mínimo 6 caracteres)
+ * @returns {Promise<{ data: object|null, error: object|null }>}
+ */
+export async function signInWithPassword(email, password) {
+  if (!email || typeof email !== 'string' || !email.includes('@')) {
+    const error = new Error('Por favor, informe um endereço de e-mail válido.');
+    return { data: null, error };
+  }
+
+  if (!password || typeof password !== 'string' || password.length < 6) {
+    const error = new Error('A senha deve conter no mínimo 6 caracteres.');
+    return { data: null, error };
+  }
+
+  if (isGuestMode() || isOfflineMode()) {
+    setOfflineMode(false);
+    setGuestMode(false);
+  }
+
+  let client = getSupabase();
+  if (!client || client.isOfflineFallback) {
+    try {
+      client = await initSupabaseAsync();
+    } catch (e) {}
+  }
+
+  if (!client || client.isOfflineFallback) {
+    if (DEFAULT_SUPABASE_URL && DEFAULT_SUPABASE_ANON_KEY) {
+      try {
+        client = await initSupabaseAsync(DEFAULT_SUPABASE_URL, DEFAULT_SUPABASE_ANON_KEY);
+      } catch (e) {}
+    }
+  }
+
+  if (!client || client.isOfflineFallback) {
+    const config = getConfig();
+    const isUnconfigured = !config.supabaseUrl || !config.supabaseAnonKey;
+    const msg = isUnconfigured
+      ? 'Modo Offline: Supabase não configurado. Por favor, configure a URL do Projeto e a Chave Pública Anon (⚙️) antes de conectar com e-mail e senha.'
+      : 'Modo Offline: Login indisponível sem conexão à internet.';
+    const error = new Error(msg);
+    if (isUnconfigured) error.isNotConfigured = true;
+    console.warn('[SupabaseClient]', error.message);
+    return { data: null, error };
+  }
+
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    const error = new Error('Modo Offline: Login indisponível sem conexão à internet.');
+    console.warn('[SupabaseClient]', error.message);
+    return { data: null, error };
+  }
+
+  try {
+    const { data, error } = await client.auth.signInWithPassword({
+      email: email.trim(),
+      password: password
+    });
+
+    if (error) {
+      console.error('[SupabaseClient] Erro no signInWithPassword:', error.message);
+    }
+    return { data, error };
+  } catch (err) {
+    console.error('[SupabaseClient] Exceção no signInWithPassword:', err);
+    return { data: null, error: err };
+  }
+}
+
+/**
+ * Cadastra uma nova conta de médica diretamente com e-mail e senha
+ * @param {string} email - Endereço de e-mail
+ * @param {string} password - Senha (mínimo 6 caracteres)
+ * @param {string} [doctorName='Dra. Fernanda Ch.'] - Nome completo da médica
+ * @returns {Promise<{ data: object|null, error: object|null }>}
+ */
+export async function signUpWithPassword(email, password, doctorName = 'Dra. Fernanda Ch.') {
+  if (!email || typeof email !== 'string' || !email.includes('@')) {
+    const error = new Error('Por favor, informe um endereço de e-mail válido.');
+    return { data: null, error };
+  }
+
+  if (!password || typeof password !== 'string' || password.length < 6) {
+    const error = new Error('A senha deve conter no mínimo 6 caracteres.');
+    return { data: null, error };
+  }
+
+  if (isGuestMode() || isOfflineMode()) {
+    setOfflineMode(false);
+    setGuestMode(false);
+  }
+
+  let client = getSupabase();
+  if (!client || client.isOfflineFallback) {
+    try {
+      client = await initSupabaseAsync();
+    } catch (e) {}
+  }
+
+  if (!client || client.isOfflineFallback) {
+    if (DEFAULT_SUPABASE_URL && DEFAULT_SUPABASE_ANON_KEY) {
+      try {
+        client = await initSupabaseAsync(DEFAULT_SUPABASE_URL, DEFAULT_SUPABASE_ANON_KEY);
+      } catch (e) {}
+    }
+  }
+
+  if (!client || client.isOfflineFallback) {
+    const config = getConfig();
+    const isUnconfigured = !config.supabaseUrl || !config.supabaseAnonKey;
+    const msg = isUnconfigured
+      ? 'Modo Offline: Supabase não configurado. Por favor, configure a URL do Projeto e a Chave Pública Anon (⚙️) antes de cadastrar.'
+      : 'Modo Offline: Cadastro indisponível sem conexão à internet.';
+    const error = new Error(msg);
+    if (isUnconfigured) error.isNotConfigured = true;
+    console.warn('[SupabaseClient]', error.message);
+    return { data: null, error };
+  }
+
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+    const error = new Error('Modo Offline: Cadastro indisponível sem conexão à internet.');
+    console.warn('[SupabaseClient]', error.message);
+    return { data: null, error };
+  }
+
+  try {
+    const { data, error } = await client.auth.signUp({
+      email: email.trim(),
+      password: password,
+      options: {
+        data: {
+          full_name: doctorName || 'Dra. Fernanda Ch.',
+          name: doctorName || 'Dra. Fernanda Ch.'
+        }
+      }
+    });
+
+    if (error) {
+      console.error('[SupabaseClient] Erro no signUp:', error.message);
+    }
+    return { data, error };
+  } catch (err) {
+    console.error('[SupabaseClient] Exceção no signUpWithPassword:', err);
     return { data: null, error: err };
   }
 }

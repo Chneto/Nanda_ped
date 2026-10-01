@@ -47,6 +47,8 @@ import {
   getSupabase,
   signInWithGoogle,
   signInWithMagicLink,
+  signInWithPassword,
+  signUpWithPassword,
   signOut,
   getSession,
   parseOAuthHash,
@@ -585,6 +587,65 @@ describe('Finanças Pediatria V4_Cloud — Silk Gate Auth & Offline Resilience E
       assert.equal(validRes.error, null);
       assert.equal(otpCalledWith.email, 'dra.fernanda@hospital.com.br');
       assert.equal(otpCalledWith.options.emailRedirectTo, 'https://financas-pediatria.vercel.app');
+    });
+
+    test('signInWithPassword validates email and password constraints and triggers signInWithPassword', async () => {
+      let passwordCalledWith = null;
+      _setCreateClientForTesting(() => ({
+        auth: {
+          signInWithPassword: async (options) => {
+            passwordCalledWith = options;
+            return { data: { session: { user: { email: options.email } } }, error: null };
+          },
+          getSession: async () => ({ data: { session: null }, error: null })
+        }
+      }));
+
+      initSupabase(validUrl, validAnon);
+
+      // Rejects invalid email
+      const invalidEmail = await signInWithPassword('not-an-email', '123456');
+      assert.equal(invalidEmail.data, null);
+      assert.match(invalidEmail.error.message, /e-mail válido/i);
+
+      // Rejects short password (< 6 chars)
+      const invalidPass = await signInWithPassword('dra.fernanda@hospital.com.br', '12345');
+      assert.equal(invalidPass.data, null);
+      assert.match(invalidPass.error.message, /6 caracteres/i);
+
+      // Accepts valid credentials
+      const validRes = await signInWithPassword('dra.fernanda@hospital.com.br', 'segredo123');
+      assert.ok(validRes.data?.session);
+      assert.equal(validRes.error, null);
+      assert.equal(passwordCalledWith.email, 'dra.fernanda@hospital.com.br');
+      assert.equal(passwordCalledWith.password, 'segredo123');
+    });
+
+    test('signUpWithPassword validates input and passes doctor metadata to signUp', async () => {
+      let signUpCalledWith = null;
+      _setCreateClientForTesting(() => ({
+        auth: {
+          signUp: async (options) => {
+            signUpCalledWith = options;
+            return { data: { user: { id: 'new-user', email: options.email }, session: { access_token: 'tok' } }, error: null };
+          },
+          getSession: async () => ({ data: { session: null }, error: null })
+        }
+      }));
+
+      initSupabase(validUrl, validAnon);
+
+      // Rejects invalid input
+      const invalidRes = await signUpWithPassword('invalid', '123');
+      assert.equal(invalidRes.data, null);
+
+      // Accepts valid registration
+      const validRes = await signUpWithPassword('dra.fernanda@hospital.com.br', 'senhaForte2026', 'Dra. Fernanda Ch.');
+      assert.ok(validRes.data?.user);
+      assert.equal(validRes.error, null);
+      assert.equal(signUpCalledWith.email, 'dra.fernanda@hospital.com.br');
+      assert.equal(signUpCalledWith.password, 'senhaForte2026');
+      assert.equal(signUpCalledWith.options.data.full_name, 'Dra. Fernanda Ch.');
     });
 
     test('signOut terminates session and cleans up guest and offline mode from localStorage', async () => {

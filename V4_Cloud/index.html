@@ -79,13 +79,119 @@
         <div class="silk-gate-actions">
           
           <!-- Botão de Acesso Direto Imediato (Zero Burocracia) -->
-          <button id="btn-enter-direct" class="btn-silk-primary" type="button" style="margin-bottom: 12px; font-size: 16px; font-weight: 700; height: 52px; background: linear-gradient(135deg, #EC407A 0%, #F48FB1 100%); color: #fff; box-shadow: 0 8px 24px rgba(236, 64, 122, 0.25);">
+          <button id="btn-enter-direct" class="btn-silk-primary" type="button" style="margin-bottom: 14px; font-size: 16px; font-weight: 700; height: 52px; background: linear-gradient(135deg, #EC407A 0%, #F48FB1 100%); color: #fff; box-shadow: 0 8px 24px rgba(236, 64, 122, 0.25);">
             <span>🌸 Acessar Santuário Financeiro</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
             </svg>
           </button>
+
+          <!-- Divisor Primário -->
+          <div class="silk-gate-divider" style="margin: 10px 0 16px 0;">
+            <span class="divider-line"></span>
+            <span class="divider-text">ou acesse com sua conta</span>
+            <span class="divider-line"></span>
+          </div>
+
+          <!-- Abas de Alternância: Entrar vs. Cadastrar -->
+          <div class="silk-auth-tabs">
+            <button id="tab-btn-signin" type="button" class="silk-auth-tab active">
+              Entrar
+            </button>
+            <button id="tab-btn-signup" type="button" class="silk-auth-tab">
+              Cadastrar Nova Conta
+            </button>
+          </div>
+
+          <!-- Formulário Direto E-mail e Senha -->
+          <form id="form-password-auth" class="silk-password-form" novalidate>
+            <!-- Campo Nome da Médica (Visível no modo Cadastro) -->
+            <div id="group-auth-name" class="input-field-group hidden">
+              <label for="input-auth-name" class="silk-input-label">Nome Completo da Médica</label>
+              <div class="input-with-icon">
+                <svg class="input-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <input 
+                  type="text" 
+                  id="input-auth-name" 
+                  name="name" 
+                  class="silk-input" 
+                  placeholder="Dra. Fernanda Ch." 
+                  autocomplete="name"
+                  value="Dra. Fernanda Ch."
+                />
+              </div>
+            </div>
+
+            <!-- Campo E-mail -->
+            <div class="input-field-group">
+              <label for="input-auth-email" class="silk-input-label">E-mail</label>
+              <div class="input-with-icon">
+                <svg class="input-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <input 
+                  type="email" 
+                  id="input-auth-email" 
+                  name="email" 
+                  class="silk-input" 
+                  placeholder="dra.fernanda@hospital.com.br" 
+                  autocomplete="email" 
+                  required 
+                />
+              </div>
+            </div>
+
+            <!-- Campo Senha -->
+            <div class="input-field-group">
+              <label for="input-auth-password" class="silk-input-label">Senha</label>
+              <div class="input-with-icon" style="position: relative;">
+                <svg class="input-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input 
+                  type="password" 
+                  id="input-auth-password" 
+                  name="password" 
+                  class="silk-input" 
+                  placeholder="Mínimo 6 caracteres" 
+                  autocomplete="current-password" 
+                  required 
+                  style="padding-right: 44px;"
+                />
+                <button id="btn-toggle-password-visibility" type="button" aria-label="Mostrar ou ocultar senha" style="position: absolute; right: 12px; background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; padding: 4px;">
+                  <svg id="icon-eye-password" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Botão de Ação do Formulário -->
+            <button id="btn-password-submit" class="btn-silk-primary" type="submit" style="margin-top: 4px;">
+              <span id="label-password-submit">Entrar no Santuário</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+
+            <!-- Feedback de Autenticação -->
+            <div id="password-auth-feedback" class="silk-feedback-message hidden" role="alert"></div>
+          </form>
+
+          <!-- Divisor Opções Secundárias -->
+          <div class="silk-gate-divider" style="margin: 14px 0 12px 0;">
+            <span class="divider-line"></span>
+            <span class="divider-text">ou conecte com Google</span>
+            <span class="divider-line"></span>
+          </div>
 
           <!-- Botão Oficial Google OAuth (1 Toque) -->
           <button id="btn-google-auth" class="btn-silk-google" type="button" aria-label="Entrar com Google">
@@ -98,8 +204,8 @@
             <span id="label-google-auth">Entrar com Google</span>
           </button>
 
-          <!-- Divisor Delicado Primário -->
-          <div class="silk-gate-divider">
+          <!-- Divisor Magic Link -->
+          <div class="silk-gate-divider" style="margin: 14px 0 12px 0;">
             <span class="divider-line"></span>
             <span class="divider-text">ou acesse sem senha com Magic Link</span>
             <span class="divider-line"></span>
@@ -126,7 +232,7 @@
               </div>
             </div>
 
-            <button id="btn-magic-link" class="btn-silk-primary" type="submit">
+            <button id="btn-magic-link" class="btn-silk-secondary" type="submit" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
               <span id="label-magic-link">Enviar Link Mágico</span>
               <svg id="icon-magic-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="5" y1="12" x2="19" y2="12"></line>

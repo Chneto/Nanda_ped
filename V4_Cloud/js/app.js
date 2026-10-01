@@ -42,6 +42,8 @@ import {
   getSupabase,
   signInWithGoogle,
   signInWithMagicLink,
+  signInWithPassword,
+  signUpWithPassword,
   signOut,
   getSession,
   onAuthStateChange,
@@ -180,6 +182,183 @@ export class PediatricApp {
   }
 
   bindSilkGateEvents() {
+    // -------------------------------------------------------------
+    // 1. Alternância de Abas: Entrar vs. Cadastrar
+    // -------------------------------------------------------------
+    const tabBtnSignIn = document.getElementById('tab-btn-signin');
+    const tabBtnSignUp = document.getElementById('tab-btn-signup');
+    const groupAuthName = document.getElementById('group-auth-name');
+    const labelPasswordSubmit = document.getElementById('label-password-submit');
+    const passwordFeedback = document.getElementById('password-auth-feedback');
+    const inputAuthPassword = document.getElementById('input-auth-password');
+    let isSignUpMode = false;
+
+    if (tabBtnSignIn && tabBtnSignUp) {
+      tabBtnSignIn.addEventListener('click', () => {
+        isSignUpMode = false;
+        tabBtnSignIn.classList.add('active');
+        tabBtnSignUp.classList.remove('active');
+        if (groupAuthName) groupAuthName.classList.add('hidden');
+        if (labelPasswordSubmit) labelPasswordSubmit.textContent = 'Entrar no Santuário';
+        if (inputAuthPassword) inputAuthPassword.setAttribute('autocomplete', 'current-password');
+        if (passwordFeedback) {
+          passwordFeedback.classList.add('hidden');
+          passwordFeedback.textContent = '';
+        }
+      });
+
+      tabBtnSignUp.addEventListener('click', () => {
+        isSignUpMode = true;
+        tabBtnSignUp.classList.add('active');
+        tabBtnSignIn.classList.remove('active');
+        if (groupAuthName) groupAuthName.classList.remove('hidden');
+        if (labelPasswordSubmit) labelPasswordSubmit.textContent = 'Criar Conta e Acessar';
+        if (inputAuthPassword) inputAuthPassword.setAttribute('autocomplete', 'new-password');
+        if (passwordFeedback) {
+          passwordFeedback.classList.add('hidden');
+          passwordFeedback.textContent = '';
+        }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // 2. Mostrar / Ocultar Senha (Eye Toggle)
+    // -------------------------------------------------------------
+    const btnTogglePassword = document.getElementById('btn-toggle-password-visibility');
+    if (btnTogglePassword && inputAuthPassword) {
+      btnTogglePassword.addEventListener('click', () => {
+        const isPassword = inputAuthPassword.getAttribute('type') === 'password';
+        inputAuthPassword.setAttribute('type', isPassword ? 'text' : 'password');
+        btnTogglePassword.innerHTML = isPassword
+          ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`
+          : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`;
+      });
+    }
+
+    // -------------------------------------------------------------
+    // 3. Submissão do Formulário Direto E-mail e Senha
+    // -------------------------------------------------------------
+    const formPasswordAuth = document.getElementById('form-password-auth');
+    if (formPasswordAuth) {
+      formPasswordAuth.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const emailInput = document.getElementById('input-auth-email');
+        const nameInput = document.getElementById('input-auth-name');
+        const email = emailInput?.value?.trim();
+        const password = inputAuthPassword?.value;
+        const doctorName = nameInput?.value?.trim() || 'Dra. Fernanda Ch.';
+
+        if (!email || !email.includes('@')) {
+          if (passwordFeedback) {
+            passwordFeedback.textContent = 'Por favor, insira um e-mail válido.';
+            passwordFeedback.className = 'silk-feedback-message error';
+            passwordFeedback.classList.remove('hidden');
+          }
+          return;
+        }
+
+        if (!password || password.length < 6) {
+          if (passwordFeedback) {
+            passwordFeedback.textContent = 'A senha deve conter no mínimo 6 caracteres.';
+            passwordFeedback.className = 'silk-feedback-message error';
+            passwordFeedback.classList.remove('hidden');
+          }
+          return;
+        }
+
+        if (labelPasswordSubmit) {
+          labelPasswordSubmit.textContent = isSignUpMode ? 'Criando conta...' : 'Entrando...';
+        }
+
+        try {
+          if (isSignUpMode) {
+            // Fluxo de Cadastro Direto
+            const { data, error } = await signUpWithPassword(email, password, doctorName);
+            if (error) {
+              let errorMsg = error.message;
+              if (errorMsg.includes('User already registered') || errorMsg.includes('already registered')) {
+                errorMsg = 'Este e-mail já está cadastrado! Clique na aba "Entrar" para acessar.';
+              }
+              if (passwordFeedback) {
+                passwordFeedback.textContent = `Erro no cadastro: ${errorMsg}`;
+                passwordFeedback.className = 'silk-feedback-message error';
+                passwordFeedback.classList.remove('hidden');
+              }
+              if (labelPasswordSubmit) labelPasswordSubmit.textContent = 'Criar Conta e Acessar';
+              this.ui.showToast(errorMsg, 'warning', 6000);
+            } else {
+              // Se sessão retornada diretamente (email confirmation desligado)
+              if (data?.session) {
+                this.routeAuthView(data.session);
+                this.ui.showToast(`Bem-vinda, ${doctorName}! Conta criada com sucesso. 🩺🌸`, 'success');
+                this.ui.render();
+                try {
+                  syncNow().catch(e => console.log('[Sync Background]', e.message));
+                } catch (e) {}
+              } else {
+                // Tenta login direto automático
+                const loginRes = await signInWithPassword(email, password);
+                if (loginRes?.data?.session) {
+                  this.routeAuthView(loginRes.data.session);
+                  this.ui.showToast(`Bem-vinda, ${doctorName}! Santuário financeiro ativo. 🩺🌸`, 'success');
+                  this.ui.render();
+                  try {
+                    syncNow().catch(e => console.log('[Sync Background]', e.message));
+                  } catch (e) {}
+                } else {
+                  if (passwordFeedback) {
+                    passwordFeedback.textContent = 'Conta criada com sucesso! Você já pode fazer login.';
+                    passwordFeedback.className = 'silk-feedback-message success';
+                    passwordFeedback.classList.remove('hidden');
+                  }
+                  if (labelPasswordSubmit) labelPasswordSubmit.textContent = 'Criar Conta e Acessar';
+                  this.ui.showToast('Conta criada com sucesso! 🌸', 'success');
+                }
+              }
+            }
+          } else {
+            // Fluxo de Login com Senha
+            const { data, error } = await signInWithPassword(email, password);
+            if (error) {
+              let errorMsg = error.message;
+              if (errorMsg.includes('Invalid login credentials') || errorMsg.includes('invalid_credentials')) {
+                errorMsg = 'E-mail ou senha incorretos. Verifique suas credenciais.';
+              }
+              if (passwordFeedback) {
+                passwordFeedback.textContent = `Falha no acesso: ${errorMsg}`;
+                passwordFeedback.className = 'silk-feedback-message error';
+                passwordFeedback.classList.remove('hidden');
+              }
+              if (labelPasswordSubmit) labelPasswordSubmit.textContent = 'Entrar no Santuário';
+              this.ui.showToast(errorMsg, 'error', 5000);
+              if (error.isNotConfigured) {
+                this.openCloudConfigModal();
+              }
+            } else if (data?.session) {
+              this.routeAuthView(data.session);
+              this.ui.showToast('Bem-vinda de volta, Dra. Fernanda! 🩺🌸', 'success');
+              this.ui.render();
+              try {
+                syncNow().catch(e => console.log('[Sync Background]', e.message));
+              } catch (e) {}
+            }
+          }
+        } catch (err) {
+          if (passwordFeedback) {
+            passwordFeedback.textContent = 'Erro inesperado ao processar credenciais.';
+            passwordFeedback.className = 'silk-feedback-message error';
+            passwordFeedback.classList.remove('hidden');
+          }
+          if (labelPasswordSubmit) {
+            labelPasswordSubmit.textContent = isSignUpMode ? 'Criar Conta e Acessar' : 'Entrar no Santuário';
+          }
+        }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // 4. Conexão Google OAuth
+    // -------------------------------------------------------------
     const btnGoogle = document.getElementById('btn-google-auth');
     if (btnGoogle) {
       btnGoogle.addEventListener('click', async () => {
