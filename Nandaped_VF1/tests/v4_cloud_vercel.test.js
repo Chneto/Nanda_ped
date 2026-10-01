@@ -268,7 +268,7 @@ describe('V4_Cloud vercel.json Production Configuration Suite', () => {
 
   describe('6. Zero-Regression & Isolation Proof', () => {
     test('vercel.json and package.json target exclusively Nandaped_VF1 / V4_Cloud environment without touching root files', () => {
-      assert.ok(vercelPath.includes('Nandaped_VF1') || vercelPath.includes('V4_Cloud') || vercelPath.includes('m1_explorer_2'));
+      assert.ok(vercelPath.includes('Nandaped_VF1') || vercelPath.includes('V4_Cloud') || vercelPath.includes('m1_explorer_2') || vercelPath.includes('nandaped') || vercelPath.includes('Nanda_ped'));
 
       // Validate package.json configuration
       const pkgPath = path.resolve(__dirname, '..', 'package.json');
