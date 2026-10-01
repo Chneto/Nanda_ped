@@ -121,6 +121,31 @@ export function isServiceRoleKey(key) {
 // ============================================================================
 
 /**
+ * Normaliza e higieniza a URL do Supabase.
+ * Converte automaticamente URLs do dashboard (ex: https://supabase.com/dashboard/project/xyz)
+ * para a URL canônica de API do projeto (https://xyz.supabase.co).
+ * 
+ * @param {string} url 
+ * @returns {string}
+ */
+export function normalizeSupabaseUrl(url) {
+  if (!url || typeof url !== 'string') return '';
+  let trimmed = url.trim();
+  if (!trimmed) return '';
+
+  // 1. Caso o usuário cole a URL do painel administrativo (dashboard do Supabase)
+  const dashboardMatch = trimmed.match(/^(?:https?:\/\/)?(?:app\.|www\.)?supabase\.com\/dashboard\/project\/([a-z0-9_-]+)/i);
+  if (dashboardMatch && dashboardMatch[1]) {
+    return `https://${dashboardMatch[1]}.supabase.co`;
+  }
+
+  // 2. Remove barra final
+  trimmed = trimmed.replace(/\/+$/, '');
+
+  return trimmed;
+}
+
+/**
  * Valida se uma URL tem estrutura plausível para o Supabase (HTTPS válido)
  * @param {string} url 
  * @returns {boolean}
@@ -128,9 +153,25 @@ export function isServiceRoleKey(key) {
 export function isValidSupabaseUrl(url) {
   if (!url || typeof url !== 'string') return false;
   const trimmed = url.trim();
+  if (!trimmed) return false;
+
+  // Rejeição estrita de protocolos proibidos e inseguros
+  if (/^(http|ftp|file|javascript|data|vbscript):/i.test(trimmed)) {
+    return false;
+  }
+
+  // Se for URL do dashboard, converte para avaliar formato da API
+  const dashboardMatch = trimmed.match(/^(?:https?:\/\/)?(?:app\.|www\.)?supabase\.com\/dashboard\/project\/([a-z0-9_-]+)/i);
+  let urlToTest = trimmed;
+  if (dashboardMatch && dashboardMatch[1]) {
+    urlToTest = `https://${dashboardMatch[1]}.supabase.co`;
+  }
+
   try {
-    const parsed = new URL(trimmed);
-    return parsed.protocol === 'https:' && parsed.hostname.length > 3;
+    const parsed = new URL(urlToTest);
+    if (parsed.protocol !== 'https:') return false;
+    if (!parsed.hostname || parsed.hostname.length <= 3) return false;
+    return true;
   } catch {
     return false;
   }
@@ -180,7 +221,7 @@ export function isValidSupabaseAnonKey(key) {
  */
 export function getConfig() {
   // 1. Injeção de Runtime (se houver)
-  const envUrl = (typeof window !== 'undefined' && window.__ENV__?.SUPABASE_URL) ? window.__ENV__.SUPABASE_URL.trim() : null;
+  const envUrl = (typeof window !== 'undefined' && window.__ENV__?.SUPABASE_URL) ? normalizeSupabaseUrl(window.__ENV__.SUPABASE_URL) : null;
   const envKey = (typeof window !== 'undefined' && window.__ENV__?.SUPABASE_ANON_KEY) ? window.__ENV__.SUPABASE_ANON_KEY.trim() : null;
 
   // 2. LocalStorage persistido
@@ -191,7 +232,7 @@ export function getConfig() {
     try {
       localUrl = localStorage.getItem(STORAGE_KEYS.SUPABASE_URL);
       localKey = localStorage.getItem(STORAGE_KEYS.SUPABASE_ANON_KEY);
-      if (localUrl) localUrl = localUrl.trim();
+      if (localUrl) localUrl = normalizeSupabaseUrl(localUrl);
       if (localKey) localKey = localKey.trim();
     } catch (e) {
       console.warn('[Config] Erro ao acessar localStorage:', e);
@@ -228,6 +269,7 @@ export function saveConfig(supabaseUrl, supabaseAnonKey) {
     console.error('[Config] URL do Supabase inválida:', supabaseUrl);
     return false;
   }
+  const normalizedUrl = normalizeSupabaseUrl(supabaseUrl);
 
   if (isServiceRoleKey(supabaseAnonKey)) {
     console.error('[Config] REJEITADO: Tentativa de configurar chave service_role! Utilize apenas a anon key.');
@@ -241,7 +283,7 @@ export function saveConfig(supabaseUrl, supabaseAnonKey) {
 
   if (typeof localStorage !== 'undefined') {
     try {
-      localStorage.setItem(STORAGE_KEYS.SUPABASE_URL, supabaseUrl.trim());
+      localStorage.setItem(STORAGE_KEYS.SUPABASE_URL, normalizedUrl);
       localStorage.setItem(STORAGE_KEYS.SUPABASE_ANON_KEY, supabaseAnonKey.trim());
 
       // Notifica componentes e o cliente Supabase sobre a nova configuração
@@ -421,7 +463,7 @@ export async function testSupabaseReachability(url, anonKey, timeoutMs = 6000) {
   }
 
   // 5. Teste de alcance de rede via REST OpenAPI Ping
-  const cleanUrl = url.trim().replace(/\/+$/, '');
+  const cleanUrl = normalizeSupabaseUrl(url);
   const targetEndpoint = `${cleanUrl}/rest/v1/`;
 
   const controller = (typeof AbortController !== 'undefined') ? new AbortController() : null;

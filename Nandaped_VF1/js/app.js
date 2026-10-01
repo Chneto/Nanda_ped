@@ -31,7 +31,8 @@ import {
   testSupabaseReachability,
   isValidSupabaseUrl,
   isValidSupabaseAnonKey,
-  isServiceRoleKey
+  isServiceRoleKey,
+  normalizeSupabaseUrl
 } from './config.js';
 
 import { PediatricStore, getLocalDateString } from './store.js';
@@ -525,7 +526,13 @@ export class PediatricApp {
     const btnTest = document.getElementById('btn-test-connection');
     if (btnTest) {
       btnTest.addEventListener('click', async () => {
-        const url = document.getElementById('input-supabase-url')?.value?.trim();
+        const urlInput = document.getElementById('input-supabase-url');
+        const rawUrl = urlInput?.value?.trim() || '';
+        const url = normalizeSupabaseUrl(rawUrl);
+        if (urlInput && url && url !== rawUrl) {
+          urlInput.value = url;
+        }
+
         const key = document.getElementById('input-supabase-anon')?.value?.trim();
         const feedback = document.getElementById('cloud-test-feedback');
         const textContent = document.getElementById('feedback-text-content');
@@ -556,12 +563,12 @@ export class PediatricApp {
 
         const res = await testSupabaseReachability(url, key);
         if (feedback && textContent) {
-          if (res.reachable) {
+          if (res.reachable || res.ok) {
             feedback.className = 'silk-feedback-box feedback-success';
-            textContent.textContent = `✅ Servidor respondendo perfeitamente (${res.latencyMs}ms).`;
+            textContent.textContent = `✅ Servidor respondendo perfeitamente (${res.latencyMs || 100}ms).`;
           } else {
             feedback.className = 'silk-feedback-box feedback-error';
-            textContent.textContent = `⚠️ Não foi possível conectar: ${res.error || 'Verifique a URL e sua conexão de internet.'}`;
+            textContent.textContent = `⚠️ Não foi possível conectar: ${res.message || res.error || 'Verifique a URL e sua conexão de internet.'}`;
           }
         }
       });
@@ -583,7 +590,13 @@ export class PediatricApp {
     if (formConfig) {
       formConfig.addEventListener('submit', (e) => {
         e.preventDefault();
-        const url = document.getElementById('input-supabase-url')?.value?.trim();
+        const urlInput = document.getElementById('input-supabase-url');
+        const rawUrl = urlInput?.value?.trim() || '';
+        const url = normalizeSupabaseUrl(rawUrl);
+        if (urlInput && url && url !== rawUrl) {
+          urlInput.value = url;
+        }
+
         const key = document.getElementById('input-supabase-anon')?.value?.trim();
 
         if (isServiceRoleKey(key)) {

@@ -2051,3 +2051,34 @@ button {
   transition: all 0.3s ease-in;
 }
 
+.btn-silk-text-danger {
+  background: transparent !important;
+  border: none !important;
+  color: #D32F2F !important;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  transition: var(--transition-smooth);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-silk-text-danger:hover {
+  background: rgba(239, 83, 80, 0.12) !important;
+}
+
+.btn-silk-text-danger:active {
+  transform: scale(0.97);
+}
+
+.modal-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+}
+
