@@ -643,12 +643,18 @@ export async function getSession() {
  * @returns {object|null}
  */
 export function parseOAuthHash(hashString) {
-  const hash = hashString || (typeof window !== 'undefined' ? window.location?.hash : '');
+  let hash = hashString;
+  if (!hash && typeof window !== 'undefined') {
+    hash = window.location?.hash || '';
+    if (!hash && window.location?.search && (window.location.search.includes('code=') || window.location.search.includes('error='))) {
+      hash = window.location.search;
+    }
+  }
   if (!hash || typeof hash !== 'string' || !hash.includes('=')) {
     return null;
   }
 
-  const cleanHash = hash.startsWith('#') ? hash.substring(1) : hash;
+  const cleanHash = (hash.startsWith('#') || hash.startsWith('?')) ? hash.substring(1) : hash;
   const params = new URLSearchParams(cleanHash);
 
   const error = params.get('error');
@@ -673,6 +679,15 @@ export function parseOAuthHash(hashString) {
     };
   }
 
+  const code = params.get('code');
+  if (code) {
+    return {
+      isSuccess: true,
+      code,
+      type: 'pkce'
+    };
+  }
+
   return null;
 }
 
@@ -680,10 +695,11 @@ export function parseOAuthHash(hashString) {
  * Remove fragmentos de token da URL do navegador via history.replaceState
  */
 export function clearOAuthHashFromUrl() {
-  if (typeof window !== 'undefined' && window.history?.replaceState && window.location?.hash) {
-    const hash = window.location.hash;
-    if (hash.includes('access_token') || hash.includes('error_description') || hash.includes('type=recovery')) {
-      const cleanUrl = window.location.pathname + window.location.search;
+  if (typeof window !== 'undefined' && window.history?.replaceState && window.location) {
+    const hash = window.location.hash || '';
+    if (hash.includes('access_token') || hash.includes('error_description') || hash.includes('type=recovery') || hash.includes('error=')) {
+      window.location.hash = '';
+      const cleanUrl = (window.location.pathname || '') + (window.location.search || '');
       window.history.replaceState(null, '', cleanUrl);
     }
   }

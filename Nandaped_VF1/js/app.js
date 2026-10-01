@@ -164,12 +164,16 @@ export class PediatricApp {
         if (label) label.textContent = 'Conectando ao Google...';
 
         try {
-          const { error } = await signInWithGoogle();
+          const { data, error } = await signInWithGoogle();
           if (error) {
-            this.ui.showToast(`Falha no login com Google: ${error.message}`, 'error');
+            this.ui.showToast(`Falha no login com Google: ${error.message}`, 'error', 5000);
             if (label) label.textContent = 'Entrar com Google';
             if (error.isNotConfigured) {
               this.openCloudConfigModal();
+            }
+          } else if (data?.url) {
+            if (typeof window !== 'undefined' && window.location && window.location.href !== data.url) {
+              window.location.href = data.url;
             }
           }
         } catch (err) {
@@ -202,18 +206,23 @@ export class PediatricApp {
         try {
           const { error } = await signInWithMagicLink(email);
           if (error) {
+            let errorMsg = error.message;
+            if (errorMsg.toLowerCase().includes('rate limit') || errorMsg.toLowerCase().includes('over_email_send_rate_limit')) {
+              errorMsg = 'Limite temporário de envio de e-mails atingido (Supabase Free: ~3/h). Utilize o botão Google ou o Acesso Direto / Modo Hospital.';
+            }
             if (feedback) {
-              feedback.textContent = `Erro ao enviar link: ${error.message}`;
+              feedback.textContent = `Erro ao enviar link: ${errorMsg}`;
               feedback.className = 'silk-feedback-message error';
               feedback.classList.remove('hidden');
             }
             if (label) label.textContent = 'Enviar Link Mágico';
+            this.ui.showToast(errorMsg, 'warning', 6000);
             if (error.isNotConfigured) {
               this.openCloudConfigModal();
             }
           } else {
             if (feedback) {
-              feedback.textContent = '✨ Link mágico enviado com sucesso! Verifique sua caixa de entrada.';
+              feedback.textContent = '✨ Link mágico enviado com sucesso! Verifique sua caixa de entrada (ou pasta de spam).';
               feedback.className = 'silk-feedback-message success';
               feedback.classList.remove('hidden');
             }

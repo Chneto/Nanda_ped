@@ -147,6 +147,11 @@ button {
   font-family: var(--font-family);
   user-select: none;
   -webkit-user-select: none;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: inherit;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .hidden {
@@ -2388,4 +2393,162 @@ button {
   transform: translateY(-8px);
   transition: all 0.3s ease-in;
 }
+
+/* ==========================================================================
+   16. BOTÕES COMPLEMENTARES & SELECTS SILK & ROSE GOLD
+   ========================================================================== */
+.submit-btn {
+  width: 100%;
+  padding: 15px 20px;
+  border-radius: var(--radius-pill);
+  border: none;
+  background: var(--fab-gradient) !important;
+  color: #FFFFFF !important;
+  font-size: 0.96rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(236, 64, 122, 0.32);
+  transition: var(--transition-smooth);
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.submit-btn:active {
+  transform: scale(0.97);
+  opacity: 0.94;
+}
+
+.btn-modal-close {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: var(--radius-pill);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+
+.btn-modal-close:hover {
+  color: var(--primary-pink);
+}
+
+.btn-del-custom-cat {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #EF5350;
+  font-size: 11px;
+  padding: 0 2px;
+  line-height: 1;
+  transition: var(--transition-smooth);
+}
+
+.btn-del-custom-cat:hover {
+  transform: scale(1.2);
+}
+
+.drawer-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  border: 1px solid var(--silk-border);
+  color: var(--text-main);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.drawer-menu-item:active {
+  background: var(--rose-gold-light);
+}
+
+.drawer-menu-item.danger {
+  color: #D32F2F;
+  border-color: #FFCDD2;
+  background: #FFEBEE;
+}
+
+[data-theme="dark"] .drawer-menu-item.danger {
+  background: rgba(211, 47, 47, 0.18);
+  border-color: rgba(211, 47, 47, 0.4);
+  color: #EF5350;
+}
+
+.category-create-card {
+  margin-bottom: 16px;
+  padding: 14px;
+  border-radius: var(--radius-card);
+  background: var(--bg-card-subtle);
+  border: 1.5px dashed var(--primary-pink);
+}
+
+.category-group-card {
+  margin-bottom: 12px;
+  padding: 14px;
+  border-radius: var(--radius-card);
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--silk-border);
+}
+
+.macro-category-card {
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--silk-border);
+  margin-bottom: 12px;
+}
+
+.macro-category-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.macro-subcat-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--silk-border);
+}
+
+.macro-subcat-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+  border: 1px solid var(--silk-border);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.macro-subcat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-pill);
+}
+
+.macro-subcat-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
 
