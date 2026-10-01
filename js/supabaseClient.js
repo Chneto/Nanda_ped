@@ -10,7 +10,7 @@
  * 5. Auto-Provisionamento de Perfil: Garante a existência do registro médico em public.profiles.
  */
 
-import { getConfig, isOfflineMode, setOfflineMode, isGuestMode, setGuestMode, APP_CREATOR, STORAGE_KEYS } from './config.js';
+import { getConfig, isOfflineMode, setOfflineMode, isGuestMode, setGuestMode, APP_CREATOR, STORAGE_KEYS, DEFAULT_SUPABASE_URL, DEFAULT_SUPABASE_ANON_KEY } from './config.js';
 
 export { APP_CREATOR };
 
@@ -152,15 +152,27 @@ export function createDegradedClient() {
       };
     },
 
-    signInWithOAuth: async () => ({
-      data: null,
-      error: new Error('Modo Offline: Autenticação via Google indisponível sem conexão à internet.')
-    }),
+    signInWithOAuth: async () => {
+      const config = getConfig();
+      const isUnconfigured = !config.supabaseUrl || !config.supabaseAnonKey;
+      const msg = isUnconfigured
+        ? 'Modo Offline: Supabase não configurado. Por favor, configure a URL do Projeto e a Chave Pública Anon (⚙️) antes de conectar via Google.'
+        : 'Modo Offline: Autenticação via Google indisponível sem conexão à internet.';
+      const err = new Error(msg);
+      if (isUnconfigured) err.isNotConfigured = true;
+      return { data: null, error: err };
+    },
 
-    signInWithOtp: async () => ({
-      data: null,
-      error: new Error('Modo Offline: Envio de Link Mágico indisponível sem conexão à internet.')
-    }),
+    signInWithOtp: async () => {
+      const config = getConfig();
+      const isUnconfigured = !config.supabaseUrl || !config.supabaseAnonKey;
+      const msg = isUnconfigured
+        ? 'Modo Offline: Supabase não configurado. Por favor, configure a URL do Projeto e a Chave Pública Anon (⚙️) antes de enviar o Link Mágico.'
+        : 'Modo Offline: Envio de Link Mágico indisponível sem conexão à internet.';
+      const err = new Error(msg);
+      if (isUnconfigured) err.isNotConfigured = true;
+      return { data: null, error: err };
+    },
 
     signOut: async () => {
       if (typeof localStorage !== 'undefined') {
@@ -421,6 +433,14 @@ export async function signInWithGoogle() {
   }
 
   if (!client || client.isOfflineFallback) {
+    if (DEFAULT_SUPABASE_URL && DEFAULT_SUPABASE_ANON_KEY) {
+      try {
+        client = await initSupabaseAsync(DEFAULT_SUPABASE_URL, DEFAULT_SUPABASE_ANON_KEY);
+      } catch (e) {}
+    }
+  }
+
+  if (!client || client.isOfflineFallback) {
     const config = getConfig();
     const isUnconfigured = !config.supabaseUrl || !config.supabaseAnonKey;
     const msg = isUnconfigured
@@ -487,6 +507,14 @@ export async function signInWithMagicLink(email) {
     try {
       client = await initSupabaseAsync();
     } catch (e) {}
+  }
+
+  if (!client || client.isOfflineFallback) {
+    if (DEFAULT_SUPABASE_URL && DEFAULT_SUPABASE_ANON_KEY) {
+      try {
+        client = await initSupabaseAsync(DEFAULT_SUPABASE_URL, DEFAULT_SUPABASE_ANON_KEY);
+      } catch (e) {}
+    }
   }
 
   if (!client || client.isOfflineFallback) {

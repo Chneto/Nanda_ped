@@ -75,9 +75,11 @@ export class PediatricApp {
     this.isInitialized = true;
 
     // 1. Inicializa o cliente Supabase com credenciais ativas (se houver)
-    const config = getConfig();
+    let config = getConfig();
     if (config.isConfigured) {
       initSupabase(config.supabaseUrl, config.supabaseAnonKey);
+    } else if (DEFAULT_SUPABASE_URL && DEFAULT_SUPABASE_ANON_KEY) {
+      initSupabase(DEFAULT_SUPABASE_URL, DEFAULT_SUPABASE_ANON_KEY);
     } else {
       initSupabase(); // Inicializa fallback degradado offline
     }
