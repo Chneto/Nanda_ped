@@ -58,7 +58,7 @@ test('Shift Creation & Cash Attribution with 75% D+60 and 25% D+90', () => {
 
   // Add shift in September 2026
   const shift = store.addShift({
-    hospital: 'Maternidade Araken',
+    hospital: 'Maternidade Principal',
     shiftDate: '2026-09-10',
     grossValue: 2000,
     netValue: 1880,
@@ -102,7 +102,7 @@ test('Tax Rate Slider (6% to 20%) calculation', () => {
 
   // Test with minimum tax rate (6%)
   const s6 = store.addShift({
-    hospital: 'Maternidade Leide Morais',
+    hospital: 'Maternidade Secundária',
     shiftDate: '2026-09-01',
     grossValue: 1000,
     taxRate: 6
@@ -111,7 +111,7 @@ test('Tax Rate Slider (6% to 20%) calculation', () => {
 
   // Test with custom middle rate (13.5%)
   const s13 = store.addShift({
-    hospital: 'MEJEC',
+    hospital: 'Hospital Pediátrico',
     shiftDate: '2026-09-05',
     grossValue: 1000,
     taxRate: 13.5
@@ -120,7 +120,7 @@ test('Tax Rate Slider (6% to 20%) calculation', () => {
 
   // Test with maximum rate (20%)
   const s20 = store.addShift({
-    hospital: 'Hospital Infantil Sabará',
+    hospital: 'Hospital Pediátrico',
     shiftDate: '2026-09-10',
     grossValue: 1000,
     taxRate: 20
@@ -133,9 +133,9 @@ test('Work Locations & Work Types Customization', () => {
   store.resetToDefault();
 
   const locations = store.getWorkLocations();
-  assert.ok(locations.includes('Maternidade Araken'), 'Must include Maternidade Araken');
-  assert.ok(locations.includes('Maternidade Leide Morais'), 'Must include Maternidade Leide Morais');
-  assert.ok(locations.includes('MEJEC'), 'Must include MEJEC');
+  assert.ok(locations.includes('Maternidade Principal'), 'Must include Maternidade Principal');
+  assert.ok(locations.includes('Maternidade Secundária'), 'Must include Maternidade Secundária');
+  assert.ok(locations.includes('Hospital Pediátrico'), 'Must include Hospital Pediátrico');
 
   // Doctor can dynamically add a new location
   store.addWorkLocation('Hospital Geral Dr. Varela');
@@ -348,7 +348,7 @@ test('Trash & Undo Recovery mechanism in PediatricStore', () => {
   store.resetToDefault();
 
   const shift = store.addShift({
-    hospital: 'MEJEC',
+    hospital: 'Hospital Pediátrico',
     shiftDate: '2026-09-20',
     grossValue: 1200,
     netValue: 1128
@@ -422,9 +422,9 @@ test('D+60 Scoped CSV Export includes D+60 installment in target month with dela
   const store = new PediatricStore();
   store.resetToDefault();
 
-  // Shift worked in September, 80% due in November (D+60), 20% due in December (D+90)
+  // Shift worked in September, 75% due in November (D+60), 25% due in December (D+90)
   store.addShift({
-    hospital: 'Maternidade Araken',
+    hospital: 'Maternidade Principal',
     shiftDate: '2026-09-10',
     grossValue: 1200,
     netValue: 1128,
@@ -437,7 +437,7 @@ test('D+60 Scoped CSV Export includes D+60 installment in target month with dela
     referenceDate: new Date('2026-11-15T12:00:00')
   });
 
-  assert.ok(csvNov.includes('Maternidade Araken'), 'Must include September shift in November CSV because of D+60 installment');
+  assert.ok(csvNov.includes('Maternidade Principal'), 'Must include September shift in November CSV because of D+60 installment');
   assert.ok(csvNov.includes('(75%)'), 'Must specify 75% installment in November');
   assert.ok(csvNov.includes('Em Atraso'), 'Must flag D+60 installment as Em Atraso on Nov 15 since it was due Nov 10');
 

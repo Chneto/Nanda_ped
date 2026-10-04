@@ -69,7 +69,7 @@ describe('V4_Cloud Vercel Adversarial & Stress-Test Suite', () => {
       '/shifts',
       '/shifts/new',
       '/shifts/edit/123e4567-e89b-12d3-a456-426614174000',
-      '/shifts/maternidade-araken/2026/09',
+      '/shifts/maternidade-Maternidade Principal/2026/09',
       '/shifts/leide-morais/plantoes/detalhes',
       '/expenses',
       '/expenses/2026/09',
@@ -98,7 +98,7 @@ describe('V4_Cloud Vercel Adversarial & Stress-Test Suite', () => {
     const specialCharacterPaths = [
       '/shifts/%20new',
       '/expenses/macro-grupo/sa%C3%BAde',
-      '/shifts/hospital-araken-sala-de-parto',
+      '/shifts/hospital-Maternidade Principal-sala-de-parto',
       '/expenses/categoria_qualificacao_pos',
       '/user-12345/dashboard'
     ];
@@ -133,7 +133,7 @@ describe('V4_Cloud Vercel Adversarial & Stress-Test Suite', () => {
       '/assets/icons/icon-192.png',
       '/assets/icons/icon-512.png',
       '/assets/icons/heart.svg',
-      '/assets/images/dra_fernanda.png',
+      '/assets/images/profile-photo.png',
       // Web standards file extensions
       '/fonts/plus-jakarta-sans.woff2',
       '/fonts/bricolage.woff',
@@ -192,9 +192,9 @@ describe('V4_Cloud Vercel Adversarial & Stress-Test Suite', () => {
 
     test('Clean client routes without dot extensions cleanly rewrite', () => {
       const cleanPaths = [
-        '/dra-fernanda',
+        '/profile-example',
         '/v4-cloud',
-        '/maternidade-araken',
+        '/maternidade-Maternidade Principal',
         '/d60-75-percent',
         '/d90-25-percent'
       ];

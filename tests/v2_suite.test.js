@@ -43,10 +43,10 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
     assert.equal(APP_CREATOR, 'FChNeto');
     assert.equal(APP_VERSION, '2.0.0');
     assert.equal(store.data.creator, 'FChNeto');
-    assert.equal(store.data.doctorName, 'Dra. Fernanda Ch.');
+    assert.equal(store.data.doctorName, 'Médica');
   });
 
-  test('Verificação Completa das 22 Categorias Obrigatórias Solicitadas', () => {
+  test('Verificação Completa das 23 Categorias Canônicas Listadas', () => {
     const requiredCategories = [
       'Passagens',
       'Mercantil',
@@ -82,12 +82,12 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
       );
     });
 
-    assert.ok(DEFAULT_CATEGORIES.length >= 22);
+    assert.equal(DEFAULT_CATEGORIES.length, 23);
   });
 
   test('Cálculo Rigoroso de Plantões em Sala de Parto: 75% D+60 e 25% D+90', () => {
     const shift = store.saveShift({
-      hospital: 'Maternidade Araken',
+      hospital: 'Maternidade Principal',
       date: '2026-06-10',
       shiftType: '12h Noturno',
       grossValue: 2500,
@@ -95,7 +95,7 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
     });
 
     assert.ok(shift);
-    assert.equal(shift.hospital, 'Maternidade Araken');
+    assert.equal(shift.hospital, 'Maternidade Principal');
     assert.equal(shift.netValue, 2000);
 
     // Parcela 1: 75% com vencimento em 2 meses (D+60)
@@ -120,7 +120,7 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
 
   test('Toggle de status da parcela de plantão', () => {
     const shift = store.saveShift({
-      hospital: 'MEJEC',
+      hospital: 'Hospital Pediátrico',
       date: '2026-05-01',
       netValue: 1000
     });
@@ -171,7 +171,7 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
     // Parcela 75% (1500) cai em Agosto/2026
     // Parcela 25% (500) cai em Setembro/2026
     store.saveShift({
-      hospital: 'Hospital da Criança',
+      hospital: 'Hospital Pediátrico',
       date: '2026-06-15',
       netValue: 2000
     });
@@ -201,20 +201,20 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
   });
 
   test('Previsão de 6 Meses de Fluxo de Caixa', () => {
-    store.updateResidencySalary({ value: 4106.09, active: true });
+    store.updateResidencySalary({ value: 0.00, active: true });
     const forecast = store.getForecast6Months('2026-06');
 
     assert.equal(forecast.length, 6);
     assert.equal(forecast[0].month, '2026-06');
     assert.equal(forecast[5].month, '2026-11');
     forecast.forEach(item => {
-      assert.ok(item.income >= 4106.09);
+      assert.ok(item.income >= 0.00);
     });
   });
 
   test('Backup JSON Roundtrip (Exportação e Importação)', () => {
     store.saveShift({
-      hospital: 'Hospital Mater Dei',
+      hospital: 'Hospital Geral',
       date: '2026-07-20',
       netValue: 1800
     });
@@ -233,6 +233,6 @@ describe('Finanças Pediatria v2.0 - Core Engine Tests', () => {
     assert.equal(res.success, true);
     assert.equal(restoredStore.data.shifts.length, 1);
     assert.equal(restoredStore.data.expenses.length, 1);
-    assert.equal(restoredStore.data.shifts[0].hospital, 'Hospital Mater Dei');
+    assert.equal(restoredStore.data.shifts[0].hospital, 'Hospital Geral');
   });
 });

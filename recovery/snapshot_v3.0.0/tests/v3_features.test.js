@@ -53,7 +53,7 @@ test('V3 Feature 1: Consultations & Puericultura Module CRUD and Metrics', (t) =
 
   // Add Second Consultation (Unpaid)
   const cons2 = store.addConsultation({
-    patientName: "Alice (Mãe: Fernanda)",
+    patientName: "Alice (Mãe: Profissional)",
     consultationType: "Primeira Consulta",
     date: "2026-09-15",
     durationMinutes: 45,
@@ -74,7 +74,7 @@ test('V3 Feature 1: Consultations & Puericultura Module CRUD and Metrics', (t) =
   store.data.shifts = [
     {
       id: "shift-test-1",
-      hospital: "Hospital Mater Dei",
+      hospital: "Hospital Geral",
       shiftDate: "2026-09-05",
       shiftType: "12h Diurno",
       grossValue: 1800,
@@ -109,7 +109,7 @@ test('V3 Feature 2: CFM Shift Fatigue Bug Fix - Duration and Consultations Safet
   store.data.shifts = [
     {
       id: "s-fatigue-1",
-      hospital: "Mater Dei",
+      hospital: "Hospital Geral",
       shiftDate: "2026-09-01",
       shiftType: "6h Ambulatório/PS",
       grossValue: 900,
@@ -118,7 +118,7 @@ test('V3 Feature 2: CFM Shift Fatigue Bug Fix - Duration and Consultations Safet
     },
     {
       id: "s-fatigue-2",
-      hospital: "Mater Dei",
+      hospital: "Hospital Geral",
       shiftDate: "2026-09-02",
       shiftType: "12h Noturno",
       grossValue: 1800,
@@ -193,7 +193,7 @@ test('V3 Feature 4: DRE (Demonstrativo de Resultado do Exercício) & Fator R Dyn
 
 test('V3 Feature 5: SBAR Clinical Handover with LGPD Anonymization', (t) => {
   const shift = {
-    hospital: "Maternidade Araken",
+    hospital: "Maternidade Principal",
     sector: "UTI Neonatal",
     shiftDate: "2026-09-12",
     shiftType: "12h Noturno",
@@ -201,13 +201,13 @@ test('V3 Feature 5: SBAR Clinical Handover with LGPD Anonymization', (t) => {
   };
 
   const fullSbar = generateSBARHandoff(shift, {
-    situation: "Leito 04: RN de Maria Silva, IG 28s, PN 980g.",
+    situation: "Leito 04: RN de Paciente de Exemplo, IG 28s, PN 980g.",
     background: "Parto de emergência por descolamento prematuro de placenta. Fez 2 doses de surfactante.",
     assessment: "Estável em VAFO, parâmetros em desmame. Gasometria com pH 7.32, pCO2 42.",
     recommendation: "Manter vigilância hemodinâmica, colher hemograma e PCR às 06h.",
     anonymizePatient: false,
-    doctorName: "Dra. Fernanda Pediatra",
-    doctorCrm: "CRM-SP 123456"
+    doctorName: "Médica Pediatra",
+    doctorCrm: ""
   });
 
   assert.ok(fullSbar.includes("SBAR"), "Must include SBAR header");
@@ -215,20 +215,20 @@ test('V3 Feature 5: SBAR Clinical Handover with LGPD Anonymization', (t) => {
   assert.ok(fullSbar.includes("Background") || fullSbar.includes("Histórico"), "Must include Background section");
   assert.ok(fullSbar.includes("Avaliação") || fullSbar.includes("Assessment"), "Must include Assessment section");
   assert.ok(fullSbar.includes("Recomenda") || fullSbar.includes("Recommendation"), "Must include Recommendation section");
-  assert.ok(fullSbar.includes("Maria Silva"), "Non-anonymized output must retain patient info");
+  assert.ok(fullSbar.includes("Paciente de Exemplo"), "Non-anonymized output must retain patient info");
 
   // LGPD Anonymized test
   const lgpdSbar = generateSBARHandoff(shift, {
-    situation: "Leito 04: RN de Maria Silva, IG 28s, PN 980g.",
+    situation: "Leito 04: RN de Paciente de Exemplo, IG 28s, PN 980g.",
     background: "Parto de emergência.",
     assessment: "Estável.",
     recommendation: "Rotina.",
     anonymizePatient: true,
-    doctorName: "Dra. Fernanda Pediatra",
-    doctorCrm: "CRM-SP 123456"
+    doctorName: "Médica Pediatra",
+    doctorCrm: ""
   });
 
-  assert.ok(!lgpdSbar.includes("Maria Silva"), "LGPD mode must sanitize full patient names");
+  assert.ok(!lgpdSbar.includes("Paciente de Exemplo"), "LGPD mode must sanitize full patient names");
   assert.ok(lgpdSbar.includes("LGPD"), "Must note LGPD protection in footer");
 });
 
@@ -246,7 +246,7 @@ DATA:OFXSGML
             <DTPOSTED>20260915120000[-03:EST]
             <TRNAMT>1692.00
             <FITID>TX1001
-            <MEMO>TED 001 MATER DEI REPASSE
+            <MEMO>TED 001 Hospital Geral REPASSE
           </STMTTRN>
           <STMTTRN>
             <TRNTYPE>DEBIT
@@ -270,7 +270,7 @@ DATA:OFXSGML
   assert.strictEqual(txs[1].type, "DEBIT");
 
   const sampleCSV = `Data;Descricao;Valor
-15/09/2026;TED MATER DEI;1692,00
+15/09/2026;TED Hospital Geral;1692,00
 18/09/2026;CRM CONSELHO;-320,00`;
 
   const csvTxs = parseBankCSV(sampleCSV);
@@ -283,7 +283,7 @@ DATA:OFXSGML
   store.data.shifts = [
     {
       id: "shift-rec-1",
-      hospital: "Mater Dei",
+      hospital: "Hospital Geral",
       shiftDate: "2026-07-15",
       shiftType: "12h Diurno",
       grossValue: 1800,
@@ -306,7 +306,7 @@ DATA:OFXSGML
 
   const recResult = store.reconcileBankTransactions(txs, "2026-09");
   assert.ok(recResult.matches.length >= 1, "Must match transactions");
-  assert.ok(recResult.matchedInflows.length >= 1, "Must match Mater Dei shift repayment");
+  assert.ok(recResult.matchedInflows.length >= 1, "Must match Hospital Geral shift repayment");
   assert.strictEqual(recResult.matchedInflows[0].shift.id, "shift-rec-1");
   assert.ok(recResult.matchedOutflows.length >= 1, "Must match CRM expense");
   assert.strictEqual(recResult.matchedOutflows[0].expense.id, "exp-rec-1");
@@ -339,9 +339,9 @@ test('V3 Feature 9: Brazilian Medical NLP Voice Parser', (t) => {
   const store = new PediatricStore();
 
   // Test shift transcript
-  const shiftRes = store.parseMedicalVoiceInput("Plantão 12h no Mater Dei no dia 15 valor dois mil reais");
+  const shiftRes = store.parseMedicalVoiceInput("Plantão 12h no Hospital Geral no dia 15 valor dois mil reais");
   assert.ok(shiftRes, "NLP should parse valid transcript");
-  assert.strictEqual(shiftRes.hospital, "Hospital Mater Dei");
+  assert.strictEqual(shiftRes.hospital, "Hospital Geral");
   assert.strictEqual(shiftRes.grossValue, 2000);
   assert.strictEqual(shiftRes.shiftType, "12h Diurno");
 

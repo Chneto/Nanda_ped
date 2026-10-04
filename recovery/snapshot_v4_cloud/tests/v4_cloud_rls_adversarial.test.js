@@ -266,7 +266,7 @@ class PostgresRlsSimulator {
 }
 
 // Canonical Test Data Identities
-const USER_A_ID = '11111111-1111-4111-8111-111111111111'; // Dra. Fernanda Ch. (Legitimate Doctor)
+const USER_A_ID = '11111111-1111-4111-8111-111111111111'; // Médica (Legitimate Doctor)
 const USER_B_ID = '22222222-2222-4222-8222-222222222222'; // Attacker / Independent Doctor
 const GUEST_ID  = '33333333-3333-4333-8333-333333333333'; // Third Party
 
@@ -277,15 +277,15 @@ describe('V4_Cloud Adversarial RLS & Multi-Tenant Isolation Challenge Suite', ()
   beforeEach(() => {
     db = new PostgresRlsSimulator();
 
-    // Seed baseline data for User A (Dra. Fernanda Ch.)
+    // Seed baseline data for User A (Médica)
     db.tables.profiles.push({
       id: USER_A_ID,
-      doctor_name: 'Dra. Fernanda Ch.',
-      crm: 'CRM/RN 12345',
+      doctor_name: 'Médica',
+      crm: 'CRM/TESTE',
       rqe: 'RQE 6789',
       specialty: 'Pediatria',
-      photo_url: 'https://cdn.example.com/dra_fernanda.png',
-      residency_salary: 4106.09,
+      photo_url: 'https://cdn.example.com/profile-photo.png',
+      residency_salary: 0.00,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     });
@@ -293,7 +293,7 @@ describe('V4_Cloud Adversarial RLS & Multi-Tenant Isolation Challenge Suite', ()
     db.tables.shifts.push({
       id: 'aaaa0001-0000-0000-0000-000000000001',
       user_id: USER_A_ID,
-      hospital: 'Maternidade Araken',
+      hospital: 'Maternidade Principal',
       date: '2026-09-01',
       gross_value: 1200.00,
       net_value: 1000.00,
@@ -342,11 +342,11 @@ describe('V4_Cloud Adversarial RLS & Multi-Tenant Isolation Challenge Suite', ()
     db.tables.profiles.push({
       id: USER_B_ID,
       doctor_name: 'Dr. Rivaldo Silveira',
-      crm: 'CRM/SP 99999',
+      crm: 'CRM/TESTE',
       rqe: 'RQE 8888',
       specialty: 'Cirurgia Pediátrica',
       photo_url: null,
-      residency_salary: 4106.09,
+      residency_salary: 0.00,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     });
@@ -474,7 +474,7 @@ describe('V4_Cloud Adversarial RLS & Multi-Tenant Isolation Challenge Suite', ()
 
       const ownProfile = db.querySelect('profiles', r => r.id === USER_A_ID);
       assert.equal(ownProfile.length, 1);
-      assert.equal(ownProfile[0].doctor_name, 'Dra. Fernanda Ch.');
+      assert.equal(ownProfile[0].doctor_name, 'Médica');
     });
 
     test('User A cannot view User B\'s pediatric shifts', () => {
@@ -482,7 +482,7 @@ describe('V4_Cloud Adversarial RLS & Multi-Tenant Isolation Challenge Suite', ()
       const rows = db.querySelect('shifts');
       assert.equal(rows.length, 1, 'User A should only see 1 shift (their own)');
       assert.equal(rows[0].user_id, USER_A_ID);
-      assert.equal(rows[0].hospital, 'Maternidade Araken');
+      assert.equal(rows[0].hospital, 'Maternidade Principal');
 
       // Direct lookup by User B's shift id
       const targetB = db.querySelect('shifts', r => r.id === 'bbbb0001-0000-0000-0000-000000000001');
@@ -575,7 +575,7 @@ describe('V4_Cloud Adversarial RLS & Multi-Tenant Isolation Challenge Suite', ()
         () => db.queryInsert('profiles', {
           id: USER_B_ID,
           doctor_name: 'Imposter Doctor',
-          residency_salary: 4106.09,
+          residency_salary: 0.00,
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         }),

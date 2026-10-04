@@ -2,7 +2,7 @@
 
 > **Autor Canônico e Imutável:** **FChNeto** (`APP_CREATOR = 'FChNeto'`)  
 > **Aplicação:** Finanças Pediatria  
-> **Público-Alvo:** Médica Pediatra (Dra. Fernanda Ch.)  
+> **Público-Alvo:** Médica Pediatra (Médica)  
 > **Status de Confiabilidade:** **606 Testes Automatizados Aprovados (0 Falhas)**
 
 ---
@@ -32,7 +32,7 @@ A pasta **`Nandaped_VF1`** contém exclusivamente os arquivos necessários para 
    - Cálculo de plantões em sala de parto: **75% em D+60 (2 meses)** e **25% em D+90 (3 meses)**.
    - Categorização em **6 Macro-Grupos** (Alimentação, Transporte, Moradia, Formação, Saúde, Pessoal).
    - Presença de todas as **22 categorias canônicas de despesas**.
-   - Pré-seleção de maternidades (Araken, Leide Morais, MEJEC).
+   - Pré-seleção de maternidades (Maternidade Principal, Maternidade Secundária, Hospital Pediátrico).
    - Compras parceladas (2x a 24x) com projeção mensal.
    - Regimes de Caixa x Competência.
 

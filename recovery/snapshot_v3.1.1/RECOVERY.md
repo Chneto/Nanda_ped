@@ -25,7 +25,7 @@ O projeto dispõe de métodos independentes para restaurar snapshots estáveis a
 
 ### Método 1: Restauração em 1 Clique no Windows (Mais Rápido)
 1. Navegue até a pasta de scripts do projeto:
-   `c:\Users\chibe\OneDrive\Área de Trabalho\Antigravity\Nanda\scripts\`
+   `.scripts\`
 2. Dê um duplo clique no arquivo:
    **`restore_v3.1.1.bat`**
 3. Digite `S` e pressione Enter. O script restaurará os arquivos a partir do snapshot v3.1.1, recompilará o bundle e executará os 85 testes de validação!

@@ -3,12 +3,12 @@
  * Design System "Silk & Rose Gold"
  * Persistência Tripla para iOS Safari (IndexedDB + LocalStorage + Storage Persistence API)
  * Regras Canônicas Pediátricas: Residência Médica + Plantões Sala de Parto (75% D+60 / 25% D+90)
- * 6 Macro-Grupos Inteligentes de Despesas (com as 22 categorias canônicas)
+ * 6 Macro-Grupos Inteligentes de Despesas (com as 23 categorias canônicas listadas)
  * Autor Imutável: FChNeto (APP_CREATOR = 'FChNeto')
  */
 
 export const APP_CREATOR = 'FChNeto';
-export const APP_VERSION = '5.0.0';
+export const APP_VERSION = '5.0.1';
 export const STORAGE_KEY = 'financas_pediatria_v5';
 export const DB_NAME = 'v5_pediatric_db';
 export const DB_STORE = 'app_state';
@@ -93,12 +93,11 @@ export const MACRO_GROUPS = [
 ];
 
 export const DEFAULT_HOSPITALS = [
-  'Maternidade Araken',
-  'Maternidade Leide Morais',
-  'MEJEC',
-  'Hospital da Criança',
-  'Hospital Mater Dei',
-  'Hospital Promater'
+  'Maternidade Principal',
+  'Maternidade Secundária',
+  'Hospital Pediátrico',
+  'Hospital Geral',
+  'Unidade de Saúde'
 ];
 
 /**
@@ -178,14 +177,14 @@ export class PediatricStore {
     return {
       creator: APP_CREATOR,
       version: APP_VERSION,
-      doctorName: 'Dra. Fernanda Ch.',
-      doctorCRM: 'CRM/RN',
-      doctorSpecialty: 'Pediatria & Sala de Parto',
+      doctorName: 'Médica',
+      doctorCRM: '',
+      doctorSpecialty: 'Pediatria',
       doctorPhoto: null,
       residencySalary: {
-        value: 4106.00,
+        value: 0,
         dayOfMonth: 5,
-        active: true
+        active: false
       },
       shifts: [],
       expenses: [],
@@ -348,7 +347,7 @@ export class PediatricStore {
   saveShift(shift) {
     const shiftDate = shift.date || getLocalDateString();
     const netValue = parseFloat(shift.value) || 0;
-    const hospital = (shift.hospital || 'Maternidade Araken').trim();
+    const hospital = (shift.hospital || 'Maternidade Principal').trim();
     const shiftType = shift.shiftType || 'Sala de Parto';
 
     const val75 = Math.round(netValue * 0.75 * 100) / 100;

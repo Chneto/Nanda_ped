@@ -17,24 +17,24 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- ==============================================================================
 CREATE TABLE IF NOT EXISTS public.profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    doctor_name TEXT NOT NULL DEFAULT 'Dra. Fernanda Ch.',
+    doctor_name TEXT NOT NULL DEFAULT 'Médica',
     crm TEXT,
     rqe TEXT,
     specialty TEXT DEFAULT 'Pediatria',
     photo_url TEXT,
-    residency_salary NUMERIC(10,2) NOT NULL DEFAULT 4106.09 CHECK (residency_salary >= 0),
+    residency_salary NUMERIC(10,2) NOT NULL DEFAULT 0.00 CHECK (residency_salary >= 0),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 COMMENT ON TABLE public.profiles IS 'Physician profile storing professional credentials, residency stipend, and personal preferences.';
 COMMENT ON COLUMN public.profiles.id IS 'Primary key directly referencing auth.users(id).';
-COMMENT ON COLUMN public.profiles.doctor_name IS 'Full doctor display name (default: Dra. Fernanda Ch.).';
-COMMENT ON COLUMN public.profiles.crm IS 'Regional Medical Council registration number (e.g. CRM/RN 12345).';
+COMMENT ON COLUMN public.profiles.doctor_name IS 'Full doctor display name (default: Médica).';
+COMMENT ON COLUMN public.profiles.crm IS 'Regional Medical Council registration number (e.g. CRM/TESTE).';
 COMMENT ON COLUMN public.profiles.rqe IS 'Specialist Qualification Registry (Registro de Qualificação de Especialista).';
 COMMENT ON COLUMN public.profiles.specialty IS 'Medical specialty area (default: Pediatria).';
 COMMENT ON COLUMN public.profiles.photo_url IS 'Public or signed URL to physician avatar photo.';
-COMMENT ON COLUMN public.profiles.residency_salary IS 'Net monthly pediatric residency fellowship stipend (default: R$ 4,106.09).';
+COMMENT ON COLUMN public.profiles.residency_salary IS 'Net monthly pediatric residency fellowship stipend (default: 0.00).';
 COMMENT ON COLUMN public.profiles.created_at IS 'Record creation timestamp with timezone.';
 COMMENT ON COLUMN public.profiles.updated_at IS 'Record last update timestamp with timezone.';
 
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS public.shifts (
 COMMENT ON TABLE public.shifts IS 'Pediatric hospital shifts with D+60 (75%) and D+90 (25%) payment distribution.';
 COMMENT ON COLUMN public.shifts.id IS 'Unique identifier for the shift record.';
 COMMENT ON COLUMN public.shifts.user_id IS 'Owner physician referencing auth.users(id).';
-COMMENT ON COLUMN public.shifts.hospital IS 'Hospital or maternity name (e.g. Maternidade Araken, Leide Morais, MEJEC).';
+COMMENT ON COLUMN public.shifts.hospital IS 'Hospital or maternity name (e.g. Maternidade Principal, Maternidade Secundária, Hospital Pediátrico).';
 COMMENT ON COLUMN public.shifts.date IS 'Date the shift was worked (ISO 8601 YYYY-MM-DD).';
 COMMENT ON COLUMN public.shifts.gross_value IS 'Gross contracted value of the shift before deductions.';
 COMMENT ON COLUMN public.shifts.net_value IS 'Net liquid amount to be received for the shift.';

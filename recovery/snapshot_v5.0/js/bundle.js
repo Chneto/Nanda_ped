@@ -207,12 +207,12 @@ const MACRO_GROUPS = [
 ];
 
 const DEFAULT_HOSPITALS = [
-  'Maternidade Araken',
-  'Maternidade Leide Morais',
-  'MEJEC',
-  'Hospital da Criança',
-  'Hospital Mater Dei',
-  'Hospital Promater'
+  'Maternidade Principal',
+  'Maternidade Secundária',
+  'Hospital Pediátrico',
+  'Hospital Pediátrico',
+  'Hospital Geral',
+  'Unidade de Saúde'
 ];
 
 /**
@@ -288,12 +288,12 @@ class PediatricStore {
     return {
       creator: APP_CREATOR,
       version: APP_VERSION,
-      doctorName: 'Dra. Fernanda Ch.',
-      doctorCRM: 'CRM/RN',
+      doctorName: 'Médica',
+      doctorCRM: '',
       doctorSpecialty: 'Pediatria & Sala de Parto',
       doctorPhoto: null,
       residencySalary: {
-        value: 4106.00,
+        value: 0.00,
         dayOfMonth: 5,
         active: true
       },
@@ -458,7 +458,7 @@ class PediatricStore {
   saveShift(shift) {
     const shiftDate = shift.date || getLocalDateString();
     const netValue = parseFloat(shift.value) || 0;
-    const hospital = (shift.hospital || 'Maternidade Araken').trim();
+    const hospital = (shift.hospital || 'Maternidade Principal').trim();
     const shiftType = shift.shiftType || 'Sala de Parto';
 
     const val75 = Math.round(netValue * 0.75 * 100) / 100;
@@ -1355,7 +1355,7 @@ class PediatricApp {
         return;
       }
 
-      // 4. Chips de Pré-Seleção de Maternidades (Araken & Leide Morais)
+      // 4. Chips de Pré-Seleção de Maternidades (Maternidade Principal & Maternidade Secundária)
       const hospChip = e.target.closest('[data-quick-hospital]');
       if (hospChip) {
         const hospName = hospChip.getAttribute('data-quick-hospital');
@@ -1744,7 +1744,7 @@ class PediatricApp {
     if (navigator.share) {
       const file = new File([jsonStr], `backup_financas_pediatria_${getLocalDateString()}.json`, { type: 'application/json' });
       navigator.share({
-        title: 'Backup Finanças Pediatria Dra. Fernanda Ch.',
+        title: 'Backup Finanças Pediatria Médica',
         files: [file]
       }).catch(() => {
         this.store.triggerDirectBackupDownload();
@@ -1842,7 +1842,7 @@ class PediatricApp {
         <form id="form-doctor-profile">
           <div class="form-group">
             <label>Nome Completo da Médica</label>
-            <input type="text" name="name" class="form-input" value="${doc.doctorName || 'Dra. Fernanda Ch.'}" required />
+            <input type="text" name="name" class="form-input" value="${doc.doctorName || 'Médica'}" required />
           </div>
 
           <div class="form-row">
@@ -2106,7 +2106,7 @@ class PediatricApp {
             ${doc.doctorPhoto ? `<img src="${doc.doctorPhoto}" class="avatar-img" />` : getIconSvg('stethoscope', { size: 24, color: '#EC407A' })}
           </div>
           <div class="greeting-text">
-            <h1>${doc.doctorName || 'Dra. Fernanda Ch.'}</h1>
+            <h1>${doc.doctorName || 'Médica'}</h1>
             <p>${doc.doctorSpecialty || 'Pediatria & Sala de Parto'} • ${doc.doctorCRM || 'CRM/RN'}</p>
           </div>
         </div>
@@ -2149,18 +2149,18 @@ class PediatricApp {
     // 4. Chips de Maternidade (Acesso Rápido)
     const quickHospitalsHtml = `
       <div class="quick-hospitals-bar">
-        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Araken">
+        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Principal">
           ${getIconSvg('hospital', { size: 15, color: '#EC407A' })}
-          + Araken
+          + Maternidade Principal
         </button>
-        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Leide Morais">
+        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Secundária">
           ${getIconSvg('hospital', { size: 15, color: '#EC407A' })}
-          + Leide Morais
+          + Maternidade Secundária
         </button>
-        <button class="quick-hospital-chip" data-quick-hospital="MEJEC">
-          + MEJEC
+        <button class="quick-hospital-chip" data-quick-hospital="Hospital Pediátrico">
+          + Hospital Pediátrico
         </button>
-        <button class="quick-hospital-chip" data-quick-hospital="Hospital da Criança">
+        <button class="quick-hospital-chip" data-quick-hospital="Hospital Pediátrico">
           + Hosp. da Criança
         </button>
       </div>
@@ -2626,7 +2626,7 @@ class PediatricApp {
 
     if (this.activeModalTab === 'shift') {
       const today = getLocalDateString();
-      const defaultHospital = this.prefilledHospital || 'Maternidade Araken';
+      const defaultHospital = this.prefilledHospital || 'Maternidade Principal';
 
       const shiftTypeOptions = [
         { value: 'Sala de Parto', label: 'Sala de Parto (Padrão Pediátrico)', icon: 'baby', color: '#EC407A' },
@@ -2648,7 +2648,7 @@ class PediatricApp {
         <form id="form-new-shift">
           <div class="form-group">
             <label>Maternidade / Hospital</label>
-            <input type="text" id="shift-hospital-input" name="hospital" class="form-input" value="${defaultHospital}" placeholder="Ex: Maternidade Araken" required />
+            <input type="text" id="shift-hospital-input" name="hospital" class="form-input" value="${defaultHospital}" placeholder="Ex: Maternidade Principal" required />
             <div style="display: flex; gap: 6px; margin-top: 6px; overflow-x: auto; padding-bottom: 2px;">
               ${DEFAULT_HOSPITALS.map(h => `
                 <button type="button" class="quick-hospital-chip modal-hosp-pill ${h === defaultHospital ? 'selected' : ''}" data-modal-hosp="${h}" style="font-size: 0.74rem; padding: 4px 10px;">

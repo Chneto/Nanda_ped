@@ -1,0 +1,1227 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Mobile Viewport & Ergonomia iPhone 16 Plus (Safe-Areas & Anti-Zoom Shield) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  
+  <!-- Título Canônico & Autoria Imutável -->
+  <title>Médica — Finanças Pediatria</title>
+  <meta name="author" content="FChNeto" />
+  <meta name="creator" content="FChNeto" />
+  <meta name="app-creator" content="FChNeto" />
+  <meta name="description" content="Gestão financeira com acesso seguro e categorias personalizáveis." />
+
+  <!-- Suporte Nativo a Temas Claro / Escuro -->
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#FAF6F5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#150D1C" media="(prefers-color-scheme: dark)" />
+
+  <!-- Apple iOS WebApp Meta Tags & Blindagem PWA Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Finanças Pediatria" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <!-- PWA Manifest & Ícones Canônicos -->
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" href="./assets/icons/favicon.png" />
+  <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png" />
+
+  <!-- Tipografia Editorial Silk & Rose Gold -->
+
+  <!-- Estilos Canônicos Silk & Rose Gold v6 -->
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <!-- Container Canônico Otimizado para iPhone 16 Plus (430px - 480px) -->
+  <div id="app-container">
+
+    <!-- ==================================================================== -->
+    <!-- 1. TELA DE INGRESSO ACOLHEDORA: SILK GATE                           -->
+    <!-- ==================================================================== -->
+    <section id="silk-gate-screen" class="silk-gate-wrapper" aria-label="Ingresso Silk Gate">
+      <div class="silk-gate-card">
+        
+        <!-- Botão de Configuração de Credenciais Flutuante (Canto Superior Direito) -->
+        <button id="btn-gate-gear" class="silk-gate-gear-btn" type="button" aria-label="Configurações de Conexão Supabase" title="Configurar Supabase">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+
+        <!-- Emblema Médico com Rose Gold Glow -->
+        <div class="silk-gate-emblem">
+          <div class="silk-gate-icon-halo">
+            <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="silk-stethoscope-icon">
+              <path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"/>
+              <path d="M9 12.5v3.5a4 4 0 0 0 8 0v-2"/>
+              <circle cx="17" cy="12" r="2"/>
+              <circle cx="4.5" cy="3" r="1.5"/>
+              <circle cx="13.5" cy="3" r="1.5"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Títulos e Saudação da Médica -->
+        <header class="silk-gate-header">
+          <span class="silk-pill-badge">Nuvem Segura • Supabase PostgreSQL</span>
+          <h1 class="silk-gate-title">Médica</h1>
+          <p class="silk-gate-subtitle">Finanças Pediatria • Silk & Rose Gold</p>
+          <p class="silk-gate-caption">Seu santuário financeiro pediátrico</p>
+        </header>
+
+        <!-- Ações de Ingresso -->
+        <div class="silk-gate-actions">
+          
+          <!-- Botão de Acesso Direto Imediato (Zero Burocracia) -->
+          <button id="btn-enter-direct" class="btn-silk-primary" type="button" style="margin-bottom: 14px; font-size: 16px; font-weight: 700; height: 52px; background: linear-gradient(135deg, #EC407A 0%, #F48FB1 100%); color: #fff; box-shadow: 0 8px 24px rgba(236, 64, 122, 0.25);">
+            <span>🌸 Acessar Santuário Financeiro</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+
+          <!-- Divisor Primário -->
+          <div class="silk-gate-divider" style="margin: 10px 0 16px 0;">
+            <span class="divider-line"></span>
+            <span class="divider-text">ou acesse com sua conta</span>
+            <span class="divider-line"></span>
+          </div>
+
+          <!-- Abas de Alternância: Entrar vs. Cadastrar -->
+          <div class="silk-auth-tabs">
+            <button id="tab-btn-signin" type="button" class="silk-auth-tab active">
+              Entrar
+            </button>
+            <button id="tab-btn-signup" type="button" class="silk-auth-tab">
+              Cadastrar Nova Conta
+            </button>
+          </div>
+
+          <!-- Formulário Direto E-mail e Senha -->
+          <form id="form-password-auth" class="silk-password-form" novalidate>
+            <!-- Campo Nome da Médica (Visível no modo Cadastro) -->
+            <div id="group-auth-name" class="input-field-group hidden">
+              <label for="input-auth-name" class="silk-input-label">Nome Completo da Médica</label>
+              <div class="input-with-icon">
+                <svg class="input-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                <input 
+                  type="text" 
+                  id="input-auth-name" 
+                  name="name" 
+                  class="silk-input" 
+                  placeholder="Médica" 
+                  autocomplete="name"
+                  value="Médica"
+                />
+              </div>
+            </div>
+
+            <!-- Campo E-mail -->
+            <div class="input-field-group">
+              <label for="input-auth-email" class="silk-input-label">E-mail</label>
+              <div class="input-with-icon">
+                <svg class="input-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <input 
+                  type="email" 
+                  id="input-auth-email" 
+                  name="email" 
+                  class="silk-input" 
+                  placeholder="medica@example.com" 
+                  autocomplete="email" 
+                  required 
+                />
+              </div>
+            </div>
+
+            <!-- Campo Senha -->
+            <div class="input-field-group">
+              <label for="input-auth-password" class="silk-input-label">Senha</label>
+              <div class="input-with-icon" style="position: relative;">
+                <svg class="input-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <input 
+                  type="password" 
+                  id="input-auth-password" 
+                  name="password" 
+                  class="silk-input" 
+                  placeholder="Mínimo 6 caracteres" 
+                  autocomplete="current-password" 
+                  required 
+                  style="padding-right: 44px;"
+                />
+                <button id="btn-toggle-password-visibility" type="button" aria-label="Mostrar ou ocultar senha" style="position: absolute; right: 12px; background: none; border: none; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; padding: 4px;">
+                  <svg id="icon-eye-password" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Botão de Ação do Formulário -->
+            <button id="btn-password-submit" class="btn-silk-primary" type="submit" style="margin-top: 4px;">
+              <span id="label-password-submit">Entrar no Santuário</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+
+            <!-- Feedback de Autenticação -->
+            <div id="password-auth-feedback" class="silk-feedback-message hidden" role="alert"></div>
+          </form>
+
+          <!-- Divisor Opções Secundárias -->
+          <div class="silk-gate-divider" style="margin: 14px 0 12px 0;">
+            <span class="divider-line"></span>
+            <span class="divider-text">ou conecte com Google</span>
+            <span class="divider-line"></span>
+          </div>
+
+          <!-- Botão Oficial Google OAuth (1 Toque) -->
+          <button id="btn-google-auth" class="btn-silk-google" type="button" aria-label="Entrar com Google">
+            <svg class="google-logo-svg" width="20" height="20" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span id="label-google-auth">Entrar com Google</span>
+          </button>
+
+          <!-- Divisor Magic Link -->
+          <div class="silk-gate-divider" style="margin: 14px 0 12px 0;">
+            <span class="divider-line"></span>
+            <span class="divider-text">ou acesse sem senha com Magic Link</span>
+            <span class="divider-line"></span>
+          </div>
+
+          <!-- Formulário Magic Link Sem Senha -->
+          <form id="form-magic-link" class="silk-magic-form" novalidate>
+            <div class="input-field-group">
+              <label for="input-magic-email" class="silk-input-label">E-mail para Acesso Sem Senha</label>
+              <div class="input-with-icon">
+                <svg class="input-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <input 
+                  type="email" 
+                  id="input-magic-email" 
+                  name="email" 
+                  class="silk-input" 
+                  placeholder="medica@example.com" 
+                  autocomplete="email" 
+                  required 
+                />
+              </div>
+            </div>
+
+            <button id="btn-magic-link" class="btn-silk-secondary" type="submit" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <span id="label-magic-link">Enviar Link Mágico</span>
+              <svg id="icon-magic-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </button>
+
+            <!-- Feedback de Envio -->
+            <div id="magic-link-feedback" class="silk-feedback-message hidden" role="alert"></div>
+          </form>
+
+          <!-- Divisor Modo Hospitalar -->
+          <div class="silk-gate-divider">
+            <span class="divider-line"></span>
+            <span class="divider-text">sem sinal no hospital?</span>
+            <span class="divider-line"></span>
+          </div>
+
+          <!-- Modo Local / Convidada para UTI Neonatal e Sala de Parto -->
+          <button id="btn-guest-mode" class="btn-silk-guest" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <polyline points="9 12 11 14 15 10"/>
+            </svg>
+            <span>Continuar sem login / Modo Hospital</span>
+          </button>
+
+          <!-- Link Discreto para Configurações da Nuvem -->
+          <button id="btn-open-cloud-config" class="btn-silk-text" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+            <span>Configurar Conexão da Nuvem (Supabase)</span>
+          </button>
+        </div>
+
+        <!-- Rodapé Canônico da Médica -->
+        <footer class="silk-gate-footer">
+          <p>Criado com dedicação por <strong>FChNeto</strong></p>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ==================================================================== -->
+    <!-- 2. APLICAÇÃO PRINCIPAL: DASHBOARD SILK & ROSE GOLD (STANDALONE SPA) -->
+    <!-- ==================================================================== -->
+    <main id="main-app-screen" class="main-app-wrapper hidden" aria-label="Painel Principal Finanças Pediatria">
+
+      <!-- Cabeçalho com Saudação, Status do Sync e Ações -->
+      <header class="app-header">
+        <div class="doctor-greeting" id="btn-header-profile" title="Abrir Perfil da Médica">
+          <div class="avatar-badge">
+            <img id="doctor-avatar-img" class="avatar-img hidden" alt="Foto da Médica" />
+            <div id="doctor-avatar-fallback" class="avatar-fallback">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"/>
+                <path d="M9 12.5v3.5a4 4 0 0 0 8 0v-2"/>
+                <circle cx="17" cy="12" r="2"/>
+                <circle cx="4.5" cy="3" r="1.5"/>
+                <circle cx="13.5" cy="3" r="1.5"/>
+              </svg>
+            </div>
+          </div>
+          <div class="greeting-text">
+            <h1 id="header-doctor-name">Médica</h1>
+            <p id="header-doctor-role">Pediatra (R3)</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- Badge Dinâmica de Sincronização Local-First -->
+          <div id="sync-badge" class="sync-badge guest" title="Status de Sincronização">
+            <span class="sync-dot"></span>
+            <span class="sync-text" id="sync-text-status">Modo Local</span>
+          </div>
+
+          <!-- Botão de Configurações da Nuvem -->
+          <button id="btn-header-config" class="icon-btn" type="button" aria-label="Configurações Supabase">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+            </svg>
+          </button>
+
+          <!-- Botão Hambúrguer Drawer -->
+          <button id="btn-header-menu" class="icon-btn" type="button" aria-label="Menu Principal">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="3" y1="7" x2="21" y2="7"/>
+              <line x1="3" y1="12" x2="16" y2="12"/>
+              <line x1="3" y1="17" x2="21" y2="17"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Barra Seletora de Mês & Regime Contábil -->
+      <section class="month-selector-bar">
+        <button id="btn-prev-month" class="month-nav-btn" aria-label="Mês Anterior">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+
+        <div class="current-month-display">
+          <h2 id="current-month-title">Maio de 2026</h2>
+          <span id="current-regime-pill" class="regime-pill">Regime de Caixa</span>
+        </div>
+
+        <button id="btn-next-month" class="month-nav-btn" aria-label="Próximo Mês">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </section>
+
+      <!-- Seletor de Regime Caixa vs Competência -->
+      <div class="regime-toggle-pill">
+        <button class="regime-btn active" data-regime="caixa" type="button">
+          Regime de Caixa (Depósitos D+60/D+90)
+        </button>
+        <button class="regime-btn" data-regime="competencia" type="button">
+          Regime de Competência (Produção)
+        </button>
+      </div>
+
+      <!-- Barra de Chips de Pré-Seleção Rápida de Maternidades -->
+      <section class="maternity-chips-scroll" aria-label="Maternidades Frequentes">
+        <button class="hospital-chip highlight" data-quick-hospital="Maternidade Principal" type="button">+ Maternidade Principal</button>
+        <button class="hospital-chip highlight" data-quick-hospital="Maternidade Secundária" type="button">+ Maternidade Secundária</button>
+        <button class="hospital-chip" data-quick-hospital="Hospital Pediátrico" type="button">+ Hospital Pediátrico</button>
+        <button class="hospital-chip" data-quick-hospital="Hospital Pediátrico" type="button">+ Hosp. da Criança</button>
+        <button class="hospital-chip" data-quick-hospital="Hospital Geral" type="button">+ Hospital Geral</button>
+        <button class="hospital-chip" data-quick-hospital="Unidade de Saúde" type="button">+ Unidade de Saúde</button>
+      </section>
+
+      <!-- Botões de Ação Rápida Direta -->
+      <div class="quick-actions-row">
+        <button class="quick-action-btn coral" id="btn-quick-add-expense" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span>+ Nova Despesa</span>
+        </button>
+        <button class="quick-action-btn pink" id="btn-quick-add-shift" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"/><path d="M9 12.5v3.5a4 4 0 0 0 8 0v-2"/><circle cx="17" cy="12" r="2"/><circle cx="4.5" cy="3" r="1.5"/><circle cx="13.5" cy="3" r="1.5"/></svg>
+          <span>+ Novo Plantão</span>
+        </button>
+      </div>
+
+      <!-- ================================================================ -->
+      <!-- ÁREA DE CONTEÚDO DAS 3 ABAS PRIMÁRIAS                           -->
+      <!-- ================================================================ -->
+      <div id="view-container" class="view-content-wrapper">
+        
+        <!-- Aba 1: Início (Dashboard / Balanço / Resumo Pediátrico) -->
+        <section id="view-home" class="app-view active" aria-label="Aba Início">
+          <!-- Hero Card de Saldo -->
+          <div class="hero-balance-card">
+            <div class="balance-title">
+              <span id="hero-balance-title">Saldo Projetado de Caixa</span>
+              <span id="hero-month-label">Maio de 2026</span>
+            </div>
+            <div class="balance-value" id="hero-balance-value">R$ 0,00</div>
+            <div class="balance-stats-row">
+              <div class="stat-item">
+                <div class="stat-icon mint">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 6v2m0 8v2"/></svg>
+                </div>
+                <div class="stat-info">
+                  <span>Total Entradas</span>
+                  <strong id="stat-total-income">R$ 0,00</strong>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-icon coral">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8l4 4-4 4"/></svg>
+                </div>
+                <div class="stat-info">
+                  <span>Total Despesas</span>
+                  <strong id="stat-total-expenses">R$ 0,00</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Representação Visual 1: Balanço Líquido e Taxa de Poupança -->
+          <div id="home-net-balance-container"></div>
+
+          <!-- Representação Visual 2: Previsão de 6 Meses de Fluxo -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EC407A" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                Previsão dos Próximos 6 Meses
+              </h2>
+            </div>
+            <div id="home-forecast-container"></div>
+          </div>
+
+          <!-- Representação Visual 3: Distribuição de Gastos com Donut -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
+                Distribuição de Gastos
+              </h2>
+              <span id="donut-item-count" class="item-count-badge">0 lançamentos</span>
+            </div>
+            <div id="home-donut-container"></div>
+          </div>
+
+          <!-- Representação Visual 4: Comparativo Caixa Real vs Produção Represada -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#26A69A" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><circle cx="18" cy="7" r="2"/><circle cx="12" cy="2" r="2"/><circle cx="6" cy="11" r="2"/></svg>
+                Caixa Real vs Produção em Aberto
+              </h2>
+            </div>
+            <div id="home-comparison-container"></div>
+          </div>
+
+          <!-- Representação Visual 5: Mini-Calendário Visual do Mês -->
+          <div class="card-section">
+            <div id="home-calendar-container"></div>
+          </div>
+        </section>
+
+        <!-- Aba 2: Ganhos & Plantões (75% D+60 e 25% D+90) -->
+        <section id="view-income" class="app-view hidden" aria-label="Aba Ganhos">
+          <!-- Card da Bolsa Residência Fixa -->
+          <div class="card-section" id="salary-card">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#26A69A" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0"/><path d="M2 9.5h20"/><circle cx="16" cy="14" r="1.5"/></svg>
+                Bolsa Residência Fixa
+              </h2>
+              <span id="salary-status-badge" class="badge-status-pill mint">Ativa</span>
+            </div>
+            <div class="salary-value-row">
+              <span class="salary-amount" id="salary-display-value">R$ 0,00</span>
+              <span class="salary-period">/ mês líquido</span>
+            </div>
+            <p class="salary-hint">Creditada mensalmente todo dia 5 sem retenções de impostos</p>
+          </div>
+
+          <!-- Lista de Plantões do Mês com Divisão D+60 / D+90 -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EC407A" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 10h6"/><path d="M12 7v6"/></svg>
+                Plantões em Sala de Parto & UTI
+              </h2>
+              <button class="section-action-btn" id="btn-add-shift-quick" type="button">+ Novo Plantão</button>
+            </div>
+            <div id="shifts-list-container" class="shifts-list">
+              <!-- Renderizado dinamicamente via store/ui -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Aba 3: Despesas & 6 Macro-Grupos de Gastos -->
+        <section id="view-expenses" class="app-view hidden" aria-label="Aba Despesas">
+          <!-- Resumo de Despesas do Mês -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                Total de Despesas
+              </h2>
+              <button class="section-action-btn" id="btn-add-expense-quick" type="button">+ Nova Despesa</button>
+            </div>
+            <div class="expenses-total-amount" id="expenses-total-value">R$ 0,00</div>
+            <span class="expenses-sub-hint" id="expenses-filter-subtitle">Todas as despesas do mês e compras parceladas vigentes</span>
+          </div>
+
+          <!-- Barra de Filtros por Macro-Grupo (Estilo Apps Bancários) -->
+          <div class="card-section" style="padding-bottom: 8px;">
+            <div class="section-header" style="margin-bottom: 8px;">
+              <h3 style="font-size: 0.86rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EC407A" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                Filtrar por Macro-Grupo
+              </h3>
+              <button id="btn-clear-macro-filter" class="section-action-btn hidden" data-macro-filter="all" style="font-size: 0.72rem; padding: 4px 8px;" type="button">
+                Limpar Filtro
+              </button>
+            </div>
+            <div class="macro-filter-bar" id="macro-filter-bar">
+              <!-- Renderizado dinamicamente com 6 Macro-Grupos + 'Todas' -->
+            </div>
+          </div>
+
+          <!-- Lista Detalhada de Despesas com Sparklines e Tags -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2 id="expenses-list-title">Extrato de Gastos</h2>
+              <span id="expenses-count-badge" class="item-count-badge">0 itens</span>
+            </div>
+            <div id="expenses-list-container" class="expenses-list">
+              <!-- Renderizado dinamicamente via store/ui -->
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Barra Flutuante de Navegação Inferior (iPhone 16 Plus Ergonomics) -->
+      <nav class="bottom-nav-bar" aria-label="Navegação Inferior">
+        <button class="nav-tab active" data-tab="home" id="tab-nav-home" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Início</span>
+        </button>
+
+        <button class="nav-tab" data-tab="income" id="tab-nav-income" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"/><path d="M9 12.5v3.5a4 4 0 0 0 8 0v-2"/><circle cx="17" cy="12" r="2"/><circle cx="4.5" cy="3" r="1.5"/><circle cx="13.5" cy="3" r="1.5"/>
+          </svg>
+          <span>Ganhos</span>
+        </button>
+
+        <!-- Botão Central Flutuante FAB (+) -->
+        <button id="fab-add-btn" class="nav-fab-btn" type="button" aria-label="Adicionar Novo Lançamento" title="Novo Lançamento">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+
+        <button class="nav-tab" data-tab="expenses" id="tab-nav-expenses" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span>Despesas</span>
+        </button>
+      </nav>
+
+    </main>
+
+    <!-- ==================================================================== -->
+    <!-- 3. MODAIS COM ARQUITETURA IN-FLOW EXPANSION ANTI-CROP               -->
+    <!-- ==================================================================== -->
+
+    <!-- Modal 1: Configurações da Nuvem Supabase -->
+    <div id="modal-cloud-config" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="cloud-config-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Conexão em Nuvem</span>
+            <h3 id="cloud-config-title">Credenciais do Supabase</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-cloud-config" aria-label="Fechar Modal" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </header>
+
+        <form id="form-cloud-config" class="modal-form" novalidate>
+          <p class="modal-help-text">
+            Insira as credenciais do seu projeto Supabase para habilitar sincronização em nuvem e login seguro. 
+            Se preferir não conectar agora, você pode usar livremente o <strong>Modo Hospital</strong>.
+          </p>
+          
+          <!-- Campo 1: SUPABASE_URL -->
+          <div class="input-field-group">
+            <label for="input-supabase-url" class="silk-input-label">Project URL (SUPABASE_URL)</label>
+            <div class="input-with-icon">
+              <svg class="input-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              </svg>
+              <input 
+                type="url" 
+                id="input-supabase-url" 
+                name="supabaseUrl"
+                class="silk-input" 
+                placeholder="https://xyzproject.supabase.co" 
+                autocomplete="url"
+                spellcheck="false"
+                required 
+              />
+            </div>
+          </div>
+
+          <!-- Campo 2: SUPABASE_ANON_KEY Mascarada com Botão Reveal -->
+          <div class="input-field-group">
+            <div class="label-with-badge">
+              <label for="input-supabase-anon" class="silk-input-label">Public Anon Key (SUPABASE_ANON_KEY)</label>
+              <span class="security-tag safe">Pública / Safe</span>
+            </div>
+            
+            <div class="silk-input-masked-wrap">
+              <input 
+                type="password" 
+                id="input-supabase-anon" 
+                name="supabaseAnonKey"
+                class="silk-input masked-field" 
+                placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." 
+                autocomplete="off"
+                spellcheck="false"
+                required 
+              />
+              <button 
+                type="button" 
+                id="btn-toggle-anon-visibility" 
+                class="btn-reveal-toggle" 
+                aria-label="Alternar visibilidade da chave"
+                title="Mostrar / ocultar chave anon"
+              >
+                <!-- Ícone Olho Aberto (quando mascarado) -->
+                <svg id="eye-icon-open" class="eye-svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <!-- Ícone Olho Barrado (quando visível) -->
+                <svg id="eye-icon-closed" class="eye-svg hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              </button>
+            </div>
+
+            <small class="silk-input-hint">
+              Insira exclusivamente a <strong>anon public key</strong>. Chaves administrativas (<code>service_role</code>) são categoricamente bloqueadas por segurança.
+            </small>
+          </div>
+
+          <!-- Feedback de Reachability / Alerta de service_role -->
+          <div id="cloud-test-feedback" class="silk-feedback-box hidden" role="status" aria-live="polite">
+            <div class="feedback-icon" id="feedback-icon-container"></div>
+            <div class="feedback-text" id="feedback-text-content"></div>
+          </div>
+
+          <!-- Botão de Teste de Conexão -->
+          <div class="test-connection-wrap">
+            <button type="button" id="btn-test-connection" class="btn-silk-secondary btn-test-conn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                <line x1="12" y1="20" x2="12.01" y2="20"></line>
+              </svg>
+              <span id="btn-test-text">Testar Conexão do Servidor</span>
+            </button>
+          </div>
+
+          <!-- Linha de Ações Finais: Limpar e Salvar -->
+          <div class="modal-actions-row">
+            <button type="button" id="btn-clear-cloud-config" class="btn-silk-text-danger">
+              Limpar Chaves
+            </button>
+            <button type="submit" id="btn-save-cloud-config" class="btn-silk-primary">
+              Salvar e Conectar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal 2: Adicionar Plantão Médico (75% D+60 / 25% D+90) -->
+    <div id="modal-shift" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-shift-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Ganhos Médicos</span>
+            <h3 id="modal-shift-title">Novo Plantão Pediátrico</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-shift" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
+
+        <div id="modal-shift-content">
+          <form id="form-new-shift" class="modal-form" novalidate>
+          <div class="form-group">
+            <label for="shift-hospital-input">Hospital / Maternidade</label>
+            <input type="text" id="shift-hospital-input" name="hospital" class="form-input" value="Maternidade Principal" placeholder="Ex: Maternidade Principal" required />
+            <div class="modal-hospital-pills">
+              <button type="button" class="modal-hosp-pill selected" data-modal-hosp="Maternidade Principal">Maternidade Principal</button>
+              <button type="button" class="modal-hosp-pill" data-modal-hosp="Maternidade Secundária">Maternidade Secundária</button>
+              <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Pediátrico">Hospital Pediátrico</button>
+              <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Pediátrico">Hosp. Criança</button>
+              <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Geral">Hospital Geral</button>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="shift-date-input">Data do Plantão</label>
+              <input type="date" id="shift-date-input" name="date" class="form-input" required />
+            </div>
+            <div class="form-group">
+              <label for="input-shift-type">Tipo de Plantão</label>
+              <div class="silk-select-container" id="container-select-shift-type">
+                <input type="hidden" name="shiftType" id="input-shift-type" value="Sala de Parto" />
+                <div class="silk-select-trigger" data-silk-select="shift-type" tabindex="0">
+                  <div class="trigger-content">
+                    <span class="trigger-icon" style="background: rgba(236, 64, 122, 0.15); color: #EC407A;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.5 1.5.5 2 0"/><path d="M19 6.3a9 9 0 0 1 1.8 3.9 2 2 0 0 1 0 3.6 9 9 0 0 1-17.6 0 2 2 0 0 1 0-3.6A9 9 0 0 1 12 3c2 0 3.8.6 5.3 1.7"/><path d="M12 3a2 2 0 0 1 2 2v1"/></svg>
+                    </span>
+                    <span class="trigger-label">Sala de Parto</span>
+                  </div>
+                  <span class="trigger-arrow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                  </span>
+                </div>
+                <div class="silk-select-menu" id="menu-shift-type">
+                  <div class="silk-select-item selected" data-value="Sala de Parto" data-label="Sala de Parto (D+60 75% / D+90 25%)" data-icon="baby" data-color="#EC407A">
+                    <div class="silk-select-item-left">
+                      <span class="silk-select-badge" style="background: rgba(236, 64, 122, 0.15); color: #EC407A;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h.01"/><path d="M15 12h.01"/><path d="M10 16c.5.5 1.5.5 2 0"/></svg>
+                      </span>
+                      <span>Sala de Parto (D+60 75% / D+90 25%)</span>
+                    </div>
+                  </div>
+                  <div class="silk-select-item" data-value="12h Noturno" data-label="12h Noturno" data-icon="moon" data-color="#AB47BC">
+                    <div class="silk-select-item-left">
+                      <span class="silk-select-badge" style="background: rgba(171, 71, 188, 0.15); color: #AB47BC;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                      </span>
+                      <span>12h Noturno</span>
+                    </div>
+                  </div>
+                  <div class="silk-select-item" data-value="12h Diurno" data-label="12h Diurno" data-icon="sun" data-color="#FFA726">
+                    <div class="silk-select-item-left">
+                      <span class="silk-select-badge" style="background: rgba(255, 167, 38, 0.15); color: #FFA726;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/></svg>
+                      </span>
+                      <span>12h Diurno</span>
+                    </div>
+                  </div>
+                  <div class="silk-select-item" data-value="24h" data-label="24h (Plantão 24 Horas)" data-icon="hospital" data-color="#26A69A">
+                    <div class="silk-select-item-left">
+                      <span class="silk-select-badge" style="background: rgba(38, 166, 154, 0.15); color: #26A69A;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/></svg>
+                      </span>
+                      <span>24h (Plantão 24 Horas)</span>
+                    </div>
+                  </div>
+                  <div class="silk-select-item" data-value="Sobreaviso" data-label="Sobreaviso" data-icon="stethoscope" data-color="#42A5F5">
+                    <div class="silk-select-item-left">
+                      <span class="silk-select-badge" style="background: rgba(66, 165, 245, 0.15); color: #42A5F5;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"/></svg>
+                      </span>
+                      <span>Sobreaviso</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="shift-net-input">Valor Líquido (R$)</label>
+              <input type="number" step="0.01" id="shift-net-input" name="netValue" class="form-input" placeholder="Ex: 2100.00 (ou bruto)" />
+            </div>
+            <div class="form-group">
+              <label for="shift-gross-input">Valor Bruto (R$)</label>
+              <input type="number" step="0.01" id="shift-gross-input" name="grossValue" class="form-input" placeholder="Ex: 2500.00 (ou líquido)" />
+            </div>
+          </div>
+
+          <div class="shift-split-notice">
+            ✨ Divisão automática do plantão médico: <strong>75% em 2 meses (D+60)</strong> e <strong>25% em 3 meses (D+90)</strong> com ajuste no fechamento do mês.
+          </div>
+
+          <button type="submit" id="btn-save-shift" class="btn-silk-primary">
+            Salvar Plantão
+          </button>
+        </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 3: Adicionar Despesa (6 Macro-Grupos & Compras Parceladas) -->
+    <div id="modal-expense" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-expense-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Saídas & Gastos</span>
+            <h3 id="modal-expense-title">Nova Despesa Pediátrica</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-expense" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
+
+        <div id="modal-expense-content">
+          <form id="form-new-expense" class="modal-form" novalidate>
+          <div class="form-group">
+            <label for="expense-desc-input">Descrição do Gasto</label>
+            <input type="text" id="expense-desc-input" name="description" class="form-input" placeholder="Ex: Supermercado, Aluguel, Farmácia" required />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="input-expense-category">Categoria (Macro-Grupo)</label>
+              <div class="silk-select-container silk-dropup" id="container-select-expense-category">
+                <input type="hidden" name="category" id="input-expense-category" value="Mercantil" />
+                <div class="silk-select-trigger" data-silk-select="expense-category" tabindex="0">
+                  <div class="trigger-content">
+                    <span class="trigger-icon" id="trigger-icon-category" style="background: rgba(38, 166, 154, 0.15); color: #26A69A;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                    </span>
+                    <span class="trigger-label" id="trigger-label-category">Mercantil</span>
+                  </div>
+                  <span class="trigger-arrow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                  </span>
+                </div>
+                <div class="silk-select-menu dropup" id="menu-expense-category">
+                  <!-- Alimentação -->
+                  <div class="silk-select-group-header" style="color: #FF7043;">Alimentação</div>
+                  <div class="silk-select-item selected" data-value="Mercantil" data-label="Mercantil" data-icon="cart" data-color="#26A69A">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #26A69A15; color: #26A69A;">🛒</span><span>Mercantil</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Refeição" data-label="Refeição" data-icon="meal" data-color="#FF8A65">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #FF8A6515; color: #FF8A65;">🍽️</span><span>Refeição</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Lanches" data-label="Lanches" data-icon="snack" data-color="#FFCA28">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #FFCA2815; color: #FFCA28;">☕</span><span>Lanches</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Delivery" data-label="Delivery" data-icon="delivery" data-color="#FF5722">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #FF572215; color: #FF5722;">🛵</span><span>Delivery</span></div>
+                  </div>
+                  <!-- Transporte -->
+                  <div class="silk-select-group-header" style="color: #42A5F5;">Transporte & Mobilidade</div>
+                  <div class="silk-select-item" data-value="Combustível" data-label="Combustível" data-icon="fuel" data-color="#FF7043">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #FF704315; color: #FF7043;">⛽</span><span>Combustível</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Uber" data-label="Uber" data-icon="car" data-color="#78909C">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #78909C15; color: #78909C;">🚗</span><span>Uber</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Passagens" data-label="Passagens" data-icon="flight" data-color="#7E57C2">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #7E57C215; color: #7E57C2;">✈️</span><span>Passagens</span></div>
+                  </div>
+                  <!-- Moradia -->
+                  <div class="silk-select-group-header" style="color: #26A69A;">Moradia & Contas</div>
+                  <div class="silk-select-item" data-value="Aluguel" data-label="Aluguel" data-icon="home" data-color="#EF5350">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #EF535015; color: #EF5350;">🏠</span><span>Aluguel</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Energia" data-label="Energia" data-icon="bolt" data-color="#FFA726">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #FFA72615; color: #FFA726;">⚡</span><span>Energia</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Água" data-label="Água" data-icon="water" data-color="#26C6DA">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #26C6DA15; color: #26C6DA;">💧</span><span>Água</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Internet" data-label="Internet" data-icon="wifi" data-color="#29B6F6">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #29B6F615; color: #29B6F6;">🌐</span><span>Internet</span></div>
+                  </div>
+                  <!-- Formação -->
+                  <div class="silk-select-group-header" style="color: #7E57C2;">Formação & Carreira</div>
+                  <div class="silk-select-item" data-value="Estudo" data-label="Estudo" data-icon="study" data-color="#42A5F5">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #42A5F515; color: #42A5F5;">📖</span><span>Estudo</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Cursos" data-label="Cursos" data-icon="course" data-color="#5C6BC0">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #5C6BC015; color: #5C6BC0;">🎓</span><span>Cursos</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Qualificação/Congresso/Pós" data-label="Qualificação/Congresso/Pós" data-icon="qualification" data-color="#8E24AA">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #8E24AA15; color: #8E24AA;">📜</span><span>Qualificação/Congresso/Pós</span></div>
+                  </div>
+                  <!-- Saúde & Autocuidado -->
+                  <div class="silk-select-group-header" style="color: #EC407A;">Saúde & Autocuidado</div>
+                  <div class="silk-select-item" data-value="Remédios" data-label="Remédios" data-icon="meds" data-color="#66BB6A">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #66BB6A15; color: #66BB6A;">💊</span><span>Remédios</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Academia" data-label="Academia" data-icon="fitness" data-color="#EC407A">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #EC407A15; color: #EC407A;">💪</span><span>Academia</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Fisioterapia" data-label="Fisioterapia" data-icon="fisioterapia" data-color="#26A69A">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #26A69A15; color: #26A69A;">🩺</span><span>Fisioterapia</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Beleza/Salão" data-label="Beleza/Salão" data-icon="beauty" data-color="#D81B60">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #D81B6015; color: #D81B60;">✂️</span><span>Beleza/Salão</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Produtos de beleza" data-label="Produtos de beleza" data-icon="sparkles" data-color="#F48FB1">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #F48FB115; color: #F48FB1;">✨</span><span>Produtos de beleza</span></div>
+                  </div>
+                  <!-- Pessoal & Lazer -->
+                  <div class="silk-select-group-header" style="color: #AB47BC;">Pessoal, Lazer & Outros</div>
+                  <div class="silk-select-item" data-value="Presentes" data-label="Presentes" data-icon="gift" data-color="#AB47BC">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #AB47BC15; color: #AB47BC;">🎁</span><span>Presentes</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Saídas" data-label="Saídas" data-icon="outing" data-color="#9C27B0">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #9C27B015; color: #9C27B0;">🍸</span><span>Saídas</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Compras Parceladas" data-label="Compras Parceladas" data-icon="credit_card" data-color="#8D6E63">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #8D6E6315; color: #8D6E63;">💳</span><span>Compras Parceladas</span></div>
+                  </div>
+                  <div class="silk-select-item" data-value="Doação" data-label="Doação" data-icon="donation" data-color="#E91E63">
+                    <div class="silk-select-item-left"><span class="silk-select-badge" style="background: #E91E6315; color: #E91E63;">❤️</span><span>Doação</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="expense-value-input">Valor (R$)</label>
+              <input type="number" step="0.01" id="expense-value-input" name="value" class="form-input" placeholder="Ex: 150.00" required />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="expense-date-input">Data da Despesa</label>
+            <input type="date" id="expense-date-input" name="date" class="form-input" required />
+          </div>
+
+          <!-- Seção de Compra Parcelada no Cartão -->
+          <div class="installment-toggle-box">
+            <label class="checkbox-label" for="check-is-installment">
+              <input type="checkbox" id="check-is-installment" name="isInstallment" />
+              <span>Compra Parcelada no Cartão (2x a 24x)</span>
+            </label>
+
+            <div id="installment-fields" class="installment-fields hidden">
+              <label for="input-expense-installments">Número de Parcelas</label>
+              <div class="silk-select-container silk-dropup" id="container-select-installments">
+                <input type="hidden" name="totalInstallments" id="input-expense-installments" value="3" />
+                <div class="silk-select-trigger" data-silk-select="expense-installments" tabindex="0">
+                  <div class="trigger-content">
+                    <span class="trigger-label" id="trigger-label-installments">3x Parcelas</span>
+                  </div>
+                  <span class="trigger-arrow">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                  </span>
+                </div>
+                <div class="silk-select-menu dropup" id="menu-expense-installments">
+                  <div class="silk-select-item" data-value="2" data-label="2x Parcelas"><span>2x Parcelas</span></div>
+                  <div class="silk-select-item selected" data-value="3" data-label="3x Parcelas"><span>3x Parcelas</span></div>
+                  <div class="silk-select-item" data-value="4" data-label="4x Parcelas"><span>4x Parcelas</span></div>
+                  <div class="silk-select-item" data-value="5" data-label="5x Parcelas"><span>5x Parcelas</span></div>
+                  <div class="silk-select-item" data-value="6" data-label="6x Parcelas"><span>6x Parcelas</span></div>
+                  <div class="silk-select-item" data-value="10" data-label="10x Parcelas"><span>10x Parcelas</span></div>
+                  <div class="silk-select-item" data-value="12" data-label="12x Parcelas"><span>12x Parcelas</span></div>
+                  <div class="silk-select-item" data-value="24" data-label="24x Parcelas"><span>24x Parcelas</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-save-expense" class="btn-silk-primary">
+            Salvar Despesa
+          </button>
+        </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 4: Editar Perfil da Médica & Foto -->
+    <div id="modal-doctor-profile" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="doctor-profile-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Identidade Médica</span>
+            <h3 id="doctor-profile-title">Perfil da Médica Pediatra</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-doctor-profile" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
+
+        <div id="modal-doctor-profile-content">
+          <form id="form-edit-profile" class="modal-form" novalidate>
+          <div class="profile-photo-row">
+            <div class="avatar-badge" style="width: 64px; height: 64px;">
+              <img id="profile-preview-img" class="avatar-img hidden" alt="Prévia da Foto" />
+              <div id="profile-preview-fallback" class="avatar-fallback">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#EC407A" stroke-width="2"><path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"/><path d="M9 12.5v3.5a4 4 0 0 0 8 0v-2"/><circle cx="17" cy="12" r="2"/><circle cx="4.5" cy="3" r="1.5"/><circle cx="13.5" cy="3" r="1.5"/></svg>
+              </div>
+            </div>
+            <div>
+              <label for="input-doctor-photo" class="silk-input-label">Foto de Perfil Médica</label>
+              <input type="file" id="input-doctor-photo" accept="image/*" class="silk-file-input" />
+              <small class="silk-input-hint">Comprimida automaticamente para persistência no iOS</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-name-input">Nome Completo</label>
+            <input type="text" id="profile-name-input" name="doctorName" class="form-input" value="Médica" required />
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="profile-crm-input">CRM / UF</label>
+              <input type="text" id="profile-crm-input" name="crm" class="form-input" value="" />
+            </div>
+            <div class="form-group">
+              <label for="profile-spec-input">Especialidade / Ano</label>
+              <input type="text" id="profile-spec-input" name="specialty" class="form-input" value="Pediatria (R3)" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="profile-salary-input">Bolsa Residência Mensal Líquida (R$)</label>
+            <input type="number" step="0.01" id="profile-salary-input" name="salaryValue" class="form-input" value="0.00" required />
+          </div>
+
+          <button type="submit" id="btn-save-profile" class="btn-silk-primary">
+            Salvar Perfil
+          </button>
+        </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 5: Categorização por Macro-Grupos (Acordeão) -->
+    <div id="modal-categories" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-categories-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Taxonomia Financeira</span>
+            <h3 id="modal-categories-title">6 Macro-Grupos de Gastos</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-categories" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
+
+        <div id="categories-modal-body" class="categories-accordion-wrap">
+          <!-- Renderizado dinamicamente via store/ui -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 6: Hub de Finanças Visual (Gráficos Ampliados) -->
+    <div id="modal-hub" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-hub-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Análise Gráfica</span>
+            <h3 id="modal-hub-title">Hub de Finanças Visual</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-hub" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
+
+        <div id="hub-modal-body" class="hub-visual-scroll">
+          <!-- Renderizado dinamicamente via charts.js/ui -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal 7: Conflito de Sincronização em Nuvem (Resolução Segura com Backup) -->
+    <div id="modal-sync-conflict" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-conflict-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge" style="background: rgba(255, 112, 67, 0.15); color: #FF7043;">Conflito de Versões</span>
+            <h3 id="modal-conflict-title">Atualização Remota Detectada</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-sync-conflict" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
+
+        <div id="conflict-modal-body" class="modal-form">
+          <p class="modal-help-text" style="margin-bottom: 12px;">
+            Identificamos edições mais recentes salvas na nuvem a partir de outro aparelho. Escolha como prosseguir com total segurança:
+          </p>
+          <div id="conflict-comparison-container" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+            <!-- Renderizado dinamicamente via ui.renderConflictModalContent -->
+          </div>
+          <div class="modal-actions-column" style="display: flex; flex-direction: column; gap: 8px;">
+            <button type="button" id="btn-conflict-load-remote" class="btn-silk-primary">
+              Carregar Dados da Nuvem (com backup prévio)
+            </button>
+            <button type="button" id="btn-conflict-overwrite-remote" class="btn-silk-secondary" style="border-color: #EC407A; color: #EC407A;">
+              Manter Dados Deste Aparelho e Salvar na Nuvem
+            </button>
+            <button type="button" id="btn-conflict-download-backup" class="btn-silk-text">
+              Baixar Backup das Duas Versões em JSON
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Drawer Lateral do Menu Hambúrguer -->
+    <aside id="drawer-menu" class="drawer-overlay hidden" aria-label="Menu de Navegação Lateral">
+      <div class="drawer-panel">
+        <header class="drawer-header">
+          <div class="drawer-profile-info">
+            <h3 id="drawer-doctor-name">Médica</h3>
+            <p>Finanças Pediatria v4.0</p>
+          </div>
+          <button id="btn-close-drawer" class="icon-btn" aria-label="Fechar Menu" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
+
+        <nav class="drawer-nav-list">
+          <button class="drawer-item" id="drawer-item-profile" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EC407A" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <div class="drawer-item-text">
+              <span>Editar Perfil Médico</span>
+              <small>CRM, Especialidade e Bolsa</small>
+            </div>
+            <svg class="drawer-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-categories" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            <div class="drawer-item-text">
+              <span>Macro-Grupos de Despesas</span>
+              <small>6 Macro-Grupos (Alimentação, Moradia, etc.)</small>
+            </div>
+            <svg class="drawer-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-hub" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#26A69A" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><circle cx="18" cy="7" r="2"/><circle cx="12" cy="2" r="2"/><circle cx="6" cy="11" r="2"/></svg>
+            <div class="drawer-item-text">
+              <span>Hub de Finanças Visual</span>
+              <small>5 Representações Gráficas Ricas</small>
+            </div>
+            <svg class="drawer-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-sync" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#42A5F5" stroke-width="2"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>
+            <span>Sincronizar com Nuvem Agora</span>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-cloud" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#AB47BC" stroke-width="2"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>
+            <span>Configurações do Supabase</span>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-theme" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFA726" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/></svg>
+            <span id="theme-toggle-label">Alternar Modo Escuro</span>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-backup" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/><path d="M9 10l3 3 3-3"/></svg>
+            <span>Salvar no Meu iPhone (Backup)</span>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-restore" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#26A69A" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span>Restaurar Arquivo de Backup</span>
+          </button>
+
+          <button class="drawer-item text-danger" id="drawer-item-reset" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF5350" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+            <span>Zerar Dados da Aplicação</span>
+          </button>
+
+          <button class="drawer-item text-muted" id="drawer-item-signout" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Desconectar / Voltar ao Silk Gate</span>
+          </button>
+        </nav>
+
+        <footer class="drawer-footer">
+          <p>Finanças Pediatria <strong>v6.0.0</strong></p>
+          <p>Criado com dedicação por <strong>FChNeto</strong></p>
+        </footer>
+      </div>
+    </aside>
+
+    <!-- Contêiner de Notificações Toasts -->
+    <div id="toast-container" class="toast-stack" aria-live="polite"></div>
+
+    <!-- Input Oculto de Arquivo de Backup -->
+    <input type="file" id="backup-file-input" accept=".json" style="display: none;" />
+
+  </div>
+
+  <!-- Fallback Acessível para JavaScript Desativado -->
+  <noscript>
+    <div style="padding: 24px; text-align: center; color: #D81B60; font-family: sans-serif; background: #FFF0ED; border-radius: 16px; margin: 20px;">
+      <h2>JavaScript Necessário</h2>
+      <p>Para desfrutar do santuário financeiro Finanças Pediatria com segurança em nuvem e modo offline, por favor ative o JavaScript no seu navegador Safari / Chrome.</p>
+      <p style="margin-top: 12px; font-size: 0.85rem; color: #7E7485;">Criado por FChNeto</p>
+    </div>
+  </noscript>
+
+  <!-- Configuração pública obtida de /api/config; nenhuma chave fica no HTML. -->
+
+  <!-- SDK Oficial do Supabase para Execução SPA em Módulos Nativos -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2"></script>
+
+  <!-- Script Principal de Inicialização ES6+ -->
+  <script type="module" src="./js/app.js"></script>
+  <script type="module" src="./js/pwa.js"></script>
+</body>
+</html>

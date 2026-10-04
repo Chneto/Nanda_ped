@@ -141,12 +141,12 @@ const DEFAULT_CATEGORIES = [
 ];
 
 const DEFAULT_HOSPITALS = [
-  'Maternidade Araken',
-  'Maternidade Leide Morais',
-  'MEJEC',
-  'Hospital da Criança',
-  'Hospital Mater Dei',
-  'Hospital Promater'
+  'Maternidade Principal',
+  'Maternidade Secundária',
+  'Hospital Pediátrico',
+  'Hospital Pediátrico',
+  'Hospital Geral',
+  'Unidade de Saúde'
 ];
 
 /**
@@ -273,9 +273,9 @@ function getInitialData() {
   return {
     version: APP_VERSION,
     creator: APP_CREATOR,
-    doctorName: 'Dra. Fernanda Ch.',
+    doctorName: 'Médica',
     residencySalary: {
-      value: 4106.09,
+      value: 0.00,
       dayOfMonth: 5,
       description: 'Bolsa Residência Médica (Pediatria)',
       active: true
@@ -1700,7 +1700,7 @@ class PediatricApp {
         <form id="form-new-shift">
           <div class="form-group">
             <label>Hospital / Local</label>
-            <input list="hospitals-list" name="hospital" class="form-input" placeholder="Ex: Maternidade Araken" required />
+            <input list="hospitals-list" name="hospital" class="form-input" placeholder="Ex: Maternidade Principal" required />
             <datalist id="hospitals-list">
               ${hospitalOptions}
             </datalist>

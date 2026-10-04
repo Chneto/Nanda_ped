@@ -20,12 +20,12 @@
 | **👶 Módulo Consultório & Puericultura** | Acompanhamento completo dos atendimentos particulares e planos de puericultura do 1º ano de vida (RN, 2m, 4m, 6m, 9m, 12m), comparando rendimento horário (R$/h) com plantões. |
 | **🌙 Modo Noturno UTI Neonatal (Dark Mode)** | Tema escuro refinado, ideal para plantões noturnos em UTIs e quartos escuros, com contraste suave, proteção ocular e persistência automática. |
 | **📈 Projeção Rolante 12 Meses & Scrubber Touch** | Gráfico SVG panorâmico navegável por toque que projeta os próximos 12 meses de fluxo de caixa com linha de Reserva Segura de 6 Meses. |
-| **📊 DRE Médica & Otimizador Fator R 28%** | Demonstrativo de Resultado do Exercício com cálculo em tempo real do Fator R (RBT12 vs Folha12) para manter a PJ no Anexo III (6%) e economizar milhares de reais em impostos. |
+| **📊 DRE Médica & Otimizador Fator R 28%** | Demonstrativo de Resultado do Exercício com cálculo em tempo real do Fator R (RBT12 vs Folha12) para manter a PJ no Anexo III (6%) e comparar cenários com os parâmetros informados. |
 | **🩺 Passagem de Plantão SBAR (LGPD-Safe)** | Gerador profissional de handover clínico estruturado (Situação, Background, Avaliação, Recomendação) com proteção de dados de pacientes para envio via WhatsApp. |
 | **🏦 Conciliação Bancária OFX & CSV** | Importe extratos de qualquer banco (Nubank, Itaú, Bradesco, Inter, Santander) e concilie automaticamente os repasses de plantões e pagamentos de despesas. |
 | **💼 Kit do Contador em 1 Toque** | Gera resumo executivo completo e arquivo CSV compatível com Excel brasileiro (UTF-8 BOM) pronto para envio por WhatsApp ou e-mail ao contador da clínica. |
 | **🔥 Simulador FIRE & Termômetro de Liberdade** | Calcula a independência financeira médica, indicando quantos plantões noturnos a médica pode eliminar permanentemente através dos rendimentos passivos. |
-| **🎙️ Lançamento Rápido por Voz (NLP)** | Reconhecimento de voz em português brasileiro para cadastrar plantões e despesas falando naturalmente (ex: *"Plantão de 12 horas ontem no Mater Dei, valor dois mil reais"*). |
+| **🎙️ Lançamento Rápido por Voz (NLP)** | Reconhecimento de voz em português brasileiro para cadastrar plantões e despesas falando naturalmente (ex: *"Plantão de 12 horas ontem no Hospital Geral, valor dois mil reais"*). |
 | **🔍 Spotlight Search Global (Cmd+K / Ctrl+K)** | Barra de pesquisa universal instantânea para encontrar qualquer plantão, consulta, paciente de puericultura, hospital ou despesa em milissegundos. |
 | **🛡️ Blindagem contra Zoom Indesejado no iOS** | Campos de entrada ajustados com tamanho mínimo de 16px e meta tag `interactive-widget=resizes-content`, eliminando o incômodo zoom automático do Safari móvel. |
 | **💾 Armazenamento Dual-Engine L2 (PediatricSanctuaryDB)** | Sincronização em tempo real entre `localStorage` e `IndexedDB`, garantindo tolerância a falhas e backup automático das finanças. |

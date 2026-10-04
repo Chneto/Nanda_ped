@@ -105,8 +105,8 @@ import {
 // ============================================================================
 
 class AdversarialMockSupabaseClient {
-  constructor(userId = 'dra-fernanda-uid') {
-    this.currentUser = { id: userId, email: 'dra.fernanda@pediatria.med.br' };
+  constructor(userId = 'user-a-test-id') {
+    this.currentUser = { id: userId, email: 'medica@example.com' };
     this.remoteTables = {
       profiles: new Map(),
       shifts: new Map(),
@@ -298,7 +298,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
   // ==========================================================================
   describe('2. Adversarial Target 1: Concorrência Extrema (100+ Mutações Simultâneas)', () => {
     test('100 inserções simultâneas de plantões via Promise.all: zero perdas de atualização', async () => {
-      const hospitalList = ['Maternidade Araken', 'Maternidade Leide Morais', 'MEJEC'];
+      const hospitalList = ['Maternidade Principal', 'Maternidade Secundária', 'Hospital Pediátrico'];
       const promises = [];
 
       for (let i = 0; i < 100; i++) {
@@ -359,7 +359,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
       // Criação inicial
       await localPut(STORES.SHIFTS, {
         id: shiftId,
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         net_value: 1000,
         notes: 'Versão 0'
       }, true);
@@ -370,7 +370,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
         updatePromises.push(
           localPut(STORES.SHIFTS, {
             id: shiftId,
-            hospital: 'Maternidade Araken',
+            hospital: 'Maternidade Principal',
             net_value: 1000 + i,
             notes: `Versão Concorrente ${i}`
           }, true)
@@ -494,7 +494,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
     test('Valores numéricos e datas corrompidos (NaN, Infinity, data inválida) não quebram o ciclo syncNow', async () => {
       const corruptShift = {
         id: generateUUID(),
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         date: 'DATA_COMPLETAMENTE_INVALIDA_2026',
         net_value: NaN,
         gross_value: Infinity,
@@ -517,7 +517,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
         store: STORES.SHIFTS,
         action: 'insert',
         entityId: generateUUID(),
-        data: { hospital: 'Araken' },
+        data: { hospital: 'Maternidade Principal' },
         attempts: 0,
         status: QUEUE_STATUS.PENDING
       }, false);
@@ -609,7 +609,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
       // Configura atraso de 40ms na chamada ao Supabase para simular tempo de trânsito WAN
       mockSupabase.upsertDelayMs = 40;
 
-      await localPut(STORES.SHIFTS, { hospital: 'Araken', net_value: 1500 }, true);
+      await localPut(STORES.SHIFTS, { hospital: 'Maternidade Principal', net_value: 1500 }, true);
 
       // Dispara 3 syncs simultâneos
       const p1 = syncNow();
@@ -632,7 +632,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
       mockSupabase.shouldFailUpsert = true;
       mockSupabase.upsertFailureError = new Error('Network timeout: socket closed unexpectedly');
 
-      await localPut(STORES.SHIFTS, { hospital: 'Araken', net_value: 1500 }, true);
+      await localPut(STORES.SHIFTS, { hospital: 'Maternidade Principal', net_value: 1500 }, true);
 
       const res = await syncNow();
       assert.ok(res.errors.length >= 1);
@@ -650,7 +650,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
       const shiftId = generateUUID();
       const shiftPayload = {
         id: shiftId,
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         date: '2026-04-10',
         net_value: 2000
       };
@@ -680,7 +680,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
       assert.equal(mockSupabase.remoteTables.shifts.size, 1);
       const remoteRecord = mockSupabase.remoteTables.shifts.get(shiftId);
       assert.equal(remoteRecord.net_value, 2000);
-      assert.equal(remoteRecord.user_id, 'dra-fernanda-uid');
+      assert.equal(remoteRecord.user_id, 'user-a-test-id');
     });
 
     test('Isolamento de falhas em listeners: callback com throw não quebra o ciclo syncNow nem outros ouvintes', async () => {
@@ -744,15 +744,15 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
       // 1. Criação local recente às 12:00
       await localPut(STORES.SHIFTS, {
         id: shiftId,
-        hospital: 'Hospital Araken Criado Recentemente',
+        hospital: 'Hospital Maternidade Principal Criado Recentemente',
         updated_at: '2026-04-01T12:00:00.000Z'
       }, false);
 
       // 2. Chega tombstone remoto obsoleto com deleted_at às 11:00
       await mockSupabase.from('shifts').upsert({
         id: shiftId,
-        user_id: 'dra-fernanda-uid',
-        hospital: 'Hospital Araken',
+        user_id: 'user-a-test-id',
+        hospital: 'Hospital Maternidade Principal',
         updated_at: '2026-04-01T11:00:00.000Z',
         deleted_at: '2026-04-01T11:00:00.000Z'
       });
@@ -762,7 +762,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
       // O registro local recente DEVE sobreviver
       const surviving = await localGet(STORES.SHIFTS, shiftId);
       assert.ok(surviving !== null, 'Registro local mais recente não pode ser deletado por tombstone obsoleto');
-      assert.equal(surviving.hospital, 'Hospital Araken Criado Recentemente');
+      assert.equal(surviving.hospital, 'Hospital Maternidade Principal Criado Recentemente');
       assert.equal(surviving.sync_status, SYNC_STATUS.PENDING);
     });
 
@@ -780,7 +780,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
       // 2. Outro dispositivo (ou web) recriou a despesa às 09:30
       await mockSupabase.from('expenses').upsert({
         id: expId,
-        user_id: 'dra-fernanda-uid',
+        user_id: 'user-a-test-id',
         description: 'Livro de Medicina 2ª Edição',
         amount: 250,
         updated_at: '2026-04-01T09:30:00.000Z'
@@ -798,7 +798,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
 
     test('Item criado offline e excluído antes do sync é purgado localmente com ZERO tráfego de rede', async () => {
       const id = generateUUID();
-      await localPut(STORES.SHIFTS, { id, hospital: 'Araken Sala 3', net_value: 1800 }, true);
+      await localPut(STORES.SHIFTS, { id, hospital: 'Maternidade Principal Sala 3', net_value: 1800 }, true);
 
       assert.equal((await getPendingSyncItems()).length, 1);
 
@@ -833,8 +833,8 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
     });
 
     test('Isolamento de stores: localClear em SHIFTS não afeta EXPENSES nem PROFILES', async () => {
-      await localPut(STORES.PROFILES, { id: 'prof-1', doctor_name: 'Dra. Fernanda Ch.' }, false);
-      await localPut(STORES.SHIFTS, { id: 's-1', hospital: 'Araken', net_value: 1200 }, false);
+      await localPut(STORES.PROFILES, { id: 'prof-1', doctor_name: 'Médica' }, false);
+      await localPut(STORES.SHIFTS, { id: 's-1', hospital: 'Maternidade Principal', net_value: 1200 }, false);
       await localPut(STORES.EXPENSES, { id: 'e-1', description: 'Café', amount: 15 }, false);
 
       await localClear(STORES.SHIFTS);
@@ -849,7 +849,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
       assert.ok(largeClinicalNotes.length > 40000);
 
       const shiftWithBigNotes = {
-        hospital: 'Maternidade Araken UTI Neonatal',
+        hospital: 'Maternidade Principal UTI Neonatal',
         date: '2026-04-20',
         net_value: 2200,
         notes: largeClinicalNotes

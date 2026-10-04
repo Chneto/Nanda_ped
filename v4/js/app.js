@@ -96,7 +96,7 @@ export class PediatricApp {
         return;
       }
 
-      // 4. Chips de Pré-Seleção de Maternidades (Araken & Leide Morais)
+      // 4. Chips de Pré-Seleção de Maternidades (Maternidade Principal & Maternidade Secundária)
       const hospChip = e.target.closest('[data-quick-hospital]');
       if (hospChip) {
         const hospName = hospChip.getAttribute('data-quick-hospital');
@@ -536,7 +536,7 @@ export class PediatricApp {
     if (tabs) tabs.style.display = 'none';
 
     const p = this.store.data;
-    const salary = p.residencySalary?.value || 4106.09;
+    const salary = p.residencySalary?.value || 0.00;
 
     body.innerHTML = `
       <div style="padding: 6px 0;">
@@ -562,13 +562,13 @@ export class PediatricApp {
 
           <div class="form-group">
             <label>Nome Completo da Médica</label>
-            <input type="text" name="doctorName" class="form-input" value="${p.doctorName || 'Dra. Fernanda Ch.'}" required />
+            <input type="text" name="doctorName" class="form-input" value="${p.doctorName || 'Médica'}" required />
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label>CRM / UF</label>
-              <input type="text" name="crm" class="form-input" value="${p.crm || 'CRM/RN 12345'}" />
+              <input type="text" name="crm" class="form-input" value="${p.crm || 'CRM/TESTE'}" />
             </div>
             <div class="form-group">
               <label>Especialidade / Ano</label>
@@ -918,20 +918,20 @@ export class PediatricApp {
         </button>
       </div>
 
-      <!-- Barra de Pré-Seleção Rápida de Maternidades (Araken & Leide Morais) -->
+      <!-- Barra de Pré-Seleção Rápida de Maternidades (Maternidade Principal & Maternidade Secundária) -->
       <div class="quick-hospitals-bar">
-        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Araken">
+        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Principal">
           ${getIconSvg('hospital', { size: 16, color: '#EC407A' })}
-          + Araken
+          + Maternidade Principal
         </button>
-        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Leide Morais">
+        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Secundária">
           ${getIconSvg('hospital', { size: 16, color: '#EC407A' })}
-          + Leide Morais
+          + Maternidade Secundária
         </button>
-        <button class="quick-hospital-chip" data-quick-hospital="MEJEC">
-          + MEJEC
+        <button class="quick-hospital-chip" data-quick-hospital="Hospital Pediátrico">
+          + Hospital Pediátrico
         </button>
-        <button class="quick-hospital-chip" data-quick-hospital="Hospital da Criança">
+        <button class="quick-hospital-chip" data-quick-hospital="Hospital Pediátrico">
           + Hosp. Criança
         </button>
       </div>
@@ -1540,7 +1540,7 @@ export class PediatricApp {
 
     if (this.activeModalTab === 'shift') {
       const today = getLocalDateString();
-      const defaultHospital = this.prefilledHospital || 'Maternidade Araken';
+      const defaultHospital = this.prefilledHospital || 'Maternidade Principal';
 
       const shiftTypeOptions = [
         { value: 'Sala de Parto', label: 'Sala de Parto (D+60 75% / D+90 25%)', icon: 'baby', color: '#EC407A' },
@@ -1562,13 +1562,13 @@ export class PediatricApp {
         <form id="form-new-shift">
           <div class="form-group">
             <label>Hospital / Maternidade</label>
-            <input type="text" id="shift-hospital-input" name="hospital" class="form-input" value="${defaultHospital}" placeholder="Ex: Maternidade Araken" required />
+            <input type="text" id="shift-hospital-input" name="hospital" class="form-input" value="${defaultHospital}" placeholder="Ex: Maternidade Principal" required />
             <div class="modal-hospital-pills">
-              <button type="button" class="modal-hosp-pill ${defaultHospital === 'Maternidade Araken' ? 'selected' : ''}" data-modal-hosp="Maternidade Araken">Araken</button>
-              <button type="button" class="modal-hosp-pill ${defaultHospital === 'Maternidade Leide Morais' ? 'selected' : ''}" data-modal-hosp="Maternidade Leide Morais">Leide Morais</button>
-              <button type="button" class="modal-hosp-pill ${defaultHospital === 'MEJEC' ? 'selected' : ''}" data-modal-hosp="MEJEC">MEJEC</button>
-              <button type="button" class="modal-hosp-pill ${defaultHospital === 'Hospital da Criança' ? 'selected' : ''}" data-modal-hosp="Hospital da Criança">Hosp. Criança</button>
-              <button type="button" class="modal-hosp-pill ${defaultHospital === 'Hospital Mater Dei' ? 'selected' : ''}" data-modal-hosp="Hospital Mater Dei">Mater Dei</button>
+              <button type="button" class="modal-hosp-pill ${defaultHospital === 'Maternidade Principal' ? 'selected' : ''}" data-modal-hosp="Maternidade Principal">Maternidade Principal</button>
+              <button type="button" class="modal-hosp-pill ${defaultHospital === 'Maternidade Secundária' ? 'selected' : ''}" data-modal-hosp="Maternidade Secundária">Maternidade Secundária</button>
+              <button type="button" class="modal-hosp-pill ${defaultHospital === 'Hospital Pediátrico' ? 'selected' : ''}" data-modal-hosp="Hospital Pediátrico">Hospital Pediátrico</button>
+              <button type="button" class="modal-hosp-pill ${defaultHospital === 'Hospital Pediátrico' ? 'selected' : ''}" data-modal-hosp="Hospital Pediátrico">Hosp. Criança</button>
+              <button type="button" class="modal-hosp-pill ${defaultHospital === 'Hospital Geral' ? 'selected' : ''}" data-modal-hosp="Hospital Geral">Hospital Geral</button>
             </div>
           </div>
 

@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- Migration: 003_triggers_and_indexes.sql
--- Application: Finanças Pediatria V4_Cloud (Dra. Fernanda Ch.)
+-- Application: Finanças Pediatria V4_Cloud (Médica)
 -- Canonical Creator: FChNeto (APP_CREATOR = 'FChNeto')
 -- Description: Automatic user provisioning trigger, updated_at timestamp triggers,
 --              and high-performance composite indexes for local-first sync.
@@ -9,7 +9,7 @@
 -- ------------------------------------------------------------------------------
 -- 1. Automatic User Profile Provisioning Trigger (auth.users -> public.profiles)
 -- ------------------------------------------------------------------------------
--- Automatically provisions a profile for Dra. Fernanda Ch. (or new physician users)
+-- Automatically provisions a profile for Médica (or new physician users)
 -- upon registration via Google OAuth or Magic Link.
 -- SECURITY DEFINER allows executing with elevated privileges to insert into public.profiles.
 -- SET search_path = public prevents search_path hijacking attacks (CVE security best practice).
@@ -28,7 +28,7 @@ BEGIN
   v_full_name := COALESCE(
     NULLIF(TRIM(NEW.raw_user_meta_data->>'full_name'), ''),
     NULLIF(TRIM(NEW.raw_user_meta_data->>'name'), ''),
-    'Dra. Fernanda Ch.'
+    'Médica'
   );
 
   -- Extract avatar URL if provided by OAuth provider
@@ -57,7 +57,7 @@ BEGIN
     NULL,
     'Pediatria',
     v_avatar_url,
-    4106.09,
+    0.00,
     NOW(),
     NOW()
   )

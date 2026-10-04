@@ -19,10 +19,10 @@
 export const APP_CREATOR = 'FChNeto';
 export const APP_VERSION = '4.0.0';
 export const APP_NAME = 'Finanças Pediatria V4_Cloud';
-export const DOCTOR_DEFAULT_NAME = 'Dra. Fernanda Ch.';
+export const DOCTOR_DEFAULT_NAME = 'Médica';
 
-export const DEFAULT_SUPABASE_URL = 'https://rdqbhafebdfhsfdlqjdr.supabase.co';
-export const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJkcWJoYWZlYmRmaHNmZGxxamRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA2Mjg0MzgsImV4cCI6MjEwNjIwNDQzOH0.yQZjUrP7hshAYPDWmXXLW6Z_s38ge_6fU6CrN1Ba0TA';
+export const DEFAULT_SUPABASE_URL = '';
+export const DEFAULT_SUPABASE_ANON_KEY = '';
 
 // Chaves canônicas de armazenamento no localStorage
 export const STORAGE_KEYS = {

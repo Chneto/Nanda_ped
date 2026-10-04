@@ -37,7 +37,7 @@ test('calculateExpectedPaymentDate calculates D+90, other lags, and respects cus
 test('evaluateShiftStatus correctly flags delayed, pending, and received shifts', () => {
   const shift = {
     id: 'sh1',
-    hospital: 'Do meu Coração',
+    hospital: 'Instituição de Exemplo F',
     shiftDate: '2026-06-10',
     expectedPaymentDate: '2026-09-10',
     status: 'pending',
@@ -83,7 +83,7 @@ test('PediatricStore demo loader provides benchmark exploration scenario', () =>
   // Verify sh1 is present
   const sh1 = data.shifts.find(s => s.id === 'sh1');
   assert.ok(sh1, 'sh1 must exist in demo data');
-  assert.equal(sh1.hospital, 'Do meu Coração');
+  assert.equal(sh1.hospital, 'Instituição de Exemplo F');
   assert.equal(sh1.shiftDate, '2026-06-10');
   assert.equal(sh1.expectedPaymentDate, '2026-09-10');
   assert.equal(sh1.netValue, 1950);
@@ -132,8 +132,8 @@ test('Regime de Caixa vs Regime de Competência calculation logic', () => {
 
   // In Competência (Sep 2026):
   // Shifts WORKED in Sep 2026:
-  // - sh7: Sabará worked 2026-09-02 (gross 3800, net 3230)
-  // - sh8: Do meu Coração worked 2026-09-08 (gross 2400, net 2040)
+  // - sh7: Hospital Geral worked 2026-09-02 (gross 3800, net 3230)
+  // - sh8: Instituição de Exemplo F worked 2026-09-08 (gross 2400, net 2040)
   // Total Net Production = 3230 + 2040 = 5270
   // Total Gross Production = 3800 + 2400 = 6200
   assert.equal(reportSep.competencia.shiftsCount, 2);
@@ -195,7 +195,7 @@ test('CRUD operations: add, update, and delete shifts and expenses', () => {
 
   // Add shift
   const newShift = store.addShift({
-    hospital: 'Hospital Infantil Sabará',
+    hospital: 'Hospital Pediátrico',
     shiftDate: '2026-09-14',
     shiftType: '12h Diurno',
     grossValue: 4000,

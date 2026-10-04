@@ -120,12 +120,12 @@ function getIcon(name, extraClass = "", size = 20) {
  * Design System "Silk & Rose Gold"
  * Persistência Tripla para iOS Safari (IndexedDB + LocalStorage + Storage Persistence API)
  * Regras Canônicas Pediátricas: Residência Médica + Plantões Sala de Parto (75% D+60 / 25% D+90)
- * 6 Macro-Grupos Inteligentes de Despesas (com as 22 categorias canônicas)
+ * 6 Macro-Grupos Inteligentes de Despesas (com as 23 categorias canônicas listadas)
  * Autor Imutável: FChNeto (APP_CREATOR = 'FChNeto')
  */
 
 const APP_CREATOR = 'FChNeto';
-const APP_VERSION = '5.0.0';
+const APP_VERSION = '5.0.1';
 const STORAGE_KEY = 'financas_pediatria_v5';
 const DB_NAME = 'v5_pediatric_db';
 const DB_STORE = 'app_state';
@@ -210,12 +210,11 @@ const MACRO_GROUPS = [
 ];
 
 const DEFAULT_HOSPITALS = [
-  'Maternidade Araken',
-  'Maternidade Leide Morais',
-  'MEJEC',
-  'Hospital da Criança',
-  'Hospital Mater Dei',
-  'Hospital Promater'
+  'Maternidade Principal',
+  'Maternidade Secundária',
+  'Hospital Pediátrico',
+  'Hospital Geral',
+  'Unidade de Saúde'
 ];
 
 /**
@@ -295,14 +294,14 @@ class PediatricStore {
     return {
       creator: APP_CREATOR,
       version: APP_VERSION,
-      doctorName: 'Dra. Fernanda Ch.',
-      doctorCRM: 'CRM/RN',
-      doctorSpecialty: 'Pediatria & Sala de Parto',
+      doctorName: 'Médica',
+      doctorCRM: '',
+      doctorSpecialty: 'Pediatria',
       doctorPhoto: null,
       residencySalary: {
-        value: 4106.00,
+        value: 0,
         dayOfMonth: 5,
-        active: true
+        active: false
       },
       shifts: [],
       expenses: [],
@@ -465,7 +464,7 @@ class PediatricStore {
   saveShift(shift) {
     const shiftDate = shift.date || getLocalDateString();
     const netValue = parseFloat(shift.value) || 0;
-    const hospital = (shift.hospital || 'Maternidade Araken').trim();
+    const hospital = (shift.hospital || 'Maternidade Principal').trim();
     const shiftType = shift.shiftType || 'Sala de Parto';
 
     const val75 = Math.round(netValue * 0.75 * 100) / 100;
@@ -1362,7 +1361,7 @@ class PediatricApp {
         return;
       }
 
-      // 4. Chips de Pré-Seleção de Maternidades (Araken & Leide Morais)
+      // 4. Chips de Pré-Seleção de Maternidades (Maternidade Principal & Maternidade Secundária)
       const hospChip = e.target.closest('[data-quick-hospital]');
       if (hospChip) {
         const hospName = hospChip.getAttribute('data-quick-hospital');
@@ -1751,7 +1750,7 @@ class PediatricApp {
     if (navigator.share) {
       const file = new File([jsonStr], `backup_financas_pediatria_${getLocalDateString()}.json`, { type: 'application/json' });
       navigator.share({
-        title: 'Backup Finanças Pediatria Dra. Fernanda Ch.',
+        title: 'Backup Finanças Pediatria Médica',
         files: [file]
       }).catch(() => {
         this.store.triggerDirectBackupDownload();
@@ -1849,13 +1848,13 @@ class PediatricApp {
         <form id="form-doctor-profile">
           <div class="form-group">
             <label>Nome Completo da Médica</label>
-            <input type="text" name="name" class="form-input" value="${doc.doctorName || 'Dra. Fernanda Ch.'}" required />
+            <input type="text" name="name" class="form-input" value="${doc.doctorName || 'Médica'}" required />
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label>Registro Profissional (CRM)</label>
-              <input type="text" name="crm" class="form-input" value="${doc.doctorCRM || 'CRM/RN'}" required />
+              <input type="text" name="crm" class="form-input" value="${doc.doctorCRM || ''}" required />
             </div>
             <div class="form-group">
               <label>Especialidade</label>
@@ -1984,7 +1983,7 @@ class PediatricApp {
               Macro-Grupos de Despesas
             </h3>
             <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">
-              Organização inspirada no Nubank & Revolut com as 22 categorias obrigatórias
+              Organização inspirada no Nubank & Revolut com as 23 categorias canônicas
             </p>
           </div>
           <button class="btn-modal-close" style="border: none; background: transparent; cursor: pointer; color: var(--text-muted);">
@@ -2113,8 +2112,8 @@ class PediatricApp {
             ${doc.doctorPhoto ? `<img src="${doc.doctorPhoto}" class="avatar-img" />` : getIconSvg('stethoscope', { size: 24, color: '#EC407A' })}
           </div>
           <div class="greeting-text">
-            <h1>${doc.doctorName || 'Dra. Fernanda Ch.'}</h1>
-            <p>${doc.doctorSpecialty || 'Pediatria & Sala de Parto'} • ${doc.doctorCRM || 'CRM/RN'}</p>
+            <h1>${doc.doctorName || 'Médica'}</h1>
+            <p>${doc.doctorSpecialty || 'Pediatria'} • ${doc.doctorCRM || ''}</p>
           </div>
         </div>
         <div class="header-actions">
@@ -2156,18 +2155,18 @@ class PediatricApp {
     // 4. Chips de Maternidade (Acesso Rápido)
     const quickHospitalsHtml = `
       <div class="quick-hospitals-bar">
-        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Araken">
+        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Principal">
           ${getIconSvg('hospital', { size: 15, color: '#EC407A' })}
-          + Araken
+          + Maternidade Principal
         </button>
-        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Leide Morais">
+        <button class="quick-hospital-chip highlight" data-quick-hospital="Maternidade Secundária">
           ${getIconSvg('hospital', { size: 15, color: '#EC407A' })}
-          + Leide Morais
+          + Maternidade Secundária
         </button>
-        <button class="quick-hospital-chip" data-quick-hospital="MEJEC">
-          + MEJEC
+        <button class="quick-hospital-chip" data-quick-hospital="Hospital Pediátrico">
+          + Hospital Pediátrico
         </button>
-        <button class="quick-hospital-chip" data-quick-hospital="Hospital da Criança">
+        <button class="quick-hospital-chip" data-quick-hospital="Hospital Pediátrico">
           + Hosp. da Criança
         </button>
       </div>
@@ -2633,7 +2632,7 @@ class PediatricApp {
 
     if (this.activeModalTab === 'shift') {
       const today = getLocalDateString();
-      const defaultHospital = this.prefilledHospital || 'Maternidade Araken';
+      const defaultHospital = this.prefilledHospital || 'Maternidade Principal';
 
       const shiftTypeOptions = [
         { value: 'Sala de Parto', label: 'Sala de Parto (Padrão Pediátrico)', icon: 'baby', color: '#EC407A' },
@@ -2655,7 +2654,7 @@ class PediatricApp {
         <form id="form-new-shift">
           <div class="form-group">
             <label>Maternidade / Hospital</label>
-            <input type="text" id="shift-hospital-input" name="hospital" class="form-input" value="${defaultHospital}" placeholder="Ex: Maternidade Araken" required />
+            <input type="text" id="shift-hospital-input" name="hospital" class="form-input" value="${defaultHospital}" placeholder="Ex: Maternidade Principal" required />
             <div style="display: flex; gap: 6px; margin-top: 6px; overflow-x: auto; padding-bottom: 2px;">
               ${DEFAULT_HOSPITALS.map(h => `
                 <button type="button" class="quick-hospital-chip modal-hosp-pill ${h === defaultHospital ? 'selected' : ''}" data-modal-hosp="${h}" style="font-size: 0.74rem; padding: 4px 10px;">

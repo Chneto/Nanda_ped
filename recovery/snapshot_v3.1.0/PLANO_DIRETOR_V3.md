@@ -1,4 +1,4 @@
-﻿# 🩺 PLANO DIRETOR DE EVOLUÇÃO & AUDITORIA TÉCNICA (v2.5.0 → v3.0 ULTRA)
+# 🩺 PLANO DIRETOR DE EVOLUÇÃO & AUDITORIA TÉCNICA (v2.5.0 → v3.0 ULTRA)
 ## Finanças Pediatria — PWA Mobile-First para Médica Pediatra
 > **Autor & Criador Imutável:** FChNeto (`APP_CREATOR = 'FChNeto'`)  
 > **Data:** Setembro de 2026  
@@ -82,7 +82,7 @@ Inspirado nos melhores apps de finanças e medicina do mundo (**Nubank, Monarch 
 2. **Busca Universal Inteligente (Spotlight Pediátrico / Cmd+K):**
    - Busca em tempo real por aproximação (*fuzzy search*) em todo o histórico de plantões, despesas, hospitais e atalhos rápidos do sistema.
 3. **Lançamento Rápido por Comando de Voz Pós-Plantão (Web Speech API):**
-   - Lançamento sem esforço ao sair do hospital: *"Plantão de ontem no Araken doze horas dois mil reais Simples seis por cento"*. O parser NLP interpreta e preenche o formulário automaticamente.
+   - A entrada por voz interpreta a descrição e deixa o lançamento pronto para revisão.
 4. **Gestos Táteis (Swipe-to-Action):**
    - Deslizar card para a direita: marca como "Recebido"; deslizar para a esquerda: edita ou envia para a lixeira com 1-tap undo.
 

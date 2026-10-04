@@ -4,12 +4,12 @@
  * Application: Finanças Pediatria V4_Cloud
  * 
  * Verifies the 6 Tier 4 Real-World Pediatric Application Scenarios:
- * 1. Scenario 1 — Hospital Basement Delivery Room Workflow (Araken, offline mode, 75% D+60 / 25% D+90, 0ms latency)
+ * 1. Scenario 1 — Hospital Basement Delivery Room Workflow (Maternidade Principal, offline mode, 75% D+60 / 25% D+90, 0ms latency)
  * 2. Scenario 2 — Hospital Emergence & Online Reconnection (WiFi reconnect, queue drains, idempotent upsert, sync status)
  * 3. Scenario 3 — Stethoscope Purchase Installment Plan (R$ 1.250,00 in 10x, chronological projection, residual cents, macro_formacao)
  * 4. Scenario 4 — Silk Gate Multi-Auth Switch (Google OAuth, Signout, Magic Link, Modo Convidada, session persistence)
  * 5. Scenario 5 — Security & CSP Breach Defense (Cross-user access, user_id spoofing, service_role rejection, CSP & RLS audit)
- * 6. Scenario 6 — Full Financial Month-End Settlement (D+60/D+90 payouts, residency salary R$ 4.106,09, 22 categories, Regime de Caixa liquidity)
+ * 6. Scenario 6 — Full Financial Month-End Settlement (D+60/D+90 payouts, residency salary R$ 0,00, 22 categories, Regime de Caixa liquidity)
  * 
  * Canonical Author: FChNeto (APP_CREATOR = 'FChNeto')
  */
@@ -503,15 +503,15 @@ function buildMockDOM() {
 // ============================================================================
 
 class MockSupabaseClient {
-  constructor(userId = 'dra-fernanda-uid', role = 'authenticated') {
+  constructor(userId = 'user-a-test-id', role = 'authenticated') {
     this.currentUser = {
       id: userId,
-      email: 'dra.fernanda@pediatria.med.br',
+      email: 'medica@example.com',
       role: role,
       user_metadata: {
-        full_name: 'Dra. Fernanda Ch.',
-        name: 'Dra. Fernanda Ch.',
-        avatar_url: 'https://cdn.pediatria.med.br/dra_fernanda.png'
+        full_name: 'Médica',
+        name: 'Médica',
+        avatar_url: 'https://cdn.pediatria.med.br/profile-photo.png'
       }
     };
     this.remoteTables = {
@@ -724,8 +724,8 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
   // SCENARIO 1: Hospital Basement Delivery Room Workflow
   // Features: F4, F12, F15, F19, F24
   // ==========================================================================
-  describe('Scenario 1 — Hospital Basement Delivery Room Workflow (Araken Offline Entry)', () => {
-    test('1.1 Dra. Fernanda initiates app in hospital basement with 0 signal: Modo Local activates immediately without network delay', () => {
+  describe('Scenario 1 — Hospital Basement Delivery Room Workflow (Maternidade Principal Offline Entry)', () => {
+    test('1.1 Médica initiates app in hospital basement with 0 signal: Modo Local activates immediately without network delay', () => {
       // Simulate no internet connectivity in hospital basement
       try {
         Object.defineProperty(globalThis.navigator, 'onLine', { value: false, writable: true, configurable: true });
@@ -751,16 +751,16 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       assert.match(syncBadge.textContent, /Modo Local/i);
     });
 
-    test('1.2 1-Touch quick maternity chip selection for "Maternidade Araken" opens modal and pre-fills form', () => {
-      ui.selectHospitalChip('Maternidade Araken');
+    test('1.2 1-Touch quick maternity chip selection for "Maternidade Principal" opens modal and pre-fills form', () => {
+      ui.selectHospitalChip('Maternidade Principal');
 
       const modal = mockDoc.getElementById('modal-shift');
       assert.equal(modal.classList.contains('hidden'), false);
       assert.equal(modal.getAttribute('aria-modal'), 'true');
 
       const content = mockDoc.getElementById('modal-shift-content');
-      assert.match(content.innerHTML, /value="Maternidade Araken"/);
-      assert.ok(store.data.hospitals.includes('Maternidade Araken'));
+      assert.match(content.innerHTML, /value="Maternidade Principal"/);
+      assert.ok(store.data.hospitals.includes('Maternidade Principal'));
     });
 
     test('1.3 Neonatal delivery shift calculation adheres to 75% D+60 / 25% D+90 cash projections and strict cent preservation', () => {
@@ -791,7 +791,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       const shiftId = generateUUID();
       const shiftRecord = {
         id: shiftId,
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         date: '2026-03-15',
         gross_value: 1800.00,
         net_value: 1500.00,
@@ -815,7 +815,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       const retrieved = await localGet('shifts', shiftId);
       assert.ok(retrieved);
       assert.equal(retrieved.id, shiftId);
-      assert.equal(retrieved.hospital, 'Maternidade Araken');
+      assert.equal(retrieved.hospital, 'Maternidade Principal');
 
       // Mutation is queued in sync_queue for eventual cloud push
       const pendingQueue = await getPendingSyncItems();
@@ -851,7 +851,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       queuedShiftId = generateUUID();
       const offlineShift = {
         id: queuedShiftId,
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         date: '2026-03-15',
         gross_value: 1800.00,
         net_value: 1500.00,
@@ -896,8 +896,8 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       assert.ok(remoteShifts.has(queuedShiftId));
 
       const remoteRow = remoteShifts.get(queuedShiftId);
-      assert.equal(remoteRow.user_id, 'dra-fernanda-uid');
-      assert.equal(remoteRow.hospital, 'Maternidade Araken');
+      assert.equal(remoteRow.user_id, 'user-a-test-id');
+      assert.equal(remoteRow.hospital, 'Maternidade Principal');
       assert.equal(remoteRow.sync_status, 'synced');
     });
 
@@ -946,8 +946,8 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       const newerTime = new Date(Date.now() + 5000).toISOString();
       mockSupabase.remoteTables.shifts.set(queuedShiftId, {
         id: queuedShiftId,
-        user_id: 'dra-fernanda-uid',
-        hospital: 'Maternidade Araken',
+        user_id: 'user-a-test-id',
+        hospital: 'Maternidade Principal',
         status: 'received',
         updated_at: newerTime
       });
@@ -1120,10 +1120,10 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       const mockOAuthSession = {
         user: {
           id: 'google-oauth-uid-999',
-          email: 'dra.fernanda@pediatria.med.br',
+          email: 'medica@example.com',
           user_metadata: {
-            full_name: 'Dra. Fernanda Ch.',
-            name: 'Dra. Fernanda Ch.',
+            full_name: 'Médica',
+            name: 'Médica',
             avatar_url: 'https://images.hospital.com/avatar.jpg'
           }
         }
@@ -1177,7 +1177,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       const label = mockDoc.getElementById('label-magic-link');
 
       // Valid email submission
-      const email = 'dra.fernanda@pediatria.med.br';
+      const email = 'medica@example.com';
       const res = await signInWithMagicLink(email);
       assert.equal(res.error, null);
 
@@ -1229,13 +1229,13 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
   // Features: F3, F6, F7, F13
   // ==========================================================================
   describe('Scenario 5 — Security & CSP Breach Defense (Cross-User & Injection Defense)', () => {
-    test('5.1 Cross-user isolation: intruder client cannot query records belonging to Dra. Fernanda', async () => {
-      // Seed record for Dra. Fernanda
+    test('5.1 Cross-user isolation: intruder client cannot query records belonging to Médica', async () => {
+      // Seed record for Médica
       const shiftId = generateUUID();
       mockSupabase.remoteTables.shifts.set(shiftId, {
         id: shiftId,
-        user_id: 'dra-fernanda-uid',
-        hospital: 'Maternidade Araken',
+        user_id: 'user-a-test-id',
+        hospital: 'Maternidade Principal',
         net_value: 1500.00
       });
 
@@ -1253,7 +1253,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       const intruderClient = new MockSupabaseClient('dr-intruder-id');
       const spoofedPayload = {
         id: generateUUID(),
-        user_id: 'dra-fernanda-uid', // Attempting to inject into Dra. Fernanda's account
+        user_id: 'user-a-test-id', // Attempting to inject into Médica's account
         hospital: 'Hospital Invasor',
         net_value: 5000.00
       };
@@ -1329,14 +1329,14 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       // Reset store shifts & expenses
       store.data.shifts = [];
       store.data.expenses = [];
-      store.data.residencySalary = { value: 4106.09, active: true, dayOfMonth: 5 };
+      store.data.residencySalary = { value: 0.00, active: true, dayOfMonth: 5 };
 
       // 1. Shift worked in March 2026 (Net R$ 1.600,00)
       // D+60 (75% = R$ 1.200,00) due in May 2026 (2026-05-12)
       // D+90 (25% = R$ 400,00) due in June 2026 (2026-06-12)
       marchShift = store.saveShift({
         id: 'shift_march_01',
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         date: '2026-03-12',
         grossValue: 1900.00,
         netValue: 1600.00
@@ -1347,7 +1347,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       // D+90 (25% = R$ 500,00) due in May 2026 (2026-05-15)
       febShift = store.saveShift({
         id: 'shift_feb_01',
-        hospital: 'Maternidade Leide Morais',
+        hospital: 'Maternidade Secundária',
         date: '2026-02-15',
         grossValue: 2400.00,
         netValue: 2000.00
@@ -1357,7 +1357,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       // Competência only for May! Cash arrives in July (D+60) and August (D+90)
       mayShift = store.saveShift({
         id: 'shift_may_01',
-        hospital: 'MEJEC',
+        hospital: 'Hospital Pediátrico',
         date: '2026-05-20',
         grossValue: 2150.00,
         netValue: 1800.00
@@ -1379,14 +1379,14 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       mayExpenses.forEach(exp => store.saveExpense(exp));
     });
 
-    test('6.1 Settlement pipeline correctly identifies May cash inflows: Residency (R$ 4.106,09) + March 75% + Feb 25%', () => {
+    test('6.1 Settlement pipeline correctly identifies May cash inflows: Residency (R$ 0,00) + March 75% + Feb 25%', () => {
       const summary = store.getMonthlySummary('2026-05', 'caixa');
 
       // Expected Cash Inflows:
-      // Residency Salary: 4106.09
+      // Residency Salary: 0.00
       // March Shift 75%: 1200.00
       // Feb Shift 25%: 500.00
-      // Total Expected Inflow = 4106.09 + 1200.00 + 500.00 = 5806.09
+      // Total Expected Inflow = 0.00 + 1200.00 + 500.00 = 5806.09
       assert.equal(summary.totalIncome, 5806.09);
     });
 
@@ -1409,7 +1409,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
     test('6.4 Regime de Competência comparison highlights pediatric production hiatus (May worked shifts deferred in Caixa)', () => {
       const summaryComp = store.getMonthlySummary('2026-05', 'competencia');
 
-      // Competência Inflow: Residency (4106.09) + May Shift worked (1800.00) = 5906.09
+      // Competência Inflow: Residency (0.00) + May Shift worked (1800.00) = 5906.09
       assert.equal(summaryComp.totalIncome, 5906.09);
 
       // Competência Balance: 5906.09 - 3780.80 = 2125.29
@@ -1426,7 +1426,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
       assert.equal(summary.shiftsPendingValue, 1700.00); // 1200 + 500
       assert.equal(summary.shiftsReceivedValue, 0.00);
 
-      // Dra. Fernanda marks March D+60 payment as received
+      // Médica marks March D+60 payment as received
       store.toggleShiftInstallment(marchShift.id, 1);
 
       summary = store.getMonthlySummary('2026-05', 'caixa');

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   
   <!-- Título Canônico & Autoria Imutável -->
-  <title>Dra. Fernanda Ch. — Finanças Pediatria</title>
+  <title>Médica — Finanças Pediatria</title>
   <meta name="author" content="FChNeto" />
   <meta name="creator" content="FChNeto" />
   <meta name="app-creator" content="FChNeto" />
@@ -70,7 +70,7 @@
         <!-- Títulos e Saudação da Médica -->
         <header class="silk-gate-header">
           <span class="silk-pill-badge">Nuvem Segura • Supabase PostgreSQL</span>
-          <h1 class="silk-gate-title">Dra. Fernanda Ch.</h1>
+          <h1 class="silk-gate-title">Médica</h1>
           <p class="silk-gate-subtitle">Finanças Pediatria • Silk & Rose Gold</p>
           <p class="silk-gate-caption">Seu santuário financeiro pediátrico</p>
         </header>
@@ -110,7 +110,7 @@
                   id="input-magic-email" 
                   name="email" 
                   class="silk-input" 
-                  placeholder="dra.fernanda@hospital.com.br" 
+                  placeholder="medica@example.com" 
                   autocomplete="email" 
                   required 
                 />
@@ -183,7 +183,7 @@
             </div>
           </div>
           <div class="greeting-text">
-            <h1 id="header-doctor-name">Dra. Fernanda Ch.</h1>
+            <h1 id="header-doctor-name">Médica</h1>
             <p id="header-doctor-role">Pediatra (R3)</p>
           </div>
         </div>
@@ -246,12 +246,12 @@
 
       <!-- Barra de Chips de Pré-Seleção Rápida de Maternidades -->
       <section class="maternity-chips-scroll" aria-label="Maternidades Frequentes">
-        <button class="hospital-chip highlight" data-quick-hospital="Maternidade Araken" type="button">+ Araken</button>
-        <button class="hospital-chip highlight" data-quick-hospital="Maternidade Leide Morais" type="button">+ Leide Morais</button>
-        <button class="hospital-chip" data-quick-hospital="MEJEC" type="button">+ MEJEC</button>
-        <button class="hospital-chip" data-quick-hospital="Hospital da Criança" type="button">+ Hosp. da Criança</button>
-        <button class="hospital-chip" data-quick-hospital="Hospital Mater Dei" type="button">+ Mater Dei</button>
-        <button class="hospital-chip" data-quick-hospital="Hospital Promater" type="button">+ Promater</button>
+        <button class="hospital-chip highlight" data-quick-hospital="Maternidade Principal" type="button">+ Maternidade Principal</button>
+        <button class="hospital-chip highlight" data-quick-hospital="Maternidade Secundária" type="button">+ Maternidade Secundária</button>
+        <button class="hospital-chip" data-quick-hospital="Hospital Pediátrico" type="button">+ Hospital Pediátrico</button>
+        <button class="hospital-chip" data-quick-hospital="Hospital Pediátrico" type="button">+ Hosp. da Criança</button>
+        <button class="hospital-chip" data-quick-hospital="Hospital Geral" type="button">+ Hospital Geral</button>
+        <button class="hospital-chip" data-quick-hospital="Unidade de Saúde" type="button">+ Unidade de Saúde</button>
       </section>
 
       <!-- Botões de Ação Rápida Direta -->
@@ -357,7 +357,7 @@
               <span id="salary-status-badge" class="badge-status-pill mint">Ativa</span>
             </div>
             <div class="salary-value-row">
-              <span class="salary-amount" id="salary-display-value">R$ 4.106,09</span>
+              <span class="salary-amount" id="salary-display-value">R$ 0,00</span>
               <span class="salary-period">/ mês líquido</span>
             </div>
             <p class="salary-hint">Creditada mensalmente todo dia 5 sem retenções de impostos</p>
@@ -599,13 +599,13 @@
           <form id="form-new-shift" class="modal-form" novalidate>
           <div class="form-group">
             <label for="shift-hospital-input">Hospital / Maternidade</label>
-            <input type="text" id="shift-hospital-input" name="hospital" class="form-input" value="Maternidade Araken" placeholder="Ex: Maternidade Araken" required />
+            <input type="text" id="shift-hospital-input" name="hospital" class="form-input" value="Maternidade Principal" placeholder="Ex: Maternidade Principal" required />
             <div class="modal-hospital-pills">
-              <button type="button" class="modal-hosp-pill selected" data-modal-hosp="Maternidade Araken">Araken</button>
-              <button type="button" class="modal-hosp-pill" data-modal-hosp="Maternidade Leide Morais">Leide Morais</button>
-              <button type="button" class="modal-hosp-pill" data-modal-hosp="MEJEC">MEJEC</button>
-              <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital da Criança">Hosp. Criança</button>
-              <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Mater Dei">Mater Dei</button>
+              <button type="button" class="modal-hosp-pill selected" data-modal-hosp="Maternidade Principal">Maternidade Principal</button>
+              <button type="button" class="modal-hosp-pill" data-modal-hosp="Maternidade Secundária">Maternidade Secundária</button>
+              <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Pediátrico">Hospital Pediátrico</button>
+              <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Pediátrico">Hosp. Criança</button>
+              <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Geral">Hospital Geral</button>
             </div>
           </div>
 
@@ -902,13 +902,13 @@
 
           <div class="form-group">
             <label for="profile-name-input">Nome Completo</label>
-            <input type="text" id="profile-name-input" name="doctorName" class="form-input" value="Dra. Fernanda Ch." required />
+            <input type="text" id="profile-name-input" name="doctorName" class="form-input" value="Médica" required />
           </div>
 
           <div class="form-row">
             <div class="form-group">
               <label for="profile-crm-input">CRM / UF</label>
-              <input type="text" id="profile-crm-input" name="crm" class="form-input" value="CRM/RN 12345" />
+              <input type="text" id="profile-crm-input" name="crm" class="form-input" value="CRM/TESTE" />
             </div>
             <div class="form-group">
               <label for="profile-spec-input">Especialidade / Ano</label>
@@ -918,7 +918,7 @@
 
           <div class="form-group">
             <label for="profile-salary-input">Bolsa Residência Mensal Líquida (R$)</label>
-            <input type="number" step="0.01" id="profile-salary-input" name="salaryValue" class="form-input" value="4106.09" required />
+            <input type="number" step="0.01" id="profile-salary-input" name="salaryValue" class="form-input" value="0.00" required />
           </div>
 
           <button type="submit" id="btn-save-profile" class="btn-silk-primary">
@@ -972,7 +972,7 @@
       <div class="drawer-panel">
         <header class="drawer-header">
           <div class="drawer-profile-info">
-            <h3 id="drawer-doctor-name">Dra. Fernanda Ch.</h3>
+            <h3 id="drawer-doctor-name">Médica</h3>
             <p>Finanças Pediatria v4.0</p>
           </div>
           <button id="btn-close-drawer" class="icon-btn" aria-label="Fechar Menu" type="button">

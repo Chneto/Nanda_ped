@@ -1,7 +1,7 @@
 # 🗺️ ROADMAP — Finanças Pediatria
 
 > **Visão de Produto, Marcos Históricos e Próximos Horizontes de Desenvolvimento.**  
-> **Aplicação:** Finanças Pediatria (Dra. Fernanda Ch.)  
+> **Aplicação:** Finanças Pediatria
 > **Autor / Criador:** **FChNeto** (`APP_CREATOR = 'FChNeto'`)  
 > **Status:** Ativo / Produção Contínua  
 
@@ -9,11 +9,14 @@
 
 ## 📌 Visão de Produto & Filosofia
 
-O **Finanças Pediatria** nasceu para resolver a complexidade financeira única vivenciada por médicas pediatras no Brasil: a convivência entre rendimentos fixos (Bolsa de Residência Médica), rendimentos variáveis com recebimento postergado e fracionado (Plantões em Sala de Parto pagos em **80% a D+60** e **20% a D+90**), despesas pessoais e de qualificação médica contínua, e a transição tributária de Pessoa Física (PF) para Pessoa Jurídica (PJ com Fator R a 28%).
+O **Finanças Pediatria** organiza rendimentos fixos configuráveis, receitas variáveis com recebimento postergado e fracionado (regra padrão de **75% em D+60** e **25% em D+90**), despesas e parâmetros tributários informados pela pessoa usuária.
 
-O projeto equilibra duas experiências complementares:
-1. **Versão v2.0 (Sanctuary Minimalist em `/v2.0/`):** Interface pura, higienizada, sem qualquer ruído visual, focada no essencial do dia a dia (Salário Residência, Plantões em Sala de Parto, 22 categorias essenciais de gastos, parcelamentos e persistência local blindada para iPhone).
-2. **Versão v3.x (Master Executive na raiz `/`):** Plataforma completa com consultório de puericultura do 1º ano de vida, DRE contábil, otimizador de Fator R, passagem de plantão SBAR (LGPD), conciliação bancária OFX/CSV e simulador FIRE.
+O projeto equilibra experiências complementares:
+1. **Versão v6.0.0 (Cloud & Sanctuary em `/v6/`):** Versão oficial com autenticação Supabase, CSP estrita sem `unsafe-inline`, 23 categorias canônicas mapeadas nos 6 macro-grupos, detecção de concorrência com bloqueio otimista e backups de conflito.
+2. **Versão v2.0 (Sanctuary Minimalist em `/v2.0/`):** Interface pura, higienizada, sem ruído visual, focada em receitas, despesas, categorias, parcelamentos e persistência local.
+3. **Versões v5.x (`/` e `/v5/`):** Aplicação standalone com painel financeiro, categorias editáveis e experiência mobile-first.
+4. **Versão v4.1.1 (`/V4_Cloud/`):** Aplicação Cloud com autenticação Supabase, sincronização por conta e edição de categorias e despesas.
+5. **Versões v3.x (histórico):** Consultório, DRE, Fator R, SBAR, conciliação bancária, simulador FIRE e entrada por voz.
 
 ---
 
@@ -23,16 +26,20 @@ O projeto equilibra duas experiências complementares:
 timeline
     title Linha do Tempo e Evolução do Finanças Pediatria
     v1.0 (Maio 2026) : MVP Inicial : Gestão básica de plantões e despesas : PWA inicial
-    v2.5 (Junho 2026) : Fórmula D+60 e D+90 : 22 Categorias : CSV Excel : Lixeira e Undo
+    v2.5 (Junho 2026) : Fórmula D+60 e D+90 : Categorias livres : CSV Excel : Lixeira e Undo
     v3.0 (Julho 2026) : Consultório & Puericultura : DRE & Fator R (28%) : SBAR LGPD : Conciliação OFX : FIRE : Voice NLP
     v3.1 (Agosto 2026) : Pediatric Dark Sanctuary : Dropdowns Modernos : Menu Hambúrguer : Foto da Médica : Partículas
     v3.1.1 (Setembro 2026) : In-Flow Expansion : Correção anti-crop em modais : Scroll livre em todos os diálogos
     v2.0 (Setembro 2026) : Sanctuary Minimalist : Higienização total : Persistência Tripla iOS : Backup iCloud/Arquivos
+    v4.1.0 (Outubro 2026) : Auth runtime Vercel : Estado Supabase isolado por conta : Edição de categorias e despesas
+    v4.1.1 (Outubro 2026) : Remoção de valores de perfil pré-preenchidos : Exemplos anonimizados : Publicação segura
+    v5.0.1 (Outubro 2026) : Perfil e locais genéricos : Rendimentos iniciais zerados : Documentação sanitizada
+    v6.0.0 (Outubro 2026) : CSP Estrita (sem unsafe-inline) : 23 Categorias nos 6 Macro-Grupos : Conflito Otimista & Backups
 ```
 
 ### Detalhamento dos Marcos Entregues:
 - **v1.0.0 — Fundação do Core:** SPA Mobile-First para iPhone, calendário financeiro e cálculo preliminar de atrasos em plantões.
-- **v2.5.0 — Regra Médica Canônica:** Implementação da fórmula de recebimento (80% D+60 e 20% D+90), categorias personalizadas e lixeira com recuperação em 1 toque.
+- **v2.5.0 — Regra Médica Canônica:** Implementação da fórmula de recebimento D+60/D+90, categorias personalizadas e lixeira com recuperação em 1 toque.
 - **v3.0.0 — Ultra Release Clínico & Executivo:**
   - Módulo nativo de Consultório e Puericultura do 1º ano (RN, 2m, 4m, 6m, 9m, 12m).
   - DRE Médica e Otimizador Dinâmico do Fator R (28%) para Anexo III do Simples Nacional.
@@ -50,9 +57,29 @@ timeline
 - **v2.0.0 — Sanctuary Minimalist (Versão Higienizada e Pura):**
   - Pasta dedicada `/v2.0/` com arquitetura independente.
   - 3 abas essenciais (Início, Ganhos, Despesas) + botão flutuante central (+).
-  - Pré-configuração estrita das 22 categorias prioritárias de gastos.
+  - Pré-configuração estrita das categorias prioritárias listadas em `agents.md`.
   - Cálculo automático de compras parceladas com projeção mensal futura.
   - Persistência tripla no iOS (IndexedDB + LocalStorage + `navigator.storage.persist()`) e botão "Salvar no Meu iPhone" (iCloud / Arquivos via Web Share API nativa).
+
+- **V4_Cloud v4.1.0 — Correção de autenticação e sincronização por conta:**
+  - Configuração pública do Supabase carregada em runtime pela Vercel, sem credenciais embutidas no HTML.
+  - Callback OAuth sem troca duplicada do código PKCE; cadastro por senha encaminha o retorno à origem atual.
+  - Estado completo persistido por usuário com RLS e controle de revisão para evitar sobrescrita silenciosa entre dispositivos.
+  - Escopo local isolado por conta, edição de despesas e renomeação de categorias com atualização dos lançamentos relacionados.
+  - Revalidação de HTML, CSS e JavaScript para reduzir a entrega de versões antigas após deploy.
+
+- **V4_Cloud v4.1.1 — Privacidade dos padrões:** remoção de nomes, locais, registros profissionais e valores financeiros pré-preenchidos; novos perfis começam sem renda configurada.
+- **Standalone v5.0.1 — Privacidade dos dados iniciais:** perfis e locais sem identificação, renda inicial zerada, protótipos sem saldos demonstrativos e documentos operacionais atualizados.
+
+## 🔎 Plano de Revisão e Gestão Operacional
+
+1. **Autenticação e implantação:** conferir Vercel Root Directory, variáveis públicas, provedor Google, URL de callback do Supabase e allowlist de retorno; exercitar cadastro com confirmação de e-mail e login em sessão nova.
+2. **Dados e isolamento:** aplicar as migrações em ordem, conferir RLS para cada usuário e testar leitura, criação, atualização, conflito entre dispositivos e restauração de backup.
+3. **Financeiro:** revisar arredondamentos, fechamento de mês D+60/D+90, parcelamentos, edição de lançamentos e classificação em grupos macro.
+4. **Interface móvel:** validar iPhone/Safari, teclado, áreas seguras, estados sem internet, acessibilidade, formulários e menus dentro de modais.
+5. **Regressão e liberação:** executar as suítes da raiz, v2, v4 e V4_Cloud; depois publicar primeiro em preview e validar com conta de teste antes de trocar o domínio de produção.
+
+**Acompanhamento pendente:** o código não consegue habilitar credenciais Google, redirects ou variáveis nos painéis externos. Esses itens estão descritos em `V4_Cloud/README.md`.
 
 ---
 
@@ -83,11 +110,11 @@ timeline
 
 ### 🏥 Fase 2 — Médio Prazo (Q1 2027 / v2.2 & v4.0)
 - [ ] **Bot Assistente no WhatsApp / Telegram:**
-  - Canal direto onde a médica envia áudios curtos ou mensagens de texto enquanto sai do hospital (ex: *"Acabei de fazer plantão de 24h na Maternidade Araken, líquido 2.800"*), registrando automaticamente via webhook criptografado.
-- [ ] **Gestão Multi-Hospital & Benchmark de Rendimento por Hora:**
-  - Relatório visual comparativo demonstrando qual escala ou hospital oferece a melhor remuneração líquida real por hora trabalhada, pontualidade de pagamento e índice de esforço.
+  - Canal direto para registrar lançamentos por áudio ou texto, usando os valores e locais informados pela pessoa usuária.
+- [ ] **Gestão de Locais de Atendimento & Benchmark de Rendimento por Hora:**
+  - Relatório visual comparativo das remunerações por hora e prazos de pagamento dos locais configurados pela pessoa usuária.
 - [ ] **Emissor de Recibos para Reembolso de Convênio:**
-  - Geração de recibos em PDF médico padronizados com CRM, RQE, CPF e dados do paciente de puericultura para que os pais peçam reembolso no convênio de saúde (Bradesco, SulAmérica, Unimed, Amil).
+  - Geração de recibos padronizados com os campos cadastrais necessários, sem incluir dados de demonstração identificáveis.
 - [ ] **Planejador de Metas de Equipamentos e Consultório:**
   - Cofrinhos digitais com progresso visual para compra de otoscópio de fibra óptica, estadiômetro portátil, oxímetro neonatal ou reforma da sala de atendimento.
 

@@ -207,8 +207,8 @@ describe('V4_Cloud Supabase PostgreSQL Schema & Migrations Suite', () => {
         'profiles.id must be UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE');
 
       // doctor_name
-      assert.ok(/doctor_name\s+TEXT\s+NOT\s+NULL\s+DEFAULT\s+'Dra\.\s+Fernanda\s+Ch\.'/i.test(rawBody),
-        'profiles.doctor_name must be TEXT NOT NULL DEFAULT Dra. Fernanda Ch.');
+      assert.ok(/doctor_name\s+TEXT\s+NOT\s+NULL\s+DEFAULT\s+'Dra\.\s+Profissional\s+Ch\.'/i.test(rawBody),
+        'profiles.doctor_name must be TEXT NOT NULL DEFAULT Médica');
 
       // crm, rqe, specialty
       assert.ok(/crm\s+TEXT/i.test(rawBody), 'profiles.crm must be TEXT');
@@ -216,8 +216,8 @@ describe('V4_Cloud Supabase PostgreSQL Schema & Migrations Suite', () => {
       assert.ok(/specialty\s+TEXT\s+DEFAULT\s+'Pediatria'/i.test(rawBody), 'profiles.specialty must be TEXT DEFAULT Pediatria');
 
       // residency_salary
-      assert.ok(/residency_salary\s+NUMERIC\(10,\s*2\)\s+NOT\s+NULL\s+DEFAULT\s+4106\.09/i.test(rawBody),
-        'profiles.residency_salary must be NUMERIC(10,2) NOT NULL DEFAULT 4106.09');
+      assert.ok(/residency_salary\s+NUMERIC\(10,\s*2\)\s+NOT\s+NULL\s+DEFAULT\s+0\.00/i.test(rawBody),
+        'profiles.residency_salary must be NUMERIC(10,2) NOT NULL DEFAULT 0.00');
 
       // Timestamps
       assert.ok(/created_at\s+TIMESTAMPTZ\s+NOT\s+NULL\s+DEFAULT\s+NOW\(\)/i.test(rawBody), 'profiles.created_at must be TIMESTAMPTZ');
@@ -302,7 +302,7 @@ describe('V4_Cloud Supabase PostgreSQL Schema & Migrations Suite', () => {
       assert.ok(/SET\s+search_path\s*=\s*public/i.test(funcStmt), 'handle_new_user must SET search_path = public to prevent hijacking');
       assert.ok(/INSERT\s+INTO\s+(?:public\.)?profiles/i.test(funcStmt), 'handle_new_user must insert into public.profiles');
       assert.ok(/raw_user_meta_data/i.test(funcStmt), 'handle_new_user must parse user metadata');
-      assert.ok(/Dra\.\s+Fernanda\s+Ch\./i.test(funcStmt), 'handle_new_user must fallback to Dra. Fernanda Ch.');
+      assert.ok(/Dra\.\s+Profissional\s+Ch\./i.test(funcStmt), 'handle_new_user must fallback to Médica');
     });
 
     test('Trigger on_auth_user_created attaches to auth.users AFTER INSERT', () => {

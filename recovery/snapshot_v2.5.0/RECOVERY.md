@@ -1,4 +1,4 @@
-﻿# 🔄 RECOVERY — Finanças Pediatria (Guia de Restauração v2.5.0)
+# 🔄 RECOVERY — Finanças Pediatria (Guia de Restauração v2.5.0)
 
 > **Ponto de Restauração Oficial:** v2.5.0  
 > **Criado por:** FChNeto  
@@ -22,7 +22,7 @@ pm run restore):** Restaura arquivos, reconstrói o bundle e roda os testes.
 
 ### Método 1: Restauração em 1 Clique no Windows (Mais Fácil)
 1. Abra a pasta do projeto no Windows Explorer:
-   c:\Users\chibe\OneDrive\Área de Trabalho\Antigravity\Nanda\scripts\
+   .scripts\
 2. Dê um duplo clique no arquivo:
    **estore_v2.5.0.bat**
 3. Confirme pressionando S e Enter. O script fará a cópia dos arquivos, recompilará o bundle e executará os 59 testes de validação automaticamente!

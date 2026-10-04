@@ -1,6 +1,6 @@
 /**
  * Finanças Pediatria V4_Cloud - UI Controller & View Manager
- * Design System: "Silk & Rose Gold" para Dra. Fernanda Ch.
+ * Design System: "Silk & Rose Gold" para Médica
  * Autor Canônico: FChNeto (APP_CREATOR = 'FChNeto')
  * 
  * Invariantes & Princípios Arquiteturais:
@@ -8,7 +8,7 @@
  * 2. In-Flow Expansion Anti-Crop para Modais (position: relative !important).
  * 3. Pure Inline SVGs (Anti-Blowout de ligaduras de fontes no iOS Safari).
  * 4. 3 Abas Essenciais: Início (Dashboard), Ganhos (Plantões), Despesas (com 6 Macro-Grupos).
- * 5. Pré-Seleção Rápida de Maternidades (Araken, Leide Morais, MEJEC) em 1 toque.
+ * 5. Pré-Seleção Rápida de Maternidades (Maternidade Principal, Maternidade Secundária, Hospital Pediátrico) em 1 toque.
  * 6. Visual Sync Badge com 5 estados (guest, synced, syncing, offline, error).
  */
 
@@ -126,7 +126,7 @@ export class PediatricUI {
         return;
       }
 
-      // 2. Chips de Pré-Seleção de Maternidades (Araken, Leide Morais, etc.)
+      // 2. Chips de Pré-Seleção de Maternidades (Maternidade Principal, Maternidade Secundária, etc.)
       const hospChip = e.target.closest('[data-quick-hospital]');
       if (hospChip) {
         const hospitalName = hospChip.getAttribute('data-quick-hospital');
@@ -346,7 +346,7 @@ export class PediatricUI {
     }
 
     if (modalSelector === '#modal-shift') {
-      const hospitalPrefill = options.hospital || this.prefilledHospital || 'Maternidade Araken';
+      const hospitalPrefill = options.hospital || this.prefilledHospital || 'Maternidade Principal';
       this.renderShiftModalContent(hospitalPrefill);
       this.prefilledHospital = '';
     } else if (modalSelector === '#modal-expense') {
@@ -412,13 +412,12 @@ export class PediatricUI {
   // 6. FORMULÁRIOS DINÂMICOS & CÁLCULOS MATEMÁTICOS EM TEMPO REAL
   // ==========================================================================
 
-  renderShiftModalContent(defaultHospital = 'Maternidade Araken') {
+  renderShiftModalContent(defaultHospital = 'Maternidade Principal') {
     const container = document.getElementById('modal-shift-content');
     if (!container) return;
 
     const todayStr = getLocalDateString();
-    const defaultNet = 1200.00;
-    const installments = calculateShiftInstallments(defaultNet, todayStr);
+    const installments = calculateShiftInstallments(0, todayStr);
 
     container.innerHTML = `
       <form id="form-new-shift" class="modal-form" novalidate>
@@ -431,16 +430,16 @@ export class PediatricUI {
             class="silk-input" 
             value="${escapeHtml(defaultHospital)}" 
             required 
-            placeholder="Ex: Maternidade Araken"
+            placeholder="Ex: Maternidade Principal"
           />
         </div>
 
         <div class="modal-hosp-chips-row">
-          <button type="button" class="modal-hosp-pill ${defaultHospital.includes('Araken') ? 'selected' : ''}" data-modal-hosp="Maternidade Araken">Araken</button>
-          <button type="button" class="modal-hosp-pill ${defaultHospital.includes('Leide') ? 'selected' : ''}" data-modal-hosp="Maternidade Leide Morais">Leide Morais</button>
-          <button type="button" class="modal-hosp-pill ${defaultHospital === 'MEJEC' ? 'selected' : ''}" data-modal-hosp="MEJEC">MEJEC</button>
-          <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital da Criança">Hosp. Criança</button>
-          <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Mater Dei">Mater Dei</button>
+          <button type="button" class="modal-hosp-pill ${defaultHospital.includes('Maternidade Principal') ? 'selected' : ''}" data-modal-hosp="Maternidade Principal">Maternidade Principal</button>
+          <button type="button" class="modal-hosp-pill ${defaultHospital.includes('Maternidade Secundária') ? 'selected' : ''}" data-modal-hosp="Maternidade Secundária">Maternidade Secundária</button>
+          <button type="button" class="modal-hosp-pill ${defaultHospital === 'Hospital Pediátrico' ? 'selected' : ''}" data-modal-hosp="Hospital Pediátrico">Hospital Pediátrico</button>
+          <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Pediátrico">Hosp. Criança</button>
+          <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Geral">Hospital Geral</button>
         </div>
 
         <div class="form-row-2">
@@ -476,7 +475,7 @@ export class PediatricUI {
               id="shift-gross-input" 
               name="grossValue" 
               class="silk-input" 
-              value="${defaultNet}" 
+              value="" 
               placeholder="0,00"
             />
           </div>
@@ -489,7 +488,7 @@ export class PediatricUI {
               id="shift-net-input" 
               name="netValue" 
               class="silk-input" 
-              value="${defaultNet}" 
+              value="" 
               placeholder="0,00"
             />
           </div>
@@ -516,13 +515,13 @@ export class PediatricUI {
         </div>
 
         <div class="input-field-group">
-          <label for="shift-notes-input" class="silk-input-label">Observações Clínicas (Opcional)</label>
+          <label for="shift-notes-input" class="silk-input-label">Observações (Opcional)</label>
           <input 
             type="text" 
             id="shift-notes-input" 
             name="notes" 
             class="silk-input" 
-            placeholder="Ex: Intercorrências na sala de parto, UTI neo"
+            placeholder="Observação opcional"
           />
         </div>
 
@@ -564,7 +563,7 @@ export class PediatricUI {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const fd = new FormData(form);
-        const hospital = fd.get('hospital')?.trim() || 'Maternidade Araken';
+        const hospital = fd.get('hospital')?.trim() || 'Maternidade Principal';
         const date = fd.get('date') || getLocalDateString();
         const shiftType = fd.get('shiftType') || '12h Noturno';
         const grossValue = parseFloat(fd.get('grossValue')) || 0;
@@ -791,7 +790,7 @@ export class PediatricUI {
           <header class="modal-header">
             <div class="modal-title-wrap">
               <span class="silk-pill-badge">Perfil Médico</span>
-              <h3>Dra. Fernanda Ch.</h3>
+              <h3>Médica</h3>
             </div>
             <button class="modal-close-btn" data-close-modal="#modal-doctor-profile" aria-label="Fechar">
               ${getIconSvg('close', 20)}
@@ -807,7 +806,7 @@ export class PediatricUI {
     if (!container) return;
 
     const data = this.store.data;
-    const salaryVal = data.residencySalary?.value || 4106.09;
+    const salaryVal = data.residencySalary?.value || 0.00;
 
     container.innerHTML = `
       <form id="form-edit-doctor-profile" class="modal-form" novalidate>
@@ -818,7 +817,7 @@ export class PediatricUI {
             id="profile-name-input" 
             name="doctorName" 
             class="silk-input" 
-            value="${escapeHtml(data.doctorName || 'Dra. Fernanda Ch.')}" 
+            value="${escapeHtml(data.doctorName || 'Médica')}" 
             required 
           />
         </div>
@@ -831,7 +830,7 @@ export class PediatricUI {
               id="profile-crm-input" 
               name="crm" 
               class="silk-input" 
-              value="${escapeHtml(data.crm || 'CRM/RN 12345')}" 
+              value="${escapeHtml(data.crm || 'CRM/TESTE')}" 
             />
           </div>
 
@@ -872,10 +871,10 @@ export class PediatricUI {
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const fd = new FormData(form);
-        const doctorName = fd.get('doctorName')?.trim() || 'Dra. Fernanda Ch.';
+        const doctorName = fd.get('doctorName')?.trim() || 'Médica';
         const crm = fd.get('crm')?.trim();
         const specialty = fd.get('specialty')?.trim();
-        const salaryValue = parseFloat(fd.get('salaryValue')) || 4106.09;
+        const salaryValue = parseFloat(fd.get('salaryValue')) || 0.00;
 
         this.store.updateDoctorProfile({
           doctorName,
@@ -1071,7 +1070,7 @@ export class PediatricUI {
     const currentMonth = data.preferences.activeMonth || getLocalDateString().slice(0, 7);
     const currentRegime = data.preferences.regime || 'caixa';
 
-    if (this.doctorNameHeader) this.doctorNameHeader.textContent = data.doctorName || 'Dra. Fernanda Ch.';
+    if (this.doctorNameHeader) this.doctorNameHeader.textContent = data.doctorName || 'Médica';
     if (this.doctorRoleHeader) this.doctorRoleHeader.textContent = data.specialty || 'Pediatria (R3)';
     if (this.monthTitle) this.monthTitle.textContent = formatMonthYear(currentMonth);
     if (this.regimePill) this.regimePill.textContent = currentRegime === 'caixa' ? 'Regime de Caixa' : 'Regime de Competência';

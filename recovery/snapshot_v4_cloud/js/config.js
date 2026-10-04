@@ -19,7 +19,7 @@
 export const APP_CREATOR = 'FChNeto';
 export const APP_VERSION = '4.0.0';
 export const APP_NAME = 'Finanças Pediatria V4_Cloud';
-export const DOCTOR_DEFAULT_NAME = 'Dra. Fernanda Ch.';
+export const DOCTOR_DEFAULT_NAME = 'Médica';
 
 // Chaves canônicas de armazenamento no localStorage
 export const STORAGE_KEYS = {

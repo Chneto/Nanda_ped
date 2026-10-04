@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   
-  <title>Finanças Pediatria v5.0 - Dra. Fernanda Ch.</title>
+  <title>Finanças Pediatria v5.0.1</title>
   <meta name="description" content="Controle financeiro pediátrico com regras D+60 (75%) e D+90 (25%), macro-grupos de despesas e interface Silk & Rose Gold." />
   
   <!-- Apple iOS WebApp Meta Tags -->
@@ -25,7 +25,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Estilos da Versão 5.0 Silk & Rose Gold -->
-  <link rel="stylesheet" href="./css/styles.css?v=5.0.0" />
+  <link rel="stylesheet" href="./css/styles.css?v=5.0.1" />
 </head>
 <body>
   <div id="app-container">
@@ -35,19 +35,19 @@
         <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
       </svg>
       <p style="font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.92rem; font-weight: 700; color: #7E7485;">
-        Carregando Finanças Pediatria v5.0...
+        Carregando Finanças Pediatria v5.0.1...
       </p>
     </div>
   </div>
 
   <noscript>
     <div style="padding: 20px; text-align: center; color: #D81B60; font-family: sans-serif;">
-      Para utilizar o Finanças Pediatria v5.0, por favor ative o JavaScript no seu navegador.
+      Para utilizar o Finanças Pediatria v5.0.1, por favor ative o JavaScript no seu navegador.
     </div>
   </noscript>
 
   <!-- Execução Autônoma Sem Dependência de Módulos (Zero CORS) -->
-  <script src="./js/bundle.js?v=5.0.0"></script>
+  <script src="./js/bundle.js?v=5.0.1"></script>
 
   <!-- Registro e Atualização do Service Worker v5 -->
   <script>
@@ -55,7 +55,7 @@
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
           .then((reg) => {
-            console.log('SW Finanças v5.0 registrado.');
+            console.log('SW Finanças v5.0.1 registrado.');
             if (reg && reg.update) {
               reg.update();
             }

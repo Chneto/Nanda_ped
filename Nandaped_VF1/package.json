@@ -1,7 +1,7 @@
 {
   "name": "nandaped-vf1",
   "version": "4.0.0",
-  "description": "Finanças Pediatria VF1 (Versão Final 1) - Dra. Fernanda Ch. (Vercel + Supabase) - Criado por FChNeto",
+  "description": "Finanças Pediatria VF1 (Versão Final 1) - Médica (Vercel + Supabase) - Criado por FChNeto",
   "main": "index.html",
   "type": "module",
   "scripts": {

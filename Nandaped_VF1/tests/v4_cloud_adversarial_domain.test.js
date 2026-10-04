@@ -387,7 +387,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
     test('Shift notes with SQL injection tokens (DROP TABLE, OR 1=1) store and retrieve safely', () => {
       const sqlNotes = "'; DROP TABLE shifts; SELECT * FROM profiles WHERE '1'='1";
       const shift = store.saveShift({
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         date: '2026-03-15',
         netValue: 1500,
         notes: sqlNotes
@@ -420,14 +420,14 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
 
     test('Doctor profile fields with XSS tags and symbols store and update reliably', () => {
       store.updateDoctorProfile({
-        doctorName: 'Dra. <script>alert(1)</script> Fernanda',
-        crm: 'CRM/RN 99999 <img src=x onerror=1>',
+        doctorName: 'Dra. <script>alert(1)</script> Profissional',
+        crm: 'CRM/TESTE <img src=x onerror=1>',
         specialty: 'Neonatologia & <svg onload=alert(1)>',
-        salaryValue: 4106.09
+        salaryValue: 0.00
       });
 
-      assert.equal(store.data.doctorName, 'Dra. <script>alert(1)</script> Fernanda');
-      assert.equal(store.data.crm, 'CRM/RN 99999 <img src=x onerror=1>');
+      assert.equal(store.data.doctorName, 'Dra. <script>alert(1)</script> Profissional');
+      assert.equal(store.data.crm, 'CRM/TESTE <img src=x onerror=1>');
       assert.equal(store.data.specialty, 'Neonatologia & <svg onload=alert(1)>');
     });
 
@@ -445,7 +445,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
     });
 
     test('Emojis (🩺🌸✨💉🏥👶) in hospital names, notes and categories preserve UTF-8 byte integrity', () => {
-      const emojiHospital = 'Maternidade 🏥 Araken 🩺 UTI Neonatal 👶🌸✨';
+      const emojiHospital = 'Maternidade 🏥 Maternidade Principal 🩺 UTI Neonatal 👶🌸✨';
       const emojiNotes = 'Plantão tranquilo com 3 partos cesáreos 💉';
       store.saveShift({
         hospital: emojiHospital,
@@ -499,7 +499,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
     });
 
     test('Saving shifts or expenses with property keys "__proto__" or "constructor" does not alter Object prototype', () => {
-      const dirtyShift = JSON.parse('{"hospital": "Araken", "netValue": 1000, "__proto__": {"isAdmin": true}}');
+      const dirtyShift = JSON.parse('{"hospital": "Maternidade Principal", "netValue": 1000, "__proto__": {"isAdmin": true}}');
       store.saveShift(dirtyShift);
 
       assert.equal(({})['isAdmin'], undefined);
@@ -578,7 +578,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
     test('20,000 character shift notes handle serialization without memory exhaustion', () => {
       const massiveNotes = 'Anotação de plantão pediátrico em sala de parto. '.repeat(400); // ~20,000 chars
       const shift = store.saveShift({
-        hospital: 'Maternidade Leide Morais',
+        hospital: 'Maternidade Secundária',
         date: '2026-08-01',
         netValue: 1500,
         notes: massiveNotes
@@ -613,7 +613,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
       let totalExpensesCreated = 0;
 
       // Add 10 shifts per month with odd cents across 3 maternities
-      const hospitals = ['Maternidade Araken', 'Maternidade Leide Morais', 'MEJEC'];
+      const hospitals = ['Maternidade Principal', 'Maternidade Secundária', 'Hospital Pediátrico'];
       months.forEach((mStr, mIdx) => {
         for (let s = 1; s <= 10; s++) {
           const day = String((s * 2) % 28 + 1).padStart(2, '0');
@@ -877,7 +877,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
   describe('10. State Machine & Mutation Guardrails', () => {
     test('toggleShiftInstallment with invalid installment numbers (0, 3, -1, 999) does not throw and targets fallback', () => {
       const shift = store.saveShift({
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         netValue: 1200,
         date: '2026-03-01'
       });
@@ -893,7 +893,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 5 Adversarial Hardening Suite', 
     });
 
     test('deleteShift and deleteExpense are idempotent and handle nonexistent IDs as safe no-ops', () => {
-      store.saveShift({ id: 's100', hospital: 'Araken', netValue: 1000 });
+      store.saveShift({ id: 's100', hospital: 'Maternidade Principal', netValue: 1000 });
       store.saveExpense({ id: 'e100', description: 'Gasto', amount: 50 });
 
       assert.equal(store.data.shifts.length, 1);

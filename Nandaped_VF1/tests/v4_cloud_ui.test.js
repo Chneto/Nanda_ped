@@ -8,7 +8,7 @@
  * 3. 3 Essential Tab Switching Mechanics (Home, Income, Expenses, Active States)
  * 4. In-Flow Expansion Modal Anti-Crop Architecture (position: relative !important)
  * 5. Anti-Zoom 16px Font-Size Constraints (Mobile-First iPhone 16 Plus)
- * 6. Hospital Chips 1-Touch Selection (Araken, Leide Morais, MEJEC)
+ * 6. Hospital Chips 1-Touch Selection (Maternidade Principal, Maternidade Secundária, Hospital Pediátrico)
  * 7. Shift Form Handling & 75% D+60 / 25% D+90 Real-Time Preview
  * 8. Expense Form Handling, Macro-Groups & 1x-24x Installments
  * 9. Doctor Profile Update & Residency Salary Management
@@ -481,10 +481,10 @@ describe('Finanças Pediatria V4_Cloud — Milestone M5 UI Integration & Archite
       const session = {
         user: {
           id: 'doctor-uuid-1234',
-          email: 'dra.fernanda@hospital.com',
+          email: 'medica@example.com',
           user_metadata: {
-            full_name: 'Dra. Fernanda Ch.',
-            name: 'Dra. Fernanda Ch.'
+            full_name: 'Médica',
+            name: 'Médica'
           }
         }
       };
@@ -583,23 +583,23 @@ describe('Finanças Pediatria V4_Cloud — Milestone M5 UI Integration & Archite
   // 6. HOSPITAL CHIPS 1-TOUCH SELECTION
   describe('6. Hospital Chips 1-Touch Selection', () => {
     test('selectHospitalChip opens shift modal with the hospital prefilled in the form', () => {
-      ui.selectHospitalChip('Maternidade Araken');
+      ui.selectHospitalChip('Maternidade Principal');
 
       const modal = mockDoc.getElementById('modal-shift');
       assert.equal(modal.classList.contains('hidden'), false);
 
       const content = mockDoc.getElementById('modal-shift-content');
-      assert.match(content.innerHTML, /value="Maternidade Araken"/);
+      assert.match(content.innerHTML, /value="Maternidade Principal"/);
     });
 
-    test('selectHospitalChip works seamlessly with Leide Morais and MEJEC', () => {
-      ui.selectHospitalChip('Maternidade Leide Morais');
+    test('selectHospitalChip works seamlessly with Maternidade Secundária and Hospital Pediátrico', () => {
+      ui.selectHospitalChip('Maternidade Secundária');
       let content = mockDoc.getElementById('modal-shift-content');
-      assert.match(content.innerHTML, /value="Maternidade Leide Morais"/);
+      assert.match(content.innerHTML, /value="Maternidade Secundária"/);
 
-      ui.selectHospitalChip('MEJEC');
+      ui.selectHospitalChip('Hospital Pediátrico');
       content = mockDoc.getElementById('modal-shift-content');
-      assert.match(content.innerHTML, /value="MEJEC"/);
+      assert.match(content.innerHTML, /value="Hospital Pediátrico"/);
     });
   });
 
@@ -620,7 +620,7 @@ describe('Finanças Pediatria V4_Cloud — Milestone M5 UI Integration & Archite
     });
 
     test('renderShiftModalContent embeds the split preview card in DOM', () => {
-      ui.renderShiftModalContent('Maternidade Araken');
+      ui.renderShiftModalContent('Maternidade Principal');
       const content = mockDoc.getElementById('modal-shift-content');
       assert.match(content.innerHTML, /id="shift-split-preview"/);
       assert.match(content.innerHTML, /75% \(D\+60\)/);
@@ -665,14 +665,14 @@ describe('Finanças Pediatria V4_Cloud — Milestone M5 UI Integration & Archite
   describe('9. Doctor Profile Update & Residency Salary', () => {
     test('updateDoctorProfile modifies store data and preserves canonical creator', () => {
       store.updateDoctorProfile({
-        doctorName: 'Dra. Fernanda Carvalho',
-        crm: 'CRM/RN 99887',
+        doctorName: 'Médica',
+        crm: 'CRM/TESTE',
         specialty: 'Neonatologia Pediátrica',
         salaryValue: 4500.00
       });
 
-      assert.equal(store.data.doctorName, 'Dra. Fernanda Carvalho');
-      assert.equal(store.data.crm, 'CRM/RN 99887');
+      assert.equal(store.data.doctorName, 'Médica');
+      assert.equal(store.data.crm, 'CRM/TESTE');
       assert.equal(store.data.specialty, 'Neonatologia Pediátrica');
       assert.equal(store.data.residencySalary.value, 4500.00);
       assert.equal(store.data.creator, 'FChNeto');
@@ -785,8 +785,8 @@ describe('Finanças Pediatria V4_Cloud — Milestone M5 UI Integration & Archite
         creator: 'FChNeto',
         version: '4.0.0',
         data: {
-          doctorName: 'Dra. Fernanda Ch.',
-          shifts: [{ id: 's1', hospital: 'Maternidade Araken', netValue: 1200 }],
+          doctorName: 'Médica',
+          shifts: [{ id: 's1', hospital: 'Maternidade Principal', netValue: 1200 }],
           expenses: [{ id: 'e1', description: 'Livro', amount: 150 }]
         }
       };

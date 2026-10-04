@@ -1,6 +1,6 @@
 /**
  * Finanças Pediatria V4_Cloud - Aplicação Principal (SPA Bootstrap & Lifecycle)
- * Design System: "Silk & Rose Gold" para Dra. Fernanda Ch.
+ * Design System: "Silk & Rose Gold" para Médica
  * Autor Canônico: FChNeto (APP_CREATOR = 'FChNeto')
  * 
  * Invariantes & Responsabilidades:
@@ -226,7 +226,7 @@ export class PediatricApp {
       btnGuest.addEventListener('click', () => {
         setGuestMode(true);
         this.routeAuthView(null);
-        this.ui.showToast('Bem-vinda, Dra. Fernanda! Modo Hospital ativo. 🩺🌸', 'success');
+        this.ui.showToast('Bem-vinda, Médica! Modo Hospital ativo. 🩺🌸', 'success');
         this.ui.render();
       });
     }
@@ -606,7 +606,7 @@ export class PediatricApp {
         if (navigator.canShare({ files: [file] })) {
           await navigator.share({
             title: 'Backup Finanças Pediatria',
-            text: `Backup financeiro da Dra. Fernanda Ch. gerado em ${dateFormatted}.`,
+            text: `Backup financeiro da Médica gerado em ${dateFormatted}.`,
             files: [file]
           });
           this.ui.showToast('Backup compartilhado com sucesso! 📱💾', 'success');

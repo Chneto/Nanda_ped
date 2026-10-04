@@ -132,8 +132,8 @@ export function createDegradedClient() {
                 id: 'guest-doctor-offline',
                 email: 'convidada@pediatria.local',
                 user_metadata: {
-                  full_name: 'Dra. Fernanda Ch. (Modo Local)',
-                  name: 'Dra. Fernanda Ch. (Modo Local)'
+                  full_name: 'Médica (Modo Local)',
+                  name: 'Médica (Modo Local)'
                 }
               }
             }
@@ -656,10 +656,10 @@ export async function signInWithPassword(email, password) {
  * Cadastra uma nova conta de médica diretamente com e-mail e senha
  * @param {string} email - Endereço de e-mail
  * @param {string} password - Senha (mínimo 6 caracteres)
- * @param {string} [doctorName='Dra. Fernanda Ch.'] - Nome completo da médica
+ * @param {string} [doctorName='Médica'] - Nome completo da médica
  * @returns {Promise<{ data: object|null, error: object|null }>}
  */
-export async function signUpWithPassword(email, password, doctorName = 'Dra. Fernanda Ch.') {
+export async function signUpWithPassword(email, password, doctorName = 'Médica') {
   if (!email || typeof email !== 'string' || !email.includes('@')) {
     const error = new Error('Por favor, informe um endereço de e-mail válido.');
     return { data: null, error };
@@ -714,8 +714,8 @@ export async function signUpWithPassword(email, password, doctorName = 'Dra. Fer
       password: password,
       options: {
         data: {
-          full_name: doctorName || 'Dra. Fernanda Ch.',
-          name: doctorName || 'Dra. Fernanda Ch.'
+          full_name: doctorName || 'Médica',
+          name: doctorName || 'Médica'
         }
       }
     });
@@ -1011,9 +1011,9 @@ export async function ensureProfile(user) {
       return { data: existing, error: null, created: false };
     }
 
-    // 2. Perfil ausente: provê dados padrão seguros da Dra. Fernanda Ch.
+    // 2. Perfil ausente: provê dados padrão seguros da Médica
     const meta = user.user_metadata || {};
-    const doctorName = meta.full_name || meta.name || 'Dra. Fernanda Ch.';
+    const doctorName = meta.full_name || meta.name || 'Médica';
     const photoUrl = meta.avatar_url || meta.picture || null;
 
     const profilePayload = {
@@ -1023,7 +1023,7 @@ export async function ensureProfile(user) {
       rqe: null,
       specialty: 'Pediatria',
       photo_url: photoUrl,
-      residency_salary: 4106.09,
+      residency_salary: 0.00,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };

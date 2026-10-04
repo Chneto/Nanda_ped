@@ -1,7 +1,7 @@
 {
   "name": "nanda-financas-pediatria-v4-cloud",
   "version": "4.0.0",
-  "description": "Finanças Pediatria V4 Cloud - Dra. Fernanda Ch. (Vercel + Supabase) - Criado por FChNeto",
+  "description": "Finanças Pediatria V4 Cloud - Médica (Vercel + Supabase) - Criado por FChNeto",
   "main": "index.html",
   "type": "module",
   "scripts": {

@@ -1,0 +1,26 @@
+{
+  "name": "nanda-financas-pediatria-v4-cloud",
+  "version": "4.1.0",
+  "description": "Finanças Pediatria V4 Cloud - Médica (Vercel + Supabase) - Criado por FChNeto",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:all": "node tests/run_all.js",
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "keywords": [
+    "pediatria",
+    "medicina",
+    "plantoes",
+    "controle-financeiro",
+    "pwa",
+    "mobile-first",
+    "supabase",
+    "vercel",
+    "silk-rose-gold"
+  ],
+  "author": "FChNeto",
+  "license": "MIT"
+}

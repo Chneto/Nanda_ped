@@ -173,7 +173,7 @@ describe('Finanças Pediatria V4_Cloud — Silk Gate Auth & Offline Resilience E
   describe('2. Key Validation & Strict Rejection of service_role Keys', () => {
     test('isValidSupabaseUrl accepts legitimate HTTPS Supabase domains and rejects non-HTTPS', () => {
       assert.equal(isValidSupabaseUrl('https://example.supabase.co'), true);
-      assert.equal(isValidSupabaseUrl('https://pediatria-nanda.supabase.co'), true);
+      assert.equal(isValidSupabaseUrl('https://example-project.supabase.co'), true);
       assert.equal(isValidSupabaseUrl('https://custom-gateway.hospital.med.br/supabase'), true);
 
       // Rejections
@@ -265,7 +265,7 @@ describe('Finanças Pediatria V4_Cloud — Silk Gate Auth & Offline Resilience E
       const testCases = [
         { role: 'anon', iss: 'supabase' },
         { role: 'service_role', desc: 'test-admin' },
-        { sub: '1234567890', name: 'Dra. Fernanda Ch.', iat: 1516239022 },
+        { sub: '1234567890', name: 'Médica', iat: 1516239022 },
         { a: 'b' },
         { foo: 'bar', baz: [1, 2, 3] }
       ];
@@ -282,7 +282,7 @@ describe('Finanças Pediatria V4_Cloud — Silk Gate Auth & Offline Resilience E
     });
 
     test('base64Decode utility safely decodes standard and URL-safe base64 strings', () => {
-      const original = 'Dra. Fernanda Ch. — Finanças Pediatria';
+      const original = 'Médica — Finanças Pediatria';
       const encoded = Buffer.from(original).toString('base64url');
       assert.equal(base64Decode(encoded), original);
       assert.equal(base64Decode(''), '');
@@ -294,7 +294,7 @@ describe('Finanças Pediatria V4_Cloud — Silk Gate Auth & Offline Resilience E
   // 3. CREDENTIAL STORAGE & LIFECYCLE
   // --------------------------------------------------------------------------
   describe('3. Credential Storage, Precedence & Event Notification', () => {
-    const validUrl = 'https://dr-fernanda-cloud.supabase.co';
+    const validUrl = 'https://dr-Profissional-cloud.supabase.co';
     const validAnonKey = createSampleJwt({ role: 'anon', ref: 'nanda-project' });
 
     test('saveConfig persists valid URL and Anon Key and dispatches v4_cloud_config_updated', () => {
@@ -580,10 +580,10 @@ describe('Finanças Pediatria V4_Cloud — Silk Gate Auth & Offline Resilience E
       assert.match(invalidRes.error.message, /e-mail válido/i);
 
       // Accepts valid doctor email
-      const validRes = await signInWithMagicLink('dra.fernanda@hospital.com.br');
+      const validRes = await signInWithMagicLink('medica@example.com');
       assert.ok(validRes.data);
       assert.equal(validRes.error, null);
-      assert.equal(otpCalledWith.email, 'dra.fernanda@hospital.com.br');
+      assert.equal(otpCalledWith.email, 'medica@example.com');
       assert.equal(otpCalledWith.options.emailRedirectTo, 'https://financas-pediatria.vercel.app');
     });
 
@@ -705,7 +705,7 @@ describe('Finanças Pediatria V4_Cloud — Silk Gate Auth & Offline Resilience E
       const user = {
         id: 'user-pediatra-uuid-1234',
         user_metadata: {
-          full_name: 'Dra. Fernanda Ch.',
+          full_name: 'Médica',
           avatar_url: 'https://example.com/avatar.jpg'
         }
       };
@@ -714,9 +714,9 @@ describe('Finanças Pediatria V4_Cloud — Silk Gate Auth & Offline Resilience E
       assert.equal(queriedTable, 'profiles');
       assert.ok(res.created);
       assert.equal(upsertedData.id, 'user-pediatra-uuid-1234');
-      assert.equal(upsertedData.doctor_name, 'Dra. Fernanda Ch.');
+      assert.equal(upsertedData.doctor_name, 'Médica');
       assert.equal(upsertedData.specialty, 'Pediatria');
-      assert.equal(upsertedData.residency_salary, 4106.09);
+      assert.equal(upsertedData.residency_salary, 0.00);
     });
   });
 
@@ -730,7 +730,7 @@ describe('Finanças Pediatria V4_Cloud — Silk Gate Auth & Offline Resilience E
       assert.equal(client.isDegraded, true);
 
       // Queries do not throw
-      const q = client.from('shifts').select('*').eq('hospital', 'Araken');
+      const q = client.from('shifts').select('*').eq('hospital', 'Maternidade Principal');
       assert.ok(q);
 
       // getSession returns null when guest mode is false
@@ -746,7 +746,7 @@ describe('Finanças Pediatria V4_Cloud — Silk Gate Auth & Offline Resilience E
       const sessionRes = await client.auth.getSession();
       assert.ok(sessionRes.data.session);
       assert.equal(sessionRes.data.session.user.id, 'guest-doctor-offline');
-      assert.match(sessionRes.data.session.user.user_metadata.name, /Dra\. Fernanda Ch\./);
+      assert.match(sessionRes.data.session.user.user_metadata.name, /Médica \(Modo Local\)/);
     });
 
     test('Calling cloud methods in degraded offline client fails gracefully with friendly errors', async () => {

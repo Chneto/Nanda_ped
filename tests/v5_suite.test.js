@@ -51,13 +51,13 @@ describe('Finanças Pediatria v5.0 - Silk & Rose Gold Engine Tests', () => {
 
   test('v5 Identidade Canônica & Assinatura Imutável', () => {
     assert.equal(APP_CREATOR, 'FChNeto');
-    assert.equal(APP_VERSION, '5.0.0');
+    assert.equal(APP_VERSION, '5.0.1');
     assert.equal(store.data.creator, 'FChNeto');
-    assert.equal(store.data.version, '5.0.0');
-    assert.equal(store.data.doctorName, 'Dra. Fernanda Ch.');
+    assert.equal(store.data.version, '5.0.1');
+    assert.equal(store.data.doctorName, 'Médica');
   });
 
-  test('v5 Presença Integral das 22 Categorias Obrigatórias', () => {
+  test('v5 Presença Integral das 23 Categorias Canônicas', () => {
     const requiredCategories = [
       'Passagens', 'Mercantil', 'Academia', 'Estudo', 'Cursos',
       'Presentes', 'Aluguel', 'Energia', 'Internet', 'Combustível',
@@ -70,7 +70,7 @@ describe('Finanças Pediatria v5.0 - Silk & Rose Gold Engine Tests', () => {
     requiredCategories.forEach(cat => {
       assert.ok(categoryNames.includes(cat), `Categoria obrigatória ausente na v5: ${cat}`);
     });
-    assert.ok(DEFAULT_CATEGORIES.length >= 22);
+    assert.equal(DEFAULT_CATEGORIES.length, 23);
   });
 
   test('v5 Macro-Grupos de Despesas Inteligentes (Mapeamento Nubank/Revolut)', () => {
@@ -113,16 +113,16 @@ describe('Finanças Pediatria v5.0 - Silk & Rose Gold Engine Tests', () => {
     assert.equal(getMacroGroupForCategory('Doação').name, 'Pessoal, Lazer & Outros');
   });
 
-  test('v5 Pré-Seleção de Maternidades Araken e Leide Morais', () => {
-    assert.ok(DEFAULT_HOSPITALS.includes('Maternidade Araken'));
-    assert.ok(DEFAULT_HOSPITALS.includes('Maternidade Leide Morais'));
-    assert.ok(DEFAULT_HOSPITALS.includes('MEJEC'));
+  test('v5 Pré-Seleção de Maternidades Maternidade Principal e Maternidade Secundária', () => {
+    assert.ok(DEFAULT_HOSPITALS.includes('Maternidade Principal'));
+    assert.ok(DEFAULT_HOSPITALS.includes('Maternidade Secundária'));
+    assert.ok(DEFAULT_HOSPITALS.includes('Hospital Pediátrico'));
   });
 
   test('v5 Regra Canônica de Plantão em Sala de Parto: 75% D+60 e 25% D+90', () => {
     // Plantão em 2026-06-10 de R$ 1950,00
     const shift = store.saveShift({
-      hospital: 'Maternidade Araken',
+      hospital: 'Maternidade Principal',
       date: '2026-06-10',
       value: 1950.00,
       shiftType: 'Sala de Parto'
@@ -171,11 +171,11 @@ describe('Finanças Pediatria v5.0 - Silk & Rose Gold Engine Tests', () => {
   });
 
   test('v5 Resumo Mensal com Breakdown por Macro-Grupos e Categorias', () => {
-    store.updateResidencySalary({ value: 4106.00, active: true });
+    store.updateResidencySalary({ value: 3000.00, active: true });
 
     // Plantão em Junho: 75% cai em Agosto (1462.50) e 25% em Setembro (487.50)
     store.saveShift({
-      hospital: 'Maternidade Araken',
+      hospital: 'Maternidade Principal',
       date: '2026-06-10',
       value: 1950.00
     });
@@ -189,11 +189,11 @@ describe('Finanças Pediatria v5.0 - Silk & Rose Gold Engine Tests', () => {
     });
 
     const summaryAug = store.getMonthlySummary('2026-08');
-    assert.equal(summaryAug.salaryVal, 4106.00);
+    assert.equal(summaryAug.salaryVal, 3000.00);
     assert.equal(summaryAug.shiftInflowExpected, 1462.50);
-    assert.equal(summaryAug.totalCashInflow, 4106.00 + 1462.50);
+    assert.equal(summaryAug.totalCashInflow, 3000.00 + 1462.50);
     assert.equal(summaryAug.totalExpenses, 600.00);
-    assert.equal(summaryAug.netCashBalance, (4106.00 + 1462.50) - 600.00);
+    assert.equal(summaryAug.netCashBalance, (3000.00 + 1462.50) - 600.00);
 
     const macroSummary = store.getMacroGroupSummary('2026-08');
     const alimGroup = macroSummary.find(g => g.id === 'macro_alimentacao');
@@ -204,28 +204,28 @@ describe('Finanças Pediatria v5.0 - Silk & Rose Gold Engine Tests', () => {
 
   test('v5 Edição de Perfil da Médica e Foto de Perfil', () => {
     store.updateDoctorProfile({
-      name: 'Dra. Fernanda Chianca',
-      crm: 'CRM/RN 9999',
-      specialty: 'UTI Neonatal e Pediatria',
+      name: 'Médica de Exemplo',
+      crm: 'CRM/TESTE',
+      specialty: 'Pediatria',
       photo: 'data:image/jpeg;base64,mock'
     });
 
-    assert.equal(store.data.doctorName, 'Dra. Fernanda Chianca');
-    assert.equal(store.data.doctorCRM, 'CRM/RN 9999');
-    assert.equal(store.data.doctorSpecialty, 'UTI Neonatal e Pediatria');
+    assert.equal(store.data.doctorName, 'Médica de Exemplo');
+    assert.equal(store.data.doctorCRM, 'CRM/TESTE');
+    assert.equal(store.data.doctorSpecialty, 'Pediatria');
     assert.equal(store.data.doctorPhoto, 'data:image/jpeg;base64,mock');
   });
 
   test('v5 Zerar Dados em 2 Etapas (Proteção com Backup Preventivo)', () => {
-    store.saveShift({ hospital: 'MEJEC', value: 1200, date: '2026-06-01' });
+    store.saveShift({ hospital: 'Hospital Pediátrico', value: 1200, date: '2026-06-01' });
     store.saveExpense({ description: 'Livro', value: 200, date: '2026-06-01' });
-    store.updateDoctorProfile({ name: 'Dra. Fernanda Ch.' });
+    store.updateDoctorProfile({ name: 'Médica' });
 
     // Zerar mantendo perfil
     store.resetAllData({ keepProfile: true, downloadBackup: false });
     assert.equal(store.data.shifts.length, 0);
     assert.equal(store.data.expenses.length, 0);
-    assert.equal(store.data.doctorName, 'Dra. Fernanda Ch.');
+    assert.equal(store.data.doctorName, 'Médica');
     assert.equal(store.data.creator, 'FChNeto');
   });
 
@@ -292,10 +292,10 @@ describe('Finanças Pediatria v5.0 - Silk & Rose Gold Engine Tests', () => {
     const rootHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
     const v5Html = fs.readFileSync(path.join(rootDir, 'v5', 'index.html'), 'utf8');
 
-    assert.ok(rootHtml.includes('styles.css?v=5.0.0'));
-    assert.ok(rootHtml.includes('bundle.js?v=5.0.0'));
-    assert.ok(v5Html.includes('styles.css?v=5.0.0'));
-    assert.ok(v5Html.includes('bundle.js?v=5.0.0'));
+    assert.ok(rootHtml.includes('styles.css?v=5.0.1'));
+    assert.ok(rootHtml.includes('bundle.js?v=5.0.1'));
+    assert.ok(v5Html.includes('styles.css?v=5.0.1'));
+    assert.ok(v5Html.includes('bundle.js?v=5.0.1'));
 
     // Service worker cache name
     const swCode = fs.readFileSync(path.join(rootDir, 'v5', 'sw.js'), 'utf8');

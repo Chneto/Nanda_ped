@@ -31,7 +31,7 @@
 | **🧘 Monitor de Bem-Estar & Fadiga (CFM)** | Alinhado às diretrizes do CFM, monitora a carga horária semanal/mensal e emite alertas preventivos contra plantões noturnos consecutivos. |
 | **🔄 Passagem de Plantão & Troca de Escala** | Gera mensagens pré-formatadas para solicitação de troca de plantão com colegas via WhatsApp com todos os detalhes do turno. |
 | **📄 Extrato Timbrado Pediátrico** | Relatório profissional pronto para impressão ou geração de PDF (Ctrl+P / Compartilhar), formatado para envio à contabilidade médica. |
-| **📊 Rentabilidade & Valor por Hora** | Calcula o rendimento líquido real por hora trabalhada em cada hospital ou maternidade parceira (Araken, Leide Morais, MEJEC, etc.). |
+| **📊 Rentabilidade & Valor por Hora** | Calcula o rendimento líquido real por hora trabalhada em cada hospital ou maternidade parceira (Maternidade Principal, Maternidade Secundária, Hospital Pediátrico, etc.). |
 | **📈 Gráficos SVG Puros (Sem Bibliotecas Pesadas)** | Projeção dos próximos 4 meses em gráfico de barras/área e rosca dinâmica de despesas com comparativo mês a mês. |
 | **📲 PWA Instalável (iPhone & Android)** | Aplicativo que instala na tela de início com ícones em alta definição e funciona offline via Service Worker. |
 | **🔒 100% Seguro & Privado** | Dados gravados exclusivamente no localStorage do seu dispositivo móvel. Sem servidores de terceiros espionando suas finanças. |
@@ -63,7 +63,7 @@ Como a aplicação é um **PWA (Progressive Web App)**, ela não precisa de loja
 ### Método 1: Pelo GitHub Desktop (Recomendado)
 Se você utiliza o **GitHub Desktop**:
 1. Abra o aplicativo **GitHub Desktop**.
-2. Selecione o repositório **Nanda_ped** (ou abra a pasta C:\Users\chibe\OneDrive\Documentos\GitHub\Nanda_ped).
+2. Selecione o repositório **Nanda_ped** (ou abra a pasta ../Nanda_ped).
 3. O GitHub Desktop detectará automaticamente todos os arquivos novos e atualizados.
 4. No campo inferior esquerdo (Summary), digite:  
    eat: Finanças Pediatria v2.5.0 - Categorias Livres, Parcelamento D+60/D+90 e UI Manrope

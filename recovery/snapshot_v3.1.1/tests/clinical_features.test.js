@@ -36,7 +36,7 @@ test('getHospitalAnalytics computes rankings, hourly yields, and punctuality ind
   store.data.shifts = [
     {
       id: 's1',
-      hospital: 'Hospital Sabará',
+      hospital: 'Hospital Hospital Geral',
       shiftDate: '2026-06-10',
       shiftType: '12h Diurno',
       sector: 'UTI Neonatal',
@@ -48,7 +48,7 @@ test('getHospitalAnalytics computes rankings, hourly yields, and punctuality ind
     },
     {
       id: 's2',
-      hospital: 'Hospital Sabará',
+      hospital: 'Hospital Hospital Geral',
       shiftDate: '2026-06-20',
       shiftType: '12h Noturno',
       sector: 'UTI Neonatal',
@@ -60,7 +60,7 @@ test('getHospitalAnalytics computes rankings, hourly yields, and punctuality ind
     },
     {
       id: 's3',
-      hospital: 'Hospital Infantil Darcy Vargas',
+      hospital: 'Instituição de Exemplo A',
       shiftDate: '2026-06-15',
       shiftType: '24h',
       sector: 'PS Infantil',
@@ -76,14 +76,14 @@ test('getHospitalAnalytics computes rankings, hourly yields, and punctuality ind
 
   assert.equal(analytics.length, 2);
 
-  // Darcy Vargas has R$ 200/h vs Sabará R$ 135/h, so Darcy Vargas should rank first
-  assert.equal(analytics[0].hospital, 'Hospital Infantil Darcy Vargas');
+  // Instituição de Exemplo A has R$ 200/h vs Hospital Geral R$ 135/h, so Instituição de Exemplo A should rank first
+  assert.equal(analytics[0].hospital, 'Instituição de Exemplo A');
   assert.equal(analytics[0].averageHourlyRate, 200);
   assert.equal(analytics[0].shiftsCount, 1);
   assert.equal(analytics[0].totalHours, 24);
   assert.equal(analytics[0].punctualityRate, 100);
 
-  assert.equal(analytics[1].hospital, 'Hospital Sabará');
+  assert.equal(analytics[1].hospital, 'Hospital Hospital Geral');
   assert.equal(analytics[1].shiftsCount, 2);
   assert.equal(analytics[1].totalHours, 24);
   // (1440 + 1800) / 24 = 3240 / 24 = 135
@@ -105,7 +105,7 @@ test('generateCSV creates valid Brazilian Excel formatted CSV with BOM and summa
   assert.ok(csv.includes(';'), 'CSV must use semicolons as delimiter for Brazilian Portuguese Excel');
 
   // Must include Doctor CRM and headers
-  assert.ok(csv.includes('Dra. Fernanda'), 'CSV header should contain doctor name');
+  assert.ok(csv.includes('Médica'), 'CSV header should contain doctor name');
   assert.ok(csv.includes('CRM-SP'), 'CSV header should contain doctor CRM');
   assert.ok(csv.includes('EXTRATO FINANCEIRO'), 'CSV should contain title');
 
@@ -115,7 +115,7 @@ test('generateCSV creates valid Brazilian Excel formatted CSV with BOM and summa
   assert.ok(csv.includes('RESUMO FINANCEIRO'), 'CSV should have summary section');
 
   // Must include specific demo items
-  assert.ok(csv.includes('Hospital Infantil Sabará'));
+  assert.ok(csv.includes('Hospital Pediátrico'));
   assert.ok(csv.includes('Anuidade CRM-SP'));
 });
 

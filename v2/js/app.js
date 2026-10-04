@@ -690,7 +690,7 @@ class PediatricApp {
         <form id="form-new-shift">
           <div class="form-group">
             <label>Hospital / Local</label>
-            <input list="hospitals-list" name="hospital" class="form-input" placeholder="Ex: Maternidade Araken" required />
+            <input list="hospitals-list" name="hospital" class="form-input" placeholder="Ex: Maternidade Principal" required />
             <datalist id="hospitals-list">
               ${hospitalOptions}
             </datalist>

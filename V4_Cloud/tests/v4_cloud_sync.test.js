@@ -76,8 +76,8 @@ export const APP_CREATOR = 'FChNeto';
 // ============================================================================
 
 class MockSupabaseClient {
-  constructor(userId = 'dra-fernanda-uid') {
-    this.currentUser = { id: userId, email: 'dra.fernanda@pediatria.med.br' };
+  constructor(userId = 'user-a-test-id') {
+    this.currentUser = { id: userId, email: 'medica@example.com' };
     this.remoteTables = {
       profiles: new Map(),
       shifts: new Map(),
@@ -239,7 +239,7 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
   describe('3. Fila Offline de Mutações (sync_queue) & Coalescência', () => {
     test('localPut com markDirty=true insere registro local e enfileira na sync_queue', async () => {
       const shift = {
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         date: '2026-03-10',
         net_value: 1500
       };
@@ -254,29 +254,29 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
       assert.equal(queue[0].store, STORES.SHIFTS);
       assert.equal(queue[0].action, QUEUE_ACTION.INSERT);
       assert.equal(queue[0].entityId, saved.id);
-      assert.equal(queue[0].data.hospital, 'Maternidade Araken');
+      assert.equal(queue[0].data.hospital, 'Maternidade Principal');
     });
 
     test('Coalescência na fila: múltiplas edições locais atualizam o mesmo item da fila sem duplicar', async () => {
       const id = generateUUID();
-      await localPut(STORES.SHIFTS, { id, hospital: 'Araken', net_value: 1000 }, true);
+      await localPut(STORES.SHIFTS, { id, hospital: 'Maternidade Principal', net_value: 1000 }, true);
 
       let queue = await getPendingSyncItems();
       assert.equal(queue.length, 1);
       assert.equal(queue[0].data.net_value, 1000);
 
       // Edita pela 2ª vez antes da sincronização
-      await localPut(STORES.SHIFTS, { id, hospital: 'Araken', net_value: 1200 }, true);
+      await localPut(STORES.SHIFTS, { id, hospital: 'Maternidade Principal', net_value: 1200 }, true);
       queue = await getPendingSyncItems();
       assert.equal(queue.length, 1, 'Não deve criar segundo item na fila para o mesmo entityId');
       assert.equal(queue[0].data.net_value, 1200);
 
       // Edita pela 3ª vez
-      await localPut(STORES.SHIFTS, { id, hospital: 'Maternidade Araken Sala 2', net_value: 1500 }, true);
+      await localPut(STORES.SHIFTS, { id, hospital: 'Maternidade Principal Sala 2', net_value: 1500 }, true);
       queue = await getPendingSyncItems();
       assert.equal(queue.length, 1);
       assert.equal(queue[0].data.net_value, 1500);
-      assert.equal(queue[0].data.hospital, 'Maternidade Araken Sala 2');
+      assert.equal(queue[0].data.hospital, 'Maternidade Principal Sala 2');
     });
 
     test('Item criado offline e excluído antes do sync é purgado localmente sem gerar requisição', async () => {
@@ -297,7 +297,7 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
     test('Exclusão de item já sincronizado gera tombstone soft-delete e ação delete na fila', async () => {
       const id = generateUUID();
       // Gravado com markDirty=false (simulando vindo da nuvem)
-      await localPut(STORES.SHIFTS, { id, hospital: 'Leide Morais', net_value: 1400, sync_status: SYNC_STATUS.SYNCED }, false);
+      await localPut(STORES.SHIFTS, { id, hospital: 'Maternidade Secundária', net_value: 1400, sync_status: SYNC_STATUS.SYNCED }, false);
       assert.equal((await getPendingSyncItems()).length, 0);
 
       // Médica exclui o plantão
@@ -325,7 +325,7 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
       const shiftId = generateUUID();
       await localPut(STORES.SHIFTS, {
         id: shiftId,
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         date: '2026-03-12',
         net_value: 2000
       }, true);
@@ -346,15 +346,15 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
       // No Supabase, o registro existe com user_id
       const remote = await mockSupabase.from('shifts').select('*').eq('id', shiftId);
       assert.equal(remote.data.length, 1);
-      assert.equal(remote.data[0].hospital, 'Maternidade Araken');
-      assert.equal(remote.data[0].user_id, 'dra-fernanda-uid');
+      assert.equal(remote.data[0].hospital, 'Maternidade Principal');
+      assert.equal(remote.data[0].user_id, 'user-a-test-id');
     });
 
     test('Push de exclusão envia tombstone deleted_at ao Supabase', async () => {
       const expId = generateUUID();
       await mockSupabase.from('expenses').upsert({
         id: expId,
-        user_id: 'dra-fernanda-uid',
+        user_id: 'user-a-test-id',
         description: 'Livro',
         amount: 200,
         sync_status: 'synced',
@@ -384,8 +384,8 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
       const shiftId = generateUUID();
       await mockSupabase.from('shifts').upsert({
         id: shiftId,
-        user_id: 'dra-fernanda-uid',
-        hospital: 'Maternidade Leide Morais',
+        user_id: 'user-a-test-id',
+        hospital: 'Maternidade Secundária',
         date: '2026-03-20',
         net_value: 1800,
         sync_status: 'synced',
@@ -399,7 +399,7 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
 
       const local = await localGet(STORES.SHIFTS, shiftId);
       assert.ok(local !== null);
-      assert.equal(local.hospital, 'Maternidade Leide Morais');
+      assert.equal(local.hospital, 'Maternidade Secundária');
       assert.equal(local.sync_status, SYNC_STATUS.SYNCED);
     });
 
@@ -407,7 +407,7 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
       const shiftId = generateUUID();
       await mockSupabase.from('shifts').upsert({
         id: shiftId,
-        user_id: 'dra-fernanda-uid',
+        user_id: 'user-a-test-id',
         hospital: 'Deletado',
         deleted_at: '2026-03-20T08:00:00Z',
         updated_at: '2026-03-20T08:00:00Z'
@@ -436,7 +436,7 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
       // Remoto recente (10:30)
       await mockSupabase.from('shifts').upsert({
         id: shiftId,
-        user_id: 'dra-fernanda-uid',
+        user_id: 'user-a-test-id',
         hospital: 'Hospital Novo Remoto',
         updated_at: '2026-03-25T10:30:00Z'
       });
@@ -453,7 +453,7 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
       // Remoto antigo (11:00)
       await mockSupabase.from('shifts').upsert({
         id: shiftId,
-        user_id: 'dra-fernanda-uid',
+        user_id: 'user-a-test-id',
         hospital: 'Hospital Remoto Antigo',
         updated_at: '2026-03-25T11:00:00Z'
       });
@@ -461,14 +461,14 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
       // Local mais recente (11:15)
       await localPut(STORES.SHIFTS, {
         id: shiftId,
-        hospital: 'Hospital Local Recente (Dra. Fernanda)',
+        hospital: 'Hospital Local Recente (Médica)',
         updated_at: '2026-03-25T11:15:00Z'
       }, false);
 
       await pullRemoteUpdates();
 
       const resolved = await localGet(STORES.SHIFTS, shiftId);
-      assert.equal(resolved.hospital, 'Hospital Local Recente (Dra. Fernanda)');
+      assert.equal(resolved.hospital, 'Hospital Local Recente (Médica)');
     });
 
     test('LWW Caso 3: Soft-delete remoto mais recente remove registro local', async () => {
@@ -482,7 +482,7 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
 
       await mockSupabase.from('expenses').upsert({
         id: expId,
-        user_id: 'dra-fernanda-uid',
+        user_id: 'user-a-test-id',
         description: 'Livro de Plantão',
         updated_at: '2026-03-25T09:30:00Z',
         deleted_at: '2026-03-25T09:30:00Z'
@@ -507,7 +507,7 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
       // Remoto tinha sido deletado às 09:00
       await mockSupabase.from('expenses').upsert({
         id: expId,
-        user_id: 'dra-fernanda-uid',
+        user_id: 'user-a-test-id',
         description: 'Livro Antigo',
         updated_at: '2026-03-25T09:00:00Z',
         deleted_at: '2026-03-25T09:00:00Z'
@@ -553,20 +553,20 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
   });
 
   // --------------------------------------------------------------------------
-  // 8. Cenário Real Clínico — "Subsolo da Maternidade Araken para o Hall Conectado"
+  // 8. Cenário Real Clínico — "Subsolo da Maternidade Principal para o Hall Conectado"
   // --------------------------------------------------------------------------
   describe('8. Cenário Real Clínico: Subsolo para Hall Conectado', () => {
     test('Transição offline para online sincroniza todas as mutações sem perda de dados', async () => {
-      // 1. Dra. Fernanda entra no subsolo sem sinal da Maternidade Araken
+      // 1. Médica entra no subsolo sem sinal da Maternidade Principal
       // Registra 2 plantões e 1 despesa
       const s1 = await localPut(STORES.SHIFTS, {
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         date: '2026-03-26',
         net_value: 1600
       }, true);
 
       const s2 = await localPut(STORES.SHIFTS, {
-        hospital: 'Maternidade Araken',
+        hospital: 'Maternidade Principal',
         date: '2026-03-26',
         net_value: 1600
       }, true);
@@ -581,7 +581,7 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
       const queueBefore = await getPendingSyncItems();
       assert.equal(queueBefore.length, 3);
 
-      // 2. Dra. Fernanda sobe para a recepção do hospital e reconecta ao Wi-Fi
+      // 2. Médica sobe para a recepção do hospital e reconecta ao Wi-Fi
       const syncResult = await syncNow();
       assert.equal(syncResult.pushed, 3);
       assert.equal(syncResult.errors.length, 0);
@@ -590,11 +590,11 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
       const queueAfter = await getPendingSyncItems();
       assert.equal(queueAfter.length, 0);
 
-      // 4. Supabase reflete os registros com o user_id da Dra. Fernanda
-      const remoteShifts = await mockSupabase.from('shifts').select('*').eq('user_id', 'dra-fernanda-uid');
+      // 4. Supabase reflete os registros com o user_id da Médica
+      const remoteShifts = await mockSupabase.from('shifts').select('*').eq('user_id', 'user-a-test-id');
       assert.equal(remoteShifts.data.length, 2);
 
-      const remoteExpenses = await mockSupabase.from('expenses').select('*').eq('user_id', 'dra-fernanda-uid');
+      const remoteExpenses = await mockSupabase.from('expenses').select('*').eq('user_id', 'user-a-test-id');
       assert.equal(remoteExpenses.data.length, 1);
       assert.equal(remoteExpenses.data[0].description, 'Lanches Noturnos Plantão');
     });
@@ -605,8 +605,8 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
   // --------------------------------------------------------------------------
   describe('9. Estatísticas do Banco Local & Backup JSON', () => {
     test('getDatabaseStats retorna contagens exatas de todos os stores', async () => {
-      await localPut(STORES.PROFILES, { id: 'prof-1', doctor_name: 'Dra. Fernanda Ch.' }, false);
-      await localPut(STORES.SHIFTS, { hospital: 'Araken', net_value: 1200 }, true);
+      await localPut(STORES.PROFILES, { id: 'prof-1', doctor_name: 'Médica' }, false);
+      await localPut(STORES.SHIFTS, { hospital: 'Maternidade Principal', net_value: 1200 }, true);
       await localPut(STORES.EXPENSES, { description: 'Uber', amount: 35 }, true);
 
       const stats = await getDatabaseStats();
@@ -617,8 +617,8 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
     });
 
     test('exportAllLocalData e importAllLocalData executam roundtrip íntegro com APP_CREATOR', async () => {
-      await localPut(STORES.PROFILES, { id: 'p1', doctor_name: 'Dra. Fernanda' }, false);
-      await localPut(STORES.SHIFTS, { id: 's1', hospital: 'Araken', net_value: 2000 }, false);
+      await localPut(STORES.PROFILES, { id: 'p1', doctor_name: 'Médica' }, false);
+      await localPut(STORES.SHIFTS, { id: 's1', hospital: 'Maternidade Principal', net_value: 2000 }, false);
       await localPut(STORES.EXPENSES, { id: 'e1', description: 'Café', amount: 12 }, false);
 
       const dump = await exportAllLocalData();
@@ -637,7 +637,7 @@ describe('Finanças Pediatria V4_Cloud — Bidirectional Sync Engine & IndexedDB
 
       const restoredShifts = await localGetAll(STORES.SHIFTS);
       assert.equal(restoredShifts.length, 1);
-      assert.equal(restoredShifts[0].hospital, 'Araken');
+      assert.equal(restoredShifts[0].hospital, 'Maternidade Principal');
     });
 
     test('localGetByMonth busca registros com base no mês do plantão/despesa', async () => {

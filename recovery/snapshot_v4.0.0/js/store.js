@@ -93,12 +93,12 @@ export const MACRO_GROUPS = [
 ];
 
 export const DEFAULT_HOSPITALS = [
-  'Maternidade Araken',
-  'Maternidade Leide Morais',
-  'MEJEC',
-  'Hospital da Criança',
-  'Hospital Mater Dei',
-  'Hospital Promater'
+  'Maternidade Principal',
+  'Maternidade Secundária',
+  'Hospital Pediátrico',
+  'Hospital Pediátrico',
+  'Hospital Geral',
+  'Unidade de Saúde'
 ];
 
 /**
@@ -259,12 +259,12 @@ export class PediatricStore {
     return {
       creator: APP_CREATOR,
       version: APP_VERSION,
-      doctorName: 'Dra. Fernanda Ch.',
-      crm: 'CRM/RN 12345',
+      doctorName: 'Médica',
+      crm: 'CRM/TESTE',
       specialty: 'Pediatria (R3)',
       doctorPhoto: null,
       residencySalary: {
-        value: 4106.09,
+        value: 0.00,
         active: true,
         dayOfMonth: 5
       },
@@ -389,7 +389,7 @@ export class PediatricStore {
 
     const shiftData = {
       id: shift.id,
-      hospital: shift.hospital || 'Maternidade Araken',
+      hospital: shift.hospital || 'Maternidade Principal',
       date: workedDate,
       shiftType: shift.shiftType || '12h Noturno',
       grossValue: gross,
@@ -742,7 +742,7 @@ export class PediatricStore {
           await navigator.share({
             files: [file],
             title: 'Finanças Pediatria - Cópia de Segurança',
-            text: 'Backup completo do aplicativo Finanças Pediatria Dra. Fernanda Ch.'
+            text: 'Backup completo do aplicativo Finanças Pediatria Médica'
           });
           return { success: true, method: 'share' };
         }

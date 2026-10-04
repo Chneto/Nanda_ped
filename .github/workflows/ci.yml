@@ -1,0 +1,48 @@
+name: CI - Finanças Pediatria Test & Quality Shield
+
+on:
+  push:
+    branches:
+      - main
+      - NandapedV2
+      - v6
+      - 'release/**'
+  pull_request:
+    branches:
+      - main
+      - NandapedV2
+
+jobs:
+  test-and-validate:
+    name: Test Suite & Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 1. Execute Root Test Suite (v2, v3, v4, v5, sanctuary)
+        run: node --test tests/*.test.js
+
+      - name: 2. Execute V4_Cloud Test Suite
+        run: |
+          cd V4_Cloud
+          node --test tests/*.test.js
+          cd ..
+
+      - name: 3. Execute Finanças Pediatria v6 Test Suite
+        run: |
+          cd v6
+          node --test tests/*.test.js
+          cd ..
+
+      - name: 4. Validate Production Bundles Synchronization
+        run: node scripts/build_bundle.js
+
+      - name: 5. Security & CSP Validation Scan
+        run: node scripts/ci_security_scan.js

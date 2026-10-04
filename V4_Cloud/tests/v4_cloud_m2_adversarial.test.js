@@ -84,7 +84,7 @@ class PostgresUserTriggerSimulator {
     // v_full_name := COALESCE(
     //   NULLIF(TRIM(NEW.raw_user_meta_data->>'full_name'), ''),
     //   NULLIF(TRIM(NEW.raw_user_meta_data->>'name'), ''),
-    //   'Dra. Fernanda Ch.'
+    //   'Médica'
     // );
     const fullNameRaw = PostgresUserTriggerSimulator.extractJsonbField(meta, 'full_name');
     const nameRaw = PostgresUserTriggerSimulator.extractJsonbField(meta, 'name');
@@ -92,7 +92,7 @@ class PostgresUserTriggerSimulator {
     const v_full_name =
       PostgresUserTriggerSimulator.trimAndNullIf(fullNameRaw) ||
       PostgresUserTriggerSimulator.trimAndNullIf(nameRaw) ||
-      'Dra. Fernanda Ch.';
+      'Médica';
 
     // v_avatar_url := COALESCE(
     //   NULLIF(TRIM(NEW.raw_user_meta_data->>'avatar_url'), ''),
@@ -128,7 +128,7 @@ class PostgresUserTriggerSimulator {
       rqe: null,
       specialty: 'Pediatria',
       photo_url: v_avatar_url,
-      residency_salary: 4106.09,
+      residency_salary: 0.00,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };
@@ -224,10 +224,10 @@ describe('M2 Adversarial Challenge Suite — Triggers, Constraints & Indexes', (
         raw_user_meta_data: null
       });
 
-      assert.equal(profile.doctor_name, 'Dra. Fernanda Ch.', 'Must fallback to Dra. Fernanda Ch.');
+      assert.equal(profile.doctor_name, 'Médica', 'Must fallback to Médica');
       assert.equal(profile.photo_url, null, 'Avatar URL must be null');
       assert.equal(profile.specialty, 'Pediatria');
-      assert.equal(profile.residency_salary, 4106.09);
+      assert.equal(profile.residency_salary, 0.00);
     });
 
     test('1.3 Edge Case: raw_user_meta_data is empty object {}', () => {
@@ -238,7 +238,7 @@ describe('M2 Adversarial Challenge Suite — Triggers, Constraints & Indexes', (
         raw_user_meta_data: {}
       });
 
-      assert.equal(profile.doctor_name, 'Dra. Fernanda Ch.');
+      assert.equal(profile.doctor_name, 'Médica');
       assert.equal(profile.photo_url, null);
     });
 
@@ -254,23 +254,23 @@ describe('M2 Adversarial Challenge Suite — Triggers, Constraints & Indexes', (
         }
       });
 
-      assert.equal(profile.doctor_name, 'Dra. Fernanda Ch.', 'Whitespace must be trimmed and treated as empty/null');
+      assert.equal(profile.doctor_name, 'Médica', 'Whitespace must be trimmed and treated as empty/null');
       assert.equal(profile.photo_url, null, 'Whitespace avatar must be treated as null');
     });
 
     test('1.5 Stress: Special characters, Brazilian accents, apostrophes, and unicode emojis in doctor_name', () => {
       const testCases = [
         {
-          input: "Dra. Fernanda de Albuquerque Chaves e Silva",
-          expected: "Dra. Fernanda de Albuquerque Chaves e Silva"
+          input: "Médica",
+          expected: "Médica"
         },
         {
           input: "Dra. Anne-Marie O'Connor D'Angelo",
           expected: "Dra. Anne-Marie O'Connor D'Angelo"
         },
         {
-          input: "Dra. Fernanda Ch. 🩺🌸👶 (UTI Neonatal)",
-          expected: "Dra. Fernanda Ch. 🩺🌸👶 (UTI Neonatal)"
+          input: "Médica 🩺🌸👶 (UTI Neonatal)",
+          expected: "Médica 🩺🌸👶 (UTI Neonatal)"
         },
         {
           input: "Dra. Çícêrã Jõãõ & Maria",
@@ -278,8 +278,8 @@ describe('M2 Adversarial Challenge Suite — Triggers, Constraints & Indexes', (
         },
         {
           // SQL injection attempt inside string literal
-          input: "Dra. Fernanda'; DROP TABLE public.profiles; --",
-          expected: "Dra. Fernanda'; DROP TABLE public.profiles; --"
+          input: "Médica'; DROP TABLE public.profiles; --",
+          expected: "Médica'; DROP TABLE public.profiles; --"
         }
       ];
 
@@ -297,7 +297,7 @@ describe('M2 Adversarial Challenge Suite — Triggers, Constraints & Indexes', (
       }
     });
 
-    test('1.6 Fallback order: full_name -> name -> Dra. Fernanda Ch.', () => {
+    test('1.6 Fallback order: full_name -> name -> Médica', () => {
       const sim = new PostgresUserTriggerSimulator();
 
       // Case A: full_name is present
@@ -319,7 +319,7 @@ describe('M2 Adversarial Challenge Suite — Triggers, Constraints & Indexes', (
         id: '55555555-5555-4555-8555-000000000003',
         raw_user_meta_data: { full_name: '   ', name: '' }
       });
-      assert.equal(pC.doctor_name, 'Dra. Fernanda Ch.');
+      assert.equal(pC.doctor_name, 'Médica');
     });
 
     test('1.7 Avatar resolution: avatar_url vs Google OAuth picture', () => {
@@ -350,25 +350,25 @@ describe('M2 Adversarial Challenge Suite — Triggers, Constraints & Indexes', (
       // First run (user creation)
       const p1 = sim.handleNewUser({
         id: userId,
-        raw_user_meta_data: { full_name: 'Dra. Fernanda Ch.' }
+        raw_user_meta_data: { full_name: 'Médica' }
       });
 
       // User updates CRM and custom photo in application
-      p1.crm = 'CRM/RN 12345';
+      p1.crm = 'CRM/TESTE';
       p1.rqe = 'RQE 6789';
-      p1.photo_url = 'https://custom-photo.com/fernanda.jpg';
+      p1.photo_url = 'https://custom-photo.com/Profissional.jpg';
 
       // Second run (simulating auth replay or re-login event)
       const p2 = sim.handleNewUser({
         id: userId,
-        raw_user_meta_data: { full_name: 'Dra. Fernanda Ch. Atualizada', picture: 'https://google.com/old.jpg' }
+        raw_user_meta_data: { full_name: 'Médica Atualizada', picture: 'https://google.com/old.jpg' }
       });
 
       assert.equal(p2.id, userId);
-      assert.equal(p2.doctor_name, 'Dra. Fernanda Ch. Atualizada', 'Doctor name is updated');
-      assert.equal(p2.crm, 'CRM/RN 12345', 'CRM must NOT be erased by trigger on conflict');
+      assert.equal(p2.doctor_name, 'Médica Atualizada', 'Doctor name is updated');
+      assert.equal(p2.crm, 'CRM/TESTE', 'CRM must NOT be erased by trigger on conflict');
       assert.equal(p2.rqe, 'RQE 6789', 'RQE must NOT be erased by trigger on conflict');
-      assert.equal(p2.photo_url, 'https://custom-photo.com/fernanda.jpg',
+      assert.equal(p2.photo_url, 'https://custom-photo.com/Profissional.jpg',
         'Custom photo_url must be preserved via COALESCE(profiles.photo_url, EXCLUDED.photo_url)');
     });
   });
@@ -460,7 +460,7 @@ describe('M2 Adversarial Challenge Suite — Triggers, Constraints & Indexes', (
       // Generates 100 test amounts with 2 decimal places
       const testAmounts = [
         0.00, 0.01, 0.02, 0.03, 1.00, 100.00, 1250.33, 1450.50, 1875.75,
-        2200.00, 2500.00, 3125.67, 4106.09, 9999.99, 15000.55
+        2200.00, 2500.00, 3125.67, 0.00, 9999.99, 15000.55
       ];
 
       // Add random values to reach 100 cases

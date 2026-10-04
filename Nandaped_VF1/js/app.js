@@ -1,6 +1,6 @@
 /**
  * Finanças Pediatria V4_Cloud - Aplicação Principal (SPA Bootstrap & Lifecycle)
- * Design System: "Silk & Rose Gold" para Dra. Fernanda Ch.
+ * Design System: "Silk & Rose Gold" para Médica
  * Autor Canônico: FChNeto (APP_CREATOR = 'FChNeto')
  * 
  * Invariantes & Responsabilidades:
@@ -96,12 +96,12 @@ export class PediatricApp {
 
     if (hasOAuthInUrl) {
       const labelGoogle = document.getElementById('label-google-auth');
-      if (labelGoogle) labelGoogle.textContent = 'Autenticando Dra. Fernanda... 🌸';
+      if (labelGoogle) labelGoogle.textContent = 'Autenticando Médica... 🌸';
       try {
         const callbackResult = await processOAuthCallback();
         if (callbackResult?.session) {
           this.currentSession = callbackResult.session;
-          this.ui.showToast('Login com Google realizado com sucesso! Bem-vinda, Dra. Fernanda! 🩺🌸', 'success');
+          this.ui.showToast('Login com Google realizado com sucesso! Bem-vinda, Médica! 🩺🌸', 'success');
         } else if (callbackResult?.error) {
           this.ui.showToast(`Aviso de autenticação: ${callbackResult.error.message}`, 'warning', 6000);
         }
@@ -249,7 +249,7 @@ export class PediatricApp {
         const nameInput = document.getElementById('input-auth-name');
         const email = emailInput?.value?.trim();
         const password = inputAuthPassword?.value;
-        const doctorName = nameInput?.value?.trim() || 'Dra. Fernanda Ch.';
+        const doctorName = nameInput?.value?.trim() || 'Médica';
 
         if (!email || !email.includes('@')) {
           if (passwordFeedback) {
@@ -339,7 +339,7 @@ export class PediatricApp {
               }
             } else if (data?.session) {
               this.routeAuthView(data.session);
-              this.ui.showToast('Bem-vinda de volta, Dra. Fernanda! 🩺🌸', 'success');
+              this.ui.showToast('Bem-vinda de volta, Médica! 🩺🌸', 'success');
               this.ui.render();
               try {
                 syncNow().catch(e => console.log('[Sync Background]', e.message));
@@ -450,7 +450,7 @@ export class PediatricApp {
       btnEnterDirect.addEventListener('click', () => {
         setGuestMode(true);
         this.routeAuthView(null);
-        this.ui.showToast('Bem-vinda, Dra. Fernanda! Santuário financeiro ativo. 🩺🌸', 'success');
+        this.ui.showToast('Bem-vinda, Médica! Santuário financeiro ativo. 🩺🌸', 'success');
         this.ui.render();
         try {
           syncNow().catch(e => console.log('[Sync Background]', e.message));
@@ -463,7 +463,7 @@ export class PediatricApp {
       btnGuest.addEventListener('click', () => {
         setGuestMode(true);
         this.routeAuthView(null);
-        this.ui.showToast('Bem-vinda, Dra. Fernanda! Modo Hospital ativo. 🩺🌸', 'success');
+        this.ui.showToast('Bem-vinda, Médica! Modo Hospital ativo. 🩺🌸', 'success');
         this.ui.render();
       });
     }
@@ -855,7 +855,7 @@ export class PediatricApp {
         if (navigator.canShare({ files: [file] })) {
           await navigator.share({
             title: 'Backup Finanças Pediatria',
-            text: `Backup financeiro da Dra. Fernanda Ch. gerado em ${dateFormatted}.`,
+            text: `Backup financeiro da Médica gerado em ${dateFormatted}.`,
             files: [file]
           });
           this.ui.showToast('Backup compartilhado com sucesso! 📱💾', 'success');

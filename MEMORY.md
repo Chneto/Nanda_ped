@@ -1,7 +1,7 @@
 # 🧠 MEMORY — Finanças Pediatria (Guia Canônico de Contexto & Memória do Sistema)
 
 > **Documento Canônico de Memória para Agentes Autônomos, IAs e Desenvolvedores.**  
-> Este arquivo sintetiza todo o histórico, regras de negócio, decisões arquiteturais, design system, convenções de testes e fluxos operacionais da aplicação **Finanças Pediatria (Versão 3.1.1 Anti-Crop Smart Select & Modal Scroll Safeguards)**.  
+> Este arquivo sintetiza regras de negócio, decisões arquiteturais, design system, convenções de testes e fluxos operacionais das variantes do **Finanças Pediatria**.  
 > **Consulte este arquivo antes de planejar ou executar qualquer alteração no código.**
 
 ---
@@ -9,10 +9,17 @@
 ## 📌 1. Identidade do Produto & Metadados
 
 - **Nome da Aplicação:** Finanças Pediatria
-- **Versão Vigente:** `5.0.0` (Silk & Rose Gold Standalone em `/v5/` e `/`), `V4_Cloud` (Vercel & Supabase Cloud Native em `/V4_Cloud/`), `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Versão Master Executiva) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
+- **Versão Vigente:** `6.0.0` (Cloud & Sanctuary Edition em `/v6/`), `5.0.1` (Silk & Rose Gold Standalone em `/v5/` e `/`), `4.1.1` (Vercel & Supabase Cloud Native em `/V4_Cloud/`), `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Master Executive histórico) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
 - **Autor / Criador:** **FChNeto** (Constante imutável no código: `APP_CREATOR = 'FChNeto'`; exibida no rodapé, cabeçalho e modais).
-- **Público-Alvo:** Médica Pediatra (atuação em maternidades, enfermarias, pronto-socorro infantil, UTI neonatal e consultório particular de puericultura).
-- **Proposta de Valor:** Controle financeiro médico de alta performance, acolhedor e seguro. Na **V4_Cloud**, a aplicação conta com arquitetura autônoma Cloud-Native pronta para Vercel e Supabase PostgreSQL: tela de boas-vindas acolhedora ("Silk Gate") com autenticação Google OAuth em 1 toque, Magic Link sem senha por e-mail, Modo Convidada / Offline Hospital sem internet (IndexedDB local-first resiliente), sincronização automática bidirecional com Last-Write-Wins (LWW), Row Level Security (RLS) estrito com cláusula `TO authenticated` e `auth.uid() = user_id` em 100% das tabelas, regras canônicas de 75% D+60 e 25% D+90, 6 macro-grupos e 22 categorias canônicas (606 testes automatizados aprovados na suíte V4_Cloud, mantendo os 107 testes da suíte raiz 100% verdes).
+- **Público-Alvo:** profissionais da saúde que desejam acompanhar rendimentos e despesas com alta segurança e resiliência hospitalar.
+- **Proposta de Valor:** Controle financeiro acolhedor, rápido e seguro. A versão **v6 (v6.0.0)** implementa CSP estrita sem `unsafe-inline`, 23 categorias canônicas mapeadas nos 6 macro-grupos com governança completa (renomeação, reclassificação e propagação atômica), isolamento de contas no Supabase via RLS e detecção de concorrência com bloqueio otimista (`revision` incremental) e backups preventivos em JSON.
+
+### Registro técnico da versão Cloud v6.0.0 & V4_Cloud 4.1.1
+- Configuração Vercel: variáveis `SUPABASE_URL` e `SUPABASE_ANON_KEY` (ou `SUPABASE_PUBLISHABLE_KEY`); nenhuma chave de serviço no navegador; timeout de runtime estendido para 4,5s contra cold starts.
+- Persistência: snapshot JSONB por `auth.uid()` em `public.user_app_state`; migrações `001_initial_schema.sql` a `005_categories_and_expenses_category_id.sql`.
+- Cache: Service Worker `financas-pediatria-v6-static-v2` revalida HTML/JS/CSS; `/api/config` opera com `cache: no-store`.
+- Gestão de Categorias: 23 canônicas mapeadas nos 6 Macro-Grupos; renomeação/reclassificação atualiza atomicamente lançamentos históricos; exclusão de categorias em uso é bloqueada.
+- Resolução de Conflitos: modal acessível `#modal-sync-conflict` permite manter versão local (com backup remoto), carregar nuvem (com backup local) ou baixar JSON consolidado.
 - **Ambiente Principal:** Mobile-First — iPhone 16 Plus (430px x 932px) instalado como PWA via Safari com blindagem contra auto-zoom (`16px`).
 - **Licença:** MIT (Copyright 2026 FChNeto).
 
@@ -112,16 +119,17 @@ A interface segue a estética acolhedora, sofisticada e limpa desenvolvida para 
 
 ### I) Entrada Rápida por Voz com NLP Médico em Português
 - Método `parseMedicalVoiceInput(transcript)`:
-  - Interpreta termos como *"plantão"*, *"consulta"*, *" Sabará"*, *"12 horas"*, *"dia 15"*, *"dois mil e quinhentos reais"*.
+  - Interpreta descrições ditadas e preenche os campos do lançamento para revisão.
 
 ### J) Armazenamento Dual-Engine L2 (`PediatricSanctuaryDB`)
 - Camada secundária assíncrona em `IndexedDB` que sincroniza continuamente os dados com o `localStorage`.
 
 ---
 
-## 🧪 4. Convenções de Testes Automatizados (94 Testes Aprovados)
+## 🧪 4. Convenções de Testes Automatizados
 
-- Todos os 94 testes residem na pasta `tests/` e são executados com `npm test` ou `node --test tests/*.test.js`.
+- Validação registrada em 2026-10-03: 120 testes da raiz, 9 da v2.0, 13 da v4.0 e 619 da V4_Cloud aprovados.
+- Execute as suítes conforme `agents.md`; toda asserção deve continuar cobrindo comportamento real do produto.
 - O bundle `js/bundle.js` e `v2.0/js/bundle.js` são unificados via `node scripts/build_bundle.js` sem qualquer dependência externa de build.
 - Cobertura total de: cálculos D+60 / D+90, simulador FIRE médico, DRE & Fator R (28%), SBAR clínico LGPD, conciliação bancária OFX/CSV, NLP de voz, Pediatric Dark Sanctuary, Menu Hambúrguer, Foto da Médica, Seletor de Hospitais Stitch, e Proteções Anti-Crop / Modal Scroll Safeguards (`tests/select_crop_fix.test.js`), além dos 9 testes dedicados da suíte v2.0 (`tests/v2_suite.test.js`).
 - É **proibido alterar ou enfraquecer testes** para fazê-los passar. A solução deve sempre resolver o problema de forma robusta e arquiteturalmente sólida.
@@ -130,8 +138,8 @@ A interface segue a estética acolhedora, sofisticada e limpa desenvolvida para 
 
 ## 🌐 5. Arquitetura de Deploy no GitHub Pages & Branches
 
-- **Branch de Deploy do GitHub Pages**: `Nandapedv3` (configurada no GitHub como a fonte oficial de publicação).  
-  *Regra Crítica*: Todo commit deve ser sincronizado e publicado simultaneamente nas 3 branches: `NandapedV2`, `main` e `Nandapedv3`.
+- **Branch de Deploy do GitHub Pages**: `gh-pages`.  
+  *Regra*: publicar a versão validada em `NandapedV2`, `main` e `gh-pages`.
 - **Bypass do Motor Jekyll (`.nojekyll`)**: Arquivo `.nojekyll` mantido na raiz para impedir que o GitHub Pages oculte pastas com ponto no nome (como `/v2.0/`).
 - **Alias `/v2/`**: Mantido espelhado e idêntico a `/v2.0/` para garantir carregamento instantâneo por qualquer uma das duas rotas.
 

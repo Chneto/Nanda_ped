@@ -3,7 +3,7 @@
 > **Guia Obrigatório para Modelos de Linguagem, Subagentes de IA e Engenheiros de Software.**  
 > **Aplicação:** Finanças Pediatria  
 > **Autor Imutável:** **FChNeto** (`APP_CREATOR = 'FChNeto'`)  
-> **Status de Confiabilidade:** 107 Testes Automatizados Aprovados (0 Falhas)  
+> **Status de Confiabilidade:** 120 testes da raiz, 619 testes V4_Cloud e 70 testes v6 aprovados (0 falhas na validação de 2026-10-04).  
 
 ---
 
@@ -11,13 +11,16 @@
 
 Todo agente autônomo (ou desenvolvedor) que atuar neste repositório DEVE operar sob as seguintes premissas invioláveis:
 
-1. **A Médica em Primeiro Lugar:** O software é utilizado por uma Médica Pediatra (**Dra. Fernanda Ch.**) em rotina hospitalar exaustiva (UTI neonatal, sala de parto, enfermarias pediátricas, consultório particular). A aplicação deve transmitir paz visual, clareza absoluta, rapidez de lançamento e zero frustração técnica.
+1. **Profissionais da saúde em primeiro lugar:** O aplicativo é destinado à gestão financeira individual na área da saúde. Não inclua nomes, locais de trabalho, registros profissionais, rendas ou despesas reais nos padrões, na documentação ou nos dados de demonstração. A aplicação deve transmitir paz visual, clareza absoluta, rapidez de lançamento e zero frustração técnica.
 2. **Assinatura e Autoria do Criador:** O valor `APP_CREATOR = 'FChNeto'` é uma constante canônica e imutável. Deve permanecer nos metadados, rodapés, telas de créditos, documentações e suítes de testes.
 3. **Variantes do Produto no Repositório:**
-   - **`/v2.0/` — Sanctuary Minimalist:** Aplicação higienizada, enxuta, sem qualquer poluição visual, com 3 abas essenciais (Início, Ganhos, Despesas), 22 categorias canônicas de despesas, regras D+60 (75%) e D+90 (25%), compras parceladas e persistência tripla no iOS.
-   - **`/` — Master Executive (v3.x):** Aplicação executiva expandida com consultório de puericultura, DRE médica, Fator R (28%), SBAR clínico LGPD, conciliação OFX/CSV, simulador FIRE e entrada por voz.
+   - **`/v6/` — Cloud & Sanctuary v6.0.0:** Aplicação Cloud oficial com CSP estrita (sem `unsafe-inline`), 23 categorias canônicas mapeadas nos 6 macro-grupos, detecção de conflitos de revisão e backups automáticos.
+   - **`/v2.0/` — Sanctuary Minimalist:** Aplicação higienizada, enxuta, sem qualquer poluição visual, com 3 abas essenciais (Início, Ganhos, Despesas), 23 categorias descritas na lista canônica, regras D+60 (75%) e D+90 (25%), compras parceladas e persistência tripla no iOS.
+   - **`/` e `/v5/` — Silk & Rose Gold v5.0.1:** Aplicação standalone com painel financeiro, categorias livres, recursos executivos, experiência mobile-first e persistência local.
+   - **`/V4_Cloud/` — Cloud v4.1.1:** Aplicação Vercel/Supabase com autenticação, estado por conta, RLS, edição de despesas e categorias próprias.
+   - **`/v3.x` (histórico):** Master Executive com consultório de puericultura, DRE médica, Fator R (28%), SBAR clínico LGPD, conciliação OFX/CSV, simulador FIRE e entrada por voz.
    - **`/v4/` (e `/v4.0/`) — Silk & Rose Gold:** Frontend delicado, hiper-arredondado, 6 macro-grupos de despesas, pré-seleção rápida de maternidades e menu hambúrguer com formatação segura e edição de perfil.
-4. **Respeito aos Testes Automatizados:** Nenhuma alteração pode ser dada como concluída sem a execução prévia e aprovação de **100% dos testes** em `node --test tests/*.test.js`. É **estritamente proibido** desativar, deletar ou afrouxar asserções de testes para mascarar erros de código.
+4. **Respeito aos Testes Automatizados:** Nenhuma alteração pode ser dada como concluída sem a execução prévia e aprovação de **100% dos testes** em `node --test tests/*.test.js`, `cd V4_Cloud && node --test tests/*.test.js` e `cd v6 && node --test tests/*.test.js`. É **estritamente proibido** desativar, deletar ou afrouxar asserções de testes para mascarar erros de código.
 
 ---
 
@@ -77,8 +80,8 @@ Todo agente autônomo (ou desenvolvedor) que atuar neste repositório DEVE opera
   - **25% do valor líquido restante:** Creditado no mês correspondente a **D+90 (3 meses após a data trabalhada)**.
 - O utilitário `addMonthsToDateString(date, months)` deve tratar o fechamento de meses (ex: 31 de Março + 2 meses = 31 de Maio; 31 de Março + 3 meses = 30 de Junho).
 
-### B) As 22 Categorias Obrigatórias de Despesas
-A versão v2.0 pré-configura e garante a presença das 22 categorias requisitadas:
+### B) As 23 Categorias Canônicas Listadas para Despesas
+A versão v2.0 pré-configura e garante a presença das 23 categorias listadas:
 1. `Passagens`
 2. `Mercantil`
 3. `Academia`
@@ -117,7 +120,7 @@ A versão v2.0 pré-configura e garante a presença das 22 categorias requisitad
 Antes de realizar qualquer commit ou declarar uma tarefa concluída, o agente deve executar:
 
 ```bash
-# 1. Execução de toda a suíte de testes (107 testes)
+# 1. Execução de toda a suíte da raiz (a contagem acompanha os arquivos presentes)
 node --test tests/*.test.js
 
 # 2. Execução específica da suíte v2.0
@@ -125,13 +128,23 @@ node --test tests/v2_suite.test.js
 
 # 3. Execução específica da suíte v4.0
 node --test tests/v4_suite.test.js
+
+# 4. Suíte Vercel/Supabase V4_Cloud
+cd V4_Cloud
+node --test tests/*.test.js
+cd ..
+
+# 5. Suíte Finanças Pediatria v6 (Cloud & Sanctuary Edition)
+cd v6
+node --test tests/*.test.js
+cd ..
 ```
 
 ### Critérios de Aceite:
-- Total de testes: **107**
+- Todas as suítes existentes devem concluir com sucesso (120 na raiz, 619 em V4_Cloud, 70 em v6);
 - Falhas: **0**
 - Cancelados: **0**
-- Tempo de execução: **< 1 segundo**
+- Não desativar, apagar ou afrouxar asserções para mascarar regressões.
 
 ---
 
@@ -139,17 +152,17 @@ node --test tests/v4_suite.test.js
 
 O ambiente local do usuário opera em duas pastas conectadas:
 1. **Pasta de Trabalho do Antigravity (Workspace):**  
-   `c:\Users\chibe\OneDrive\Área de Trabalho\Antigravity\Nanda\`
+   `.`
 2. **Repositório Git Local (Clone):**  
-   `C:\Users\chibe\OneDrive\Documentos\GitHub\Nanda_ped`
+   `../Nanda_ped`
 
 ### Procedimento Padrão para Publicação:
 ```powershell
 # 1. Sincronizar arquivos do workspace para o repositório Git
-robocopy "c:\Users\chibe\OneDrive\Área de Trabalho\Antigravity\Nanda" "C:\Users\chibe\OneDrive\Documentos\GitHub\Nanda_ped" /E /XD .git node_modules .gemini /XF .DS_Store
+robocopy "." "../Nanda_ped" /E /XD .git node_modules .gemini /XF .DS_Store
 
 # 2. Navegar para a pasta do repositório
-cd "C:\Users\chibe\OneDrive\Documentos\GitHub\Nanda_ped"
+cd "../Nanda_ped"
 
 # 3. Validar testes no repositório Git
 node --test tests/*.test.js
@@ -158,12 +171,13 @@ node --test tests/*.test.js
 git add -A
 git commit -m "tipo: Descrição concisa da melhoria realizada"
 
-# 5. Publicar nas duas branches de produção
+# 5. Publicar nas branches de produção
 git push origin NandapedV2
 git checkout main
 git merge NandapedV2 -m "Merge NandapedV2 into main"
 git push origin main
 git checkout NandapedV2
+git push origin NandapedV2:gh-pages
 ```
 
 ---

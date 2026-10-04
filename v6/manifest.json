@@ -1,0 +1,67 @@
+{
+  "name": "Finanças Pediatria v6",
+  "short_name": "Finanças Ped",
+  "description": "Santuário de gestão financeira para médica pediatra e neonatologista. Criado por FChNeto",
+  "id": "financas-pediatria-v6",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
+  "orientation": "portrait",
+  "background_color": "#FAF6F5",
+  "theme_color": "#E8A598",
+  "categories": [
+    "finance",
+    "medical",
+    "productivity"
+  ],
+  "icons": [
+    {
+      "src": "./assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./assets/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Novo Plantão",
+      "short_name": "Plantão",
+      "description": "Lançar plantão em sala de parto ou enfermaria",
+      "url": "./index.html?action=new-shift",
+      "icons": [
+        {
+          "src": "./assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Nova Despesa",
+      "short_name": "Despesa",
+      "description": "Lançar despesa ou compra parcelada",
+      "url": "./index.html?action=new-expense",
+      "icons": [
+        {
+          "src": "./assets/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 
 **Project:** Finanças Pediatria V4_Cloud  
 **Author Signature:** `APP_CREATOR = 'FChNeto'`  
-**Date:** 2026-09-27  
+**Date:** 2026-10-03  
 **Status:** 100% COMPLETE & VERIFIED (0 Failures, 0 Regressions)
 
 ---
@@ -16,18 +16,15 @@
 ---
 
 ## Coverage Summary
-| Tier | Count | Description |
-|------|------:|-------------|
-| 1. Feature Coverage | 240 | Exhaustive verification of all 25 core features in isolation (schema, RLS, domain, auth, store, UI, icons, vercel). |
-| 2. Boundary & Corner Cases | 175 | Extreme values, leap years, month-end date clamping (Mar 31, Aug 31, Dec 31), cent-rounding split preservation (val1 + val2 === netValue). |
-| 3. Cross-Feature Combinations | 74 | Pairwise integration between IndexedDB local store, sync queue, Supabase client, multi-auth switching, and regime toggle. |
-| 4. Real-World Application Scenarios | 34 | 6 realistic pediatric application scenarios modeled in `v4_cloud_e2e_scenarios.test.js` (basement delivery room, WiFi reconnect, stethoscope installments, multi-auth switch, CSP breach defense, full month-end liquidity). |
-| 5. Adversarial Coverage Hardening | 83 | Empirical stress testing in `v4_cloud_adversarial_sync.test.js` (24) and `v4_cloud_adversarial_domain.test.js` (59) covering high concurrency, network flapping, queue poisoning, prototype safety, and XSS sanitization. |
-| **Total V4_Cloud Tests** | **606** | **606 passing across 16 registered test suites (0 failures, 0 skipped, 0 cancelled).** |
-| **Canonical Root Regression Tests** | **107** | **107 passing across 2 suites (100% preserved, 0 failures).** |
-| **Global Master Total** | **713** | **713 passing automated tests across the entire repository.** |
+| Suite | Tests | Result |
+|------|------:|--------|
+| Root regression suite | 120 | All passed |
+| V2 focused suite (included in root) | 9 | All passed |
+| V4 focused suite (included in root) | 13 | All passed |
+| V4_Cloud suite | 619 | All passed |
+| **Distinct repository tests** | **739** | **0 failures** |
 
----
+Validation date: 2026-10-03.
 
 ## Feature Checklist
 | # | Feature | Tier 1 | Tier 2 | Tier 3 | Tier 4 | Tier 5 |
@@ -60,19 +57,19 @@
 
 ---
 
-## Real-World Application Scenarios (Tier 4)
+## Synthetic Application Scenarios (Tier 4)
 1. **Scenario 1 — Hospital Basement Delivery Room Workflow:**
-   Dra. Fernanda enters neonatal delivery shift at Araken with no cellular signal (Modo Local). Verified 75% D+60 / 25% D+90 cash projections and local IndexedDB persistence with 0ms network latency.
+   A test user records a shift with no cellular signal (Modo Local). Verified 75% D+60 / 25% D+90 cash projections and local IndexedDB persistence.
 2. **Scenario 2 — Hospital Emergence & Online Reconnection:**
    Reconnecting to hospital WiFi triggers automatic bidirectional sync. Verified pending queue drains, idempotent upsert succeeds on Supabase, and status badge switches from 'offline' to 'synced'.
 3. **Scenario 3 — Stethoscope Purchase Installment Plan:**
-   Purchasing medical equipment (R$ 1.250,55 in 10x). Verified correct chronological monthly projection across calendar years, residual cent placed on 1st installment, and macro-group assignment (`macro_formacao`).
+   A synthetic purchase is split across monthly installments. Verified chronological projection, residual cent placement on the first installment, and macro-group assignment (`macro_formacao`).
 4. **Scenario 4 — Silk Gate Multi-Auth Switch:**
    Testing Google OAuth session, logging out, switching to Magic Link, and entering Modo Convidada, verifying session state persistence across reloads.
 5. **Scenario 5 — Security & CSP Breach Defense:**
    Simulating unauthorized cross-user access and injection attempts. Verified RLS policies prevent access with spoofed user_id, lexical filters block `service_role` keys, and CSP blocks unauthorized scripts.
 6. **Scenario 6 — Full Financial Month-End Settlement:**
-   Simulating month transition with D+60 / D+90 shift payouts, residency salary (R$ 4.106,09), and 22 canonical expense categories. Verified Regime de Caixa equals exact expected liquidity.
+   Simulating a month transition with D+60 / D+90 shift payouts and synthetic expense fixtures. Verified Regime de Caixa equals the expected liquidity.
 
 ---
 

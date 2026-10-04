@@ -24,7 +24,7 @@ test('Edge cases: Leap years and boundary date arithmetic', () => {
 
 test('Edge cases: Negative cash balance when expenses exceed revenue', () => {
   const store = new PediatricStore('test_store_negative', {
-    doctorName: 'Dra. Fernanda Ch.',
+    doctorName: 'Médica',
     fixedSalaries: [],
     shifts: [],
     expenses: [
@@ -93,12 +93,12 @@ test('Formatting helpers: formatCurrency, formatDateBR, formatMonthYear', () => 
 test('Accounting Integrity: Shift received in different month is NEVER double-counted in Caixa', () => {
   // A shift expected in September 2026, but paid late in October 2026
   const store = new PediatricStore('test_store_double_count', {
-    doctorName: 'Dra. Fernanda Ch.',
+    doctorName: 'Médica',
     fixedSalaries: [],
     shifts: [
       {
         id: 'shift_sep_to_oct',
-        hospital: 'Hospital Infantil Sabará',
+        hospital: 'Hospital Pediátrico',
         shiftDate: '2026-06-10',
         grossValue: 3000,
         netValue: 2550,
@@ -131,7 +131,7 @@ test('Accounting Integrity: Shift received in different month is NEVER double-co
 test('Timezone Safety: Shift due today evaluated late at night (UTC-3) does not trigger early delayed status', () => {
   const shift = {
     id: 'sh_evening',
-    hospital: 'Hospital Sabará',
+    hospital: 'Hospital Hospital Geral',
     shiftDate: '2026-06-13',
     expectedPaymentDate: '2026-09-13',
     status: 'pending',
@@ -151,7 +151,7 @@ test('Timezone Safety: Shift due today evaluated late at night (UTC-3) does not 
 
 test('Shift CRUD: Supports custom manual payment date override', () => {
   const store = new PediatricStore('test_store_custom_dates', {
-    doctorName: 'Dra. Fernanda Ch.',
+    doctorName: 'Médica',
     fixedSalaries: [],
     shifts: [],
     expenses: []
@@ -183,7 +183,7 @@ test('Shift CRUD: Supports custom manual payment date override', () => {
 
 test('Fixed Salary: upsertFixedSalary updates existing salary in place without duplicating', () => {
   const store = new PediatricStore('test_store_salary_upsert', {
-    doctorName: 'Dra. Fernanda Ch.',
+    doctorName: 'Médica',
     fixedSalaries: [
       { id: 's1', description: 'Pediatra <3', value: 8500, dayOfMonth: 5 }
     ],
@@ -207,7 +207,7 @@ test('Fixed Salary: upsertFixedSalary updates existing salary in place without d
 
   // Upsert without id when 1 salary exists should also update existing salary
   const updatedAgain = store.upsertFixedSalary({
-    description: 'Consultório Dra. Fernanda Ch.',
+    description: 'Consultório Médica',
     value: 10000,
     dayOfMonth: 10
   });
@@ -231,14 +231,14 @@ test('Donut Chart: Renders distinct segments without visual bleed when multiple 
 
 test('Shift & Expense Duplication: Correctly clones shifts and expenses with smart dates', () => {
   const store = new PediatricStore('test_dup', {
-    doctorName: 'Dra. Fernanda Ch.',
+    doctorName: 'Médica',
     doctorTitle: 'Pediatria & Neonatologia 🩺✨',
     monthlyBudgetLimit: 12000,
     fixedSalaries: [],
     shifts: [
       {
         id: 'sh_orig',
-        hospital: 'Hospital Infantil Sabará',
+        hospital: 'Hospital Pediátrico',
         shiftDate: '2026-06-10',
         shiftType: '12h Diurno',
         grossValue: 3800,
@@ -265,7 +265,7 @@ test('Shift & Expense Duplication: Correctly clones shifts and expenses with sma
   // Duplicate shift (+7 days)
   const dupShift = store.duplicateShift('sh_orig');
   assert.ok(dupShift);
-  assert.equal(dupShift.hospital, 'Hospital Infantil Sabará');
+  assert.equal(dupShift.hospital, 'Hospital Pediátrico');
   assert.equal(dupShift.shiftDate, '2026-06-17', 'Should be +7 days from original');
   assert.equal(dupShift.expectedPaymentDate, '2026-09-17', 'Expected date should be 3 months from new shift date');
   assert.equal(dupShift.status, 'pending');
@@ -282,7 +282,7 @@ test('Shift & Expense Duplication: Correctly clones shifts and expenses with sma
 
 test('Doctor Profile & Notifications: Correctly computes alerts for delayed shifts and budget', () => {
   const store = new PediatricStore('test_notifs', {
-    doctorName: 'Dra. Fernanda Ch.',
+    doctorName: 'Médica',
     doctorTitle: 'Pediatria & Neonatologia 🩺✨',
     monthlyBudgetLimit: 5000,
     fixedSalaries: [],
@@ -315,10 +315,10 @@ test('Doctor Profile & Notifications: Correctly computes alerts for delayed shif
 
   // Profile update
   store.updateDoctorProfile({
-    doctorName: 'Dra. Fernanda Chic',
+    doctorName: 'Médica Chic',
     monthlyBudgetLimit: 6000
   });
-  assert.equal(store.data.doctorName, 'Dra. Fernanda Chic');
+  assert.equal(store.data.doctorName, 'Médica Chic');
   assert.equal(store.data.monthlyBudgetLimit, 6000);
 
   // Notifications evaluation

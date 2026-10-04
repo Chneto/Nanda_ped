@@ -392,15 +392,15 @@ const CATEGORY_ICONS = {
 };
 
 const DEFAULT_WORK_LOCATIONS = [
-  "Maternidade Araken",
-  "Maternidade Leide Morais",
-  "MEJEC",
-  "Hospital Infantil Sabará",
-  "Maternidade Pro Matre",
-  "Hospital Infantil São Lucas",
-  "PS Infantil Menino Jesus",
-  "Maternidade Santa Joana",
-  "Do meu Coração"
+  "Maternidade Principal",
+  "Maternidade Secundária",
+  "Hospital Pediátrico",
+  "Hospital Pediátrico",
+  "Instituição de Exemplo B",
+  "Instituição de Exemplo C",
+  "Instituição de Exemplo D",
+  "Instituição de Exemplo E",
+  "Instituição de Exemplo F"
 ];
 
 const SHIFT_HOSPITAL_SUGGESTIONS = DEFAULT_WORK_LOCATIONS;
@@ -803,9 +803,9 @@ function getInitialData() {
   return {
     doctorName: DEFAULT_DOCTOR_NAME,
     doctorTitle: DEFAULT_DOCTOR_TITLE,
-    doctorCrm: "CRM-SP • Pediatria",
-    monthlyBudgetLimit: 10000,
-    monthlyIncomeGoal: 25000,
+    doctorCrm: "",
+    monthlyBudgetLimit: 0,
+    monthlyIncomeGoal: 0,
     workLocations: [...DEFAULT_WORK_LOCATIONS],
     workTypes: [...DEFAULT_WORK_TYPES],
     activeWorkTypes: ["Plantão em Maternidade", "Plantão em Hospital", "Serviço Público"],
@@ -824,11 +824,11 @@ function getInitialData() {
  */
 function getDemoData() {
   return {
-    doctorName: "Dra. Fernanda Ch.",
+    doctorName: "Médica",
     doctorTitle: "Pediatria & Neonatologia 🩺✨",
-    doctorCrm: "CRM-SP 214.890 • RQE 98.412",
-    monthlyBudgetLimit: 12000,
-    monthlyIncomeGoal: 25000,
+    doctorCrm: "",
+    monthlyBudgetLimit: 0,
+    monthlyIncomeGoal: 0,
     workLocations: [...DEFAULT_WORK_LOCATIONS],
     workTypes: [...DEFAULT_WORK_TYPES],
     activeWorkTypes: ["Plantão em Maternidade", "Plantão em Hospital", "Serviço Público"],
@@ -844,7 +844,7 @@ function getDemoData() {
     shifts: [
       {
         id: "sh1",
-        hospital: "Do meu Coração",
+        hospital: "Instituição de Exemplo F",
         shiftDate: "2026-06-10",
         shiftType: "12h Noturno",
         sector: "UTI Neonatal",
@@ -860,7 +860,7 @@ function getDemoData() {
       },
       {
         id: "sh2",
-        hospital: "Hospital Infantil Sabará",
+        hospital: "Hospital Pediátrico",
         shiftDate: "2026-06-15",
         shiftType: "12h Diurno",
         sector: "PS Infantil",
@@ -876,7 +876,7 @@ function getDemoData() {
       },
       {
         id: "sh3",
-        hospital: "Maternidade Pro Matre",
+        hospital: "Instituição de Exemplo B",
         shiftDate: "2026-05-20",
         shiftType: "24h Completo",
         sector: "Sala de Parto / Reanimação",
@@ -892,7 +892,7 @@ function getDemoData() {
       },
       {
         id: "sh4",
-        hospital: "Hospital Infantil São Lucas",
+        hospital: "Instituição de Exemplo C",
         shiftDate: "2026-07-08",
         shiftType: "12h Diurno",
         sector: "Enfermaria Pediátrica",
@@ -908,7 +908,7 @@ function getDemoData() {
       },
       {
         id: "sh5",
-        hospital: "PS Infantil Menino Jesus",
+        hospital: "Instituição de Exemplo D",
         shiftDate: "2026-07-22",
         shiftType: "12h Noturno",
         sector: "PS Infantil",
@@ -924,7 +924,7 @@ function getDemoData() {
       },
       {
         id: "sh6",
-        hospital: "Maternidade Santa Joana",
+        hospital: "Instituição de Exemplo E",
         shiftDate: "2026-08-05",
         shiftType: "12h Diurno",
         sector: "Alojamento Conjunto",
@@ -940,7 +940,7 @@ function getDemoData() {
       },
       {
         id: "sh7",
-        hospital: "Hospital Infantil Sabará",
+        hospital: "Hospital Pediátrico",
         shiftDate: "2026-09-02",
         shiftType: "12h Diurno",
         sector: "UTI Neonatal",
@@ -956,7 +956,7 @@ function getDemoData() {
       },
       {
         id: "sh8",
-        hospital: "Do meu Coração",
+        hospital: "Instituição de Exemplo F",
         shiftDate: "2026-09-08",
         shiftType: "12h Noturno",
         sector: "PS Infantil",
@@ -1039,8 +1039,8 @@ function getDemoData() {
     consultations: [
       {
         id: "c1",
-        patientName: "Bebê Gael",
-        parentName: "Mariana Silva",
+        patientName: "Paciente Pediátrico de Exemplo",
+        parentName: "Responsável de Exemplo",
         type: "Plano Puericultura 1º Ano",
         date: "2026-08-20",
         durationMinutes: 60,
@@ -1055,8 +1055,8 @@ function getDemoData() {
       },
       {
         id: "c2",
-        patientName: "Helena Castro",
-        parentName: "Rodrigo Castro",
+        patientName: "Paciente Pediátrico de Exemplo",
+        parentName: "Responsável de Exemplo",
         type: "Consulta Particular",
         date: "2026-10-05",
         durationMinutes: 60,
@@ -2085,7 +2085,7 @@ class PediatricStore {
     }).filter(c => c.amount > 0);
 
     // Goals & Workload Metrics
-    const monthlyIncomeGoal = Number(this.data.monthlyIncomeGoal) || 25000;
+    const monthlyIncomeGoal = Number(this.data.monthlyIncomeGoal) || 0;
     const goalProgressPercent = monthlyIncomeGoal > 0
       ? Number(((cashTotalInflow / monthlyIncomeGoal) * 100).toFixed(1))
       : 0;
@@ -2147,9 +2147,9 @@ class PediatricStore {
         pfPercent: cashExpensesTotal > 0 ? Number(((cashExpensesPF / cashExpensesTotal) * 100).toFixed(1)) : 0,
         pjPercent: cashExpensesTotal > 0 ? Number(((cashExpensesPJ / cashExpensesTotal) * 100).toFixed(1)) : 0,
         categoryBreakdown,
-        budgetLimit: this.data.monthlyBudgetLimit || 12000,
+        budgetLimit: this.data.monthlyBudgetLimit || 0,
         budgetUsagePercent: cashExpensesTotal > 0
-          ? Number(((cashExpensesTotal / (this.data.monthlyBudgetLimit || 12000)) * 100).toFixed(1))
+          ? Number(((cashExpensesTotal / (this.data.monthlyBudgetLimit || 0)) * 100).toFixed(1))
           : 0
       }
     };
@@ -2469,10 +2469,10 @@ class PediatricStore {
     if (profile.doctorTitle) this.data.doctorTitle = profile.doctorTitle.trim();
     if (profile.doctorCrm) this.data.doctorCrm = profile.doctorCrm.trim();
     if (profile.monthlyBudgetLimit !== undefined) {
-      this.data.monthlyBudgetLimit = Number(profile.monthlyBudgetLimit) || 12000;
+      this.data.monthlyBudgetLimit = Number(profile.monthlyBudgetLimit) || 0;
     }
     if (profile.monthlyIncomeGoal !== undefined) {
-      this.data.monthlyIncomeGoal = Number(profile.monthlyIncomeGoal) || 25000;
+      this.data.monthlyIncomeGoal = Number(profile.monthlyIncomeGoal) || 0;
     }
     this.save();
     return this.data;
@@ -2925,7 +2925,7 @@ class PediatricStore {
     const rPrev1 = this.getMonthlyReport(mPrev1);
     const rPrev2 = this.getMonthlyReport(mPrev2);
     const sumExp = rCurrent.expenses.total + rPrev1.expenses.total + rPrev2.expenses.total;
-    const avgMonthlyExpense = sumExp > 0 ? Math.round(sumExp / 3) : (this.data.monthlyBudgetLimit || 12000);
+    const avgMonthlyExpense = sumExp > 0 ? Math.round(sumExp / 3) : (this.data.monthlyBudgetLimit || 0);
     const emergencyReserve = Math.round(avgMonthlyExpense * 6);
 
     const monthNamesShort = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
@@ -3171,7 +3171,7 @@ class PediatricStore {
     const dre = this.getDRE(mStr);
     const monthlyCostOfLiving = (dre.pfExpensesTotal + dre.pjExpensesTotal) > 0
       ? (dre.pfExpensesTotal + dre.pjExpensesTotal)
-      : (this.data.monthlyBudgetLimit || 12000);
+      : (this.data.monthlyBudgetLimit || 0);
     
     const annualCostOfLiving = monthlyCostOfLiving * 12;
     // 4% Rule / 300x monthly expense
@@ -3245,7 +3245,7 @@ class PediatricStore {
         }
         return "RN [Leito]";
       });
-      situation = situation.replace(/Maria Silva/g, "M.S.");
+      situation = situation.replace(/Paciente de Exemplo/g, "M.S.");
     }
 
     const privacyLine = isAnonymized
@@ -3554,7 +3554,7 @@ class PediatricStore {
     const type = isConsultation ? "consultation" : isExpense ? "expense" : "shift";
 
     // 1. Hospital / Location matching
-    let hospital = "Hospital Mater Dei";
+    let hospital = "Hospital Geral";
     const locations = Array.from(new Set([...this.getWorkLocations(), ...SHIFT_HOSPITAL_SUGGESTIONS]));
     for (const loc of locations) {
       const locLower = loc.toLowerCase();
@@ -4678,7 +4678,7 @@ function promptVoiceManualFallback() {
         <h3 class="font-headline text-[17px] font-bold text-on-surface">Lançamento por Voz ou Texto</h3>
       </div>
       <p class="text-[12px] text-on-surface-variant">
-        O assistente de NLP Médico reconhece termos como: <em>"Plantão 12h sábado no Mater Dei 1800"</em>, <em>"Consulta puericultura Maria 350"</em> ou <em>"Despesa jaleco 250"</em>.
+        O assistente de NLP Médico reconhece termos como: <em>"Plantão 12h sábado no Hospital Geral 1800"</em>, <em>"Consulta puericultura Maria 350"</em> ou <em>"Despesa jaleco 250"</em>.
       </p>
       <textarea
         id="input-voice-text-fallback"
@@ -4720,7 +4720,7 @@ function processVoiceTranscript(transcript) {
   triggerHaptic(25);
   if (parsed.type === "shift") {
     openBottomSheet("plantao", {
-      hospital: parsed.hospital || "Hospital Mater Dei",
+      hospital: parsed.hospital || "Hospital Geral",
       shiftType: parsed.shiftType || "12h Diurno",
       shiftDate: parsed.shiftDate || getLocalDateString(state.referenceDate || new Date()),
       grossValue: parsed.grossValue || 1500,
@@ -5267,9 +5267,9 @@ function openOnboardingDialog() {
           </div>
           <div class="flex flex-col gap-2 mt-2">
             <label class="text-[11px] font-bold text-on-surface">Seu Nome / Como prefere ser chamada:</label>
-            <input type="text" id="onboarding-name" value="${state.store.data.doctorName || 'Dra. Fernanda'}" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary" />
+            <input type="text" id="onboarding-name" value="${state.store.data.doctorName || 'Médica'}" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary" />
             <label class="text-[11px] font-bold text-on-surface mt-1">CRM e Especialidade:</label>
-            <input type="text" id="onboarding-crm" value="${state.store.data.doctorCrm || 'CRM 123456-SP'}" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary" />
+            <input type="text" id="onboarding-crm" value="${state.store.data.doctorCrm || ''}" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary" />
           </div>
           <button type="button" id="btn-next-step" class="w-full h-11 rounded-full bg-gradient-to-r from-secondary to-primary text-white font-bold text-[13px] mt-2 active:scale-95 transition-all">Próximo Passo ➔</button>
         </div>
@@ -5286,7 +5286,7 @@ function openOnboardingDialog() {
           </div>
           <div class="flex flex-col gap-2 mt-2">
             <label class="text-[11px] font-bold text-on-surface">Hospital Principal:</label>
-            <input type="text" id="onboarding-hospital" value="Hospital Mater Dei" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary" />
+            <input type="text" id="onboarding-hospital" value="Hospital Geral" class="w-full h-11 px-3.5 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface focus:outline-none focus:border-secondary" />
             <label class="text-[11px] font-bold text-on-surface mt-1">Regime Tributário Predominante:</label>
             <select id="onboarding-tax" class="w-full h-11 px-3 rounded-2xl bg-surface-container-low border border-outline-variant/30 text-[13px] text-on-surface">
               <option value="6">PJ Simples Nacional (6% com Fator R)</option>
@@ -6421,7 +6421,7 @@ function openPrintableStatementDialog() {
           <div class="flex flex-col">
             <h2 class="font-headline text-[18px] font-bold text-primary">${doc.doctorName}</h2>
             <span class="text-[12px] text-on-surface-variant font-medium">${doc.doctorTitle}</span>
-            <span class="text-[11px] text-primary font-semibold">${doc.doctorCrm || 'CRM-SP • Pediatria'}</span>
+            <span class="text-[11px] text-primary font-semibold">${doc.doctorCrm || ''}</span>
           </div>
           <div class="text-right flex flex-col">
             <span class="text-[11px] font-bold uppercase tracking-wider text-secondary">Demonstrativo Mensal</span>
@@ -6568,7 +6568,7 @@ function openDoctorProfileDialog() {
             type="text"
             id="input-doc-name"
             class="h-11 px-3.5 rounded-2xl bg-surface-container-low text-on-surface text-[13px] font-medium focus:outline-none border border-transparent focus:border-primary"
-            placeholder="Ex: Dra. Ana Silva"
+            placeholder="Ex: Médica de Exemplo"
             value="${storeData.doctorName}"
             required
           />
@@ -6592,8 +6592,8 @@ function openDoctorProfileDialog() {
             type="text"
             id="input-doc-crm"
             class="h-11 px-3.5 rounded-2xl bg-surface-container-low text-on-surface text-[13px] font-medium focus:outline-none border border-transparent focus:border-primary"
-            placeholder="Ex: CRM-SP 214.890 • RQE 98.412"
-            value="${storeData.doctorCrm || 'CRM-SP • Pediatria'}"
+            placeholder="Ex: CRM-TESTE"
+            value="${storeData.doctorCrm || ''}"
           />
         </div>
 
@@ -6707,7 +6707,7 @@ function openDoctorProfileDialog() {
               step="500"
               id="input-doc-goal"
               class="h-11 px-3.5 rounded-2xl bg-surface-container-low text-on-surface text-[14px] font-bold focus:outline-none border border-transparent focus:border-primary font-display"
-              value="${storeData.monthlyIncomeGoal || 25000}"
+              value="${storeData.monthlyIncomeGoal || 0}"
               required
             />
           </div>
@@ -6719,7 +6719,7 @@ function openDoctorProfileDialog() {
               step="100"
               id="input-doc-budget"
               class="h-11 px-3.5 rounded-2xl bg-surface-container-low text-on-surface text-[14px] font-bold focus:outline-none border border-transparent focus:border-primary font-display"
-              value="${storeData.monthlyBudgetLimit || 10000}"
+              value="${storeData.monthlyBudgetLimit || 0}"
               required
             />
           </div>
@@ -6890,8 +6890,8 @@ function openDoctorProfileDialog() {
     const doctorName = document.getElementById("input-doc-name").value.trim();
     const doctorTitle = document.getElementById("input-doc-title").value.trim();
     const doctorCrm = document.getElementById("input-doc-crm").value.trim();
-    const monthlyIncomeGoal = parseFloat(document.getElementById("input-doc-goal").value) || 25000;
-    const monthlyBudgetLimit = parseFloat(document.getElementById("input-doc-budget").value) || 10000;
+    const monthlyIncomeGoal = parseFloat(document.getElementById("input-doc-goal").value) || 0;
+    const monthlyBudgetLimit = parseFloat(document.getElementById("input-doc-budget").value) || 0;
 
     state.store.updateDoctorProfile({ doctorName, doctorTitle, doctorCrm, monthlyIncomeGoal, monthlyBudgetLimit });
     closeDialog();
@@ -9866,7 +9866,7 @@ function renderShiftForm(data = null) {
             type="text"
             id="input-shift-hospital"
             class="w-full bg-transparent text-[14px] text-on-surface focus:outline-none placeholder:text-outline"
-            placeholder="Ex: Maternidade Araken"
+            placeholder="Ex: Maternidade Principal"
             value="${hospital}"
             required
           />

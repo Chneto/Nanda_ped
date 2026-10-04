@@ -129,7 +129,7 @@ describe('V4_Cloud vercel.json Production Configuration Suite', () => {
       '/manifest.json',
       '/favicon.ico',
       '/assets/icons/heart.svg',
-      '/assets/images/dra_fernanda.png',
+      '/assets/images/profile-photo.png',
       '/fonts/inter.woff2'
     ];
 

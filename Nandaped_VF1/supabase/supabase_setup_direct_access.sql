@@ -1,6 +1,6 @@
 -- ==============================================================================
 -- SCRIPT MESTRE DE ATUALIZAÇÃO SUPABASE (POSTGRESQL) - ACESSO DIRETO
--- Aplicação: Finanças Pediatria (Dra. Fernanda Ch.)
+-- Aplicação: Finanças Pediatria (Médica)
 -- Autor Canônico: FChNeto (APP_CREATOR = 'FChNeto')
 -- ==============================================================================
 -- INSTRUÇÕES DE EXECUÇÃO:
@@ -21,12 +21,12 @@ CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 -- 1.1 Tabela de Perfis Médicos
 CREATE TABLE IF NOT EXISTS public.profiles (
     id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-    doctor_name TEXT NOT NULL DEFAULT 'Dra. Fernanda Ch.',
+    doctor_name TEXT NOT NULL DEFAULT 'Médica',
     crm TEXT,
     rqe TEXT,
     specialty TEXT DEFAULT 'Pediatria',
     photo_url TEXT,
-    residency_salary NUMERIC(10,2) NOT NULL DEFAULT 4106.09 CHECK (residency_salary >= 0),
+    residency_salary NUMERIC(10,2) NOT NULL DEFAULT 0.00 CHECK (residency_salary >= 0),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -143,7 +143,7 @@ BEGIN
   v_full_name := COALESCE(
     NULLIF(TRIM(NEW.raw_user_meta_data->>'full_name'), ''),
     NULLIF(TRIM(NEW.raw_user_meta_data->>'name'), ''),
-    'Dra. Fernanda Ch.'
+    'Médica'
   );
 
   v_avatar_url := COALESCE(
@@ -170,7 +170,7 @@ BEGIN
     NULL,
     'Pediatria',
     v_avatar_url,
-    4106.09,
+    0.00,
     NOW(),
     NOW()
   )

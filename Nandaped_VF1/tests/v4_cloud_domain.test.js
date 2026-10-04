@@ -57,10 +57,10 @@ describe('Finanças Pediatria V4_Cloud — Medical Domain Logic Engine Suite', (
     });
 
     test('Médica padrão e bolsa de residência inicializados corretamente', () => {
-      assert.equal(store.data.doctorName, 'Dra. Fernanda Ch.');
-      assert.equal(store.data.specialty, 'Pediatria (R3)');
-      assert.equal(store.data.residencySalary.value, 4106.09);
-      assert.equal(store.data.residencySalary.active, true);
+      assert.equal(store.data.doctorName, 'Médica');
+      assert.equal(store.data.specialty, 'Pediatria');
+      assert.equal(store.data.residencySalary.value, 0.00);
+      assert.equal(store.data.residencySalary.active, false);
       assert.equal(store.data.residencySalary.dayOfMonth, 5);
     });
   });
@@ -270,43 +270,43 @@ describe('Finanças Pediatria V4_Cloud — Medical Domain Logic Engine Suite', (
   // --------------------------------------------------------------------------
   describe('6. Regime de Caixa vs Regime de Competência', () => {
     test('Hiato temporal de plantão trabalhado em Março (D+60 em Maio e D+90 em Junho)', () => {
-      store.updateResidencySalary({ value: 4106.09, active: true });
+      store.updateResidencySalary({ value: 0.00, active: true });
 
       // Shift in March: net 2000 => 75% (1500) in May, 25% (500) in June
       store.saveShift({
         date: '2026-03-10',
         netValue: 2000.00,
-        hospital: 'Maternidade Araken'
+        hospital: 'Maternidade Principal'
       });
 
       store.saveExpense({ amount: 500.00, date: '2026-03-15', category: 'Mercantil' });
       store.saveExpense({ amount: 1000.00, date: '2026-05-20', category: 'Aluguel' });
 
-      // March Competência: Residency (4106.09) + Worked (2000.00) = 6106.09
+      // March Competência: No prefilled salary + Worked (2000.00) = 2000.00
       const marCompetencia = store.getMonthlySummary('2026-03', 'competencia');
       assert.equal(marCompetencia.shiftIncome, 2000.00);
-      assert.equal(marCompetencia.totalIncome, 6106.09);
+      assert.equal(marCompetencia.totalIncome, 2000.00);
       assert.equal(marCompetencia.totalExpenses, 500.00);
-      assert.equal(marCompetencia.balance, 5606.09);
+      assert.equal(marCompetencia.balance, 1500.00);
 
-      // March Caixa: Residency (4106.09) + Shifts maturing (0) = 4106.09
+      // March Caixa: No prefilled salary + Shifts maturing (0) = 0.00
       const marCaixa = store.getMonthlySummary('2026-03', 'caixa');
       assert.equal(marCaixa.shiftIncome, 0.00);
-      assert.equal(marCaixa.totalIncome, 4106.09);
+      assert.equal(marCaixa.totalIncome, 0.00);
       assert.equal(marCaixa.totalExpenses, 500.00);
-      assert.equal(marCaixa.balance, 3606.09);
+      assert.equal(marCaixa.balance, -500.00);
 
-      // May Caixa: Residency (4106.09) + 75% D+60 (1500.00) = 5606.09
+      // May Caixa: No prefilled salary + 75% D+60 (1500.00)
       const maiCaixa = store.getMonthlySummary('2026-05', 'caixa');
       assert.equal(maiCaixa.shiftIncome, 1500.00);
-      assert.equal(maiCaixa.totalIncome, 5606.09);
+      assert.equal(maiCaixa.totalIncome, 1500.00);
       assert.equal(maiCaixa.totalExpenses, 1000.00);
-      assert.equal(maiCaixa.balance, 4606.09);
+      assert.equal(maiCaixa.balance, 500.00);
 
-      // June Caixa: Residency (4106.09) + 25% D+90 (500.00) = 4606.09
+      // June Caixa: No prefilled salary + 25% D+90 (500.00)
       const junCaixa = store.getMonthlySummary('2026-06', 'caixa');
       assert.equal(junCaixa.shiftIncome, 500.00);
-      assert.equal(junCaixa.totalIncome, 4606.09);
+      assert.equal(junCaixa.totalIncome, 500.00);
     });
 
     test('Breakdown de macro-grupos e categorias no resumo mensal', () => {
@@ -340,7 +340,7 @@ describe('Finanças Pediatria V4_Cloud — Medical Domain Logic Engine Suite', (
   describe('7. PediatricStore Lifecycle & Persistência', () => {
     test('Toggle de status de parcela de plantão (recebido / pendente)', () => {
       const shift = store.saveShift({
-        hospital: 'Maternidade Leide Morais',
+        hospital: 'Maternidade Secundária',
         date: '2026-04-01',
         netValue: 1200
       });
@@ -369,7 +369,7 @@ describe('Finanças Pediatria V4_Cloud — Medical Domain Logic Engine Suite', (
     });
 
     test('Remoção de plantões e despesas', () => {
-      const s = store.saveShift({ hospital: 'MEJEC', date: '2026-04-01', netValue: 800 });
+      const s = store.saveShift({ hospital: 'Hospital Pediátrico', date: '2026-04-01', netValue: 800 });
       store.saveExpense({ id: 'exp-del', amount: 50, date: '2026-04-02', category: 'Uber' });
 
       assert.equal(store.data.shifts.length, 1);
@@ -384,15 +384,15 @@ describe('Finanças Pediatria V4_Cloud — Medical Domain Logic Engine Suite', (
 
     test('Atualização de perfil médico e bolsa de residência', () => {
       store.updateDoctorProfile({
-        doctorName: 'Dra. Fernanda Chagas',
-        crm: 'CRM/RN 99999',
+        doctorName: 'Médica de Exemplo',
+        crm: 'CRM/TESTE',
         specialty: 'Neonatologia',
         doctorPhoto: 'data:image/png;base64,mock',
         salaryValue: 4500
       });
 
-      assert.equal(store.data.doctorName, 'Dra. Fernanda Chagas');
-      assert.equal(store.data.crm, 'CRM/RN 99999');
+      assert.equal(store.data.doctorName, 'Médica de Exemplo');
+      assert.equal(store.data.crm, 'CRM/TESTE');
       assert.equal(store.data.specialty, 'Neonatologia');
       assert.equal(store.data.doctorPhoto, 'data:image/png;base64,mock');
       assert.equal(store.data.residencySalary.value, 4500);
@@ -411,24 +411,24 @@ describe('Finanças Pediatria V4_Cloud — Medical Domain Logic Engine Suite', (
     });
 
     test('Reset em duas etapas: transações apenas vs fábrica completa', () => {
-      store.saveShift({ hospital: 'Maternidade Araken', date: '2026-04-01', netValue: 1000 });
+      store.saveShift({ hospital: 'Maternidade Principal', date: '2026-04-01', netValue: 1000 });
       store.saveExpense({ amount: 100, date: '2026-04-01', category: 'Mercantil' });
-      store.updateDoctorProfile({ doctorName: 'Dra. Fernanda Especial' });
+      store.updateDoctorProfile({ doctorName: 'Médica Especial' });
 
       // Transações apenas: zera dados mantendo perfil
       store.resetData('transactions_only');
       assert.equal(store.data.shifts.length, 0);
       assert.equal(store.data.expenses.length, 0);
-      assert.equal(store.data.doctorName, 'Dra. Fernanda Especial');
+      assert.equal(store.data.doctorName, 'Médica Especial');
 
       // Fábrica completa: restaura perfil padrão mas preserva APP_CREATOR
       store.resetData('full_factory');
-      assert.equal(store.data.doctorName, 'Dra. Fernanda Ch.');
+      assert.equal(store.data.doctorName, 'Médica');
       assert.equal(store.data.creator, 'FChNeto');
     });
 
     test('Exportação e importação de backup JSON preserva APP_CREATOR', () => {
-      store.saveShift({ hospital: 'Maternidade Araken', date: '2026-04-01', netValue: 1500 });
+      store.saveShift({ hospital: 'Maternidade Principal', date: '2026-04-01', netValue: 1500 });
       const jsonStr = store.exportBackupJsonString();
       const parsed = JSON.parse(jsonStr);
 

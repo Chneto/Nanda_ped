@@ -21,7 +21,7 @@ O projeto dispõe de **4 métodos independentes** para restaurar a versão v3.0.
 
 ### Método 1: Restauração em 1 Clique no Windows (Mais Rápido)
 1. Navegue até a pasta de scripts do projeto:
-   `c:\Users\chibe\OneDrive\Área de Trabalho\Antigravity\Nanda\scripts\`
+   `.scripts\`
 2. Dê um duplo clique no arquivo:
    **`restore_v3.0.0.bat`**
 3. Digite `S` e pressione Enter. O script restaurará os arquivos a partir do snapshot v3.0.0, recompilará o bundle e executará os 71 testes de validação!

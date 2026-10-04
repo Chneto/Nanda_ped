@@ -1,102 +1,41 @@
-# 🌸 Finanças Pediatria — Gestão Financeira Pediátrica v4.0 & v3.1 (PWA)
+# 🩺🌸 Finanças Pediatria — Gestão Financeira 6.0.0
 
-![Finanças Pediatria Showcase](./assets/images/showcase.png)
+Aplicativo web responsivo de alta precisão para organização financeira individual de médicas e médicos pediatras e neonatologistas. O projeto mantém versões standalone e a variante oficial em nuvem com sincronização resiliente, CSP estrita e isolamento de contas.
 
-[![Versão](https://img.shields.io/badge/Versão-4.0.0%20%7C%203.1.1-EC407A?style=for-the-badge&logo=apple)](./RELEASE_NOTES.md)
-[![Testes Automatizados](https://img.shields.io/badge/Testes-104%20Pass-26A69A?style=for-the-badge&logo=node.js)](./tests/)
-[![PWA Ready](https://img.shields.io/badge/PWA-Offline--First-AB47BC?style=for-the-badge&logo=pwa)](./manifest.json)
-[![Licença MIT](https://img.shields.io/badge/Licen%C3%A7a-MIT-blue?style=for-the-badge)](./LICENSE)
-[![Criado por](https://img.shields.io/badge/Criado%20por-FChNeto-F48FB1?style=for-the-badge)](#-autoria--créditos)
+## Versões no Repositório
 
-> **Aplicação Web Mobile-First (PWA) de Controle Financeiro criada sob medida para a Médica Pediatra Dra. Fernanda Ch.**  
-> Disponível em 3 variantes canônicas no repositório:
-> - **`/v4/` & `/v4.0/` — Silk & Rose Gold (Nova Versão):** Frontend profundamente refinado com estética acolhedora, bordas hiper-arredondadas (30px), chips rápidos para Maternidade Araken e Leide Morais, botões dedicados diretos (+ Nova Despesa e + Novo Plantão), 6 Macro-Grupos inteligentes de despesas com alternador interativo no gráfico de rosca, mini-barras sparklines de impacto no orçamento, e Menu Hambúrguer avançado (com perfil, Hub de Finanças Visual e Formatação de Dados em 2 etapas com backup preventivo automático).
-> - **`/v2.0/` — Sanctuary Minimalist:** Versão ultra-enxuta, sem poluição visual, com 3 abas essenciais, 22 categorias obrigatórias e persistência tripla no iOS.
-> - **`/` — Master Executive (v3.x):** Versão avançada com consultório de puericultura, DRE médica, Fator R (28%), SBAR clínico, conciliação bancária OFX/CSV e simulador FIRE.
+- **/v6/:** Versão oficial Cloud & Sanctuary 6.0.0 (Supabase Auth/RLS, CSP estrita sem `unsafe-inline`, 23 categorias canônicas mapeadas nos 6 macro-grupos, resolução de conflitos de revisão com backups automáticos).
+- **Raiz e /v5/:** Versão standalone 5.0.1 com painel executivo Silk & Rose Gold e persistência local.
+- **/V4_Cloud/:** Versão Cloud 4.1.1 (Vercel/Supabase, RLS, snapshot por conta).
+- **/v4/ e /v4.0/:** Versão standalone 4.0.0.
+- **/v2.0/:** Versão minimalista Sanctuary 2.0.0 (3 abas essenciais, 23 categorias canônicas).
 
----
+Perfis novos começam com estado limpo, sem nomes, registros profissionais ou dados reais de demonstração. É possível criar, editar e reclassificar categorias para os 6 Macro-Grupos com propagação automática no histórico de lançamentos.
 
-## 🩺 Destaques & Funcionalidades Principais da v3.1
+## Validação & Cobertura de Testes
 
-| Recurso | Descrição |
-| :--- | :--- |
-| **🌙 Pediatric Dark Sanctuary (Stitch)** | Modo escuro ergonômico e confortável com paleta feminina profunda de ameixa e vinho (`#150D1C`, `#1F1228`), texto de alto contraste *Lavender Blush* (`#FFF0F5`) e gráficos SVG adaptativos. |
-| **🎨 Dropdowns Modernos e Arredondados** | Seletores estilizados (`rounded-2xl` / 16-20px) com ícones temáticos, crachás e checkmarks, substituindo popups OS rústicos e quadrados. |
-| **🍔 Menu Hambúrguer & Gaveta Lateral** | Topo despoluído mantendo apenas logo, alternador de tema, avatar com foto e botão hambúrguer. Gaveta com perfil, atalhos executivos e módulos. |
-| **📸 Foto de Perfil da Médica** | Envio de foto com corte quadrado e compressão automática no navegador, sincronizando todos os avatares sem envio para a nuvem. |
-| **✨ Partículas & Reações Delicadas** | Chuva de corações flutuantes, borboletas e estrelas ao salvar plantões, despesas e consultas, com bebê feliz e encorajamento constante. |
-| **⚖️ Centro de Segurança & LGPD** | Painel jurídico completo fundamentado na LGPD (13.709/18), Código de Ética Médica (CFM 2.217/18), Res. CFM 2.147/16 e CF/88. |
-| **👶 Módulo Consultório & Puericultura** | Acompanhamento completo dos atendimentos particulares e planos de puericultura do 1º ano de vida (RN, 2m, 4m, 6m, 9m, 12m), comparando rendimento horário (R$/h) com plantões. |
-| **🌙 Modo Noturno UTI Neonatal (Dark Mode)** | Tema escuro refinado, ideal para plantões noturnos em UTIs e quartos escuros, com contraste suave, proteção ocular e persistência automática. |
-| **📈 Projeção Rolante 12 Meses & Scrubber Touch** | Gráfico SVG panorâmico navegável por toque que projeta os próximos 12 meses de fluxo de caixa com linha de Reserva Segura de 6 Meses. |
-| **📊 DRE Médica & Otimizador Fator R 28%** | Demonstrativo de Resultado do Exercício com cálculo em tempo real do Fator R (RBT12 vs Folha12) para manter a PJ no Anexo III (6%) e economizar milhares de reais em impostos. |
-| **🩺 Passagem de Plantão SBAR (LGPD-Safe)** | Gerador profissional de handover clínico estruturado (Situação, Background, Avaliação, Recomendação) com proteção de dados de pacientes para envio via WhatsApp. |
-| **🏦 Conciliação Bancária OFX & CSV** | Importe extratos de qualquer banco (Nubank, Itaú, Bradesco, Inter, Santander) e concilie automaticamente os repasses de plantões e pagamentos de despesas. |
-| **💼 Kit do Contador em 1 Toque** | Gera resumo executivo completo e arquivo CSV compatível com Excel brasileiro (UTF-8 BOM) pronto para envio por WhatsApp ou e-mail ao contador da clínica. |
-| **🔥 Simulador FIRE & Termômetro de Liberdade** | Calcula a independência financeira médica, indicando quantos plantões noturnos a médica pode eliminar permanentemente através dos rendimentos passivos. |
-| **🎙️ Lançamento Rápido por Voz (NLP)** | Reconhecimento de voz em português brasileiro para cadastrar plantões e despesas falando naturalmente (ex: *"Plantão de 12 horas ontem no Mater Dei, valor dois mil reais"*). |
-| **🔍 Spotlight Search Global (Cmd+K / Ctrl+K)** | Barra de pesquisa universal instantânea para encontrar qualquer plantão, consulta, paciente de puericultura, hospital ou despesa em milissegundos. |
-| **🛡️ Blindagem contra Zoom Indesejado no iOS** | Campos de entrada ajustados com tamanho mínimo de 16px e meta tag `interactive-widget=resizes-content`, eliminando o incômodo zoom automático do Safari móvel. |
-| **💾 Armazenamento Dual-Engine L2 (PediatricSanctuaryDB)** | Sincronização em tempo real entre `localStorage` e `IndexedDB`, garantindo tolerância a falhas e backup automático das finanças. |
-| **🍼 Motor de Plantões Parcelados (80% D+60 / 20% D+90)** | Cálculo automático da rotina médica real: 80% creditado em 60 dias e 20% em 90 dias, projetando entradas precisas no fluxo de caixa. |
-| **🏷️ Categorias Livres & Escopo PF/PJ** | Crie qualquer categoria que desejar (*Contador*, *Mercantil/Mercado*, *Lanches*, *Combustível*, etc.) e classifique entre Vida Pessoal (PF) ou Trabalho (PJ). |
-| **🎚️ Barra Deslizante de Imposto (6% a 20%)** | Slider interativo estilo volume para definir a alíquota tributária desejada com recálculo instantâneo do valor líquido. |
-| **🗑️ Lixeira Segura & Desfazer Imediato (1-Tap Undo)** | Exclusões acidentais de plantões, consultas, despesas ou salários podem ser desfeitas na hora via toast ou recuperadas na lixeira. |
-| **👁️ Modo Sigilo (Privacy Mode)** | Oculte ou revele todos os saldos e valores da tela com 1 toque no cabeçalho (estilo app bancário), ideal para usar perto de colegas de plantão. |
-| **✍️ Criado por FChNeto** | Assinatura oficial do desenvolvedor gravada no código-fonte e destacada no rodapé da aplicação. |
+Validações executadas em 2026-10-04 (0 falhas em todas as suítes):
 
----
+- **Suíte da raiz:** 120 testes aprovados.
+- **Suíte V2:** 9 testes aprovados.
+- **Suíte V4:** 13 testes aprovados.
+- **Suíte V5:** 13 testes aprovados.
+- **Suíte V4_Cloud:** 619 testes aprovados.
+- **Suíte v6 (Cloud & Sanctuary):** 70 testes aprovados.
 
-## 📱 Como Abrir e Instalar no Celular
-
-Como a aplicação é um **PWA (Progressive Web App)** de última geração, ela não requer download em lojas de apps:
-
-### 🍎 No iPhone ou iPad (Safari)
-1. Abra o link da aplicação no navegador **Safari**.
-2. Toque no botão de **Compartilhar** (ícone de quadrado com a seta para cima ⎋ na barra inferior do Safari).
-3. Role para baixo e toque em **"Adicionar à Tela de Início"** (ícone de ➕).
-4. Toque em **"Adicionar"** no canto superior direito.
-5. O app **Finanças Pediatria** abrirá em tela cheia como um aplicativo nativo.
-
-### 🤖 No Android (Google Chrome)
-1. Abra o link da aplicação no navegador **Google Chrome**.
-2. Toque no menu de **três pontinhos** (⋮) no canto superior direito.
-3. Selecione **"Instalar aplicativo"** ou **"Adicionar à tela inicial"**.
-4. Confirme a instalação.
-
----
-
-## 🧪 Suíte de Testes Automatizados (100% Cobertura)
-
-A aplicação conta com **71 testes automatizados rigorosos** executados nativamente via Node.js Test Runner:
+### Comandos de Teste:
 
 ```bash
-# Executar a suíte de testes e compilar o bundle
-npm test
+# Testes da raiz
+node --test tests/*.test.js
+
+# Testes da versão Cloud v6
+node --test v6/tests/*.test.js
+
+# Testes da versão V4_Cloud
+cd V4_Cloud && node --test tests/*.test.js
 ```
 
-### Arquivos de Teste:
-- `tests/v3_features.test.js` — Validação de todas as 14 novas funcionalidades da V3.0.
-- `tests/clinical_features.test.js` — Validação de Fadiga CFM, cálculos tributários e relatórios.
-- `tests/pediatric_enhancements.test.js` — Validação da lixeira, parcelamento D+60/D+90 e categorias.
-- `tests/edge_cases.test.js` — Anos bissextos, fuso horário UTC-3, valores negativos e tolerâncias.
-- `tests/layout_bundle.test.js` — Validação visual, responsividade iPhone 16 Plus e execução do bundle zero-CORS.
+## Autoria
 
----
-
-## 🔄 Recuperação e Restauração de Desastres (Disaster Recovery)
-
-A aplicação inclui snapshots estáveis completos e scripts de recuperação em 1 clique:
-
-- **Windows:** Duplo-clique em `scripts/restore_v3.0.0.bat`
-- **PowerShell:** `powershell -ExecutionPolicy Bypass -File scripts/restore_v3.0.0.ps1`
-- **Node.js:** `npm run restore` ou `node scripts/restore_v3.0.0.js`
-
-Consulte o arquivo [RECOVERY.md](./RECOVERY.md) para instruções detalhadas.
-
----
-
-## 👨‍💻 Autoria & Créditos
-
-**Finanças Pediatria** foi idealizado, desenhado e desenvolvido por **FChNeto**.  
-*Dedicado com carinho e admiração a todas as pediatras que cuidam com dedicação e amor da vida das nossas crianças.* 🩺✨🌸
+Aplicação criada por **FChNeto** (`APP_CREATOR = 'FChNeto'`).

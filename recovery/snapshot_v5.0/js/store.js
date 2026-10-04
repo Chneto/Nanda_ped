@@ -93,12 +93,12 @@ export const MACRO_GROUPS = [
 ];
 
 export const DEFAULT_HOSPITALS = [
-  'Maternidade Araken',
-  'Maternidade Leide Morais',
-  'MEJEC',
-  'Hospital da Criança',
-  'Hospital Mater Dei',
-  'Hospital Promater'
+  'Maternidade Principal',
+  'Maternidade Secundária',
+  'Hospital Pediátrico',
+  'Hospital Pediátrico',
+  'Hospital Geral',
+  'Unidade de Saúde'
 ];
 
 /**
@@ -174,12 +174,12 @@ export class PediatricStore {
     return {
       creator: APP_CREATOR,
       version: APP_VERSION,
-      doctorName: 'Dra. Fernanda Ch.',
-      doctorCRM: 'CRM/RN',
+      doctorName: 'Médica',
+      doctorCRM: '',
       doctorSpecialty: 'Pediatria & Sala de Parto',
       doctorPhoto: null,
       residencySalary: {
-        value: 4106.00,
+        value: 0.00,
         dayOfMonth: 5,
         active: true
       },
@@ -344,7 +344,7 @@ export class PediatricStore {
   saveShift(shift) {
     const shiftDate = shift.date || getLocalDateString();
     const netValue = parseFloat(shift.value) || 0;
-    const hospital = (shift.hospital || 'Maternidade Araken').trim();
+    const hospital = (shift.hospital || 'Maternidade Principal').trim();
     const shiftType = shift.shiftType || 'Sala de Parto';
 
     const val75 = Math.round(netValue * 0.75 * 100) / 100;

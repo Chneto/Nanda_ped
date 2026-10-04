@@ -132,8 +132,8 @@ export function createDegradedClient() {
                 id: 'guest-doctor-offline',
                 email: 'convidada@pediatria.local',
                 user_metadata: {
-                  full_name: 'Dra. Fernanda Ch. (Modo Local)',
-                  name: 'Dra. Fernanda Ch. (Modo Local)'
+                  full_name: 'Médica (Modo Local)',
+                  name: 'Médica (Modo Local)'
                 }
               }
             }
@@ -644,9 +644,9 @@ export async function ensureProfile(user) {
       return { data: existing, error: null, created: false };
     }
 
-    // 2. Perfil ausente: provê dados padrão seguros da Dra. Fernanda Ch.
+    // 2. Perfil ausente: provê dados padrão seguros da Médica
     const meta = user.user_metadata || {};
-    const doctorName = meta.full_name || meta.name || 'Dra. Fernanda Ch.';
+    const doctorName = meta.full_name || meta.name || 'Médica';
     const photoUrl = meta.avatar_url || meta.picture || null;
 
     const profilePayload = {
@@ -656,7 +656,7 @@ export async function ensureProfile(user) {
       rqe: null,
       specialty: 'Pediatria',
       photo_url: photoUrl,
-      residency_salary: 4106.09,
+      residency_salary: 0.00,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString()
     };

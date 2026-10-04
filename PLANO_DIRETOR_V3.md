@@ -1,4 +1,4 @@
-﻿# 🩺 PLANO DIRETOR DE EVOLUÇÃO & AUDITORIA TÉCNICA (v2.5.0 → v3.0 ULTRA)
+# 🩺 PLANO DIRETOR DE EVOLUÇÃO & AUDITORIA TÉCNICA (v2.5.0 → v3.0 ULTRA)
 ## Finanças Pediatria — PWA Mobile-First para Médica Pediatra
 > **Autor & Criador Imutável:** FChNeto (`APP_CREATOR = 'FChNeto'`)  
 > **Data:** Setembro de 2026  
@@ -82,7 +82,7 @@ Inspirado nos melhores apps de finanças e medicina do mundo (**Nubank, Monarch 
 2. **Busca Universal Inteligente (Spotlight Pediátrico / Cmd+K):**
    - Busca em tempo real por aproximação (*fuzzy search*) em todo o histórico de plantões, despesas, hospitais e atalhos rápidos do sistema.
 3. **Lançamento Rápido por Comando de Voz Pós-Plantão (Web Speech API):**
-   - Lançamento sem esforço ao sair do hospital: *"Plantão de ontem no Araken doze horas dois mil reais Simples seis por cento"*. O parser NLP interpreta e preenche o formulário automaticamente.
+   - A entrada por voz interpreta a descrição e deixa o lançamento pronto para revisão.
 4. **Gestos Táteis (Swipe-to-Action):**
    - Deslizar card para a direita: marca como "Recebido"; deslizar para a esquerda: edita ou envia para a lixeira com 1-tap undo.
 
@@ -108,7 +108,7 @@ Inspirado nos melhores apps de finanças e medicina do mundo (**Nubank, Monarch 
 2. **Passagem de Plantão Estruturada (SBAR LGPD-Safe):**
    - Gerador de resumo clínico de passagem de plantão no padrão internacional SBAR (*Situation, Background, Assessment, Recommendation*), sem dados pessoais de pacientes e pronto para copiar para o WhatsApp da colega.
 3. **Conciliação Bancária de Extratos OFX e CSV (Client-Side Puro):**
-   - Importação de extratos bancários PJ (Itaú, Inter, Nubank, Cora) processados 100% no navegador da médica, sugerindo baixa automática de parcelas de 80% D+60 e 20% D+90 correspondentes.
+   - Importação de extratos bancários PJ (Itaú, Inter, Nubank, Cora) processados 100% no navegador da médica, sugerindo baixa automática de parcelas de 75% D+60 e 25% D+90 correspondentes.
 4. **Kit do Contador em 1-Clique:**
    - Exportação no dia 1º de cada mês com CSV formatado para Excel, PDF executivo e texto pronto para envio ao WhatsApp da contabilidade.
 

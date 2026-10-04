@@ -1,6 +1,6 @@
 /**
  * Finanças Pediatria V4_Cloud - Motor IndexedDB Local-First
- * Aplicação: Finanças Pediatria V4_Cloud (Dra. Fernanda Ch.)
+ * Aplicação: Finanças Pediatria V4_Cloud (Médica)
  * Autor Canônico: FChNeto (APP_CREATOR = 'FChNeto')
  * 
  * Invariantes & Princípios Arquiteturais:

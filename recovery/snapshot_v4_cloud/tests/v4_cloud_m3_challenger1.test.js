@@ -487,7 +487,7 @@ describe('M3 Adversarial Challenge Suite — Silk Gate Auth & Offline Resilience
     });
 
     test('Race Condition: Concurrent initSupabase() invocations from multiple components', () => {
-      const validUrl = 'https://nanda-pediatria.supabase.co';
+      const validUrl = 'https://example-project.supabase.co';
       const validAnon = buildCustomJwt({ role: 'anon' });
 
       let createClientCallCount = 0;
@@ -519,7 +519,7 @@ describe('M3 Adversarial Challenge Suite — Silk Gate Auth & Offline Resilience
     });
 
     test('Race Condition: Concurrent initSupabaseAsync() resolutions', async () => {
-      const validUrl = 'https://nanda-pediatria.supabase.co';
+      const validUrl = 'https://example-project.supabase.co';
       const validAnon = buildCustomJwt({ role: 'anon' });
 
       _setCreateClientForTesting((url, key) => ({
@@ -546,7 +546,7 @@ describe('M3 Adversarial Challenge Suite — Silk Gate Auth & Offline Resilience
 
     test('OAuth Hash Parsing: Complex multi-fragment, encoded, and malformed query strings', () => {
       // 1. Extra query parameters and URL encoded values (URLSearchParams decodes %2B to + and %2F to /)
-      const complexHash = '#access_token=token_with%2Bspecial%2Fchars&refresh_token=refresh_123&expires_in=7200&token_type=bearer&type=magiclink&extra_param=hospital_araken';
+      const complexHash = '#access_token=token_with%2Bspecial%2Fchars&refresh_token=refresh_123&expires_in=7200&token_type=bearer&type=magiclink&extra_param=example_location';
       const parsed = parseOAuthHash(complexHash);
       assert.ok(parsed.isSuccess);
       assert.equal(parsed.accessToken, 'token_with+special/chars', 'URLSearchParams must decode percent-encoded tokens');
@@ -620,7 +620,7 @@ describe('M3 Adversarial Challenge Suite — Silk Gate Auth & Offline Resilience
         const ins = client.from('expenses').insert({ description: 'Lanches', value: 35.50 });
         const upd = client.from('shifts').update({ status: 'received' }).eq('id', 'shift-123');
         const del = client.from('custom_categories').delete().eq('id', 'cat-456');
-        const ups = client.from('profiles').upsert({ id: 'guest', doctor_name: 'Dra. Fernanda Ch.' });
+        const ups = client.from('profiles').upsert({ id: 'guest', doctor_name: 'Médica' });
 
         assert.ok(ins);
         assert.ok(upd);
@@ -660,7 +660,7 @@ describe('M3 Adversarial Challenge Suite — Silk Gate Auth & Offline Resilience
       assert.match(googleRes.error.message, /Modo Offline/);
 
       // Magic link offline rejection
-      const otpRes = await client.auth.signInWithOtp({ email: 'dra.fernanda@hospital.com' });
+      const otpRes = await client.auth.signInWithOtp({ email: 'medica@example.com' });
       assert.equal(otpRes.data, null);
       assert.ok(otpRes.error instanceof Error);
       assert.match(otpRes.error.message, /Modo Offline/);
@@ -684,8 +684,8 @@ describe('M3 Adversarial Challenge Suite — Silk Gate Auth & Offline Resilience
       assert.ok(data?.session);
       assert.equal(data.session.user.id, 'guest-doctor-offline');
       assert.equal(data.session.user.email, 'convidada@pediatria.local');
-      assert.equal(data.session.user.user_metadata.full_name, 'Dra. Fernanda Ch. (Modo Local)');
-      assert.equal(data.session.user.user_metadata.name, 'Dra. Fernanda Ch. (Modo Local)');
+      assert.equal(data.session.user.user_metadata.full_name, 'Médica (Modo Local)');
+      assert.equal(data.session.user.user_metadata.name, 'Médica (Modo Local)');
 
       const userRes = await client.auth.getUser();
       assert.equal(userRes.data.user.id, 'guest-doctor-offline');

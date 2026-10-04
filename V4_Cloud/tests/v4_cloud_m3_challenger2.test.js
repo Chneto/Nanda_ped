@@ -181,7 +181,7 @@ describe('Finanças Pediatria V4_Cloud — Challenger 2: Storage Resilience, Quo
   // 1. STORAGE CORRUPTION, QUOTA LIMITS & PROTOTYPE HARDENING
   // --------------------------------------------------------------------------
   describe('1. Storage Corruption, Quota Limits & Prototype Hardening', () => {
-    const validUrl = 'https://pediatria-nanda.supabase.co';
+    const validUrl = 'https://example-project.supabase.co';
     const validAnonKey = createSampleJwt({ role: 'anon', sub: 'doctor-123' });
 
     test('getConfig recovers gracefully when localStorage throws SecurityError (e.g. Safari private sandbox)', () => {
@@ -301,7 +301,7 @@ describe('Finanças Pediatria V4_Cloud — Challenger 2: Storage Resilience, Quo
   // 2. INJECTION, XSS VECTORS & UTF-8 BOUNDARIES
   // --------------------------------------------------------------------------
   describe('2. Injection, XSS Vectors & UTF-8 Boundaries in Auth & Profiles', () => {
-    const validUrl = 'https://pediatria-nanda.supabase.co';
+    const validUrl = 'https://example-project.supabase.co';
     const validAnonKey = createSampleJwt({ role: 'anon' });
 
     test('signInWithMagicLink rejects malicious XSS injection payloads in email parameter', async () => {
@@ -310,8 +310,8 @@ describe('Finanças Pediatria V4_Cloud — Challenger 2: Storage Resilience, Quo
         '<img src=x onerror=alert(1)>@hospital.med.br',
         'javascript:alert(1)@pediatria.br',
         '<svg/onload=alert(1)>@gmail.com',
-        'dra.fernanda@hospital.com\r\nBcc:attacker@evil.com', // CRLF injection
-        'dra.fernanda@hospital.com\nSet-Cookie:malicious=1',
+        'medica@example.com\r\nBcc:attacker@evil.com', // CRLF injection
+        'medica@example.com\nSet-Cookie:malicious=1',
         '"><script>alert(1)</script>@test.com',
         'not-an-email',
         '',
@@ -403,12 +403,12 @@ describe('Finanças Pediatria V4_Cloud — Challenger 2: Storage Resilience, Quo
       initSupabase(validUrl, validAnonKey);
 
       // Pediatric doctor name with Brazilian Portuguese accents and stethoscope/flower emoji
-      const doctorComplexName = 'Dra. Fernanda Ch. 🩺🌸 (São José do Rio Preto / Açúcar)';
+      const doctorComplexName = 'Médica 🩺🌸 (Cidade de Exemplo / Açúcar)';
       const testUser = {
         id: 'usr-utf8-uuid-7890',
         user_metadata: {
           full_name: doctorComplexName,
-          avatar_url: 'https://cdn.hospital.com/dra_fernanda.jpg'
+          avatar_url: 'https://cdn.hospital.com/profile-photo.png'
         }
       };
 
@@ -416,7 +416,7 @@ describe('Finanças Pediatria V4_Cloud — Challenger 2: Storage Resilience, Quo
       assert.ok(res.created);
       assert.equal(savedProfile.doctor_name, doctorComplexName);
       assert.equal(savedProfile.specialty, 'Pediatria');
-      assert.equal(savedProfile.residency_salary, 4106.09);
+      assert.equal(savedProfile.residency_salary, 0.00);
     });
 
     test('ensureProfile handles 4-byte astral Unicode symbols and RTL direction overrides safely', async () => {
@@ -444,7 +444,7 @@ describe('Finanças Pediatria V4_Cloud — Challenger 2: Storage Resilience, Quo
       initSupabase(validUrl, validAnonKey);
 
       // Astral Unicode symbols (surrogate pairs) & BiDi override attempt
-      const astralDoctorName = '\u202E Dra. Fernanda Ch. 👩‍⚕️💖👶✨';
+      const astralDoctorName = '\u202E Médica 👩‍⚕️💖👶✨';
       const testUser = {
         id: 'usr-astral-uuid-1122',
         user_metadata: {
@@ -475,7 +475,7 @@ describe('Finanças Pediatria V4_Cloud — Challenger 2: Storage Resilience, Quo
 
       const res = await ensureProfile({ id: 'usr-minimal-uuid-3344' });
       assert.ok(res.created);
-      assert.equal(savedProfile.doctor_name, 'Dra. Fernanda Ch.');
+      assert.equal(savedProfile.doctor_name, 'Médica');
     });
 
     test('parseOAuthHash safely parses malicious XSS payloads in hash fragments without code execution', () => {
@@ -499,7 +499,7 @@ describe('Finanças Pediatria V4_Cloud — Challenger 2: Storage Resilience, Quo
     });
 
     test('base64Decode decodes complex multi-byte UTF-8 accented strings accurately', () => {
-      const complexPortuguese = 'Maternidade Araken Silva • UTI Neonatal • Dra. Fernanda Ch. 🩺';
+      const complexPortuguese = 'Maternidade Principal • UTI Neonatal • Médica 🩺';
       const encoded = Buffer.from(complexPortuguese, 'utf-8').toString('base64url');
       
       const decoded = base64Decode(encoded);
@@ -523,7 +523,7 @@ describe('Finanças Pediatria V4_Cloud — Challenger 2: Storage Resilience, Quo
   // 3. OFFLINE REACHABILITY PROBE STRESS (GATEWAY TIMEOUTS, ABORTS, NON-JSON)
   // --------------------------------------------------------------------------
   describe('3. Offline Reachability Probe Stress (HTTP 5xx, 429, timeouts, aborts)', () => {
-    const validUrl = 'https://dr-fernanda.supabase.co';
+    const validUrl = 'https://project-ref.supabase.co';
     const validAnonKey = createSampleJwt({ role: 'anon' });
 
     test('testSupabaseReachability handles HTTP 500 (Internal Server Error) without throwing', async () => {
@@ -593,7 +593,7 @@ describe('Finanças Pediatria V4_Cloud — Challenger 2: Storage Resilience, Quo
     test('testSupabaseReachability handles DNS failure (TypeError: fetch failed) gracefully', async () => {
       globalThis.fetch = async () => {
         const error = new TypeError('fetch failed');
-        error.cause = new Error('getaddrinfo ENOTFOUND dr-fernanda.supabase.co');
+        error.cause = new Error('getaddrinfo ENOTFOUND project-ref.supabase.co');
         throw error;
       };
 
@@ -747,7 +747,7 @@ describe('Finanças Pediatria V4_Cloud — Challenger 2: Storage Resilience, Quo
       assert.ok(data?.session);
       assert.equal(data.session.user.id, 'guest-doctor-offline');
       assert.equal(data.session.user.email, 'convidada@pediatria.local');
-      assert.equal(data.session.user.user_metadata.full_name, 'Dra. Fernanda Ch. (Modo Local)');
+      assert.equal(data.session.user.user_metadata.full_name, 'Médica (Modo Local)');
     });
 
     test('Degraded client getSession returns null session when guest mode is disabled', async () => {

@@ -69,14 +69,14 @@ test('getDoctorWellbeingMetrics monitors shift fatigue and consecutive shifts ac
   store.data.shifts = [
     {
       id: 's1',
-      hospital: 'Hospital Infantil Sabará',
+      hospital: 'Hospital Pediátrico',
       shiftDate: '2026-10-05',
       shiftType: '12h Diurno',
       netValue: 1500
     },
     {
       id: 's2',
-      hospital: 'Hospital Sabará',
+      hospital: 'Hospital Hospital Geral',
       shiftDate: '2026-10-12',
       shiftType: '12h Diurno',
       netValue: 1500
@@ -154,10 +154,10 @@ test('getDoctorWellbeingMetrics correctly resets consecutive nights when separat
   const store = new PediatricStore();
   // Alternating night and day shifts on consecutive days
   store.data.shifts = [
-    { id: 's1', hospital: 'Sabará', shiftDate: '2026-10-01', shiftType: '12h Noturno', netValue: 1800 },
-    { id: 's2', hospital: 'Sabará', shiftDate: '2026-10-02', shiftType: '12h Diurno', netValue: 1500 },
-    { id: 's3', hospital: 'Sabará', shiftDate: '2026-10-03', shiftType: '12h Noturno', netValue: 1800 },
-    { id: 's4', hospital: 'Sabará', shiftDate: '2026-10-04', shiftType: '12h Diurno', netValue: 1500 }
+    { id: 's1', hospital: 'Hospital Geral', shiftDate: '2026-10-01', shiftType: '12h Noturno', netValue: 1800 },
+    { id: 's2', hospital: 'Hospital Geral', shiftDate: '2026-10-02', shiftType: '12h Diurno', netValue: 1500 },
+    { id: 's3', hospital: 'Hospital Geral', shiftDate: '2026-10-03', shiftType: '12h Noturno', netValue: 1800 },
+    { id: 's4', hospital: 'Hospital Geral', shiftDate: '2026-10-04', shiftType: '12h Diurno', netValue: 1500 }
   ];
 
   const metrics = store.getDoctorWellbeingMetrics('2026-10');
@@ -172,7 +172,7 @@ test('generateCSV respects options.referenceDate for accurate status evaluation'
   store.data.shifts = [
     {
       id: 'sh_eval',
-      hospital: 'Hospital Sabará',
+      hospital: 'Hospital Hospital Geral',
       shiftDate: '2026-06-10',
       expectedPaymentDate: '2026-09-10',
       status: 'pending',

@@ -53,10 +53,10 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
     assert.equal(APP_VERSION, '4.0.0');
     assert.equal(store.data.creator, 'FChNeto');
     assert.equal(store.data.version, '4.0.0');
-    assert.equal(store.data.doctorName, 'Dra. Fernanda Ch.');
+    assert.equal(store.data.doctorName, 'Médica');
   });
 
-  test('v4 Presença Integral das 22 Categorias Obrigatórias', () => {
+  test('v4 Presença Integral das 23 Categorias Canônicas', () => {
     const requiredCategories = [
       'Passagens', 'Mercantil', 'Academia', 'Estudo', 'Cursos',
       'Presentes', 'Aluguel', 'Energia', 'Internet', 'Combustível',
@@ -69,7 +69,7 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
     requiredCategories.forEach(cat => {
       assert.ok(categoryNames.includes(cat), `Categoria obrigatória ausente na v4: ${cat}`);
     });
-    assert.ok(DEFAULT_CATEGORIES.length >= 22);
+    assert.equal(DEFAULT_CATEGORIES.length, 23);
   });
 
   test('v4 Macro-Grupos de Despesas Inteligentes (Mapeamento Nubank/Revolut)', () => {
@@ -106,23 +106,23 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
     assert.equal(getMacroGroupForCategory('Categoria Inexistente').name, 'Pessoal, Lazer & Outros');
   });
 
-  test('v4 Pré-Seleção de Maternidades Araken e Leide Morais', () => {
-    assert.ok(DEFAULT_HOSPITALS.includes('Maternidade Araken'));
-    assert.ok(DEFAULT_HOSPITALS.includes('Maternidade Leide Morais'));
-    assert.ok(store.data.hospitals.includes('Maternidade Araken'));
-    assert.ok(store.data.hospitals.includes('Maternidade Leide Morais'));
+  test('v4 Pré-Seleção de Maternidades Maternidade Principal e Maternidade Secundária', () => {
+    assert.ok(DEFAULT_HOSPITALS.includes('Maternidade Principal'));
+    assert.ok(DEFAULT_HOSPITALS.includes('Maternidade Secundária'));
+    assert.ok(store.data.hospitals.includes('Maternidade Principal'));
+    assert.ok(store.data.hospitals.includes('Maternidade Secundária'));
   });
 
   test('v4 Regra Canônica de Plantão em Sala de Parto: 75% D+60 e 25% D+90', () => {
     const shift = store.saveShift({
-      hospital: 'Maternidade Araken',
+      hospital: 'Maternidade Principal',
       date: '2026-04-10',
       shiftType: 'Sala de Parto',
       netValue: 2150.50
     });
 
     assert.ok(shift);
-    assert.equal(shift.hospital, 'Maternidade Araken');
+    assert.equal(shift.hospital, 'Maternidade Principal');
     assert.equal(shift.netValue, 2150.50);
 
     // Valida exatidão de centavos
@@ -159,11 +159,11 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
   });
 
   test('v4 Resumo Mensal com Breakdown por Macro-Grupos e Categorias', () => {
-    store.updateResidencySalary({ value: 4106.09, active: true });
+    store.updateResidencySalary({ value: 0.00, active: true });
 
     // Plantão realizado em Março/2026 (Parcela 75% cai em Maio/2026)
     store.saveShift({
-      hospital: 'Maternidade Leide Morais',
+      hospital: 'Maternidade Secundária',
       date: '2026-03-20',
       netValue: 2000
     });
@@ -183,11 +183,11 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
     });
 
     const summary = store.getMonthSummary('2026-05', 'caixa');
-    assert.equal(summary.residencyIncome, 4106.09);
+    assert.equal(summary.residencyIncome, 0.00);
     assert.equal(summary.shiftIncome, 1500); // 75% de 2000
-    assert.equal(summary.totalIncome, 5606.09);
+    assert.equal(summary.totalIncome, 1500);
     assert.equal(summary.totalExpenses, 750);
-    assert.equal(summary.balance, 4856.09);
+    assert.equal(summary.balance, 750);
 
     // Valida MacroBreakdown
     assert.equal(summary.macroBreakdown.length, 2);
@@ -203,22 +203,22 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
 
   test('v4 Edição de Perfil da Médica e Foto de Perfil', () => {
     store.updateDoctorProfile({
-      doctorName: 'Dra. Fernanda Chagas',
-      crm: 'CRM/RN 9999',
+      doctorName: 'Médica de Exemplo',
+      crm: 'CRM/TESTE',
       specialty: 'Pediatria e Neonatologia',
       doctorPhoto: 'data:image/jpeg;base64,mockphotodata',
       salaryValue: 4500
     });
 
-    assert.equal(store.data.doctorName, 'Dra. Fernanda Chagas');
-    assert.equal(store.data.crm, 'CRM/RN 9999');
+    assert.equal(store.data.doctorName, 'Médica de Exemplo');
+    assert.equal(store.data.crm, 'CRM/TESTE');
     assert.equal(store.data.specialty, 'Pediatria e Neonatologia');
     assert.equal(store.data.doctorPhoto, 'data:image/jpeg;base64,mockphotodata');
     assert.equal(store.data.residencySalary.value, 4500);
   });
 
   test('v4 Zerar Dados em 2 Etapas (Proteção com Backup Preventivo)', () => {
-    store.saveShift({ hospital: 'MEJEC', date: '2026-05-01', netValue: 1500 });
+    store.saveShift({ hospital: 'Hospital Pediátrico', date: '2026-05-01', netValue: 1500 });
     store.saveExpense({ category: 'Aluguel', description: 'Apartamento', value: 1200, date: '2026-05-01' });
 
     assert.equal(store.data.shifts.length, 1);
@@ -226,7 +226,7 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
 
     // Etapa 1: Geração de string de backup preventivo
     const backupJson = store.exportBackupJsonString();
-    assert.ok(backupJson.includes('MEJEC'));
+    assert.ok(backupJson.includes('Hospital Pediátrico'));
     assert.ok(backupJson.includes('Apartamento'));
     assert.ok(backupJson.includes('FChNeto'));
 
@@ -234,7 +234,7 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
     store.resetData('transactions_only');
     assert.equal(store.data.shifts.length, 0);
     assert.equal(store.data.expenses.length, 0);
-    assert.equal(store.data.doctorName, 'Dra. Fernanda Ch.'); // Perfil preservado!
+    assert.equal(store.data.doctorName, 'Médica'); // Perfil preservado!
 
     // Restauração a partir do backup preventivo gerado
     const rest = store.importBackupFromFile(backupJson);
@@ -259,8 +259,8 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
     assert.equal(v4BundleContent, v40BundleContent);
     assert.ok(v4BundleContent.includes('FChNeto'));
     assert.ok(v4BundleContent.includes('MACRO_GROUPS'));
-    assert.ok(v4BundleContent.includes('Maternidade Araken'));
-    assert.ok(v4BundleContent.includes('Maternidade Leide Morais'));
+    assert.ok(v4BundleContent.includes('Maternidade Principal'));
+    assert.ok(v4BundleContent.includes('Maternidade Secundária'));
 
     // Valida CSS com tokens Silk & Rose Gold e regras do iOS Safari
     const cssContent = fs.readFileSync(v4CssPath, 'utf8');
@@ -363,11 +363,11 @@ describe('Finanças Pediatria v4.0 - Silk & Rose Gold Engine Tests', () => {
     assert.ok(appJsContent.includes('#drawer-item-hub'), 'Drawer deve conter item de Hub de Finanças');
     assert.ok(appJsContent.includes('#drawer-item-reset'), 'Drawer deve conter item de Zerar Dados');
 
-    // 3. Pré-Seleção rápida de Araken e Leide Morais
-    assert.ok(appJsContent.includes('Maternidade Araken'));
-    assert.ok(appJsContent.includes('Maternidade Leide Morais'));
-    assert.ok(appJsContent.includes('data-quick-hospital="Maternidade Araken"'));
-    assert.ok(appJsContent.includes('data-quick-hospital="Maternidade Leide Morais"'));
+    // 3. Pré-Seleção rápida de Maternidade Principal e Maternidade Secundária
+    assert.ok(appJsContent.includes('Maternidade Principal'));
+    assert.ok(appJsContent.includes('Maternidade Secundária'));
+    assert.ok(appJsContent.includes('data-quick-hospital="Maternidade Principal"'));
+    assert.ok(appJsContent.includes('data-quick-hospital="Maternidade Secundária"'));
   });
 });
 
