@@ -653,6 +653,7 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
   let store;
   let ui;
   let app;
+  let savedNavigator;
 
   beforeEach(() => {
     // 1. Force in-memory database & clean state
@@ -664,12 +665,26 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
     mockStorage = new MockLocalStorage();
     globalThis.localStorage = mockStorage;
 
+    savedNavigator = globalThis.navigator;
+    const mockNav = { onLine: true, storage: { persist: async () => true } };
+    try {
+      globalThis.navigator = mockNav;
+    } catch {
+      try {
+        Object.defineProperty(globalThis, 'navigator', {
+          value: mockNav,
+          writable: true,
+          configurable: true
+        });
+      } catch {}
+    }
+
     mockDoc = buildMockDOM();
     globalThis.document = mockDoc;
     globalThis.window = {
       localStorage: mockStorage,
       document: mockDoc,
-      navigator: { onLine: true, storage: { persist: async () => true } },
+      navigator: mockNav,
       scrollTo: () => {},
       dispatchEvent: () => {},
       addEventListener: (evt, fn) => {
@@ -693,12 +708,18 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
     setGuestMode(false);
 
     try {
-      Object.defineProperty(globalThis.navigator, 'onLine', {
-        value: true,
-        writable: true,
-        configurable: true
-      });
-    } catch {}
+      if (globalThis.navigator) {
+        globalThis.navigator.onLine = true;
+      }
+    } catch {
+      try {
+        Object.defineProperty(globalThis.navigator, 'onLine', {
+          value: true,
+          writable: true,
+          configurable: true
+        });
+      } catch {}
+    }
 
     // 5. Initialize Store & UI
     store = new PediatricStore();
@@ -718,6 +739,21 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
     delete globalThis.window;
     delete globalThis.document;
     delete globalThis.localStorage;
+    if (savedNavigator === undefined) {
+      try { delete globalThis.navigator; } catch {}
+    } else {
+      try {
+        globalThis.navigator = savedNavigator;
+      } catch {
+        try {
+          Object.defineProperty(globalThis, 'navigator', {
+            value: savedNavigator,
+            writable: true,
+            configurable: true
+          });
+        } catch {}
+      }
+    }
   });
 
   // ==========================================================================
@@ -727,9 +763,18 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
   describe('Scenario 1 — Hospital Basement Delivery Room Workflow (Maternidade Principal Offline Entry)', () => {
     test('1.1 Médica initiates app in hospital basement with 0 signal: Modo Local activates immediately without network delay', () => {
       // Simulate no internet connectivity in hospital basement
-      try {
-        Object.defineProperty(globalThis.navigator, 'onLine', { value: false, writable: true, configurable: true });
-      } catch {}
+      if (globalThis.navigator) {
+        try {
+          globalThis.navigator.onLine = false;
+        } catch {
+          try {
+            Object.defineProperty(globalThis.navigator, 'onLine', { value: false, writable: true, configurable: true });
+          } catch {}
+        }
+      }
+      if (globalThis.window?.navigator) {
+        globalThis.window.navigator.onLine = false;
+      }
       setOfflineMode(true);
       setGuestMode(true);
 
@@ -869,7 +914,18 @@ describe('Finanças Pediatria V4_Cloud — Tier 4 Real-World Application Scenari
     test('2.1 Emergence from basement triggers online reconnection and automatic bidirectional sync', async () => {
       setOfflineMode(false);
       setGuestMode(false);
-      globalThis.navigator.onLine = true;
+      if (globalThis.navigator) {
+        try {
+          globalThis.navigator.onLine = true;
+        } catch {
+          try {
+            Object.defineProperty(globalThis.navigator, 'onLine', { value: true, writable: true, configurable: true });
+          } catch {}
+        }
+      }
+      if (globalThis.window?.navigator) {
+        globalThis.window.navigator.onLine = true;
+      }
 
       // Pending queue has 1 item prior to sync
       const pendingBefore = await getPendingSyncItems();
