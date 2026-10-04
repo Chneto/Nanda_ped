@@ -128,7 +128,7 @@ A interface segue a estética acolhedora, sofisticada e limpa desenvolvida para 
 
 ## 🧪 4. Convenções de Testes Automatizados
 
-- Validação registrada em 2026-10-03: 120 testes da raiz, 9 da v2.0, 13 da v4.0 e 619 da V4_Cloud aprovados.
+- Validação registrada em 2026-10-04: 120 testes da raiz, 9 da v2.0, 13 da v4.0, 619 da V4_Cloud e 77 da v6 aprovados com 100% de sucesso no GitHub Actions CI (Ubuntu Node 20) e localmente.
 - Execute as suítes conforme `agents.md`; toda asserção deve continuar cobrindo comportamento real do produto.
 - O bundle `js/bundle.js` e `v2.0/js/bundle.js` são unificados via `node scripts/build_bundle.js` sem qualquer dependência externa de build.
 - Cobertura total de: cálculos D+60 / D+90, simulador FIRE médico, DRE & Fator R (28%), SBAR clínico LGPD, conciliação bancária OFX/CSV, NLP de voz, Pediatric Dark Sanctuary, Menu Hambúrguer, Foto da Médica, Seletor de Hospitais Stitch, e Proteções Anti-Crop / Modal Scroll Safeguards (`tests/select_crop_fix.test.js`), além dos 9 testes dedicados da suíte v2.0 (`tests/v2_suite.test.js`).

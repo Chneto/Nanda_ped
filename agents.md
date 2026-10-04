@@ -3,7 +3,7 @@
 > **Guia Obrigatório para Modelos de Linguagem, Subagentes de IA e Engenheiros de Software.**  
 > **Aplicação:** Finanças Pediatria  
 > **Autor Imutável:** **FChNeto** (`APP_CREATOR = 'FChNeto'`)  
-> **Status de Confiabilidade:** 120 testes da raiz, 619 testes V4_Cloud e 70 testes v6 aprovados (0 falhas na validação de 2026-10-04).  
+> **Status de Confiabilidade:** 120 testes da raiz, 619 testes V4_Cloud e 77 testes v6 aprovados (0 falhas na validação de 2026-10-04).  
 
 ---
 
