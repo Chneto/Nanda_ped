@@ -39,29 +39,15 @@ BEGIN
 END $$;
 
 -- 4. Ensure public.expenses has all relational synchronization columns
-DO $$
-BEGIN
-  IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' AND table_name = 'expenses' AND column_name = 'category_id'
-  ) THEN
-    ALTER TABLE public.expenses ADD COLUMN category_id TEXT;
-  END IF;
+ALTER TABLE public.expenses ADD COLUMN IF NOT EXISTS category_id TEXT;
+ALTER TABLE public.expenses ADD COLUMN IF NOT EXISTS macro_group TEXT NOT NULL DEFAULT 'Pessoal, Lazer & Outros';
+ALTER TABLE public.expenses ADD COLUMN IF NOT EXISTS total_installments INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE public.expenses ADD COLUMN IF NOT EXISTS current_installment INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE public.expenses ADD COLUMN IF NOT EXISTS is_installment BOOLEAN NOT NULL DEFAULT false;
+ALTER TABLE public.expenses ADD COLUMN IF NOT EXISTS installment_group_id TEXT DEFAULT NULL;
 
-  IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' AND table_name = 'expenses' AND column_name = 'total_installments'
-  ) THEN
-    ALTER TABLE public.expenses ADD COLUMN total_installments INTEGER DEFAULT 1;
-  END IF;
-
-  IF NOT EXISTS (
-    SELECT 1 FROM information_schema.columns 
-    WHERE table_schema = 'public' AND table_name = 'expenses' AND column_name = 'current_installment'
-  ) THEN
-    ALTER TABLE public.expenses ADD COLUMN current_installment INTEGER DEFAULT 1;
-  END IF;
-END $$;
+CREATE INDEX IF NOT EXISTS idx_expenses_user_category_id ON public.expenses (user_id, category_id);
+CREATE INDEX IF NOT EXISTS idx_expenses_user_date ON public.expenses (user_id, date);
 
 -- 5. Row Level Security & Defense-in-Depth Verification
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
