@@ -3,7 +3,7 @@
 > **Guia Obrigatório para Modelos de Linguagem, Subagentes de IA e Engenheiros de Software.**  
 > **Aplicação:** Finanças Pediatria  
 > **Autor Imutável:** **FChNeto** (`APP_CREATOR = 'FChNeto'`)  
-> **Status de Confiabilidade:** 120 testes da raiz, 619 testes V4_Cloud e 77 testes v6 aprovados (0 falhas na validação de 2026-10-04).  
+> **Status de Confiabilidade:** 120 testes da raiz, 619 testes V4_Cloud, 77 testes v6 e 64 testes v7 aprovados (0 falhas na validação de 2026-10-13).  
 
 ---
 
@@ -14,13 +14,14 @@ Todo agente autônomo (ou desenvolvedor) que atuar neste repositório DEVE opera
 1. **Profissionais da saúde em primeiro lugar:** O aplicativo é destinado à gestão financeira individual na área da saúde. Não inclua nomes, locais de trabalho, registros profissionais, rendas ou despesas reais nos padrões, na documentação ou nos dados de demonstração. A aplicação deve transmitir paz visual, clareza absoluta, rapidez de lançamento e zero frustração técnica.
 2. **Assinatura e Autoria do Criador:** O valor `APP_CREATOR = 'FChNeto'` é uma constante canônica e imutável. Deve permanecer nos metadados, rodapés, telas de créditos, documentações e suítes de testes.
 3. **Variantes do Produto no Repositório:**
+   - **`/v7/` — Cloud & Sanctuary v7.0.0:** Versão Cloud oficial mais recente com CSP estrita (sem `unsafe-inline`), normalização linguística unaccent em banco (migration 006), painel de diagnósticos em tempo real na UI, modelo canônico de despesas com `category_id`, sincronização relacional em background e zero legado (`db.js`/`sync.js` expurgados).
    - **`/v6/` — Cloud & Sanctuary v6.0.0:** Aplicação Cloud oficial com CSP estrita (sem `unsafe-inline`), 23 categorias canônicas mapeadas nos 6 macro-grupos, detecção de conflitos de revisão e backups automáticos.
    - **`/v2.0/` — Sanctuary Minimalist:** Aplicação higienizada, enxuta, sem qualquer poluição visual, com 3 abas essenciais (Início, Ganhos, Despesas), 23 categorias descritas na lista canônica, regras D+60 (75%) e D+90 (25%), compras parceladas e persistência tripla no iOS.
    - **`/` e `/v5/` — Silk & Rose Gold v5.0.1:** Aplicação standalone com painel financeiro, categorias livres, recursos executivos, experiência mobile-first e persistência local.
    - **`/V4_Cloud/` — Cloud v4.1.1:** Aplicação Vercel/Supabase com autenticação, estado por conta, RLS, edição de despesas e categorias próprias.
    - **`/v3.x` (histórico):** Master Executive com consultório de puericultura, DRE médica, Fator R (28%), SBAR clínico LGPD, conciliação OFX/CSV, simulador FIRE e entrada por voz.
    - **`/v4/` (e `/v4.0/`) — Silk & Rose Gold:** Frontend delicado, hiper-arredondado, 6 macro-grupos de despesas, pré-seleção rápida de maternidades e menu hambúrguer com formatação segura e edição de perfil.
-4. **Respeito aos Testes Automatizados:** Nenhuma alteração pode ser dada como concluída sem a execução prévia e aprovação de **100% dos testes** em `node --test tests/*.test.js`, `cd V4_Cloud && node --test tests/*.test.js` e `cd v6 && node --test tests/*.test.js`. É **estritamente proibido** desativar, deletar ou afrouxar asserções de testes para mascarar erros de código.
+4. **Respeito aos Testes Automatizados:** Nenhuma alteração pode ser dada como concluída sem a execução prévia e aprovação de **100% dos testes** em `node --test tests/*.test.js`, `cd V4_Cloud && node --test tests/*.test.js`, `cd v6 && node --test tests/*.test.js` e `cd v7 && node --test tests/*.test.js`. É **estritamente proibido** desativar, deletar ou afrouxar asserções de testes para mascarar erros de código.
 
 ---
 
@@ -138,10 +139,15 @@ cd ..
 cd v6
 node --test tests/*.test.js
 cd ..
+
+# 6. Suíte Finanças Pediatria v7 (Cloud & Sanctuary Edition)
+cd v7
+node --test tests/*.test.js
+cd ..
 ```
 
 ### Critérios de Aceite:
-- Todas as suítes existentes devem concluir com sucesso (120 na raiz, 619 em V4_Cloud, 70 em v6);
+- Todas as suítes existentes devem concluir com sucesso (120 na raiz, 619 em V4_Cloud, 77 em v6, 64 em v7 - Total 880);
 - Falhas: **0**
 - Cancelados: **0**
 - Não desativar, apagar ou afrouxar asserções para mascarar regressões.

@@ -2,6 +2,7 @@
   "name": "nanda-financas-pediatria-v6",
   "version": "6.0.0",
   "description": "Aplicação de gestão financeira com acesso seguro e categorias personalizáveis. Criado por FChNeto",
+  "author": "FChNeto",
   "main": "index.html",
   "type": "module",
   "private": true,

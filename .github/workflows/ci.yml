@@ -41,8 +41,14 @@ jobs:
           node --test tests/*.test.js
           cd ..
 
-      - name: 4. Validate Production Bundles Synchronization
+      - name: 4. Execute Finanças Pediatria v7 Test Suite
+        run: |
+          cd v7
+          node --test tests/*.test.js
+          cd ..
+
+      - name: 5. Validate Production Bundles Synchronization
         run: node scripts/build_bundle.js
 
-      - name: 5. Security & CSP Validation Scan
+      - name: 6. Security & CSP Validation Scan
         run: node scripts/ci_security_scan.js

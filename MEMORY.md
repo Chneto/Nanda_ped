@@ -9,16 +9,17 @@
 ## 📌 1. Identidade do Produto & Metadados
 
 - **Nome da Aplicação:** Finanças Pediatria
-- **Versão Vigente:** `6.0.0` (Cloud & Sanctuary Edition em `/v6/`), `5.0.1` (Silk & Rose Gold Standalone em `/v5/` e `/`), `4.1.1` (Vercel & Supabase Cloud Native em `/V4_Cloud/`), `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Master Executive histórico) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
+- **Versão Vigente:** `7.0.0` (Cloud & Sanctuary Edition em `/v7/`), `6.0.0` (Cloud & Sanctuary Edition em `/v6/`), `5.0.1` (Silk & Rose Gold Standalone em `/v5/` e `/`), `4.1.1` (Vercel & Supabase Cloud Native em `/V4_Cloud/`), `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Master Executive histórico) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
 - **Autor / Criador:** **FChNeto** (Constante imutável no código: `APP_CREATOR = 'FChNeto'`; exibida no rodapé, cabeçalho e modais).
 - **Público-Alvo:** profissionais da saúde que desejam acompanhar rendimentos e despesas com alta segurança e resiliência hospitalar.
-- **Proposta de Valor:** Controle financeiro acolhedor, rápido e seguro. A versão **v6 (v6.0.0)** implementa CSP estrita sem `unsafe-inline`, 23 categorias canônicas mapeadas nos 6 macro-grupos com governança completa (renomeação, reclassificação e propagação atômica), isolamento de contas no Supabase via RLS e detecção de concorrência com bloqueio otimista (`revision` incremental) e backups preventivos em JSON.
+- **Proposta de Valor:** Controle financeiro acolhedor, rápido e seguro. A versão **v7 (v7.0.0)** implementa CSP estrita sem `unsafe-inline`, normalização linguística unaccent em banco (migration 006), painel de diagnósticos em tempo real na UI, modelo canônico de despesas com `category_id` estável, sincronização relacional em background (`syncRelationalTables`) e expurgo total de motores legados duplicados (`db.js` e `sync.js`), além de bloquear concorrência por `revision` incremental e backups preventivos em JSON.
 
-### Registro técnico da versão Cloud v6.0.0 & V4_Cloud 4.1.1
+### Registro técnico da versão Cloud v7.0.0, v6.0.0 & V4_Cloud 4.1.1
 - Configuração Vercel: variáveis `SUPABASE_URL` e `SUPABASE_ANON_KEY` (ou `SUPABASE_PUBLISHABLE_KEY`); nenhuma chave de serviço no navegador; timeout de runtime estendido para 4,5s contra cold starts.
-- Persistência: snapshot JSONB por `auth.uid()` em `public.user_app_state`; migrações `001_initial_schema.sql` a `005_categories_and_expenses_category_id.sql`.
-- Cache: Service Worker `financas-pediatria-v6-static-v2` revalida HTML/JS/CSS; `/api/config` opera com `cache: no-store`.
-- Gestão de Categorias: 23 canônicas mapeadas nos 6 Macro-Grupos; renomeação/reclassificação atualiza atomicamente lançamentos históricos; exclusão de categorias em uso é bloqueada.
+- Painel de Diagnóstico em Tempo Real: `#cloud-diagnostics-panel` e botão de recarregar diagnósticos em `#modal-cloud-config`.
+- Persistência Dupla Coerente: snapshot JSONB autoritativo por `auth.uid()` em `public.user_app_state` acompanhado de upsert assíncrono em `public.expenses`, `public.custom_categories` e `public.shifts`. Migrações `001` a `006_v7_unaccent_and_relational_sync.sql`.
+- Cache: Service Worker `financas-pediatria-v7-static-v1` revalida HTML/JS/CSS; `/api/config` opera com `cache: no-store`; zero arquivos mortos no cache.
+- Gestão de Categorias: 23 canônicas mapeadas nos 6 Macro-Grupos; renomeação/reclassificação atualiza atomicamente lançamentos históricos com chave única com unaccent; exclusão de categorias em uso é bloqueada.
 - Resolução de Conflitos: modal acessível `#modal-sync-conflict` permite manter versão local (com backup remoto), carregar nuvem (com backup local) ou baixar JSON consolidado.
 - **Ambiente Principal:** Mobile-First — iPhone 16 Plus (430px x 932px) instalado como PWA via Safari com blindagem contra auto-zoom (`16px`).
 - **Licença:** MIT (Copyright 2026 FChNeto).
