@@ -9,10 +9,26 @@
 ## 📌 1. Identidade do Produto & Metadados
 
 - **Nome da Aplicação:** Finanças Pediatria
-- **Versão Vigente:** `7.0.0` (Cloud & Sanctuary Edition em `/v7/`), `6.0.0` (Cloud & Sanctuary Edition em `/v6/`), `5.0.1` (Silk & Rose Gold Standalone em `/v5/` e `/`), `4.1.1` (Vercel & Supabase Cloud Native em `/V4_Cloud/`), `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Master Executive histórico) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
+- **Versão Vigente:** `8.0.0` (Standalone & Pediatric Sanctuary Edition em `/v8/`), `7.0.0` (Cloud & Sanctuary Edition em `/v7/`), `6.0.0` (Cloud & Sanctuary Edition em `/v6/`), `5.0.1` (Silk & Rose Gold Standalone em `/v5/` e `/`), `4.1.1` (Vercel & Supabase Cloud Native em `/V4_Cloud/`), `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Master Executive histórico) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
 - **Autor / Criador:** **FChNeto** (Constante imutável no código: `APP_CREATOR = 'FChNeto'`; exibida no rodapé, cabeçalho e modais).
 - **Público-Alvo:** profissionais da saúde que desejam acompanhar rendimentos e despesas com alta segurança e resiliência hospitalar.
-- **Proposta de Valor:** Controle financeiro acolhedor, rápido e seguro. A versão **v7 (v7.0.0)** implementa CSP estrita sem `unsafe-inline`, normalização linguística unaccent em banco (migration 006), painel de diagnósticos em tempo real na UI, modelo canônico de despesas com `category_id` estável, sincronização relacional em background (`syncRelationalTables`) e expurgo total de motores legados duplicados (`db.js` e `sync.js`), além de bloquear concorrência por `revision` incremental e backups preventivos em JSON.
+- **Proposta de Valor:** Controle financeiro acolhedor, rápido e seguro. A versão **v8 (v8.0.0)** implementa arquitetura 100% standalone e local-first sem nuvem (zero Vercel/Supabase, zero login), persistência tripla no Safari/iOS (localStorage, IndexedDB e Web Share API), gestão 100% dinâmica de fontes e categorias no menu hambúrguer, microinterações UX delight (edição em 1 toque, Toasts com Desfazer/Undo, chips rápidos) e retrocompatibilidade com backups de todas as versões anteriores (`v2` a `v7`).
+
+### Registro técnico da versão Standalone v8.0.0 (/v8/)
+- **100% Standalone & Local-First:** Totalmente desacoplada de nuvem, Vercel e Supabase; abertura direta e instantânea no painel "Início" sem nenhuma barreira ou tela de login.
+- **Persistência Tripla no iOS / Safari WebKit:**
+  1. `localStorage` síncrono para render imediato sem oscilações (zero flicker);
+  2. `IndexedDB` (`PediatricSanctuaryV8DB`) assíncrono para retenção permanente e blindagem contra purgas do Safari;
+  3. Web Share API nativa (`navigator.share`) para gravação e exportação do backup JSON diretamente no app "Arquivos" ou iCloud Drive da médica, com fallback automático para download.
+- **Motor de Migração Retrocompatível:** Importação inteligente com detecção automática e normalização de backups legados de todas as versões anteriores (`v2` a `v7`).
+- **Gestão 100% Dinâmica de Fontes de Renda e Categorias:** Menu hambúrguer permite adicionar, editar e remover fontes de renda (com forma de recebimento, tipo e valor padrão) e categorias de despesas (com macro-grupos e tetos), sincronizando reativamente seletores e chips rápidos, mantendo integridade histórica via Soft-Archive (`isArchived: true`).
+- **UX Delight & Microinterações Acolhedoras:**
+  - Edição em 1 toque diretamente nas listas de transações com modal pré-preenchido;
+  - Toasts discretos com botão "Desfazer / Undo" e contagem regressiva para reverter exclusões acidentais;
+  - Chips rápidos no topo dos modais para lançamento instantâneo de plantões e despesas frequentes;
+  - Lixeira de exclusões recentes com restauração em 1 toque.
+- **Identidade Silk & Rose Gold e Ergonomia iPhone:** Tipografia `Bricolage Grotesque` e `Manrope`, Modo Noturno UTI Neonatal (`[data-theme="dark"]`), viewport iPhone 16 Plus (430px), safe areas, inputs anti-zoom (`>= 16px`), seletores in-flow anti-crop e ícones SVG inline.
+- **Autor Canônico Imutável:** `APP_CREATOR = 'FChNeto'` presente em metadados, rodapés, manifests e suíte de testes (99 testes automatizados com 100% de aprovação).
 
 ### Registro técnico da versão Cloud v7.0.0, v6.0.0 & V4_Cloud 4.1.1
 - Configuração Vercel: variáveis `SUPABASE_URL` e `SUPABASE_ANON_KEY` (ou `SUPABASE_PUBLISHABLE_KEY`); nenhuma chave de serviço no navegador; timeout de runtime estendido para 4,5s contra cold starts.
@@ -129,10 +145,11 @@ A interface segue a estética acolhedora, sofisticada e limpa desenvolvida para 
 
 ## 🧪 4. Convenções de Testes Automatizados
 
-- Validação registrada em 2026-10-04: 120 testes da raiz, 9 da v2.0, 13 da v4.0, 619 da V4_Cloud e 77 da v6 aprovados com 100% de sucesso no GitHub Actions CI (Ubuntu Node 20) e localmente.
-- Execute as suítes conforme `agents.md`; toda asserção deve continuar cobrindo comportamento real do produto.
+- Validação registrada em 2026-11-05: 120 testes da raiz, 619 da V4_Cloud, 77 da v6, 64 da v7 e 99 da v8 (totalizando 979 testes automatizados) aprovados com 100% de sucesso localmente e nas suítes de validação.
+- Execute as suítes conforme `AGENTS.md`; toda asserção deve continuar cobrindo comportamento real do produto.
+- A versão `/v8/` possui 99 testes dedicados cobrindo: autoria canônica (`APP_CREATOR = 'FChNeto'`), invariantes standalone sem nuvem, persistência tripla, motor de importação retrocompatível (`v2` a `v7`), gestão dinâmica de fontes/categorias com soft-archive, sanitização anti-DOM XSS, testes de estresse adversarial e validação de navegador.
 - O bundle `js/bundle.js` e `v2.0/js/bundle.js` são unificados via `node scripts/build_bundle.js` sem qualquer dependência externa de build.
-- Cobertura total de: cálculos D+60 / D+90, simulador FIRE médico, DRE & Fator R (28%), SBAR clínico LGPD, conciliação bancária OFX/CSV, NLP de voz, Pediatric Dark Sanctuary, Menu Hambúrguer, Foto da Médica, Seletor de Hospitais Stitch, e Proteções Anti-Crop / Modal Scroll Safeguards (`tests/select_crop_fix.test.js`), além dos 9 testes dedicados da suíte v2.0 (`tests/v2_suite.test.js`).
+- Cobertura total de: cálculos D+60 / D+90, simulador FIRE médico, DRE & Fator R (28%), SBAR clínico LGPD, conciliação bancária OFX/CSV, NLP de voz, Pediatric Dark Sanctuary, Menu Hambúrguer, Foto da Médica, Seletor de Hospitais Stitch, e Proteções Anti-Crop / Modal Scroll Safeguards (`tests/select_crop_fix.test.js`), além dos testes dedicados das suítes v2.0, v4.0, v6, v7 e v8.
 - É **proibido alterar ou enfraquecer testes** para fazê-los passar. A solução deve sempre resolver o problema de forma robusta e arquiteturalmente sólida.
 
 ---

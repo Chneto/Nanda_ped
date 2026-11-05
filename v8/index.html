@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <!-- Mobile Viewport & Ergonomia iPhone 16 Plus (Safe-Areas & Anti-Zoom Shield) -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <!-- Content Security Policy Estrita (Zero Scripts de Terceiros, 100% Standalone Offline) -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'self';" />
+
+  <!-- Título Canônico & Autoria Imutável -->
+  <title>Médica — Finanças Pediatria</title>
+  <meta name="author" content="FChNeto" />
+  <meta name="creator" content="FChNeto" />
+  <meta name="app-creator" content="FChNeto" />
+  <meta name="description" content="Gestão financeira médica pediátrica 100% standalone e offline para iPhone." />
+
+  <!-- Suporte Nativo a Temas Claro / Escuro UTI Neonatal -->
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#FAF6F5" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#150D1C" media="(prefers-color-scheme: dark)" />
+
+  <!-- Apple iOS WebApp Meta Tags & Blindagem PWA Safari -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Finanças Pediatria" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <!-- PWA Manifest & Favicon -->
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/png" href="../assets/icons/favicon.png" />
+  <link rel="apple-touch-icon" href="../assets/icons/apple-touch-icon.png" />
+
+  <!-- Estilos Canônicos Silk & Rose Gold v8 -->
+  <link rel="stylesheet" href="./css/styles.css" />
+</head>
+<body>
+  <!-- Container Canônico Otimizado para iPhone 16 Plus (430px) -->
+  <div id="app-container">
+
+    <!-- ==================================================================== -->
+    <!-- APLICAÇÃO PRINCIPAL: DASHBOARD SILK & ROSE GOLD (ABERTURA INSTANTÂNEA) -->
+    <!-- ==================================================================== -->
+    <main id="main-app-screen" class="main-app-wrapper" aria-label="Painel Principal Finanças Pediatria">
+
+      <!-- Cabeçalho com Saudação e Controles de Ação -->
+      <header class="app-header">
+        <div class="doctor-greeting" id="btn-header-profile" title="Abrir Perfil da Médica">
+          <div class="avatar-badge">
+            <img id="doctor-avatar-img" class="avatar-img hidden" alt="Foto da Médica" />
+            <div id="doctor-avatar-fallback" class="avatar-fallback">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"/>
+                <path d="M9 12.5v3.5a4 4 0 0 0 8 0v-2"/>
+                <circle cx="17" cy="12" r="2"/>
+                <circle cx="4.5" cy="3" r="1.5"/>
+                <circle cx="13.5" cy="3" r="1.5"/>
+              </svg>
+            </div>
+          </div>
+          <div class="greeting-text">
+            <h1 id="header-doctor-name">Médica</h1>
+            <p id="header-doctor-role">Pediatra (R3)</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <!-- Botão Rápido de Alternância de Tema Claro / UTI Neonatal -->
+          <button id="btn-header-theme" class="icon-btn" type="button" aria-label="Alternar Modo Escuro" title="Modo Noturno UTI Neonatal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+          </button>
+
+          <!-- Botão Hambúrguer Drawer -->
+          <button id="btn-header-menu" class="icon-btn" type="button" aria-label="Menu Principal" title="Menu Hambúrguer">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <line x1="3" y1="7" x2="21" y2="7"/>
+              <line x1="3" y1="12" x2="16" y2="12"/>
+              <line x1="3" y1="17" x2="21" y2="17"/>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <!-- Barra Seletora de Mês & Regime Contábil -->
+      <section class="month-selector-bar">
+        <button id="btn-prev-month" class="month-nav-btn" aria-label="Mês Anterior" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+
+        <div class="current-month-display">
+          <h2 id="current-month-title">Maio de 2026</h2>
+          <span id="current-regime-pill" class="regime-pill">Regime de Caixa</span>
+        </div>
+
+        <button id="btn-next-month" class="month-nav-btn" aria-label="Próximo Mês" type="button">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </section>
+
+      <!-- Seletor de Regime: Caixa vs Competência -->
+      <div class="regime-toggle-pill">
+        <button class="regime-btn active" data-regime="caixa" type="button">
+          Regime de Caixa (Depósitos D+60/D+90)
+        </button>
+        <button class="regime-btn" data-regime="competencia" type="button">
+          Regime de Competência (Produção)
+        </button>
+      </div>
+
+      <!-- Barra de Chips de Pré-Seleção Rápida de Maternidades -->
+      <section class="maternity-chips-scroll" aria-label="Maternidades Frequentes">
+        <!-- Renderizado dinamicamente via ui.renderTopMaternityChips() -->
+      </section>
+
+      <!-- Botões de Ação Rápida Direta -->
+      <div class="quick-actions-row">
+        <button class="quick-action-btn coral" id="btn-quick-add-expense" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span>+ Nova Despesa</span>
+        </button>
+        <button class="quick-action-btn pink" id="btn-quick-add-shift" type="button">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"/>
+            <path d="M9 12.5v3.5a4 4 0 0 0 8 0v-2"/>
+            <circle cx="17" cy="12" r="2"/>
+            <circle cx="4.5" cy="3" r="1.5"/>
+            <circle cx="13.5" cy="3" r="1.5"/>
+          </svg>
+          <span>+ Novo Plantão</span>
+        </button>
+      </div>
+
+      <!-- ================================================================ -->
+      <!-- ÁREA DE CONTEÚDO DAS 3 ABAS PRIMÁRIAS                           -->
+      <!-- ================================================================ -->
+      <div id="view-container" class="view-content-wrapper">
+
+        <!-- Aba 1: Início (Dashboard / Balanço / Resumo Pediátrico) -->
+        <section id="view-home" class="app-view active" aria-label="Aba Início">
+          <!-- Hero Card de Saldo -->
+          <div class="hero-balance-card">
+            <div class="balance-title">
+              <span id="hero-balance-title">Saldo Projetado de Caixa</span>
+              <span id="hero-month-label">Maio de 2026</span>
+            </div>
+            <div class="balance-value" id="hero-balance-value">R$ 0,00</div>
+            <div class="balance-stats-row">
+              <div class="stat-item">
+                <div class="stat-icon mint">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 6v2m0 8v2"/>
+                  </svg>
+                </div>
+                <div class="stat-info">
+                  <span>Total Entradas</span>
+                  <strong id="stat-total-income">R$ 0,00</strong>
+                </div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-icon coral">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/><path d="M8 12h8"/><path d="M12 8l4 4-4 4"/>
+                  </svg>
+                </div>
+                <div class="stat-info">
+                  <span>Total Despesas</span>
+                  <strong id="stat-total-expenses">R$ 0,00</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Previsão dos Próximos 6 Meses -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EC407A" stroke-width="2">
+                  <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+                Previsão dos Próximos 6 Meses
+              </h2>
+            </div>
+            <div id="home-forecast-container"></div>
+          </div>
+
+          <!-- Distribuição de Gastos com Donut SVG -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2">
+                  <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>
+                </svg>
+                Distribuição de Gastos
+              </h2>
+              <span id="donut-item-count" class="item-count-badge">0 lançamentos</span>
+            </div>
+            <div id="home-donut-container"></div>
+          </div>
+
+          <!-- Comparativo Caixa Real vs Produção em Aberto -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#26A69A" stroke-width="2">
+                  <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><circle cx="18" cy="7" r="2"/><circle cx="12" cy="2" r="2"/><circle cx="6" cy="11" r="2"/>
+                </svg>
+                Caixa Real vs Produção em Aberto
+              </h2>
+            </div>
+            <div id="home-comparison-container"></div>
+          </div>
+        </section>
+
+        <!-- Aba 2: Ganhos & Plantões (75% D+60 e 25% D+90) -->
+        <section id="view-income" class="app-view hidden" aria-label="Aba Ganhos">
+          <!-- Card da Bolsa Residência Fixa -->
+          <div class="card-section" id="salary-card">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#26A69A" stroke-width="2">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0"/><path d="M2 9.5h20"/><circle cx="16" cy="14" r="1.5"/>
+                </svg>
+                Bolsa Residência Fixa
+              </h2>
+              <span id="salary-status-badge" class="badge-status-pill mint">Ativa</span>
+            </div>
+            <div class="salary-value-row" style="margin: 8px 0;">
+              <span class="salary-amount" id="salary-display-value" style="font-size: 1.5rem; font-weight: 800; color: var(--text-main);">R$ 0,00</span>
+              <span class="salary-period" style="font-size: 0.8rem; color: var(--text-muted); margin-left: 6px;">/ mês líquido</span>
+            </div>
+            <p class="salary-hint" style="font-size: 0.75rem; color: var(--text-muted);">Creditada mensalmente todo dia 5 útil</p>
+          </div>
+
+          <!-- Lista de Plantões do Mês com Divisão D+60 / D+90 -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EC407A" stroke-width="2">
+                  <path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 10h6"/><path d="M12 7v6"/>
+                </svg>
+                Plantões em Sala de Parto & UTI
+              </h2>
+              <button class="section-action-btn" id="btn-add-shift-quick" type="button">+ Novo Plantão</button>
+            </div>
+            <div id="shifts-list-container" class="shifts-list">
+              <!-- Renderizado dinamicamente via ui.renderIncomeView -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Aba 3: Despesas & 6 Macro-Grupos de Gastos -->
+        <section id="view-expenses" class="app-view hidden" aria-label="Aba Despesas">
+          <!-- Resumo de Despesas do Mês -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                </svg>
+                Total de Despesas
+              </h2>
+              <button class="section-action-btn" id="btn-add-expense-quick" type="button">+ Nova Despesa</button>
+            </div>
+            <div class="expenses-total-amount" id="expenses-total-value" style="font-size: 1.8rem; font-weight: 900; color: var(--coral-expense-dark); margin: 6px 0;">R$ 0,00</div>
+            <span class="expenses-sub-hint" style="font-size: 0.75rem; color: var(--text-muted);">Todas as despesas do mês e compras parceladas vigentes</span>
+          </div>
+
+          <!-- Barra de Filtros por Macro-Grupo -->
+          <div class="card-section" style="padding-bottom: 8px;">
+            <div class="section-header" style="margin-bottom: 8px;">
+              <h3 style="font-size: 0.86rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EC407A" stroke-width="2">
+                  <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+                </svg>
+                Filtrar por Macro-Grupo
+              </h3>
+              <button id="btn-clear-macro-filter" class="section-action-btn hidden" data-macro-filter="all" type="button">
+                Limpar Filtro
+              </button>
+            </div>
+            <div class="macro-filter-bar" id="macro-filter-bar">
+              <!-- Renderizado dinamicamente via ui.renderExpensesView -->
+            </div>
+          </div>
+
+          <!-- Extrato Detalhado de Gastos com Edição em 1 Toque -->
+          <div class="card-section">
+            <div class="section-header">
+              <h2>Extrato de Gastos</h2>
+              <span id="expenses-count-badge" class="item-count-badge">0 itens</span>
+            </div>
+            <div id="expenses-list-container" class="expenses-list">
+              <!-- Renderizado dinamicamente via ui.renderExpensesView -->
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Barra Flutuante de Navegação Inferior (iPhone 16 Plus Ergonomics) -->
+      <nav class="bottom-nav-bar" aria-label="Navegação Inferior">
+        <button class="nav-tab active" data-tab="home" id="tab-nav-home" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+            <polyline points="9 22 9 12 15 12 15 22"/>
+          </svg>
+          <span>Início</span>
+        </button>
+
+        <button class="nav-tab" data-tab="income" id="tab-nav-income" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"/><path d="M9 12.5v3.5a4 4 0 0 0 8 0v-2"/><circle cx="17" cy="12" r="2"/><circle cx="4.5" cy="3" r="1.5"/><circle cx="13.5" cy="3" r="1.5"/>
+          </svg>
+          <span>Ganhos</span>
+        </button>
+
+        <!-- Botão Central Flutuante FAB (+) -->
+        <button id="fab-add-btn" class="nav-fab-btn" type="button" aria-label="Adicionar Novo Lançamento" title="Novo Lançamento">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+
+        <button class="nav-tab" data-tab="expenses" id="tab-nav-expenses" type="button">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          <span>Despesas</span>
+        </button>
+      </nav>
+
+    </main>
+
+    <!-- ==================================================================== -->
+    <!-- MODAIS COM ARQUITETURA IN-FLOW EXPANSION ANTI-CROP                   -->
+    <!-- ==================================================================== -->
+
+    <!-- Modal 1: Adicionar / Editar Plantão Médico -->
+    <div id="modal-shift" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-shift-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Ganhos Médicos</span>
+            <h3 id="modal-shift-title">Novo Plantão Pediátrico</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-shift" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <form id="form-new-shift" class="modal-form" novalidate></form>
+      </div>
+    </div>
+
+    <!-- Modal 2: Adicionar / Editar Despesa Pediátrica -->
+    <div id="modal-expense" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-expense-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Saídas Financeiras</span>
+            <h3 id="modal-expense-title">Nova Despesa Pediátrica</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-expense" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <form id="form-new-expense" class="modal-form" novalidate></form>
+      </div>
+    </div>
+
+    <!-- Modal 3: Gerenciador Dinâmico de Fontes de Renda & Hospitais -->
+    <div id="modal-income-sources" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-sources-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Gestão de Renda</span>
+            <h3 id="modal-sources-title">Fontes de Renda & Hospitais</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-income-sources" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <div id="income-sources-modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Modal 4: Gerenciador Dinâmico das 23 Categorias de Despesas -->
+    <div id="modal-categories" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-categories-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Taxonomia Financeira</span>
+            <h3 id="modal-categories-title">23 Categorias de Gastos</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-categories" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <div id="categories-modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Modal 5: Editar Perfil Médico -->
+    <div id="modal-profile" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-profile-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Identidade Médica</span>
+            <h3 id="modal-profile-title">Perfil da Médica</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-profile" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <form id="form-profile" class="modal-form" novalidate></form>
+      </div>
+    </div>
+
+    <!-- Modal 6: Hub de Finanças Visual (Gráficos Ampliados) -->
+    <div id="modal-hub" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-hub-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Análise Gráfica</span>
+            <h3 id="modal-hub-title">Hub de Finanças Visual</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-hub" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <div id="hub-modal-body"></div>
+      </div>
+    </div>
+
+    <!-- Modal 7: Confirmação de Reset com Backup Automático -->
+    <div id="modal-reset-confirm" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-reset-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge" style="background: rgba(239, 83, 80, 0.15); color: #EF5350;">Aviso de Segurança</span>
+            <h3 id="modal-reset-title">Zerar Dados da Aplicação</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-reset-confirm" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <div id="reset-confirm-body"></div>
+      </div>
+    </div>
+
+    <!-- Drawer Lateral do Menu Hambúrguer -->
+    <aside id="drawer-menu" class="drawer-overlay hidden" aria-label="Menu de Navegação Lateral">
+      <div class="drawer-panel">
+        <header class="drawer-header">
+          <div class="drawer-profile-info">
+            <h3 id="drawer-doctor-name">Médica</h3>
+            <p>Finanças Pediatria v8.0.0 Standalone</p>
+          </div>
+          <button id="btn-close-drawer" class="icon-btn" aria-label="Fechar Menu" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+
+        <nav class="drawer-nav-list">
+          <button class="drawer-item" id="drawer-item-profile" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EC407A" stroke-width="2">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+            <div class="drawer-item-text">
+              <span>Editar Perfil Médico</span>
+              <small>CRM, Especialidade e Bolsa</small>
+            </div>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-income-sources" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7E57C2" stroke-width="2">
+              <path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 10h6"/><path d="M12 7v6"/>
+            </svg>
+            <div class="drawer-item-text">
+              <span>Fontes de Renda & Hospitais</span>
+              <small>Maternidades, Regras D+60/D+90 e Prazos</small>
+            </div>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-categories" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF7043" stroke-width="2">
+              <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+            </svg>
+            <div class="drawer-item-text">
+              <span>Categorias de Despesas</span>
+              <small>23 Categorias nos 6 Macro-Grupos</small>
+            </div>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-hub" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#26A69A" stroke-width="2">
+              <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+            </svg>
+            <div class="drawer-item-text">
+              <span>Hub de Finanças Visual</span>
+              <small>Análise Gráfica & Projeção Semestral</small>
+            </div>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-theme" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFA726" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            <span id="theme-toggle-label">Alternar Modo UTI Neonatal</span>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-backup" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#26A69A" stroke-width="2">
+              <rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/><path d="M9 10l3 3 3-3"/>
+            </svg>
+            <span>Salvar no Meu iPhone (Backup)</span>
+          </button>
+
+          <button class="drawer-item" id="drawer-item-restore" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#42A5F5" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+            <span>Restaurar Arquivo de Backup</span>
+          </button>
+
+          <button class="drawer-item text-danger" id="drawer-item-reset" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF5350" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+            </svg>
+            <span>Zerar Dados da Aplicação</span>
+          </button>
+        </nav>
+
+        <footer class="drawer-footer">
+          <p>Finanças Pediatria <strong>v8.0.0</strong> Standalone</p>
+          <p>Criado com dedicação por <strong>FChNeto</strong></p>
+        </footer>
+      </div>
+    </aside>
+
+    <!-- Contêiner de Notificações Toasts com Desfazer (Undo) -->
+    <div id="toast-container" class="toast-stack" aria-live="polite"></div>
+
+    <!-- Input Oculto de Arquivo de Backup -->
+    <input type="file" id="backup-file-input" accept=".json" style="display: none;" />
+
+  </div>
+
+  <!-- Fallback Acessível para JavaScript Desativado -->
+  <noscript>
+    <div style="padding: 24px; text-align: center; color: #D81B60; font-family: sans-serif; background: #FFF0ED; border-radius: 16px; margin: 20px;">
+      <h2>JavaScript Necessário</h2>
+      <p>Para desfrutar do santuário financeiro Finanças Pediatria offline, por favor ative o JavaScript no seu navegador Safari / Chrome.</p>
+      <p style="margin-top: 12px; font-size: 0.85rem; color: #7E7485;">Criado por FChNeto</p>
+    </div>
+  </noscript>
+
+  <!-- Script Principal de Inicialização ES6+ 100% Offline (com registro de SW interno) -->
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
