@@ -12,11 +12,12 @@
 O **Finanças Pediatria** organiza rendimentos fixos configuráveis, receitas variáveis com recebimento postergado e fracionado (regra padrão de **75% em D+60** e **25% em D+90**), despesas e parâmetros tributários informados pela pessoa usuária.
 
 O projeto equilibra experiências complementares:
-1. **Versão v6.0.0 (Cloud & Sanctuary em `/v6/`):** Versão oficial com autenticação Supabase, CSP estrita sem `unsafe-inline`, 23 categorias canônicas mapeadas nos 6 macro-grupos, detecção de concorrência com bloqueio otimista e backups de conflito.
-2. **Versão v2.0 (Sanctuary Minimalist em `/v2.0/`):** Interface pura, higienizada, sem ruído visual, focada em receitas, despesas, categorias, parcelamentos e persistência local.
-3. **Versões v5.x (`/` e `/v5/`):** Aplicação standalone com painel financeiro, categorias editáveis e experiência mobile-first.
-4. **Versão v4.1.1 (`/V4_Cloud/`):** Aplicação Cloud com autenticação Supabase, sincronização por conta e edição de categorias e despesas.
-5. **Versões v3.x (histórico):** Consultório, DRE, Fator R, SBAR, conciliação bancária, simulador FIRE e entrada por voz.
+1. **Versão Principal v8.0.0 (Standalone & Pediatric Sanctuary em `/` e `/v8/`):** Versão 100% standalone e local-first para iPhone/iOS sem Vercel/Supabase e com abertura instantânea sem login, persistência tripla no Safari (`localStorage` + `IndexedDB` `v8_pediatric_db` + `Web Share API` com importação retrocompatível `v2` a `v7`), gestão 100% dinâmica de fontes de renda e categorias de despesas no menu hambúrguer com *Soft-Archive*, e microinterações UX Delight (edição em 1 toque, Toasts com *Desfazer/Undo*, chips rápidos).
+2. **Versões v7.0.0 (`/v7/`) e v6.0.0 (`/v6/`) — Cloud & Sanctuary:** Versões em nuvem com autenticação Supabase, CSP estrita sem `unsafe-inline`, 23 categorias canônicas mapeadas nos 6 macro-grupos, normalização linguística `unaccent`, diagnósticos de runtime e resolução de conflitos de revisão.
+3. **Versão v2.0 (Sanctuary Minimalist em `/v2.0/`):** Interface pura, higienizada, sem ruído visual, focada em receitas, despesas, categorias, parcelamentos e persistência local.
+4. **Versão v5.0.1 (`/v5/`):** Aplicação standalone com painel financeiro, categorias editáveis e experiência mobile-first.
+5. **Versão v4.1.1 (`/V4_Cloud/`):** Aplicação Cloud com autenticação Supabase, sincronização por conta e edição de categorias e despesas.
+6. **Versões v3.x (histórico):** Consultório, DRE, Fator R, SBAR, conciliação bancária, simulador FIRE e entrada por voz.
 
 ---
 
@@ -35,6 +36,8 @@ timeline
     v4.1.1 (Outubro 2026) : Remoção de valores de perfil pré-preenchidos : Exemplos anonimizados : Publicação segura
     v5.0.1 (Outubro 2026) : Perfil e locais genéricos : Rendimentos iniciais zerados : Documentação sanitizada
     v6.0.0 (Outubro 2026) : CSP Estrita (sem unsafe-inline) : 23 Categorias nos 6 Macro-Grupos : Conflito Otimista & Backups
+    v7.0.0 (Novembro 2026) : Normalização Unaccent SQL : Diagnósticos em Tempo Real : Sincronização Relacional
+    v8.0.0 (Novembro 2026) : Standalone Local-First Raiz & /v8/ : Zero Nuvem/Login : Fontes & Categorias 100% Dinâmicas : UX Delight
 ```
 
 ### Detalhamento dos Marcos Entregues:

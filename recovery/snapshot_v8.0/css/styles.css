@@ -1,0 +1,1548 @@
+/**
+ * Finanças Pediatria /v8/ - Stylesheet Canônico "Silk & Rose Gold"
+ * Design System: Pediatric Silk, Rose Gold & High-Gloss Glassmorphism
+ * Otimizado para iPhone 16 Plus (Mobile-First 430px, Safe-Areas, Anti-Zoom >= 16px, In-Flow Anti-Crop)
+ * Criado por: FChNeto (APP_CREATOR = 'FChNeto')
+ */
+
+:root {
+  /* ==========================================================================
+     1. PALETA CANÔNICA "SILK & ROSE GOLD"
+     ========================================================================== */
+  --rose-gold: #E8A598;
+  --rose-gold-dark: #C87A6C;
+  --rose-gold-light: #F7E5E1;
+  --rose-gold-glow: rgba(232, 165, 152, 0.28);
+
+  --silk-rose-bg: #FAF6F5;
+  --silk-card: #FFFFFF;
+  --silk-card-subtle: #F6EFEF;
+  --silk-border: rgba(232, 165, 152, 0.22);
+  --silk-border-strong: rgba(232, 165, 152, 0.45);
+
+  --primary-pink: #EC407A;
+  --primary-pink-light: #FCE4EC;
+  --primary-pink-dark: #D81B60;
+
+  --mint-income: #26A69A;
+  --mint-income-dark: #00897B;
+  --mint-income-light: #E0F2F1;
+
+  --coral-expense: #FF7043;
+  --coral-expense-dark: #F4511E;
+  --coral-expense-light: #FBE9E7;
+
+  --lilac-accent: #AB47BC;
+  --lilac-light: #F3E5F5;
+
+  /* Gradientes Sedosos */
+  --hero-gradient: linear-gradient(135deg, #FFF0ED 0%, #FCE4EC 45%, #F5DAD5 100%);
+  --fab-gradient: linear-gradient(135deg, #EC407A 0%, #E8A598 100%);
+  --rose-gold-gradient: linear-gradient(135deg, #E8A598 0%, #D48B7E 100%);
+
+  /* Superfícies & Fundo - Light Mode */
+  --bg-app: #FAF6F5;
+  --bg-card: #FFFFFF;
+  --bg-card-subtle: #F8F2F1;
+  --bg-input: #F5EDED;
+  --bg-nav: rgba(255, 255, 255, 0.92);
+  --bg-drawer: rgba(255, 255, 255, 0.98);
+  --bg-overlay: rgba(30, 20, 35, 0.45);
+
+  /* Textos & Tipografia Editorial */
+  --text-main: #241D28;
+  --text-muted: #7E7485;
+  --text-light: #A59BAE;
+  --text-on-primary: #FFFFFF;
+
+  /* Bordas Hiper-Arredondadas */
+  --radius-xs: 8px;
+  --radius-sm: 14px;
+  --radius-md: 20px;
+  --radius-card: 26px;
+  --radius-modal: 32px;
+  --radius-pill: 9999px;
+
+  /* Sombras Difusas & Refinadas */
+  --shadow-card: 0 10px 30px rgba(232, 165, 152, 0.12), 0 2px 8px rgba(0, 0, 0, 0.02);
+  --shadow-elevated: 0 18px 45px rgba(232, 165, 152, 0.22), 0 4px 12px rgba(0, 0, 0, 0.04);
+  --shadow-fab: 0 10px 28px rgba(236, 64, 122, 0.38);
+
+  /* Margens e Safe-Areas do iPhone 16 Plus */
+  --safe-top: env(safe-area-inset-top, 44px);
+  --safe-bottom: env(safe-area-inset-bottom, 34px);
+
+  --font-family: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Bricolage Grotesque', -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+  --transition-smooth: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   2. MODO ESCURO: UTI NEONATAL
+   ========================================================================== */
+[data-theme="dark"] {
+  --bg-app: #150D1C;
+  --bg-card: #1F1528;
+  --bg-card-subtle: #291E34;
+  --bg-input: #2D2139;
+  --bg-nav: rgba(31, 21, 40, 0.94);
+  --bg-drawer: rgba(31, 21, 40, 0.98);
+  --bg-overlay: rgba(5, 2, 8, 0.70);
+
+  --text-main: #FDFBFE;
+  --text-muted: #B8B0C4;
+  --text-light: #857C92;
+
+  --hero-gradient: linear-gradient(135deg, #2D1A38 0%, #23162C 60%, #3B203E 100%);
+  --silk-border: rgba(232, 165, 152, 0.18);
+  --silk-border-strong: rgba(232, 165, 152, 0.35);
+
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.45);
+  --shadow-elevated: 0 18px 45px rgba(0, 0, 0, 0.65);
+
+  --mint-income-light: rgba(38, 166, 154, 0.2);
+  --coral-expense-light: rgba(255, 112, 67, 0.2);
+  --primary-pink-light: rgba(236, 64, 122, 0.22);
+}
+
+/* ==========================================================================
+   3. RESET GLOBAL & ANTI-ZOOM INVARIANT DO SAFARI (>= 16PX)
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  font-family: var(--font-family);
+  background-color: var(--bg-app);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* BLINDAGEM DEFINITIVA ANTI-ZOOM DO SAFARI: NUNCA MENOS DE 16PX EM INPUTS */
+input,
+select,
+textarea,
+button,
+.silk-input,
+.form-input,
+.silk-select-trigger {
+  font-size: 16px !important;
+  font-family: var(--font-family);
+  -webkit-text-size-adjust: 100%;
+}
+
+button {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ==========================================================================
+   4. LAYOUT PRINCIPAL (IPHONE 16 PLUS: 430PX MAX-WIDTH)
+   ========================================================================== */
+#app-container {
+  width: 100%;
+  max-width: 430px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  background-color: var(--bg-app);
+  display: flex;
+  flex-direction: column;
+  padding-bottom: calc(var(--safe-bottom) + 80px);
+}
+
+.main-app-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* ==========================================================================
+   5. CABEÇALHO DA APLICAÇÃO
+   ========================================================================== */
+.app-header {
+  padding: calc(var(--safe-top) + 12px) 16px 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-app);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.doctor-greeting {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.avatar-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--primary-pink-light);
+  border: 2px solid var(--rose-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(236, 64, 122, 0.15);
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatar-fallback {
+  color: var(--primary-pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.greeting-text h1 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.greeting-text p {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--silk-border);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.icon-btn:active {
+  transform: scale(0.92);
+}
+
+/* ==========================================================================
+   6. SELETOR DE MÊS & REGIME CONTÁBIL
+   ========================================================================== */
+.month-selector-bar {
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.month-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 1px solid var(--silk-border);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+
+.month-nav-btn:active {
+  transform: scale(0.9);
+}
+
+.current-month-display {
+  text-align: center;
+}
+
+.current-month-display h2 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.3px;
+}
+
+.regime-pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--primary-pink-light);
+  color: var(--primary-pink-dark);
+  margin-top: 2px;
+}
+
+.regime-toggle-pill {
+  display: flex;
+  padding: 4px;
+  margin: 6px 16px 12px 16px;
+  background: var(--bg-card-subtle);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--silk-border);
+}
+
+.regime-btn {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 8px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem !important;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: var(--transition-smooth);
+}
+
+.regime-btn.active {
+  background: var(--bg-card);
+  color: var(--primary-pink);
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================================================
+   7. CHIPS RÁPIDOS & AÇÕES DE TOPO
+   ========================================================================== */
+.maternity-chips-scroll {
+  display: flex;
+  gap: 8px;
+  padding: 4px 16px 12px 16px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.maternity-chips-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.hospital-chip {
+  white-space: nowrap;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-card);
+  border: 1px solid var(--silk-border);
+  color: var(--text-main);
+  font-size: 0.8rem !important;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.hospital-chip.highlight {
+  background: var(--primary-pink-light);
+  border-color: rgba(236, 64, 122, 0.3);
+  color: var(--primary-pink-dark);
+}
+
+.hospital-chip:active {
+  transform: scale(0.94);
+}
+
+.quick-actions-row {
+  display: flex;
+  gap: 10px;
+  padding: 0 16px 12px 16px;
+}
+
+.quick-action-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  border: none;
+  font-weight: 700;
+  font-size: 0.85rem !important;
+  transition: var(--transition-smooth);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.quick-action-btn.coral {
+  background: var(--coral-expense-light);
+  color: var(--coral-expense-dark);
+}
+
+.quick-action-btn.pink {
+  background: var(--primary-pink-light);
+  color: var(--primary-pink-dark);
+}
+
+.quick-action-btn:active {
+  transform: scale(0.96);
+}
+
+/* ==========================================================================
+   8. CARDS, HERO & GRÁFICOS
+   ========================================================================== */
+.card-section {
+  background: var(--bg-card);
+  border-radius: var(--radius-card);
+  padding: 18px 16px;
+  margin: 0 16px 14px 16px;
+  border: 1px solid var(--silk-border);
+  box-shadow: var(--shadow-card);
+}
+
+.hero-balance-card {
+  background: var(--hero-gradient);
+  border-radius: var(--radius-card);
+  padding: 22px 20px;
+  margin: 0 16px 14px 16px;
+  border: 1px solid var(--rose-gold-light);
+  box-shadow: var(--shadow-elevated);
+}
+
+.balance-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.balance-value {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+  margin: 6px 0 16px 0;
+}
+
+.balance-value.negative {
+  color: #D32F2F;
+}
+
+.balance-stats-row {
+  display: flex;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(232, 165, 152, 0.25);
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stat-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon.mint {
+  background: var(--mint-income);
+}
+
+.stat-icon.coral {
+  background: var(--coral-expense);
+}
+
+.stat-info span {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.stat-info strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.section-header h2 {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-action-btn {
+  border: none;
+  background: transparent;
+  color: var(--primary-pink);
+  font-weight: 700;
+  font-size: 0.82rem !important;
+}
+
+/* ==========================================================================
+   9. LISTA DE PLANTÕES E PARCELAS D+60 / D+90
+   ========================================================================== */
+.shift-card {
+  background: var(--bg-card);
+  border: 1px solid var(--silk-border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: var(--transition-smooth);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  cursor: pointer;
+}
+
+.shift-card:active {
+  background: var(--bg-card-subtle);
+}
+
+.shift-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.shift-hospital-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hospital-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.shift-hospital-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.shift-date-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: block;
+}
+
+.shift-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shift-net-value {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--mint-income);
+}
+
+.shift-installments-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--silk-border);
+}
+
+.installment-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-subtle);
+}
+
+.installment-pill.current-month-highlight {
+  border-left: 3px solid var(--primary-pink);
+}
+
+.inst-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.inst-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.inst-date {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.inst-action {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inst-val {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.btn-toggle-status {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: transparent;
+  padding: 4px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem !important;
+  font-weight: 700;
+}
+
+.btn-toggle-status.received {
+  background: var(--mint-income-light);
+  color: var(--mint-income-dark);
+}
+
+.btn-toggle-status.pending {
+  background: rgba(255, 167, 38, 0.15);
+  color: #F57C00;
+}
+
+/* ==========================================================================
+   10. LISTA DE DESPESAS & MACRO-GRUPOS
+   ========================================================================== */
+.macro-filter-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 0;
+}
+
+.macro-filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.macro-chip {
+  white-space: nowrap;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--silk-border);
+  color: var(--text-muted);
+  font-size: 0.75rem !important;
+  font-weight: 600;
+  transition: var(--transition-smooth);
+}
+
+.macro-chip.active {
+  background: var(--coral-expense);
+  color: #fff;
+  border-color: var(--coral-expense);
+  font-weight: 700;
+}
+
+.expense-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--silk-border);
+  border-radius: var(--radius-md);
+  margin-bottom: 8px;
+  transition: var(--transition-smooth);
+  cursor: pointer;
+}
+
+.expense-card:active {
+  background: var(--bg-card-subtle);
+}
+
+.expense-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.expense-info-wrap {
+  flex: 1;
+}
+
+.expense-desc-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+}
+
+.expense-meta-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 3px;
+}
+
+.category-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  border: 1px solid currentColor;
+}
+
+.inst-counter-pill {
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  background: var(--coral-expense-light);
+  color: var(--coral-expense-dark);
+}
+
+.expense-date-sub {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.expense-amount-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expense-amount-val {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--coral-expense-dark);
+}
+
+.btn-icon-delete {
+  border: none;
+  background: transparent;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #EF5350;
+  transition: var(--transition-smooth);
+}
+
+.btn-icon-delete:active {
+  transform: scale(0.85);
+  background: rgba(239, 83, 80, 0.1);
+}
+
+/* ==========================================================================
+   11. BARRA DE NAVEGAÇÃO INFERIOR COM FAB (+)
+   ========================================================================== */
+.bottom-nav-bar {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 430px;
+  height: calc(var(--safe-bottom) + 60px);
+  padding-bottom: var(--safe-bottom);
+  background: var(--bg-nav);
+  border-top: 1px solid var(--silk-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 90;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.nav-tab {
+  border: none;
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text-muted);
+  width: 70px;
+  transition: var(--transition-smooth);
+}
+
+.nav-tab svg {
+  transition: var(--transition-smooth);
+}
+
+.nav-tab span {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.nav-tab.active {
+  color: var(--primary-pink);
+}
+
+.nav-tab.active span {
+  font-weight: 800;
+}
+
+.nav-fab-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--fab-gradient);
+  color: #fff;
+  border: none;
+  box-shadow: var(--shadow-fab);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -24px;
+  transition: var(--transition-smooth);
+}
+
+.nav-fab-btn:active {
+  transform: scale(0.92);
+}
+
+/* ==========================================================================
+   12. MODAIS COM ARQUITETURA IN-FLOW EXPANSION ANTI-CROP
+   ========================================================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1000;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.modal-sheet {
+  position: relative !important;
+  width: 100%;
+  max-width: 430px;
+  max-height: 88vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-modal) var(--radius-modal) 0 0;
+  background: var(--bg-card);
+  padding: 20px 18px calc(var(--safe-bottom) + 20px) 18px;
+  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.25);
+  animation: slideUpModal 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpModal {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--silk-border);
+}
+
+.modal-title-wrap h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.silk-pill-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--primary-pink-light);
+  color: var(--primary-pink-dark);
+  display: inline-block;
+  margin-bottom: 4px;
+}
+
+.modal-close-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg-card-subtle);
+  border: none;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-input, .silk-input {
+  width: 100%;
+  height: 48px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-input);
+  border: 1px solid var(--silk-border);
+  color: var(--text-main);
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+textarea.form-input {
+  height: auto;
+  min-height: 80px;
+}
+
+.form-input:focus, .silk-input:focus {
+  border-color: var(--primary-pink);
+  box-shadow: 0 0 0 3px rgba(236, 64, 122, 0.15);
+}
+
+.modal-hospital-pills {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 0;
+}
+
+.modal-hospital-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.modal-hosp-pill {
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--silk-border);
+  color: var(--text-muted);
+  font-size: 0.75rem !important;
+  font-weight: 600;
+}
+
+.modal-hosp-pill.selected {
+  background: var(--primary-pink);
+  color: #fff;
+  border-color: var(--primary-pink);
+  font-weight: 700;
+}
+
+.modal-actions-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.modal-actions-row button {
+  flex: 1;
+}
+
+.btn-silk-primary {
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, #EC407A 0%, #D81B60 100%);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(236, 64, 122, 0.3);
+  transition: var(--transition-smooth);
+}
+
+.btn-silk-primary:active {
+  transform: scale(0.97);
+}
+
+.btn-silk-secondary {
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--silk-border);
+  color: var(--text-main);
+  font-weight: 700;
+  transition: var(--transition-smooth);
+}
+
+.btn-silk-secondary:active {
+  transform: scale(0.97);
+}
+
+.btn-silk-text-danger {
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1px solid #EF5350;
+  color: #EF5350;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   13. DRAWER MENU HAMBÚRGUER
+   ========================================================================== */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-overlay);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.drawer-panel {
+  width: 82%;
+  max-width: 350px;
+  height: 100%;
+  background: var(--bg-drawer);
+  padding: calc(var(--safe-top) + 16px) 20px calc(var(--safe-bottom) + 16px) 20px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.3);
+  animation: slideInDrawer 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInDrawer {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--silk-border);
+  margin-bottom: 16px;
+}
+
+.drawer-profile-info h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.drawer-profile-info p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.drawer-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: transparent;
+  color: var(--text-main);
+  text-align: left;
+  transition: var(--transition-smooth);
+}
+
+.drawer-item:active {
+  background: var(--bg-card-subtle);
+}
+
+.drawer-item-text {
+  flex: 1;
+}
+
+.drawer-item-text span {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.drawer-item-text small {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.drawer-item.text-danger {
+  color: #EF5350;
+}
+
+.drawer-footer {
+  padding-top: 16px;
+  border-top: 1px solid var(--silk-border);
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   14. TOAST STACK & MICROINTERAÇÃO DE DESFAZER (UNDO)
+   ========================================================================== */
+.toast-stack {
+  position: fixed;
+  bottom: calc(var(--safe-bottom) + 76px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+  max-width: 400px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.toast-silk {
+  pointer-events: auto;
+  background: #241D28;
+  color: #FFF;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  font-size: 0.85rem;
+  position: relative;
+  overflow: hidden;
+  animation: toastSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.toast-silk.toast-undo {
+  padding-bottom: 14px;
+}
+
+.toast-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.btn-toast-undo {
+  border: none;
+  background: var(--primary-pink);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: 0.75rem !important;
+}
+
+.toast-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  background: var(--primary-pink);
+  width: 100%;
+  animation: toastProgress linear forwards;
+}
+
+@keyframes toastSlideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes toastProgress {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+.toast-silk.fade-out {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.25s ease;
+}
+
+/* ==========================================================================
+   15. GESTÃO DINÂMICA DE FONTES & CATEGORIAS (UI LISTS)
+   ========================================================================== */
+.management-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.management-toolbar h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+}
+
+.management-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.management-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--silk-border);
+}
+
+.management-item.archived {
+  opacity: 0.55;
+}
+
+.mgmt-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.mgmt-name {
+  font-size: 0.88rem;
+  color: var(--text-main);
+}
+
+.mgmt-sub, .mgmt-rule {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.badge-status-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+}
+
+.badge-status-pill.mint { background: var(--mint-income-light); color: var(--mint-income-dark); }
+.badge-status-pill.safe { background: var(--mint-income-light); color: var(--mint-income-dark); }
+.badge-status-pill.muted { background: var(--bg-card-subtle); color: var(--text-muted); }
+
+.categories-grouped-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.macro-group-block {
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-subtle);
+  padding: 10px;
+}
+
+.mg-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  margin-bottom: 6px;
+}
+
+.mg-cats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.cat-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: var(--bg-card);
+  border-radius: var(--radius-xs);
+  font-size: 0.82rem;
+}
+
+.cat-item-row.archived {
+  opacity: 0.5;
+}
+
+/* ==========================================================================
+   16. GRÁFICOS SEMESTRAL & DONUT SVG
+   ========================================================================== */
+.forecast-chart-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.forecast-chart-grid {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 140px;
+  padding: 0 4px;
+}
+
+.forecast-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.forecast-bars-wrap {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 120px;
+}
+
+.f-bar {
+  width: 14px;
+  border-radius: 4px 4px 0 0;
+  transition: height 0.3s ease;
+}
+
+.f-bar.income { background: var(--mint-income); }
+.f-bar.expense { background: var(--coral-expense); }
+
+.forecast-col-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.forecast-legend {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.f-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.f-legend-item .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.f-legend-item .dot.mint { background: var(--mint-income); }
+.f-legend-item .dot.coral { background: var(--coral-expense); }
+
+.donut-chart-flex {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.donut-svg-wrap {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+}
+
+.donut-center-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.donut-center-text span {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.donut-center-text strong {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.donut-legend-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.donut-legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+}
+
+.donut-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 6px;
+}
+
+.donut-cat-name {
+  flex: 1;
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.donut-cat-pct {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.empty-state-card {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--text-muted);
+}
+
+.empty-state-card h4 {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin: 10px 0 4px 0;
+}
+
+.empty-state-card p {
+  font-size: 0.82rem;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+.comp-box {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.comp-row span {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.macro-bars-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.macro-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+}
+
+.macro-bar-track {
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-card-subtle);
+  overflow: hidden;
+}
+
+.macro-bar-fill {
+  height: 100%;
+  border-radius: var(--radius-pill);
+}

@@ -1,15 +1,17 @@
-# E2E Test Suite Ready — Finanças Pediatria V4_Cloud
+# E2E & Unit Test Suite Ready — Finanças Pediatria (v8.0.0 Standalone & Variantes)
 
-**Project:** Finanças Pediatria V4_Cloud  
+**Project:** Finanças Pediatria (`/` & `/v8/` Standalone, `/v7/`, `/v6/`, `/V4_Cloud/`, `/v5/`, `/v4/`, `/v2.0/`)  
 **Author Signature:** `APP_CREATOR = 'FChNeto'`  
-**Date:** 2026-10-03  
-**Status:** 100% COMPLETE & VERIFIED (0 Failures, 0 Regressions)
+**Date:** 2026-11-05  
+**Status:** 100% COMPLETE & VERIFIED (**979 Tests Passing, 0 Failures, 0 Regressions**)
 
 ---
 
 ## Test Runner
-- **Master Test Runner Command:** `node V4_Cloud/tests/run_all.js`
-- **Native Test Runner Command:** `node --test V4_Cloud/tests/*.test.js`
+- **v8 Standalone & Browser E2E Suite Command:** `node --test v8/tests/*.test.js`
+- **v7 Cloud & Sanctuary Suite Command:** `cd v7 && node --test tests/*.test.js`
+- **v6 Cloud & Sanctuary Suite Command:** `cd v6 && node --test tests/*.test.js`
+- **V4_Cloud Suite Command:** `cd V4_Cloud && node --test tests/*.test.js`
 - **Root Regression Invariant Command:** `node --test tests/*.test.js`
 - **Expected Outcome:** 100% of all tests pass with exit code 0.
 
@@ -18,13 +20,14 @@
 ## Coverage Summary
 | Suite | Tests | Result |
 |------|------:|--------|
-| Root regression suite | 120 | All passed |
-| V2 focused suite (included in root) | 9 | All passed |
-| V4 focused suite (included in root) | 13 | All passed |
+| Root regression suite (`v2`–`v5`) | 120 | All passed |
 | V4_Cloud suite | 619 | All passed |
-| **Distinct repository tests** | **739** | **0 failures** |
+| v6 (Cloud & Sanctuary) suite | 77 | All passed |
+| v7 (Cloud & Sanctuary) suite | 64 | All passed |
+| v8 (Standalone & Sanctuary — Domain, Storage, 10k Fuzzing & Playwright E2E iPhone 16 Plus) | 99 | All passed |
+| **Distinct repository tests** | **979** | **0 failures** |
 
-Validation date: 2026-10-03.
+Validation date: 2026-11-05.
 
 ## Feature Checklist
 | # | Feature | Tier 1 | Tier 2 | Tier 3 | Tier 4 | Tier 5 |

@@ -9,26 +9,27 @@
 ## 📌 1. Identidade do Produto & Metadados
 
 - **Nome da Aplicação:** Finanças Pediatria
-- **Versão Vigente:** `8.0.0` (Standalone & Pediatric Sanctuary Edition em `/v8/`), `7.0.0` (Cloud & Sanctuary Edition em `/v7/`), `6.0.0` (Cloud & Sanctuary Edition em `/v6/`), `5.0.1` (Silk & Rose Gold Standalone em `/v5/` e `/`), `4.1.1` (Vercel & Supabase Cloud Native em `/V4_Cloud/`), `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Master Executive histórico) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
+- **Versão Vigente:** `8.0.0` (Standalone & Pediatric Sanctuary Edition em `/` e `/v8/`), `7.0.0` (Cloud & Sanctuary Edition em `/v7/`), `6.0.0` (Cloud & Sanctuary Edition em `/v6/`), `5.0.1` (Silk & Rose Gold Standalone em `/v5/`), `4.1.1` (Vercel & Supabase Cloud Native em `/V4_Cloud/`), `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Master Executive histórico) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
 - **Autor / Criador:** **FChNeto** (Constante imutável no código: `APP_CREATOR = 'FChNeto'`; exibida no rodapé, cabeçalho e modais).
 - **Público-Alvo:** profissionais da saúde que desejam acompanhar rendimentos e despesas com alta segurança e resiliência hospitalar.
-- **Proposta de Valor:** Controle financeiro acolhedor, rápido e seguro. A versão **v8 (v8.0.0)** implementa arquitetura 100% standalone e local-first sem nuvem (zero Vercel/Supabase, zero login), persistência tripla no Safari/iOS (localStorage, IndexedDB e Web Share API), gestão 100% dinâmica de fontes e categorias no menu hambúrguer, microinterações UX delight (edição em 1 toque, Toasts com Desfazer/Undo, chips rápidos) e retrocompatibilidade com backups de todas as versões anteriores (`v2` a `v7`).
+- **Proposta de Valor:** Controle financeiro acolhedor, rápido e seguro. A versão **v8 (v8.0.0)** — promovida como entrypoint principal tanto na raiz `/` (`https://chneto.github.io/Nanda_ped/`) quanto em `/v8/` — implementa arquitetura 100% standalone e local-first sem nuvem (zero Vercel/Supabase, zero login), persistência tripla no Safari/iOS (localStorage, IndexedDB e Web Share API), gestão 100% dinâmica de fontes e categorias no menu hambúrguer, microinterações UX delight (edição em 1 toque, Toasts com Desfazer/Undo, chips rápidos) e retrocompatibilidade com backups de todas as versões anteriores (`v2` a `v7`).
 
-### Registro técnico da versão Standalone v8.0.0 (/v8/)
-- **100% Standalone & Local-First:** Totalmente desacoplada de nuvem, Vercel e Supabase; abertura direta e instantânea no painel "Início" sem nenhuma barreira ou tela de login.
+### Registro técnico da versão Standalone v8.0.0 (`/` e `/v8/`)
+- **100% Standalone & Local-First (Raiz `/` e `/v8/`):** Totalmente desacoplada de nuvem, Vercel e Supabase; abertura direta e instantânea (`< 50ms`) no painel "Início" sem nenhuma barreira ou tela de login. Sincronizada na raiz do repositório via `node scripts/build_bundle.js` com expurgo automático de caches legados (`financas-ped-v5*`) do Service Worker.
 - **Persistência Tripla no iOS / Safari WebKit:**
-  1. `localStorage` síncrono para render imediato sem oscilações (zero flicker);
-  2. `IndexedDB` (`PediatricSanctuaryV8DB`) assíncrono para retenção permanente e blindagem contra purgas do Safari;
+  1. `localStorage` síncrono (`v8_pediatric_state`) para render imediato sem oscilações (zero flicker);
+  2. `IndexedDB` (`v8_pediatric_db`) assíncrono com `navigator.storage.persist()`, listeners em `visibilitychange`/`pagehide` e *Safari Quota Shield* (fotos Base64 `> 30KB` armazenadas exclusivamente no IndexedDB para proteger o limite de `5MB` do iOS);
   3. Web Share API nativa (`navigator.share`) para gravação e exportação do backup JSON diretamente no app "Arquivos" ou iCloud Drive da médica, com fallback automático para download.
 - **Motor de Migração Retrocompatível:** Importação inteligente com detecção automática e normalização de backups legados de todas as versões anteriores (`v2` a `v7`).
-- **Gestão 100% Dinâmica de Fontes de Renda e Categorias:** Menu hambúrguer permite adicionar, editar e remover fontes de renda (com forma de recebimento, tipo e valor padrão) e categorias de despesas (com macro-grupos e tetos), sincronizando reativamente seletores e chips rápidos, mantendo integridade histórica via Soft-Archive (`isArchived: true`).
+- **Gestão 100% Dinâmica de Fontes de Renda e Categorias:** Menu hambúrguer permite adicionar, editar e remover fontes de renda (com regra de recebimento `D+0`, `D+30`, `75% D+60 / 25% D+90` ou customizada, tipo e valor padrão sugerido) e categorias de despesas (com macro-grupos, forma padrão, tetos mensais e botão seguro *"Restaurar Categorias Padrão"*), sincronizando reativamente seletores e chips rápidos e mantendo integridade histórica via *Double Snapshotting* e *Soft-Archive* (`active: false`).
 - **UX Delight & Microinterações Acolhedoras:**
   - Edição em 1 toque diretamente nas listas de transações com modal pré-preenchido;
-  - Toasts discretos com botão "Desfazer / Undo" e contagem regressiva para reverter exclusões acidentais;
+  - Toasts discretos com botão "Desfazer / Undo" e contagem regressiva para reverter exclusões acidentais (`undo_trash`);
   - Chips rápidos no topo dos modais para lançamento instantâneo de plantões e despesas frequentes;
   - Lixeira de exclusões recentes com restauração em 1 toque.
-- **Identidade Silk & Rose Gold e Ergonomia iPhone:** Tipografia `Bricolage Grotesque` e `Manrope`, Modo Noturno UTI Neonatal (`[data-theme="dark"]`), viewport iPhone 16 Plus (430px), safe areas, inputs anti-zoom (`>= 16px`), seletores in-flow anti-crop e ícones SVG inline.
-- **Autor Canônico Imutável:** `APP_CREATOR = 'FChNeto'` presente em metadados, rodapés, manifests e suíte de testes (99 testes automatizados com 100% de aprovação).
+- **Identidade Silk & Rose Gold e Ergonomia iPhone:** Tipografia `Bricolage Grotesque` e `Manrope`, Modo Noturno UTI Neonatal (`[data-theme="dark"]`), viewport iPhone 16 Plus (430px), safe areas, inputs anti-zoom (`>= 16px`), seletores in-flow anti-crop e 37 ícones SVG inline puros.
+- **Autor Canônico Imutável:** `APP_CREATOR = 'FChNeto'` presente em metadados, rodapés, manifests e suíte de testes (99 testes automatizados dedicados em `v8/tests/*.test.js` com 100% de aprovação, incluindo 10.000 ensaios de fuzzing financeiro e suíte E2E Playwright iPhone 16 Plus).
+- **Snapshot Imutável de Recuperação:** Congelado em `recovery/snapshot_v8.0/`.
 
 ### Registro técnico da versão Cloud v7.0.0, v6.0.0 & V4_Cloud 4.1.1
 - Configuração Vercel: variáveis `SUPABASE_URL` e `SUPABASE_ANON_KEY` (ou `SUPABASE_PUBLISHABLE_KEY`); nenhuma chave de serviço no navegador; timeout de runtime estendido para 4,5s contra cold starts.
@@ -156,8 +157,9 @@ A interface segue a estética acolhedora, sofisticada e limpa desenvolvida para 
 
 ## 🌐 5. Arquitetura de Deploy no GitHub Pages & Branches
 
+- **Entrypoint Principal do GitHub Pages (`/` e `/v8/`):** Tanto `https://chneto.github.io/Nanda_ped/` (raiz `/`) quanto `https://chneto.github.io/Nanda_ped/v8/` servem a versão **Finanças Pediatria v8.0.0 Standalone & Sanctuary Edition**. O script `node scripts/build_bundle.js` mantém a raiz sincronizada automaticamente com `/v8/`.
 - **Branch de Deploy do GitHub Pages**: `gh-pages`.  
-  *Regra*: publicar a versão validada em `NandapedV2`, `main` e `gh-pages`.
+  *Regra*: publicar a versão validada em `NandapedV2`, `main` e `gh-pages` (e espelhar em `Chneto/nandaped` quando aplicável).
 - **Bypass do Motor Jekyll (`.nojekyll`)**: Arquivo `.nojekyll` mantido na raiz para impedir que o GitHub Pages oculte pastas com ponto no nome (como `/v2.0/`).
 - **Alias `/v2/`**: Mantido espelhado e idêntico a `/v2.0/` para garantir carregamento instantâneo por qualquer uma das duas rotas.
 

@@ -1,0 +1,12 @@
+{
+  "name": "nanda-financas-pediatria-v8",
+  "version": "8.0.0",
+  "description": "Aplicação de gestão financeira hospitalar e puericultura 100% standalone e offline para iPhone. Criado por FChNeto",
+  "author": "FChNeto",
+  "main": "index.html",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  }
+}

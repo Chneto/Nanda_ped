@@ -1,7 +1,9 @@
-# 🔄 RECOVERY — Finanças Pediatria (Guia de Restauração v6.0.0, v5.0.1, v4_Cloud 4.1.1, v4.0.0, v3.1.1, v3.1.0 & v2.0)
+# 🔄 RECOVERY — Finanças Pediatria (Guia de Restauração v8.0.0, v7.0.0, v6.0.0, v5.0.1, V4_Cloud 4.1.1, v4.0.0, v3.1.1, v3.1.0 & v2.0)
 
 > **Pontos de Restauração Oficiais Disponíveis:**  
-> - **v6.0.0 (Cloud & Sanctuary Edition — CSP Estrita, 23 Categorias, Conflito Otimista & Backups)**: 70 testes aprovados (`v6/`).  
+> - **v8.0.0 (Standalone & Pediatric Sanctuary Edition — 100% Local-First iPhone/iOS, Zero Nuvem, Persistência Tripla, Fontes/Categorias 100% Dinâmicas & UX Delight)**: 99 testes aprovados (`/` e `v8/` — snapshot imutável em `recovery/snapshot_v8.0/`).  
+> - **v7.0.0 (Cloud & Sanctuary Edition — Normalização Unaccent SQL, Diagnósticos Visuais, Modelo Canônico & Sync Relacional)**: 64 testes aprovados (`v7/`).  
+> - **v6.0.0 (Cloud & Sanctuary Edition — CSP Estrita, 23 Categorias, Conflito Otimista & Backups)**: 77 testes aprovados (`v6/`).  
 > - **V4_Cloud v4.1.1 (Padrões sem dados pessoais ou renda pré-preenchida)**: `recovery/snapshot_v4.1.1/`.  
 > - **v5.0.1 (Perfil genérico, locais configuráveis e renda inicial zerada)**: `recovery/snapshot_v5.0.1/`.  
 > - **V4_Cloud v4.1.0 (Autenticação, estado por conta, edição de despesas/categorias)**: 619 testes aprovados (`recovery/snapshot_v4.1.0/`).  
@@ -22,9 +24,10 @@
 
 O projeto dispõe de métodos independentes para restaurar snapshots estáveis a qualquer momento:
 
+- **Snapshot Standalone v8.0.0 (`recovery/snapshot_v8.0/`):** Contém a versão oficial 100% local-first para iPhone/iOS (sem Vercel/Supabase e com abertura instantânea sem login), camada de persistência tripla (`localStorage` + `IndexedDB` `v8_pediatric_db` + `Web Share API` com importação retrocompatível `v2` a `v7`), gestão 100% dinâmica de fontes de renda e categorias no menu hambúrguer com *Soft-Archive*, microinterações UX Delight (edição em 1 toque, Toasts com *Desfazer/Undo*, chips rápidos) e suíte dedicada de 99 testes (incluindo 10.000 ensaios de fuzzing financeiro e validação E2E Playwright iPhone 16 Plus). Para restaurar a raiz e `/v8/`, copie `recovery/snapshot_v8.0/` para `v8/` e execute `node scripts/build_bundle.js`.
 - **Snapshot V4_Cloud 4.1.0 (`recovery/snapshot_v4.1.0/`):** Restaura os arquivos da aplicação Cloud, incluindo endpoint de configuração, melhorias de autenticação, categorias e suíte de 619 testes. O snapshot contém código e documentação, não contém dados do Supabase nem variáveis secretas da Vercel; esses recursos permanecem nos respectivos serviços.
 - **Snapshot V4_Cloud 4.1.1 (`recovery/snapshot_v4.1.1/`):** Restaura a versão Cloud com perfis genéricos e sem renda ou identificadores profissionais pré-preenchidos, preservando autenticação, RLS, categorias e edição de despesas.
-- **Snapshot Standalone 5.0.1 (`recovery/snapshot_v5.0.1/`):** Restaura a versão local com perfil e locais genéricos e renda inicial zerada.
+- **Snapshot Standalone 5.0.1 (`recovery/snapshot_v5.0.1/`):** Restaura a versão local v5 com perfil e locais genéricos e renda inicial zerada.
 - Para restaurar o Cloud, faça cópia do diretório atual `V4_Cloud/` e depois copie o conteúdo do snapshot para ele. Após isso, confira `V4_Cloud/README.md`, as variáveis da Vercel e as migrações já aplicadas no Supabase.
 
 1. **Snapshot v3.1.1 (`recovery/snapshot_v3.1.1/`):** Contém todo o código-fonte com a arquitetura *In-Flow Expansion* anti-crop para dropdowns e seletores, rolagem garantida sem aprisionamento de toque em todos os modais, 6 regimes tributários completos, Pediatric Dark Sanctuary, Menu Hambúrguer, Foto de Perfil da Médica e Blindagem Jurídica (85 testes passando).
@@ -57,7 +60,7 @@ node scripts/restore_v3.1.1.js
 O script executa em sequência:
 - Restauração de todos os arquivos a partir de `recovery/snapshot_v3.1.1/`.
 - Execução de `node scripts/build_bundle.js` para sincronizar o bundle standalone `js/bundle.js`.
-- Na versão vigente 5.0.1, a suíte da raiz foi validada com 120 testes aprovados; a variante V4_Cloud foi validada separadamente com 619 testes aprovados.test.js`) validando 100% de sucesso.
+- Na versão vigente **v8.0.0**, as suítes do repositório totalizam **979 testes aprovados** (120 na raiz, 619 em `V4_Cloud`, 77 em `v6`, 64 em `v7` e 99 em `v8`), validando 100% de sucesso com 0 falhas.
 
 ---
 
