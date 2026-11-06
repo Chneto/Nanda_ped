@@ -16,87 +16,35 @@ function cleanModule(code) {
     .replace(/^export\s+default\s+/gm, '');
 }
 
-// 1. Constrói Bundle Raiz (v5.0 Silk & Rose Gold Master)
+// 1. Sincroniza a Versão Principal (v8.0.0 Standalone & Sanctuary) para a Raiz do Repositório (GitHub Pages Root)
 function buildRootBundle() {
-  const v5Dir = path.join(rootDir, 'v5');
+  const v8Dir = path.join(rootDir, 'v8');
   
-  // Sincroniza v5 para a raiz do repositório
-  if (fs.existsSync(v5Dir)) {
+  if (fs.existsSync(v8Dir)) {
     ['index.html', 'manifest.json', 'sw.js'].forEach(file => {
-      const src = path.join(v5Dir, file);
+      const src = path.join(v8Dir, file);
       const dst = path.join(rootDir, file);
       if (fs.existsSync(src)) fs.copyFileSync(src, dst);
     });
 
-    const cssSrc = path.join(v5Dir, 'css', 'styles.css');
+    const cssSrc = path.join(v8Dir, 'css', 'styles.css');
     const cssDst = path.join(rootDir, 'css', 'styles.css');
     if (fs.existsSync(cssSrc)) {
       fs.mkdirSync(path.join(rootDir, 'css'), { recursive: true });
       fs.copyFileSync(cssSrc, cssDst);
     }
 
-    ['icons.js', 'store.js', 'charts.js', 'app.js'].forEach(file => {
-      const src = path.join(v5Dir, 'js', file);
+    ['app.js', 'icons.js', 'storage.js', 'store.js', 'ui.js'].forEach(file => {
+      const src = path.join(v8Dir, 'js', file);
       const dst = path.join(rootDir, 'js', file);
       if (fs.existsSync(src)) {
         fs.mkdirSync(path.join(rootDir, 'js'), { recursive: true });
         fs.copyFileSync(src, dst);
       }
     });
+
+    console.log('Raiz sincronizada com Finanças Pediatria v8.0.0 Standalone.');
   }
-
-  const iconsPath = path.join(rootDir, 'js', 'icons.js');
-  const storePath = path.join(rootDir, 'js', 'store.js');
-  const chartsPath = path.join(rootDir, 'js', 'charts.js');
-  const appPath = path.join(rootDir, 'js', 'app.js');
-  const bundlePath = path.join(rootDir, 'js', 'bundle.js');
-
-  let iconsCode = cleanModule(fs.readFileSync(iconsPath, 'utf8'));
-  let storeCode = cleanModule(fs.readFileSync(storePath, 'utf8'));
-  let chartsCode = cleanModule(fs.existsSync(chartsPath) ? fs.readFileSync(chartsPath, 'utf8') : '');
-  let appCode = cleanModule(fs.readFileSync(appPath, 'utf8'));
-
-  const bundle = `/**
- * Finanças Pediatria v5.0 - Unified Standalone Bundle (Root Master)
- * Self-contained for zero-CORS file:// protocol and offline execution
- * Autor Imutável: FChNeto (APP_CREATOR = 'FChNeto')
- */
-(function() {
-  'use strict';
-
-  // --- ICONS SYSTEM ---
-  ${iconsCode}
-
-  // Fallback global de ícones para o escopo do window
-  if (typeof window !== 'undefined') {
-    window.getIconSvg = getIconSvg;
-    window.getIcon = getIcon;
-  }
-
-  // --- STORE ENGINE ---
-  ${storeCode}
-
-  // --- CHARTS ENGINE ---
-  ${chartsCode}
-
-  // --- APPLICATION LOGIC ---
-  ${appCode}
-
-  // Auto-inicialização imediata e segura
-  if (typeof window !== 'undefined') {
-    if (!window.app && typeof PediatricApp !== 'undefined') {
-      try {
-        window.app = new PediatricApp();
-      } catch (e) {
-        console.warn('Auto-init PediatricApp:', e);
-      }
-    }
-  }
-})();
-`;
-
-  fs.writeFileSync(bundlePath, bundle, 'utf8');
-  console.log('Root bundle escrito em:', bundlePath);
 }
 
 // 2. Constrói Bundle v2.0 (Sanctuary Minimalist)

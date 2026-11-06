@@ -32,13 +32,14 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activate: Purge older cache versions and claim clients
+// Activate: Purge older cache versions (including legacy v5 root cache) and claim clients
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.filter((key) => key !== CACHE_NAME && (
           key.startsWith('nanda-') || 
+          key.startsWith('financas-ped-') ||
           key.startsWith('financas-pediatria-')
         )).map((key) => caches.delete(key))
       );

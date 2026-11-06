@@ -1,65 +1,15 @@
 /**
- * Finanças Pediatria V4_Cloud - UI Controller & View Manager
- * Design System: "Silk & Rose Gold" para Médica
- * Autor Canônico: FChNeto (APP_CREATOR = 'FChNeto')
- * 
- * Invariantes & Princípios Arquiteturais:
- * 1. Mobile-First iPhone 16 Plus (Safe-Areas & Anti-Zoom Shield >= 16px).
- * 2. In-Flow Expansion Anti-Crop para Modais (position: relative !important).
- * 3. Pure Inline SVGs (Anti-Blowout de ligaduras de fontes no iOS Safari).
- * 4. 3 Abas Essenciais: Início (Dashboard), Ganhos (Plantões), Despesas (com 6 Macro-Grupos).
- * 5. Pré-Seleção Rápida de Maternidades (Maternidade Principal, Maternidade Secundária, Hospital Pediátrico) em 1 toque.
- * 6. Visual Sync Badge com 5 estados (guest, synced, syncing, offline, error).
+ * Finanças Pediatria /v8/ - Camada de Apresentação e UI Ergonomicamente Blindada
+ * Standalone Local-First • Anti-XSS Sanitization • Microinterações Acolhedoras
+ * Criado por: FChNeto (APP_CREATOR = 'FChNeto')
  */
 
-export const APP_CREATOR = 'FChNeto';
-export const APP_VERSION = '4.0.0';
+import { APP_CREATOR, formatCurrency, formatDateBR, formatMonthYear, getLocalDateString, addMonthsToDateString, getCategoryKey, normalizeCategoryName, MACRO_GROUPS } from './store.js';
+import { getIconSvg, sanitizeColor } from './icons.js';
 
-import {
-  CANONICAL_CATEGORIES,
-  DEFAULT_CATEGORIES,
-  MACRO_GROUPS,
-  DEFAULT_HOSPITALS,
-  formatCurrency,
-  formatDateBR,
-  formatMonthYear,
-  getLocalDateString,
-  addMonthsToDateString,
-  calculateShiftInstallments,
-  generateExpenseInstallments,
-  getMacroGroupForCategory
-} from './store.js';
-
-import { isGuestMode, isOfflineMode } from './config.js';
-
-// ============================================================================
-// 1. SISTEMA DE ÍCONES SVG EMBUTIDOS (BLINDAGEM ANTI-BLOWOUT COM FALLBACK)
-// ============================================================================
-
-export const FALLBACK_SVGS = {
-  stethoscope: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 3v5a4.5 4.5 0 0 0 9 0V3"/><path d="M9 12.5v3.5a4 4 0 0 0 8 0v-2"/><circle cx="17" cy="12" r="2"/><circle cx="4.5" cy="3" r="1.5"/><circle cx="13.5" cy="3" r="1.5"/></svg>',
-  hospital: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/><path d="M9 10h6"/><path d="M12 7v6"/></svg>',
-  calendar: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
-  check: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
-  close: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>',
-  delete: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>',
-  edit: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>',
-  cart: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>',
-  dollar: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
-  home: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
-  wallet: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0"/><path d="M2 9.5h20"/><circle cx="16" cy="14" r="1.5"/></svg>',
-  credit_card: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
-  sparkles: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3Z"/></svg>',
-  tag: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2H2v10l9.29 9.29c.94.94 2.48.94 3.42 0l6.58-6.58c.94-.94.94-2.48 0-3.42L12 2Z"/><path d="M7 7h.01"/></svg>',
-  sync: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/></svg>',
-  alert: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
-  plus: '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>'
-};
-
-// ============================================================================
-// SANITIZAÇÃO DE HTML & BLINDAGEM CONTRA DOM XSS
-// ============================================================================
-
+/**
+ * Sanitiza strings para inserção segura no DOM (Previne DOM XSS)
+ */
 export function escapeHtml(str) {
   if (str === null || str === undefined) return '';
   return String(str)
@@ -70,55 +20,29 @@ export function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
-export function getIconSvg(name, options = {}) {
-  const size = typeof options === 'number' ? options : (options?.size || 20);
-  const color = options?.color || 'currentColor';
-  const extraClass = options?.className || options?.extraClass || '';
-
-  const hasIcon = Object.prototype.hasOwnProperty.call(FALLBACK_SVGS, name) && typeof FALLBACK_SVGS[name] === 'string';
-  const rawSvg = hasIcon ? FALLBACK_SVGS[name] : FALLBACK_SVGS.tag;
-  return rawSvg
-    .replace(/width="[^"]*"/, `width="${size}"`)
-    .replace(/height="[^"]*"/, `height="${size}"`)
-    .replace('<svg ', `<svg class="${extraClass}" style="${color !== 'currentColor' ? `color: ${color}; stroke: ${color};` : ''}" `);
-}
-
-// ============================================================================
-// 2. CLASSE CONTROLADORA DA INTERFACE DE USUÁRIO (PediatricUI)
-// ============================================================================
-
 export class PediatricUI {
-  constructor(store) {
+  constructor(store, storage) {
     this.store = store;
-    this.currentTab = 'home'; // 'home' | 'income' | 'expenses'
-    this.activeExpenseFilter = 'all'; // 'all' | macroId
-    this.activeModal = null;
-    this.prefilledHospital = '';
+    this.storage = storage;
+    this.activeTab = 'home';
+    this.selectedMacroFilter = 'all';
+    this.editingShiftId = null;
+    this.editingExpenseId = null;
+    this.undoToastTimer = null;
+  }
 
-    this.initDOMReferences();
+  init() {
     this.bindGlobalEvents();
+    this.render();
   }
 
-  initDOMReferences() {
-    this.viewHome = document.getElementById('view-home');
-    this.viewIncome = document.getElementById('view-income');
-    this.viewExpenses = document.getElementById('view-expenses');
-    this.syncBadge = document.getElementById('sync-badge');
-    this.toastContainer = document.getElementById('toast-container');
-    this.monthTitle = document.getElementById('current-month-title');
-    this.regimePill = document.getElementById('current-regime-pill');
-    this.doctorNameHeader = document.getElementById('header-doctor-name');
-    this.doctorRoleHeader = document.getElementById('header-doctor-role');
-    this.avatarImg = document.getElementById('doctor-avatar-img');
-    this.avatarFallback = document.getElementById('doctor-avatar-fallback');
-  }
+  // =========================================================================
+  // DELEGAÇÃO DE EVENTOS GLOBAIS (ZERO HANDLERS INLINE NO HTML)
+  // =========================================================================
 
   bindGlobalEvents() {
-    if (this._eventsBound) return;
-    this._eventsBound = true;
-
+    // 1. Navegação por Abas (Inferior)
     document.addEventListener('click', (e) => {
-      // 1. Navegação de Abas Inferiores
       const tabBtn = e.target.closest('[data-tab]');
       if (tabBtn) {
         const tab = tabBtn.getAttribute('data-tab');
@@ -126,1126 +50,1687 @@ export class PediatricUI {
         return;
       }
 
-      // 2. Chips de Pré-Seleção de Maternidades (Maternidade Principal, Maternidade Secundária, etc.)
-      const hospChip = e.target.closest('[data-quick-hospital]');
-      if (hospChip) {
-        const hospitalName = hospChip.getAttribute('data-quick-hospital');
-        this.selectHospitalChip(hospitalName);
+      // 2. Modais: Abertura e Fechamento
+      const openModalBtn = e.target.closest('[data-open-modal]');
+      if (openModalBtn) {
+        const target = openModalBtn.getAttribute('data-open-modal');
+        this.openModal(target);
         return;
       }
 
-      // 3. Botão Flutuante Central FAB (+) e Botões de Ação Rápida
-      const fabBtn = e.target.closest('#fab-add-btn');
-      if (fabBtn) {
-        this.openModal('#modal-shift');
+      const closeModalBtn = e.target.closest('[data-close-modal]');
+      if (closeModalBtn) {
+        const target = closeModalBtn.getAttribute('data-close-modal');
+        this.closeModal(target);
         return;
       }
 
-      const quickShiftBtn = e.target.closest('#btn-quick-add-shift');
-      if (quickShiftBtn) {
-        this.openModal('#modal-shift');
-        return;
-      }
-
-      const quickExpenseBtn = e.target.closest('#btn-quick-add-expense');
-      if (quickExpenseBtn) {
-        this.openModal('#modal-expense');
-        return;
-      }
-
-      // Seletores de Regime (Caixa vs Competência)
+      // 3. Regime Contábil: Caixa vs Competência
       const regimeBtn = e.target.closest('[data-regime]');
       if (regimeBtn) {
-        const selectedRegime = regimeBtn.getAttribute('data-regime');
-        if (selectedRegime && ['caixa', 'competencia'].includes(selectedRegime)) {
-          this.store.data.preferences.regime = selectedRegime;
-          this.store.save();
-          this.showToast(`Modo alterado para ${selectedRegime === 'caixa' ? 'Regime de Caixa' : 'Regime de Competência'}.`, 'info');
+        const regime = regimeBtn.getAttribute('data-regime');
+        this.store.data.preferences.regime = regime;
+        this.store.save();
+        this.render();
+        return;
+      }
+
+      // 4. Navegação de Mês
+      const prevMonthBtn = e.target.closest('#btn-prev-month');
+      if (prevMonthBtn) {
+        this.changeMonth(-1);
+        return;
+      }
+
+      const nextMonthBtn = e.target.closest('#btn-next-month');
+      if (nextMonthBtn) {
+        this.changeMonth(1);
+        return;
+      }
+
+      // 5. Botões de Ação Rápida no Topo
+      if (e.target.closest('#btn-quick-add-shift') || e.target.closest('#btn-add-shift-quick')) {
+        this.openShiftModal();
+        return;
+      }
+
+      if (e.target.closest('#btn-quick-add-expense') || e.target.closest('#btn-add-expense-quick')) {
+        this.openExpenseModal();
+        return;
+      }
+
+      if (e.target.closest('#fab-add-btn')) {
+        if (this.activeTab === 'income') {
+          this.openShiftModal();
+        } else {
+          this.openExpenseModal();
+        }
+        return;
+      }
+
+      // 6. Chips de Lançamento Rápido no Topo da Home
+      const quickChip = e.target.closest('[data-quick-hospital]');
+      if (quickChip) {
+        const hosp = quickChip.getAttribute('data-quick-hospital');
+        this.openShiftModal({ hospital: hosp });
+        return;
+      }
+
+      // 7. Filtro por Macro-Grupo na Aba Despesas
+      const macroFilterBtn = e.target.closest('[data-macro-filter]');
+      if (macroFilterBtn) {
+        this.selectedMacroFilter = macroFilterBtn.getAttribute('data-macro-filter');
+        this.renderExpensesView();
+        return;
+      }
+
+      // 8. Toque em Item de Plantão (Single-Tap Edit ou Toggle de Parcela)
+      const toggleInstallmentBtn = e.target.closest('[data-toggle-installment]');
+      if (toggleInstallmentBtn) {
+        e.stopPropagation();
+        const shiftId = toggleInstallmentBtn.getAttribute('data-shift-id');
+        const instNum = parseInt(toggleInstallmentBtn.getAttribute('data-toggle-installment'), 10);
+        this.store.toggleShiftInstallment(shiftId, instNum);
+        this.render();
+        return;
+      }
+
+      const deleteShiftBtn = e.target.closest('[data-delete-shift]');
+      if (deleteShiftBtn) {
+        e.stopPropagation();
+        const shiftId = deleteShiftBtn.getAttribute('data-delete-shift');
+        const deleted = this.store.deleteShift(shiftId);
+        if (deleted) {
+          this.showToastWithUndo(`Plantão ${escapeHtml(deleted.source_name_snapshot)} excluído`, () => {
+            this.store.restoreShift(deleted);
+            this.render();
+          });
           this.render();
         }
         return;
       }
 
-      // Itens de Navegação do Drawer Hambúrguer
-      const drawerItemCats = e.target.closest('#drawer-item-categories');
-      if (drawerItemCats) {
-        const drawer = document.getElementById('menu-drawer');
-        if (drawer) drawer.classList.add('hidden');
-        this.openModal('#modal-categories');
+      const shiftCard = e.target.closest('[data-shift-card-id]');
+      if (shiftCard && !e.target.closest('button')) {
+        const shiftId = shiftCard.getAttribute('data-shift-card-id');
+        this.openShiftModal({ shiftId });
         return;
       }
 
-      const drawerItemHub = e.target.closest('#drawer-item-hub');
-      if (drawerItemHub) {
-        const drawer = document.getElementById('menu-drawer');
-        if (drawer) drawer.classList.add('hidden');
-        this.openModal('#modal-hub');
-        return;
-      }
-
-      // 4. Fechamento de Modais (Overlay ou Botão Fechar)
-      const closeTrigger = e.target.closest('[data-close-modal]') || e.target.closest('.modal-close-btn');
-      if (closeTrigger) {
-        const modalTarget = closeTrigger.getAttribute('data-close-modal') || (this.activeModal ? `#${this.activeModal.id}` : null);
-        if (modalTarget) {
-          this.closeModal(modalTarget);
-        } else {
-          this.closeModal();
-        }
-        return;
-      }
-
-      // Fechar modal ao clicar no backdrop (fora da folha .modal-sheet)
-      const backdrop = e.target.closest('.modal-backdrop');
-      if (backdrop && e.target === backdrop) {
-        this.closeModal(`#${backdrop.id}`);
-        return;
-      }
-
-      // 5. Toggle de Parcela Recebida em Plantão (D+60 ou D+90)
-      const toggleInstallmentBtn = e.target.closest('[data-toggle-installment]');
-      if (toggleInstallmentBtn) {
-        const shiftId = toggleInstallmentBtn.getAttribute('data-shift-id');
-        const instNum = parseInt(toggleInstallmentBtn.getAttribute('data-toggle-installment'), 10);
-        this.handleToggleShiftInstallment(shiftId, instNum);
-        return;
-      }
-
-      // 6. Exclusão de Plantão
-      const deleteShiftBtn = e.target.closest('[data-delete-shift]');
-      if (deleteShiftBtn) {
-        const shiftId = deleteShiftBtn.getAttribute('data-delete-shift');
-        this.handleDeleteShift(shiftId);
-        return;
-      }
-
-      // 7. Exclusão de Despesa
+      // 9. Toque em Item de Despesa (Single-Tap Edit ou Exclusão)
       const deleteExpenseBtn = e.target.closest('[data-delete-expense]');
       if (deleteExpenseBtn) {
+        e.stopPropagation();
         const expId = deleteExpenseBtn.getAttribute('data-delete-expense');
-        this.handleDeleteExpense(expId);
-        return;
-      }
-
-      // 8. Filtro de Macro-Grupos na Aba de Despesas
-      const macroFilterChip = e.target.closest('[data-macro-filter]');
-      if (macroFilterChip) {
-        const macroId = macroFilterChip.getAttribute('data-macro-filter');
-        this.setExpenseFilter(macroId);
-        return;
-      }
-
-      // 9. Pills de Hospital dentro do Modal de Plantão
-      const modalHospPill = e.target.closest('[data-modal-hosp]');
-      if (modalHospPill) {
-        const hospValue = modalHospPill.getAttribute('data-modal-hosp');
-        const input = document.getElementById('shift-hospital-input');
-        if (input) {
-          input.value = hospValue;
-          document.querySelectorAll('.modal-hosp-pill').forEach(p => p.classList.remove('selected'));
-          modalHospPill.classList.add('selected');
+        const deleted = this.store.deleteExpense(expId);
+        if (deleted) {
+          this.showToastWithUndo(`Despesa "${escapeHtml(deleted.description)}" excluída`, () => {
+            this.store.restoreExpense(deleted);
+            this.render();
+          });
+          this.render();
         }
+        return;
+      }
+
+      const expenseCard = e.target.closest('[data-expense-card-id]');
+      if (expenseCard && !e.target.closest('button')) {
+        const expId = expenseCard.getAttribute('data-expense-card-id');
+        this.openExpenseModal({ expenseId: expId });
+        return;
+      }
+
+      // 10. Drawer Menu Hambúrguer
+      if (e.target.closest('#btn-header-menu')) {
+        this.openDrawer();
+        return;
+      }
+
+      if (e.target.closest('#btn-close-drawer') || (e.target.id === 'drawer-menu' && !e.target.closest('.drawer-panel'))) {
+        this.closeDrawer();
+        return;
+      }
+
+      // 11. Itens do Drawer
+      if (e.target.closest('#drawer-item-profile') || e.target.closest('#btn-header-profile')) {
+        this.closeDrawer();
+        this.openProfileModal();
+        return;
+      }
+
+      if (e.target.closest('#drawer-item-income-sources')) {
+        this.closeDrawer();
+        this.openIncomeSourcesModal();
+        return;
+      }
+
+      if (e.target.closest('#drawer-item-categories')) {
+        this.closeDrawer();
+        this.openCategoriesModal();
+        return;
+      }
+
+      if (e.target.closest('#drawer-item-hub')) {
+        this.closeDrawer();
+        this.openHubModal();
+        return;
+      }
+
+      if (e.target.closest('#drawer-item-theme') || e.target.closest('#btn-header-theme')) {
+        this.toggleTheme();
+        return;
+      }
+
+      if (e.target.closest('#drawer-item-backup')) {
+        this.closeDrawer();
+        this.exportBackup();
+        return;
+      }
+
+      if (e.target.closest('#drawer-item-restore')) {
+        this.closeDrawer();
+        const fileInput = document.getElementById('backup-file-input');
+        if (fileInput) fileInput.click();
+        return;
+      }
+
+      if (e.target.closest('#drawer-item-reset')) {
+        this.closeDrawer();
+        this.openResetConfirmModal();
+        return;
+      }
+
+      // Fechamento de backdrop de modal ao clicar fora
+      if (e.target.classList.contains('modal-backdrop')) {
+        e.target.classList.add('hidden');
+      }
+    });
+
+    // Submissão de Formulários
+    document.addEventListener('submit', (e) => {
+      if (e.target.id === 'form-new-shift') {
+        e.preventDefault();
+        this.handleSaveShift(e.target);
+        return;
+      }
+
+      if (e.target.id === 'form-new-expense') {
+        e.preventDefault();
+        this.handleSaveExpense(e.target);
+        return;
+      }
+
+      if (e.target.id === 'form-profile') {
+        e.preventDefault();
+        this.handleSaveProfile(e.target);
+        return;
+      }
+
+      if (e.target.id === 'form-add-income-source') {
+        e.preventDefault();
+        this.handleAddIncomeSource(e.target);
+        return;
+      }
+
+      if (e.target.id === 'form-add-category') {
+        e.preventDefault();
+        this.handleAddCategory(e.target);
         return;
       }
     });
 
+    // Importação de Arquivo de Backup
+    const fileInput = document.getElementById('backup-file-input');
+    if (fileInput) {
+      fileInput.addEventListener('change', async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        try {
+          const text = await file.text();
+          const result = this.storage.importBackup(text, this.store);
+          if (result.success) {
+            this.showToast(`Backup restaurado! ${result.countShifts} plantões e ${result.countExpenses} despesas recuperadas.`);
+            this.render();
+          } else {
+            this.showToast(`Erro na restauração: ${result.error}`, 'error');
+          }
+        } catch (err) {
+          this.showToast(`Falha ao ler arquivo: ${err.message}`, 'error');
+        } finally {
+          fileInput.value = '';
+        }
+      });
+    }
+
+    // Tecla Escape fecha modais e gavetas
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && this.activeModal) {
-        this.closeModal(`#${this.activeModal.id}`);
+      if (e.key === 'Escape') {
+        this.closeAllModals();
+        this.closeDrawer();
       }
     });
   }
 
-  // ==========================================================================
-  // 3. NAVEGAÇÃO DE ABAS PRIMÁRIAS
-  // ==========================================================================
+  // =========================================================================
+  // NAVEGAÇÃO DE ABAS & MESES
+  // =========================================================================
 
   switchTab(tabName) {
     if (!['home', 'income', 'expenses'].includes(tabName)) return;
+    this.activeTab = tabName;
 
-    this.currentTab = tabName;
-
-    document.querySelectorAll('.nav-tab').forEach((btn) => {
-      if (btn.getAttribute('data-tab') === tabName) {
-        btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
-      } else {
-        btn.classList.remove('active');
-        btn.setAttribute('aria-selected', 'false');
-      }
+    // Atualiza botões da barra inferior
+    document.querySelectorAll('.bottom-nav-bar .nav-tab').forEach(btn => {
+      const isMatch = btn.getAttribute('data-tab') === tabName;
+      btn.classList.toggle('active', isMatch);
     });
 
-    if (this.viewHome) {
-      if (tabName === 'home') {
-        this.viewHome.classList.remove('hidden');
-        this.viewHome.classList.add('active');
-      } else {
-        this.viewHome.classList.add('hidden');
-        this.viewHome.classList.remove('active');
-      }
-    }
+    // Atualiza views
+    document.querySelectorAll('.app-view').forEach(view => {
+      view.classList.add('hidden');
+    });
 
-    if (this.viewIncome) {
-      if (tabName === 'income') {
-        this.viewIncome.classList.remove('hidden');
-        this.viewIncome.classList.add('active');
-      } else {
-        this.viewIncome.classList.add('hidden');
-        this.viewIncome.classList.remove('active');
-      }
-    }
-
-    if (this.viewExpenses) {
-      if (tabName === 'expenses') {
-        this.viewExpenses.classList.remove('hidden');
-        this.viewExpenses.classList.add('active');
-      } else {
-        this.viewExpenses.classList.add('hidden');
-        this.viewExpenses.classList.remove('active');
-      }
-    }
+    const targetView = document.getElementById(`view-${tabName}`);
+    if (targetView) targetView.classList.remove('hidden');
 
     this.render();
+  }
 
-    if (typeof window !== 'undefined' && window.scrollTo) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+  changeMonth(delta) {
+    const current = this.store.data.preferences.activeMonth || getLocalDateString().slice(0, 7);
+    const parts = current.split('-');
+    let y = parseInt(parts[0], 10);
+    let m = parseInt(parts[1], 10) - 1 + delta;
+    y += Math.floor(m / 12);
+    m = ((m % 12) + 12) % 12;
+
+    const nextMonth = `${y}-${String(m + 1).padStart(2, '0')}`;
+    this.store.data.preferences.activeMonth = nextMonth;
+    this.store.save();
+    this.render();
+  }
+
+  // =========================================================================
+  // RENDERIZAÇÃO PRINCIPAL DO APLICATIVO
+  // =========================================================================
+
+  render() {
+    const activeMonth = this.store.data.preferences.activeMonth || getLocalDateString().slice(0, 7);
+    const regime = this.store.data.preferences.regime || 'caixa';
+    const summary = this.store.getMonthSummary(activeMonth, regime);
+
+    // 1. Cabeçalho e Mês Atual
+    const monthTitle = document.getElementById('current-month-title');
+    if (monthTitle) monthTitle.textContent = formatMonthYear(activeMonth);
+
+    const heroMonthLabel = document.getElementById('hero-month-label');
+    if (heroMonthLabel) heroMonthLabel.textContent = formatMonthYear(activeMonth);
+
+    const regimePill = document.getElementById('current-regime-pill');
+    if (regimePill) {
+      regimePill.textContent = regime === 'caixa' ? 'Regime de Caixa' : 'Regime de Competência';
     }
 
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new CustomEvent('v4_cloud_tab_changed', {
-        detail: { tab: tabName }
-      }));
+    // Toggle de botões de regime
+    document.querySelectorAll('.regime-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-regime') === regime);
+    });
+
+    // 2. Perfil da Médica no Cabeçalho
+    const doctorName = document.getElementById('header-doctor-name');
+    if (doctorName) doctorName.textContent = escapeHtml(this.store.data.doctorName || 'Médica');
+
+    const doctorRole = document.getElementById('header-doctor-role');
+    if (doctorRole) doctorRole.textContent = escapeHtml(this.store.data.doctorRole || 'Pediatra (R3)');
+
+    const avatarImg = document.getElementById('doctor-avatar-img');
+    const avatarFallback = document.getElementById('doctor-avatar-fallback');
+    if (avatarImg && avatarFallback) {
+      if (this.store.data.doctorPhoto) {
+        avatarImg.src = this.store.data.doctorPhoto;
+        avatarImg.classList.remove('hidden');
+        avatarFallback.classList.add('hidden');
+      } else {
+        avatarImg.classList.add('hidden');
+        avatarFallback.classList.remove('hidden');
+      }
+    }
+
+    // 3. Renderiza a Aba Ativa
+    if (this.activeTab === 'home') {
+      this.renderHomeView(summary);
+    } else if (this.activeTab === 'income') {
+      this.renderIncomeView(summary);
+    } else if (this.activeTab === 'expenses') {
+      this.renderExpensesView(summary);
+    }
+
+    // 4. Renderiza Chips de Topo
+    this.renderTopMaternityChips();
+  }
+
+  // =========================================================================
+  // ABA 1: INÍCIO (DASHBOARD & BALANÇO PEDIÁTRICO)
+  // =========================================================================
+
+  renderHomeView(summary) {
+    // Saldo e Totais
+    const balanceEl = document.getElementById('hero-balance-value');
+    if (balanceEl) {
+      balanceEl.textContent = formatCurrency(summary.balance);
+      balanceEl.classList.toggle('negative', summary.balance < 0);
+    }
+
+    const totalIncomeEl = document.getElementById('stat-total-income');
+    if (totalIncomeEl) totalIncomeEl.textContent = formatCurrency(summary.totalIncome);
+
+    const totalExpensesEl = document.getElementById('stat-total-expenses');
+    if (totalExpensesEl) totalExpensesEl.textContent = formatCurrency(summary.totalExpenses);
+
+    // Representação Visual 1: Previsão de 6 Meses
+    const forecastContainer = document.getElementById('home-forecast-container');
+    if (forecastContainer) {
+      const forecast = this.store.getForecast6Months(this.store.data.preferences.activeMonth);
+      forecastContainer.innerHTML = this.renderForecastChart(forecast);
+    }
+
+    // Representação Visual 2: Donut de Gastos
+    const donutContainer = document.getElementById('home-donut-container');
+    const donutBadge = document.getElementById('donut-item-count');
+    if (donutContainer) {
+      if (donutBadge) donutBadge.textContent = `${summary.expensesCount} lançamentos`;
+      donutContainer.innerHTML = this.renderDonutChart(summary.categoryBreakdown, summary.totalExpenses);
+    }
+
+    // Representação Visual 3: Comparativo Caixa vs Competência
+    const compContainer = document.getElementById('home-comparison-container');
+    if (compContainer) {
+      compContainer.innerHTML = `
+        <div class="comp-box">
+          <div class="comp-row">
+            <span>Caixa Real Efetivado (Recebido):</span>
+            <strong style="color: #26A69A;">${formatCurrency(summary.shiftInflowRealized)}</strong>
+          </div>
+          <div class="comp-row">
+            <span>A Receber em Aberto (D+60/D+90):</span>
+            <strong style="color: #FFA726;">${formatCurrency(summary.shiftInflowPending)}</strong>
+          </div>
+          <div class="comp-row">
+            <span>Produção Realizada no Mês:</span>
+            <strong style="color: #EC407A;">${formatCurrency(summary.shiftProductionTotal)}</strong>
+          </div>
+        </div>
+      `;
     }
   }
 
-  // ==========================================================================
-  // 4. GESTÃO DE MODAIS COM ARQUITETURA IN-FLOW EXPANSION (ANTI-CROP)
-  // ==========================================================================
+  // =========================================================================
+  // ABA 2: GANHOS & PLANTÕES
+  // =========================================================================
 
-  openModal(modalSelector, options = {}) {
-    const modalEl = document.querySelector(modalSelector);
-    if (!modalEl) {
-      console.warn(`[PediatricUI] Modal ${modalSelector} não encontrado no DOM.`);
+  renderIncomeView(summary) {
+    // Card da Bolsa Residência
+    const salary = this.store.data.residencySalary;
+    const salaryDisplay = document.getElementById('salary-display-value');
+    const salaryBadge = document.getElementById('salary-status-badge');
+    if (salaryDisplay) {
+      salaryDisplay.textContent = formatCurrency(salary?.value || 0);
+    }
+    if (salaryBadge) {
+      const active = Boolean(salary?.active);
+      salaryBadge.textContent = active ? 'Ativa' : 'Pausada';
+      salaryBadge.className = `badge-status-pill ${active ? 'mint' : 'muted'}`;
+    }
+
+    // Lista de Plantões
+    const container = document.getElementById('shifts-list-container');
+    if (!container) return;
+
+    const activeMonth = this.store.data.preferences.activeMonth || getLocalDateString().slice(0, 7);
+    const isCaixa = this.store.data.preferences.regime === 'caixa';
+
+    // Filtra plantões aplicáveis ao mês
+    const shifts = this.store.data.shifts.filter(s => {
+      if (isCaixa) {
+        return (s.installments || []).some(i => i.date && i.date.startsWith(activeMonth));
+      }
+      return s.date && s.date.startsWith(activeMonth);
+    });
+
+    if (shifts.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state-card">
+          ${getIconSvg('stethoscope', 40, '#EC407A')}
+          <h4>Nenhum plantão registrado</h4>
+          <p>Registre seus plantões em sala de parto ou consultas com cálculo automático de D+60 e D+90.</p>
+          <button class="btn-silk-primary" data-action="quick-add-shift" type="button" style="margin-top: 12px;">+ Adicionar Plantão</button>
+        </div>
+      `;
+      const quickBtn = container.querySelector('[data-action="quick-add-shift"]');
+      if (quickBtn) quickBtn.addEventListener('click', () => this.openShiftModal());
       return;
     }
 
-    this.activeModal = modalEl;
-    modalEl.classList.remove('hidden');
-    modalEl.setAttribute('aria-hidden', 'false');
-    modalEl.setAttribute('aria-modal', 'true');
-    modalEl.setAttribute('role', 'dialog');
+    container.innerHTML = shifts.map(shift => {
+      const installmentsHtml = (shift.installments || []).map((inst, idx) => {
+        const isReceived = inst.status === 'received';
+        const num = idx + 1;
+        const inThisMonth = inst.date && inst.date.startsWith(activeMonth);
 
-    // Blindagem In-Flow Expansion no .modal-sheet
-    const sheet = modalEl.querySelector('.modal-sheet');
-    if (sheet && sheet.style) {
-      if (typeof sheet.style.setProperty === 'function') {
-        sheet.style.setProperty('position', 'relative', 'important');
-      } else {
-        sheet.style.position = 'relative';
-      }
-    }
-
-    if (modalSelector === '#modal-shift') {
-      const hospitalPrefill = options.hospital || this.prefilledHospital || 'Maternidade Principal';
-      this.renderShiftModalContent(hospitalPrefill);
-      this.prefilledHospital = '';
-    } else if (modalSelector === '#modal-expense') {
-      this.renderExpenseModalContent();
-    } else if (modalSelector === '#modal-doctor-profile') {
-      this.renderProfileModalContent();
-    } else if (modalSelector === '#modal-categories') {
-      this.renderCategoriesModalContent();
-    }
-
-    if (typeof document !== 'undefined' && document.body) {
-      document.body.style.overflow = 'hidden';
-    }
-
-    const firstInput = modalEl.querySelector('input, select, textarea');
-    if (firstInput) {
-      setTimeout(() => firstInput.focus(), 80);
-    }
-  }
-
-  closeModal(modalSelector = null) {
-    let modalEl = null;
-    if (modalSelector) {
-      modalEl = document.querySelector(modalSelector);
-    } else if (this.activeModal) {
-      modalEl = this.activeModal;
-    } else {
-      modalEl = document.querySelector('.modal-backdrop:not(.hidden)');
-    }
-
-    if (modalEl) {
-      modalEl.classList.add('hidden');
-      modalEl.setAttribute('aria-hidden', 'true');
-    }
-
-    this.activeModal = null;
-
-    if (typeof document !== 'undefined' && document.body) {
-      document.body.style.overflow = '';
-    }
-  }
-
-  // ==========================================================================
-  // 5. PRÉ-SELEÇÃO RÁPIDA DE MATERNIDADES (1 TOQUE)
-  // ==========================================================================
-
-  selectHospitalChip(hospitalName) {
-    if (!hospitalName) return;
-    this.prefilledHospital = hospitalName;
-
-    document.querySelectorAll('.hospital-chip').forEach((chip) => {
-      if (chip.getAttribute('data-quick-hospital') === hospitalName) {
-        chip.classList.add('active');
-      } else {
-        chip.classList.remove('active');
-      }
-    });
-
-    this.openModal('#modal-shift', { hospital: hospitalName });
-  }
-
-  // ==========================================================================
-  // 6. FORMULÁRIOS DINÂMICOS & CÁLCULOS MATEMÁTICOS EM TEMPO REAL
-  // ==========================================================================
-
-  renderShiftModalContent(defaultHospital = 'Maternidade Principal') {
-    const container = document.getElementById('modal-shift-content');
-    if (!container) return;
-
-    const todayStr = getLocalDateString();
-    const installments = calculateShiftInstallments(0, todayStr);
-
-    container.innerHTML = `
-      <form id="form-new-shift" class="modal-form" novalidate>
-        <div class="input-field-group">
-          <label for="shift-hospital-input" class="silk-input-label">Maternidade / Hospital</label>
-          <input 
-            type="text" 
-            id="shift-hospital-input" 
-            name="hospital" 
-            class="silk-input" 
-            value="${escapeHtml(defaultHospital)}" 
-            required 
-            placeholder="Ex: Maternidade Principal"
-          />
-        </div>
-
-        <div class="modal-hosp-chips-row">
-          <button type="button" class="modal-hosp-pill ${defaultHospital.includes('Maternidade Principal') ? 'selected' : ''}" data-modal-hosp="Maternidade Principal">Maternidade Principal</button>
-          <button type="button" class="modal-hosp-pill ${defaultHospital.includes('Maternidade Secundária') ? 'selected' : ''}" data-modal-hosp="Maternidade Secundária">Maternidade Secundária</button>
-          <button type="button" class="modal-hosp-pill ${defaultHospital === 'Hospital Pediátrico' ? 'selected' : ''}" data-modal-hosp="Hospital Pediátrico">Hospital Pediátrico</button>
-          <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Pediátrico">Hosp. Criança</button>
-          <button type="button" class="modal-hosp-pill" data-modal-hosp="Hospital Geral">Hospital Geral</button>
-        </div>
-
-        <div class="form-row-2">
-          <div class="input-field-group">
-            <label for="shift-date-input" class="silk-input-label">Data Trabalhada</label>
-            <input 
-              type="date" 
-              id="shift-date-input" 
-              name="date" 
-              class="silk-input" 
-              value="${todayStr}" 
-              required 
-            />
-          </div>
-
-          <div class="input-field-group">
-            <label for="shift-type-input" class="silk-input-label">Escala / Turno</label>
-            <select id="shift-type-input" name="shiftType" class="silk-input">
-              <option value="12h Noturno" selected>12h Noturno</option>
-              <option value="12h Diurno">12h Diurno</option>
-              <option value="24h Plantão">24h Plantão</option>
-              <option value="Sobreaviso">Sobreaviso</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row-2">
-          <div class="input-field-group">
-            <label for="shift-gross-input" class="silk-input-label">Valor Bruto (R$)</label>
-            <input 
-              type="number" 
-              step="0.01" 
-              id="shift-gross-input" 
-              name="grossValue" 
-              class="silk-input" 
-              value="" 
-              placeholder="0,00"
-            />
-          </div>
-
-          <div class="input-field-group">
-            <label for="shift-net-input" class="silk-input-label">Valor Líquido (R$)</label>
-            <input 
-              type="number" 
-              step="0.01" 
-              id="shift-net-input" 
-              name="netValue" 
-              class="silk-input" 
-              value="" 
-              required 
-              placeholder="0,00"
-            />
-          </div>
-        </div>
-
-        <div class="shift-split-preview-card" id="shift-split-preview">
-          <div class="split-preview-header">
-            <span class="preview-badge">Regra Sala de Parto</span>
-            <small>Projeção Automática de Recebimento</small>
-          </div>
-          <div class="split-preview-grid">
-            <div class="split-preview-col">
-              <span class="split-percent">75% (D+60)</span>
-              <strong id="preview-val-75" class="split-val">${formatCurrency(installments.installment1.value)}</strong>
-              <small id="preview-date-75" class="split-date">Previsão: ${formatDateBR(installments.installment1.date)}</small>
+        return `
+          <div class="installment-pill ${isReceived ? 'paid' : 'pending'} ${inThisMonth ? 'current-month-highlight' : ''}">
+            <div class="inst-info">
+              <span class="inst-label">${num}ª Parcela (${inst.percentage}%)</span>
+              <span class="inst-date">${formatDateBR(inst.date)}</span>
             </div>
-            <div class="split-preview-divider"></div>
-            <div class="split-preview-col">
-              <span class="split-percent">25% (D+90)</span>
-              <strong id="preview-val-25" class="split-val">${formatCurrency(installments.installment2.value)}</strong>
-              <small id="preview-date-25" class="split-date">Previsão: ${formatDateBR(installments.installment2.date)}</small>
+            <div class="inst-action">
+              <strong class="inst-val">${formatCurrency(inst.value)}</strong>
+              <button 
+                type="button" 
+                class="btn-toggle-status ${isReceived ? 'received' : 'pending'}" 
+                data-shift-id="${shift.id}" 
+                data-toggle-installment="${num}"
+                title="${isReceived ? 'Marcar como Pendente' : 'Marcar como Recebido'}"
+              >
+                ${isReceived ? getIconSvg('check_circle', 18, '#26A69A') : getIconSvg('payments', 18, '#FFA726')}
+                <span>${isReceived ? 'Recebido' : 'Pendente'}</span>
+              </button>
             </div>
           </div>
-        </div>
+        `;
+      }).join('');
 
-        <div class="input-field-group">
-          <label for="shift-notes-input" class="silk-input-label">Observações (Opcional)</label>
-          <input 
-            type="text" 
-            id="shift-notes-input" 
-            name="notes" 
-            class="silk-input" 
-            placeholder="Observação opcional"
-          />
-        </div>
-
-        <div class="modal-actions-row">
-          <button type="button" class="btn-silk-text-danger" data-close-modal="#modal-shift">Cancelar</button>
-          <button type="submit" class="btn-silk-primary">Salvar Plantão</button>
-        </div>
-      </form>
-    `;
-
-    const netInput = document.getElementById('shift-net-input');
-    const dateInput = document.getElementById('shift-date-input');
-
-    const updatePreview = () => {
-      const netVal = parseFloat(netInput?.value) || 0;
-      const dateVal = dateInput?.value || getLocalDateString();
-      const calc = calculateShiftInstallments(netVal, dateVal);
-
-      const val75El = document.getElementById('preview-val-75');
-      const date75El = document.getElementById('preview-date-75');
-      const val25El = document.getElementById('preview-val-25');
-      const date25El = document.getElementById('preview-date-25');
-
-      if (val75El) val75El.textContent = formatCurrency(calc.installment1.value);
-      if (date75El) date75El.textContent = `Previsão: ${formatDateBR(calc.installment1.date)}`;
-      if (val25El) val25El.textContent = formatCurrency(calc.installment2.value);
-      if (date25El) date25El.textContent = `Previsão: ${formatDateBR(calc.installment2.date)}`;
-    };
-
-    if (netInput) netInput.addEventListener('input', updatePreview);
-    if (dateInput) dateInput.addEventListener('change', updatePreview);
-
-    const form = document.getElementById('form-new-shift');
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const fd = new FormData(form);
-        const hospital = fd.get('hospital')?.trim() || 'Maternidade Principal';
-        const date = fd.get('date') || getLocalDateString();
-        const shiftType = fd.get('shiftType') || '12h Noturno';
-        const grossValue = parseFloat(fd.get('grossValue')) || 0;
-        const netValue = parseFloat(fd.get('netValue')) || 0;
-        const notes = fd.get('notes')?.trim() || '';
-
-        if (netValue <= 0) {
-          this.showToast('Informe um valor líquido válido para o plantão.', 'warning');
-          return;
-        }
-
-        this.store.saveShift({
-          hospital,
-          date,
-          shiftType,
-          grossValue: grossValue > 0 ? grossValue : netValue,
-          netValue,
-          notes
-        });
-
-        this.closeModal('#modal-shift');
-        this.showToast('Plantão médico registrado com sucesso! 🩺✨', 'success');
-        this.render();
-      });
-    }
-  }
-
-  renderExpenseModalContent() {
-    const container = document.getElementById('modal-expense-content');
-    if (!container) return;
-
-    const todayStr = getLocalDateString();
-
-    const categoryOptionsHtml = CANONICAL_CATEGORIES.map(cat => {
-      const macro = getMacroGroupForCategory(cat);
-      return `<option value="${escapeHtml(cat)}" data-macro="${escapeHtml(macro.name)}">${escapeHtml(cat)} (${escapeHtml(macro.name)})</option>`;
-    }).join('');
-
-    container.innerHTML = `
-      <form id="form-new-expense" class="modal-form" novalidate>
-        <div class="input-field-group">
-          <label for="expense-description-input" class="silk-input-label">Descrição do Gasto</label>
-          <input 
-            type="text" 
-            id="expense-description-input" 
-            name="description" 
-            class="silk-input" 
-            placeholder="Ex: Livro de Neonatologia, Supermercado" 
-            required 
-          />
-        </div>
-
-        <div class="form-row-2">
-          <div class="input-field-group">
-            <label for="expense-amount-input" class="silk-input-label">Valor (R$)</label>
-            <input 
-              type="number" 
-              step="0.01" 
-              id="expense-amount-input" 
-              name="amount" 
-              class="silk-input" 
-              placeholder="0,00" 
-              required 
-            />
-          </div>
-
-          <div class="input-field-group">
-            <label for="expense-date-input" class="silk-input-label">Data da Despesa</label>
-            <input 
-              type="date" 
-              id="expense-date-input" 
-              name="date" 
-              class="silk-input" 
-              value="${todayStr}" 
-              required 
-            />
-          </div>
-        </div>
-
-        <div class="input-field-group">
-          <label for="expense-category-select" class="silk-input-label">Categoria Canônica (23 Categorias)</label>
-          <select id="expense-category-select" name="category" class="silk-input">
-            ${categoryOptionsHtml}
-          </select>
-        </div>
-
-        <div class="macro-badge-row" id="macro-badge-container">
-          <span class="silk-pill-badge" id="macro-preview-badge">Macro-Grupo: Alimentação</span>
-        </div>
-
-        <div class="installment-toggle-row">
-          <label class="installment-checkbox-label">
-            <input type="checkbox" id="expense-is-installment-checkbox" name="isInstallment" />
-            <span>Compra Parcelada no Cartão?</span>
-          </label>
-        </div>
-
-        <div id="installment-selector-group" class="input-field-group hidden">
-          <label for="expense-installments-select" class="silk-input-label">Número de Parcelas</label>
-          <select id="expense-installments-select" name="totalInstallments" class="silk-input">
-            ${Array.from({ length: 23 }, (_, i) => i + 2).map(n => `<option value="${n}">${n}x</option>`).join('')}
-          </select>
-          <small id="installment-calculation-preview" class="silk-input-hint"></small>
-        </div>
-
-        <div class="modal-actions-row">
-          <button type="button" class="btn-silk-text-danger" data-close-modal="#modal-expense">Cancelar</button>
-          <button type="submit" class="btn-silk-primary">Salvar Despesa</button>
-        </div>
-      </form>
-    `;
-
-    const catSelect = document.getElementById('expense-category-select');
-    const macroBadge = document.getElementById('macro-preview-badge');
-    if (catSelect && macroBadge) {
-      catSelect.addEventListener('change', () => {
-        const selected = catSelect.value;
-        const macro = getMacroGroupForCategory(selected);
-        macroBadge.textContent = `Macro-Grupo: ${macro.name}`;
-      });
-    }
-
-    const instCheck = document.getElementById('expense-is-installment-checkbox');
-    const instGroup = document.getElementById('installment-selector-group');
-    const amountInput = document.getElementById('expense-amount-input');
-    const instSelect = document.getElementById('expense-installments-select');
-    const instPreview = document.getElementById('installment-calculation-preview');
-
-    const updateInstallmentPreview = () => {
-      if (!instCheck?.checked) return;
-      const amt = parseFloat(amountInput?.value) || 0;
-      const count = parseInt(instSelect?.value, 10) || 2;
-      if (amt > 0 && count > 1) {
-        const items = generateExpenseInstallments({ description: '', amount: amt, date: todayStr }, count);
-        const p1 = items[0]?.amount || 0;
-        const pOther = items[1]?.amount || 0;
-        if (instPreview) {
-          instPreview.textContent = `1ª parcela: ${formatCurrency(p1)} + ${count - 1}x de ${formatCurrency(pOther)}`;
-        }
-      } else if (instPreview) {
-        instPreview.textContent = '';
-      }
-    };
-
-    if (instCheck && instGroup) {
-      instCheck.addEventListener('change', () => {
-        if (instCheck.checked) {
-          instGroup.classList.remove('hidden');
-          updateInstallmentPreview();
-        } else {
-          instGroup.classList.add('hidden');
-        }
-      });
-    }
-
-    if (amountInput) amountInput.addEventListener('input', updateInstallmentPreview);
-    if (instSelect) instSelect.addEventListener('change', updateInstallmentPreview);
-
-    const form = document.getElementById('form-new-expense');
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const fd = new FormData(form);
-        const description = fd.get('description')?.trim();
-        const amount = parseFloat(fd.get('amount')) || 0;
-        const date = fd.get('date') || getLocalDateString();
-        const category = fd.get('category') || 'Outros';
-        const isInstallment = Boolean(instCheck?.checked);
-        const totalInstallments = isInstallment ? parseInt(fd.get('totalInstallments'), 10) : 1;
-
-        if (!description) {
-          this.showToast('Informe a descrição da despesa.', 'warning');
-          return;
-        }
-
-        if (amount <= 0) {
-          this.showToast('Informe um valor válido para a despesa.', 'warning');
-          return;
-        }
-
-        this.store.saveExpense({
-          description,
-          amount,
-          date,
-          category,
-          isInstallment,
-          totalInstallments
-        });
-
-        this.closeModal('#modal-expense');
-        this.showToast('Despesa registrada com sucesso! 💳🌸', 'success');
-        this.render();
-      });
-    }
-  }
-
-  renderProfileModalContent() {
-    let modalEl = document.getElementById('modal-doctor-profile');
-    if (!modalEl) {
-      modalEl = document.createElement('div');
-      modalEl.id = 'modal-doctor-profile';
-      modalEl.className = 'modal-backdrop hidden';
-      modalEl.setAttribute('role', 'dialog');
-      modalEl.setAttribute('aria-modal', 'true');
-      modalEl.innerHTML = `
-        <div class="modal-sheet">
-          <header class="modal-header">
-            <div class="modal-title-wrap">
-              <span class="silk-pill-badge">Perfil Médico</span>
-              <h3>Médica</h3>
+      return `
+        <div class="shift-card" data-shift-card-id="${shift.id}" tabindex="0" role="button" aria-label="Editar plantão ${escapeHtml(shift.source_name_snapshot)}">
+          <div class="shift-card-header">
+            <div class="shift-hospital-wrap">
+              <span class="hospital-icon-badge" style="background: rgba(236, 64, 122, 0.12); color: #EC407A;">
+                ${getIconSvg('hospital', 18)}
+              </span>
+              <div>
+                <h3 class="shift-hospital-title">${escapeHtml(shift.source_name_snapshot)}</h3>
+                <span class="shift-date-sub">${formatDateBR(shift.date)} • ${escapeHtml(shift.shiftType || 'Sala de Parto')}</span>
+              </div>
             </div>
-            <button class="modal-close-btn" data-close-modal="#modal-doctor-profile" aria-label="Fechar">
-              ${getIconSvg('close', 20)}
-            </button>
-          </header>
-          <div id="modal-doctor-profile-content"></div>
+            <div class="shift-card-actions">
+              <strong class="shift-net-value">${formatCurrency(shift.net_value)}</strong>
+              <button class="btn-icon-delete" type="button" data-delete-shift="${shift.id}" title="Excluir Plantão">
+                ${getIconSvg('trash', 16, '#EF5350')}
+              </button>
+            </div>
+          </div>
+          <div class="shift-installments-row">
+            ${installmentsHtml}
+          </div>
         </div>
       `;
-      document.body.appendChild(modalEl);
-    }
-
-    const container = document.getElementById('modal-doctor-profile-content');
-    if (!container) return;
-
-    const data = this.store.data;
-    const salaryVal = data.residencySalary?.value || 0.00;
-
-    container.innerHTML = `
-      <form id="form-edit-doctor-profile" class="modal-form" novalidate>
-        <div class="input-field-group">
-          <label for="profile-name-input" class="silk-input-label">Nome Completo</label>
-          <input 
-            type="text" 
-            id="profile-name-input" 
-            name="doctorName" 
-            class="silk-input" 
-            value="${escapeHtml(data.doctorName || 'Médica')}" 
-            required 
-          />
-        </div>
-
-        <div class="form-row-2">
-          <div class="input-field-group">
-            <label for="profile-crm-input" class="silk-input-label">CRM / UF</label>
-            <input 
-              type="text" 
-              id="profile-crm-input" 
-              name="crm" 
-              class="silk-input" 
-              value="${escapeHtml(data.crm || '')}"
-            />
-          </div>
-
-          <div class="input-field-group">
-            <label for="profile-specialty-input" class="silk-input-label">Especialidade</label>
-            <input 
-              type="text" 
-              id="profile-specialty-input" 
-              name="specialty" 
-              class="silk-input" 
-              value="${escapeHtml(data.specialty || 'Pediatria (R3)')}" 
-            />
-          </div>
-        </div>
-
-        <div class="input-field-group">
-          <label for="profile-salary-input" class="silk-input-label">Bolsa Residência Médica Mensal (R$)</label>
-          <input 
-            type="number" 
-            step="0.01" 
-            id="profile-salary-input" 
-            name="salaryValue" 
-            class="silk-input" 
-            value="${escapeHtml(salaryVal)}" 
-            required 
-          />
-        </div>
-
-        <div class="modal-actions-row">
-          <button type="button" class="btn-silk-text-danger" data-close-modal="#modal-doctor-profile">Cancelar</button>
-          <button type="submit" class="btn-silk-primary">Salvar Perfil</button>
-        </div>
-      </form>
-    `;
-
-    const form = document.getElementById('form-edit-doctor-profile');
-    if (form) {
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const fd = new FormData(form);
-        const doctorName = fd.get('doctorName')?.trim() || 'Médica';
-        const crm = fd.get('crm')?.trim();
-        const specialty = fd.get('specialty')?.trim();
-        const salaryValue = parseFloat(fd.get('salaryValue')) || 0.00;
-
-        this.store.updateDoctorProfile({
-          doctorName,
-          crm,
-          specialty,
-          salaryValue
-        });
-
-        this.closeModal('#modal-doctor-profile');
-        this.showToast('Perfil médico atualizado! 🩺✨', 'success');
-        this.render();
-      });
-    }
+    }).join('');
   }
 
-  renderCategoriesModalContent() {
-    const container = document.getElementById('categories-modal-body');
+  // =========================================================================
+  // ABA 3: DESPESAS & MACRO-GRUPOS
+  // =========================================================================
+
+  renderExpensesView(summary = null) {
+    const activeMonth = this.store.data.preferences.activeMonth || getLocalDateString().slice(0, 7);
+    if (!summary) summary = this.store.getMonthSummary(activeMonth);
+
+    // Total
+    const totalEl = document.getElementById('expenses-total-value');
+    if (totalEl) totalEl.textContent = formatCurrency(summary.totalExpenses);
+
+    const countBadge = document.getElementById('expenses-count-badge');
+    if (countBadge) countBadge.textContent = `${summary.expensesCount} itens`;
+
+    // Barra de Filtros de Macro-Grupos
+    const filterBar = document.getElementById('macro-filter-bar');
+    const clearBtn = document.getElementById('btn-clear-macro-filter');
+    if (filterBar) {
+      filterBar.innerHTML = `
+        <button class="macro-chip ${this.selectedMacroFilter === 'all' ? 'active' : ''}" data-macro-filter="all" type="button">
+          Todas
+        </button>
+        ${MACRO_GROUPS.map(mg => `
+          <button class="macro-chip ${this.selectedMacroFilter === mg.name ? 'active' : ''}" data-macro-filter="${escapeHtml(mg.name)}" type="button">
+            ${escapeHtml(mg.name)}
+          </button>
+        `).join('')}
+      `;
+    }
+    if (clearBtn) {
+      clearBtn.classList.toggle('hidden', this.selectedMacroFilter === 'all');
+    }
+
+    // Lista de Despesas
+    const container = document.getElementById('expenses-list-container');
     if (!container) return;
 
-    container.innerHTML = MACRO_GROUPS.map(mg => `
-      <div class="category-group-card" style="margin-bottom: 12px; padding: 14px; border-radius: var(--radius-card, 16px); background: var(--bg-card, #FFF9FA); border: 1px solid var(--silk-border, #FCE4EC);">
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-          <strong style="color: ${mg.color || '#333'}; font-size: 0.95rem;">${escapeHtml(mg.name)}</strong>
-          <span class="silk-badge" style="background: rgba(236, 64, 122, 0.1); color: #EC407A; font-size: 0.75rem; padding: 2px 8px; border-radius: 12px;">${mg.categories.length} categorias</span>
+    let expenses = this.store.data.expenses.filter(e => e.date && e.date.startsWith(activeMonth));
+    if (this.selectedMacroFilter !== 'all') {
+      expenses = expenses.filter(e => (e.macro_group_snapshot || e.macro_group) === this.selectedMacroFilter);
+    }
+
+    if (expenses.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state-card">
+          ${getIconSvg('cart', 40, '#FF7043')}
+          <h4>Nenhuma despesa registrada</h4>
+          <p>Organize suas compras à vista e parceladas com mapeamento automático de categorias.</p>
+          <button class="btn-silk-primary" data-action="quick-add-exp" type="button" style="margin-top: 12px;">+ Adicionar Despesa</button>
         </div>
-        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
-          ${mg.categories.map(c => `
-            <span style="font-size: 0.8rem; background: var(--bg-body, #FFF); border: 1px solid var(--silk-border, #F8BBD0); border-radius: 12px; padding: 3px 8px; color: var(--text-main, #333);">${escapeHtml(c)}</span>
-          `).join('')}
+      `;
+      const quickBtn = container.querySelector('[data-action="quick-add-exp"]');
+      if (quickBtn) quickBtn.addEventListener('click', () => this.openExpenseModal());
+      return;
+    }
+
+    container.innerHTML = expenses.map(exp => {
+      const cat = this.store.getActiveCategories().find(c => getCategoryKey(c.name) === getCategoryKey(exp.category_name_snapshot));
+      const icon = cat?.icon || 'tag';
+      const color = sanitizeColor(cat?.color || '#FF7043');
+      const isInst = Boolean(exp.is_installment || exp.total_installments > 1);
+
+      return `
+        <div class="expense-card" data-expense-card-id="${exp.id}" tabindex="0" role="button" aria-label="Editar despesa ${escapeHtml(exp.description)}">
+          <div class="expense-icon-badge" style="background: ${color}18; color: ${color};">
+            ${getIconSvg(icon, 18, color)}
+          </div>
+          <div class="expense-info-wrap">
+            <h4 class="expense-desc-title">${escapeHtml(exp.description)}</h4>
+            <div class="expense-meta-tags">
+              <span class="category-pill" style="border-color: ${color}40; color: ${color};">
+                ${escapeHtml(exp.category_name_snapshot)}
+              </span>
+              ${isInst ? `<span class="inst-counter-pill">${exp.current_installment}/${exp.total_installments}</span>` : ''}
+              <span class="expense-date-sub">${formatDateBR(exp.date)}</span>
+            </div>
+          </div>
+          <div class="expense-amount-wrap">
+            <strong class="expense-amount-val">${formatCurrency(exp.amount)}</strong>
+            <button class="btn-icon-delete" type="button" data-delete-expense="${exp.id}" title="Excluir Despesa">
+              ${getIconSvg('trash', 16, '#EF5350')}
+            </button>
+          </div>
         </div>
-      </div>
+      `;
+    }).join('');
+  }
+
+  // =========================================================================
+  // CHIPS DE TOPO (MATERNIDADES / FONTES FREQUENTES)
+  // =========================================================================
+
+  renderTopMaternityChips() {
+    const scrollContainer = document.querySelector('.maternity-chips-scroll');
+    if (!scrollContainer) return;
+
+    const sources = this.store.getActiveIncomeSources();
+    scrollContainer.innerHTML = sources.map((s, idx) => `
+      <button 
+        class="hospital-chip ${idx < 2 ? 'highlight' : ''}" 
+        data-quick-hospital="${escapeHtml(s.name)}" 
+        type="button"
+      >
+        + ${escapeHtml(s.name)}
+      </button>
     `).join('');
   }
 
-  // ==========================================================================
-  // 7. NOTIFICAÇÕES FLUTUANTES (TOAST STACK)
-  // ==========================================================================
+  // =========================================================================
+  // MODAIS: NOVO PLANTÃO E EDIÇÃO EM 1 TOQUE
+  // =========================================================================
 
-  showToast(message, type = 'info', duration = 3200) {
-    let container = document.getElementById('toast-container');
-    if (!container) {
-      container = document.createElement('div');
-      container.id = 'toast-container';
-      container.className = 'toast-stack';
-      document.body.appendChild(container);
+  openShiftModal(options = {}) {
+    this.closeAllModals();
+    const modal = document.getElementById('modal-shift');
+    if (!modal) return;
+
+    const titleEl = document.getElementById('modal-shift-title');
+    const form = document.getElementById('form-new-shift');
+    if (!form) return;
+
+    this.editingShiftId = options.shiftId || null;
+    const isEdit = Boolean(this.editingShiftId);
+
+    if (titleEl) {
+      titleEl.textContent = isEdit ? 'Editar Plantão Pediátrico' : 'Novo Plantão Pediátrico';
     }
 
-    const toast = document.createElement('div');
-    toast.className = `silk-toast toast-${type}`;
-    toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
+    let defaultHosp = options.hospital || 'Maternidade Principal';
+    let defaultNet = '';
+    let defaultGross = '';
+    let defaultDate = getLocalDateString();
+    let defaultType = 'Sala de Parto';
+    let defaultNotes = '';
 
-    let iconSvg = getIconSvg('sparkles', { size: 18, color: '#EC407A' });
-    if (type === 'success') iconSvg = getIconSvg('check', { size: 18, color: '#26A69A' });
-    if (type === 'warning') iconSvg = getIconSvg('alert', { size: 18, color: '#FFA726' });
-    if (type === 'error') iconSvg = getIconSvg('close', { size: 18, color: '#EF5350' });
+    if (isEdit) {
+      const shift = this.store.data.shifts.find(s => s.id === this.editingShiftId);
+      if (shift) {
+        defaultHosp = shift.source_name_snapshot;
+        defaultNet = shift.net_value;
+        defaultGross = shift.gross_value;
+        defaultDate = shift.date;
+        defaultType = shift.shiftType;
+        defaultNotes = shift.notes || '';
+      }
+    } else if (options.hospital) {
+      const matched = this.store.getActiveIncomeSources().find(s => getCategoryKey(s.name) === getCategoryKey(options.hospital));
+      if (matched && matched.defaultAmount > 0) {
+        defaultNet = matched.defaultAmount;
+      }
+    }
 
-    toast.innerHTML = `
-      <div class="toast-icon-wrap">${iconSvg}</div>
-      <div class="toast-text">${escapeHtml(message)}</div>
+    // Renderiza o corpo do formulário com chips rápidos no topo
+    const sources = this.store.getActiveIncomeSources();
+    const quickChipsHtml = sources.map(s => `
+      <button 
+        type="button" 
+        class="modal-hosp-pill ${s.name === defaultHosp ? 'selected' : ''}" 
+        data-source-chip="${escapeHtml(s.name)}" 
+        data-default-amount="${s.defaultAmount}"
+        data-source-type="${escapeHtml(s.typeLabel || s.type)}"
+      >
+        ${escapeHtml(s.name)}
+      </button>
+    `).join('');
+
+    form.innerHTML = `
+      <div class="form-group">
+        <label for="shift-hospital-input">Hospital / Maternidade</label>
+        <input 
+          type="text" 
+          id="shift-hospital-input" 
+          name="hospital" 
+          class="form-input silk-input" 
+          value="${escapeHtml(defaultHosp)}" 
+          placeholder="Ex: Maternidade Principal" 
+          required 
+        />
+        <div class="modal-hospital-pills" id="shift-source-chips-container">
+          ${quickChipsHtml}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="shift-date-input">Data do Plantão</label>
+          <input 
+            type="date" 
+            id="shift-date-input" 
+            name="date" 
+            class="form-input silk-input" 
+            value="${escapeHtml(defaultDate)}" 
+            required 
+          />
+        </div>
+        <div class="form-group">
+          <label for="shift-type-input">Tipo de Plantão</label>
+          <input 
+            type="text" 
+            id="shift-type-input" 
+            name="shiftType" 
+            class="form-input silk-input" 
+            value="${escapeHtml(defaultType)}" 
+            placeholder="Ex: Sala de Parto, 12h UTI" 
+          />
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="shift-net-input">Valor Líquido (R$)</label>
+          <input 
+            type="number" 
+            id="shift-net-input" 
+            name="netValue" 
+            class="form-input silk-input" 
+            step="0.01" 
+            min="0" 
+            value="${defaultNet}" 
+            placeholder="0,00" 
+            required 
+          />
+        </div>
+        <div class="form-group">
+          <label for="shift-gross-input">Valor Bruto (Opcional)</label>
+          <input 
+            type="number" 
+            id="shift-gross-input" 
+            name="grossValue" 
+            class="form-input silk-input" 
+            step="0.01" 
+            min="0" 
+            value="${defaultGross}" 
+            placeholder="0,00" 
+          />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="shift-notes-input">Observações Clínicas / Maternidade</label>
+        <textarea 
+          id="shift-notes-input" 
+          name="notes" 
+          class="form-input silk-input" 
+          rows="2" 
+          placeholder="Anotações opcionais (sem dados nominais de pacientes)"
+        >${escapeHtml(defaultNotes)}</textarea>
+      </div>
+
+      <div class="modal-actions-row">
+        <button type="button" class="btn-silk-secondary" data-close-modal="#modal-shift">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-silk-primary">
+          ${isEdit ? 'Atualizar Plantão' : 'Salvar Plantão'}
+        </button>
+      </div>
     `;
 
-    container.appendChild(toast);
+    // Chip click preenche em 1 toque
+    const chipsContainer = form.querySelector('#shift-source-chips-container');
+    if (chipsContainer) {
+      chipsContainer.addEventListener('click', (e) => {
+        const chip = e.target.closest('[data-source-chip]');
+        if (!chip) return;
+        chipsContainer.querySelectorAll('.modal-hosp-pill').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
 
-    setTimeout(() => {
-      toast.classList.add('fade-out');
-      setTimeout(() => {
-        if (toast.parentNode) {
-          toast.parentNode.removeChild(toast);
-        }
-      }, 300);
-    }, duration);
+        const hospInput = form.querySelector('#shift-hospital-input');
+        const netInput = form.querySelector('#shift-net-input');
+        const typeInput = form.querySelector('#shift-type-input');
+
+        if (hospInput) hospInput.value = chip.getAttribute('data-source-chip');
+        const defAmt = parseFloat(chip.getAttribute('data-default-amount'));
+        if (netInput && defAmt > 0) netInput.value = defAmt.toFixed(2);
+        if (typeInput) typeInput.value = chip.getAttribute('data-source-type');
+      });
+    }
+
+    modal.classList.remove('hidden');
   }
 
-  // ==========================================================================
-  // 8. ATUALIZADOR VISUAL DO SYNC BADGE
-  // ==========================================================================
+  handleSaveShift(form) {
+    const hosp = normalizeCategoryName(form.hospital.value);
+    const date = form.date.value || getLocalDateString();
+    const net = parseFloat(form.netValue.value) || 0;
+    const gross = parseFloat(form.grossValue.value) || net;
+    const shiftType = form.shiftType.value || 'Sala de Parto';
+    const notes = form.notes.value || '';
 
-  updateSyncBadge(status, details = {}) {
-    const badge = document.getElementById('sync-badge');
-    if (!badge) return;
+    if (!hosp || net <= 0) {
+      this.showToast('Informe o hospital e o valor líquido do plantão', 'error');
+      return;
+    }
 
-    badge.className = 'sync-badge';
-    const dot = badge.querySelector('.sync-dot');
-    const text = badge.querySelector('.sync-text');
-
-    if (status === 'guest' || isGuestMode()) {
-      badge.classList.add('guest');
-      if (text) text.textContent = 'Modo Local';
-      badge.title = 'Modo Hospitalar Local (sem conexão com a nuvem)';
-    } else if (status === 'syncing') {
-      badge.classList.add('syncing');
-      if (text) text.textContent = 'Sincronizando...';
-      badge.title = 'Transmitindo plantões e despesas para o Supabase';
-    } else if (status === 'offline' || isOfflineMode()) {
-      badge.classList.add('offline');
-      if (text) text.textContent = 'Offline';
-      badge.title = 'Sem rede. Mutações gravadas no IndexedDB local.';
-    } else if (status === 'error') {
-      badge.classList.add('error');
-      if (text) text.textContent = 'Erro de Sync';
-      badge.title = details.message || 'Falha ao sincronizar com a nuvem.';
+    if (this.editingShiftId) {
+      this.store.updateShift(this.editingShiftId, {
+        hospital: hosp,
+        date,
+        netValue: net,
+        grossValue: gross,
+        shiftType,
+        notes
+      });
+      this.showToast('Plantão atualizado com sucesso!');
     } else {
-      badge.classList.add('synced');
-      if (text) text.textContent = 'Sincronizado';
-      badge.title = 'Nuvem Supabase atualizada e protegida por RLS.';
+      this.store.addShift({
+        hospital: hosp,
+        date,
+        netValue: net,
+        grossValue: gross,
+        shiftType,
+        notes
+      });
+      this.showToast('Plantão cadastrado com sucesso!');
+    }
+
+    this.closeModal('#modal-shift');
+    this.render();
+  }
+
+  // =========================================================================
+  // MODAIS: NOVA DESPESA E EDIÇÃO EM 1 TOQUE
+  // =========================================================================
+
+  openExpenseModal(options = {}) {
+    this.closeAllModals();
+    const modal = document.getElementById('modal-expense');
+    if (!modal) return;
+
+    const titleEl = document.getElementById('modal-expense-title');
+    const form = document.getElementById('form-new-expense');
+    if (!form) return;
+
+    this.editingExpenseId = options.expenseId || null;
+    const isEdit = Boolean(this.editingExpenseId);
+
+    if (titleEl) {
+      titleEl.textContent = isEdit ? 'Editar Despesa' : 'Nova Despesa Pediátrica';
+    }
+
+    let defaultDesc = '';
+    let defaultAmount = '';
+    let defaultDate = getLocalDateString();
+    let defaultCat = 'Mercantil';
+    let defaultInstallments = 1;
+
+    if (isEdit) {
+      const exp = this.store.data.expenses.find(e => e.id === this.editingExpenseId);
+      if (exp) {
+        defaultDesc = exp.description;
+        defaultAmount = exp.amount;
+        defaultDate = exp.date;
+        defaultCat = exp.category_name_snapshot;
+        defaultInstallments = exp.total_installments || 1;
+      }
+    }
+
+    const categories = this.store.getActiveCategories();
+    const quickChipsHtml = categories.slice(0, 8).map(c => `
+      <button 
+        type="button" 
+        class="modal-hosp-pill ${c.name === defaultCat ? 'selected' : ''}" 
+        data-cat-chip="${escapeHtml(c.name)}" 
+        data-default-amount="${c.default_amount || ''}"
+        data-default-payment="${c.default_payment_type || 'a_vista'}"
+      >
+        ${escapeHtml(c.name)}
+      </button>
+    `).join('');
+
+    form.innerHTML = `
+      <div class="form-group">
+        <label for="exp-desc-input">Descrição do Gasto</label>
+        <input 
+          type="text" 
+          id="exp-desc-input" 
+          name="description" 
+          class="form-input silk-input" 
+          value="${escapeHtml(defaultDesc)}" 
+          placeholder="Ex: Mercantil semanal, Estetoscópio" 
+          required 
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="exp-category-input">Categoria de Despesa</label>
+        <select id="exp-category-input" name="category" class="form-input silk-input">
+          ${categories.map(c => `
+            <option value="${escapeHtml(c.name)}" ${c.name === defaultCat ? 'selected' : ''}>
+              ${escapeHtml(c.name)} (${escapeHtml(c.macro_group)})
+            </option>
+          `).join('')}
+        </select>
+        <div class="modal-hospital-pills" id="exp-cat-chips-container" style="margin-top: 8px;">
+          ${quickChipsHtml}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="exp-amount-input">Valor (R$)</label>
+          <input 
+            type="number" 
+            id="exp-amount-input" 
+            name="amount" 
+            class="form-input silk-input" 
+            step="0.01" 
+            min="0" 
+            value="${defaultAmount}" 
+            placeholder="0,00" 
+            required 
+          />
+        </div>
+        <div class="form-group">
+          <label for="exp-date-input">Data da Compra</label>
+          <input 
+            type="date" 
+            id="exp-date-input" 
+            name="date" 
+            class="form-input silk-input" 
+            value="${escapeHtml(defaultDate)}" 
+            required 
+          />
+        </div>
+      </div>
+
+      ${!isEdit ? `
+        <div class="form-group">
+          <label for="exp-installments-input">Condição de Pagamento</label>
+          <select id="exp-installments-input" name="totalInstallments" class="form-input silk-input">
+            <option value="1">À Vista (1x)</option>
+            ${Array.from({ length: 23 }, (_, i) => i + 2).map(n => `
+              <option value="${n}">Parcelado em ${n}x no Cartão</option>
+            `).join('')}
+          </select>
+        </div>
+      ` : ''}
+
+      <div class="modal-actions-row">
+        <button type="button" class="btn-silk-secondary" data-close-modal="#modal-expense">
+          Cancelar
+        </button>
+        <button type="submit" class="btn-silk-primary">
+          ${isEdit ? 'Atualizar Despesa' : 'Salvar Despesa'}
+        </button>
+      </div>
+    `;
+
+    // Chip de categoria preenche em 1 toque
+    const chipsContainer = form.querySelector('#exp-cat-chips-container');
+    if (chipsContainer) {
+      chipsContainer.addEventListener('click', (e) => {
+        const chip = e.target.closest('[data-cat-chip]');
+        if (!chip) return;
+        chipsContainer.querySelectorAll('.modal-hosp-pill').forEach(c => c.classList.remove('selected'));
+        chip.classList.add('selected');
+
+        const catSelect = form.querySelector('#exp-category-input');
+        if (catSelect) catSelect.value = chip.getAttribute('data-cat-chip');
+
+        const defAmt = parseFloat(chip.getAttribute('data-default-amount'));
+        const amtInput = form.querySelector('#exp-amount-input');
+        if (amtInput && defAmt > 0 && !amtInput.value) {
+          amtInput.value = defAmt.toFixed(2);
+        }
+      });
+    }
+
+    modal.classList.remove('hidden');
+  }
+
+  handleSaveExpense(form) {
+    const desc = form.description.value.trim() || 'Despesa';
+    const cat = form.category.value;
+    const amt = parseFloat(form.amount.value) || 0;
+    const date = form.date.value || getLocalDateString();
+    const inst = parseInt(form.totalInstallments?.value || 1, 10);
+
+    if (amt <= 0) {
+      this.showToast('Informe um valor válido para a despesa', 'error');
+      return;
+    }
+
+    if (this.editingExpenseId) {
+      this.store.updateExpense(this.editingExpenseId, {
+        description: desc,
+        category: cat,
+        amount: amt,
+        date
+      });
+      this.showToast('Despesa atualizada com sucesso!');
+    } else {
+      this.store.addExpense({
+        description: desc,
+        category: cat,
+        amount: amt,
+        date,
+        totalInstallments: inst
+      });
+      this.showToast(inst > 1 ? `Compra parcelada em ${inst}x gerada com sucesso!` : 'Despesa registrada com sucesso!');
+    }
+
+    this.closeModal('#modal-expense');
+    this.render();
+  }
+
+  // =========================================================================
+  // GESTÃO DINÂMICA DE FONTES DE RENDA (MODAL)
+  // =========================================================================
+
+  openIncomeSourcesModal() {
+    this.closeAllModals();
+    const modal = document.getElementById('modal-income-sources');
+    if (!modal) return;
+
+    const body = document.getElementById('income-sources-modal-body');
+    if (!body) return;
+
+    const sources = this.store.getAllIncomeSources();
+
+    body.innerHTML = `
+      <div class="management-toolbar">
+        <h4>Fontes de Renda & Hospitais</h4>
+        <button type="button" class="btn-silk-secondary" id="btn-restore-income-sources">Restaurar Padrões</button>
+      </div>
+
+      <div class="management-list" id="sources-management-list">
+        ${sources.map(s => `
+          <div class="management-item ${s.active === false ? 'archived' : ''}">
+            <div class="mgmt-info">
+              <strong class="mgmt-name">${escapeHtml(s.name)}</strong>
+              <span class="mgmt-sub">${escapeHtml(s.typeLabel || s.type)} • Padrão: ${formatCurrency(s.defaultAmount || 0)}</span>
+              <span class="mgmt-rule">${escapeHtml(s.paymentRule?.label || 'D+0')}</span>
+            </div>
+            <div class="mgmt-actions">
+              ${s.active !== false ? `
+                <button type="button" class="btn-icon-delete" data-delete-source="${s.id}" title="Excluir ou Arquivar Fonte">
+                  ${getIconSvg('trash', 16, '#EF5350')}
+                </button>
+              ` : `
+                <span class="badge-status-pill muted">Arquivada</span>
+              `}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+
+      <form id="form-add-income-source" class="management-add-form">
+        <h5>+ Nova Fonte de Renda</h5>
+        <div class="form-group">
+          <input type="text" name="name" class="form-input silk-input" placeholder="Nome da Maternidade ou Consultório" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <select name="type" class="form-input silk-input">
+              <option value="plantao">Plantão em Sala de Parto / UTI</option>
+              <option value="salario_fixo">Salário Fixo / Bolsa</option>
+              <option value="consulta_puericultura">Consulta Particular</option>
+              <option value="outros">Outros Rendimentos</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="number" name="defaultAmount" class="form-input silk-input" step="0.01" min="0" placeholder="Valor padrão (R$)" />
+          </div>
+        </div>
+        <div class="form-group">
+          <select name="paymentRuleType" class="form-input silk-input">
+            <option value="parturition_75_60_25_90">Sala de Parto: 75% D+60 / 25% D+90</option>
+            <option value="d30_100">D+30: 100% no mês seguinte</option>
+            <option value="d0_100">D+0: À Vista no ato</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-silk-primary" style="width: 100%; margin-top: 8px;">Adicionar Fonte de Renda</button>
+      </form>
+    `;
+
+    // Ações na lista
+    body.addEventListener('click', (e) => {
+      const delBtn = e.target.closest('[data-delete-source]');
+      if (delBtn) {
+        const id = delBtn.getAttribute('data-delete-source');
+        const res = this.store.deleteIncomeSource(id, { forceArchive: true });
+        if (res.deleted) {
+          this.showToast(res.archived ? 'Fonte arquivada com salvaguarda de histórico' : 'Fonte removida!');
+          this.openIncomeSourcesModal();
+          this.render();
+        }
+        return;
+      }
+
+      if (e.target.closest('#btn-restore-income-sources')) {
+        this.store.restoreDefaultIncomeSources();
+        this.showToast('Fontes de renda padrão restauradas!');
+        this.openIncomeSourcesModal();
+        this.render();
+      }
+    });
+
+    modal.classList.remove('hidden');
+  }
+
+  handleAddIncomeSource(form) {
+    const name = form.name.value;
+    const type = form.type.value;
+    const defaultAmount = parseFloat(form.defaultAmount.value) || 0;
+    const ruleType = form.paymentRuleType.value;
+
+    let paymentRule = {
+      type: 'parturition_75_60_25_90',
+      label: 'Sala de Parto (75% D+60 / 25% D+90)',
+      splits: [{ percentage: 75, lagMonths: 2 }, { percentage: 25, lagMonths: 3 }]
+    };
+
+    if (ruleType === 'd30_100') {
+      paymentRule = {
+        type: 'd30_100',
+        label: 'D+30 (100% no mês seguinte)',
+        splits: [{ percentage: 100, lagMonths: 1 }]
+      };
+    } else if (ruleType === 'd0_100') {
+      paymentRule = {
+        type: 'd0_100',
+        label: 'D+0 (À Vista no ato)',
+        splits: [{ percentage: 100, lagMonths: 0 }]
+      };
+    }
+
+    const added = this.store.addIncomeSource({
+      name,
+      type,
+      defaultAmount,
+      paymentRule
+    });
+
+    if (added) {
+      this.showToast('Fonte de renda adicionada com sucesso!');
+      this.openIncomeSourcesModal();
+      this.render();
+    } else {
+      this.showToast('Já existe uma fonte de renda com esse nome', 'error');
     }
   }
 
-  // ==========================================================================
-  // 9. RENDERIZAÇÃO DO APLICATIVO E DAS 3 ABAS PRIMÁRIAS
-  // ==========================================================================
+  // =========================================================================
+  // GESTÃO DINÂMICA DE CATEGORIAS DE DESPESAS (MODAL)
+  // =========================================================================
 
-  render() {
-    const data = this.store.data;
-    const currentMonth = data.preferences.activeMonth || getLocalDateString().slice(0, 7);
-    const currentRegime = data.preferences.regime || 'caixa';
+  openCategoriesModal() {
+    this.closeAllModals();
+    const modal = document.getElementById('modal-categories');
+    if (!modal) return;
 
-    if (this.doctorNameHeader) this.doctorNameHeader.textContent = data.doctorName || 'Médica';
-    if (this.doctorRoleHeader) this.doctorRoleHeader.textContent = data.specialty || 'Pediatria (R3)';
-    if (this.monthTitle) this.monthTitle.textContent = formatMonthYear(currentMonth);
-    if (this.regimePill) this.regimePill.textContent = currentRegime === 'caixa' ? 'Regime de Caixa' : 'Regime de Competência';
+    const body = document.getElementById('categories-modal-body');
+    if (!body) return;
 
-    if (typeof document !== 'undefined' && document.querySelectorAll) {
-      const regimeBtns = document.querySelectorAll('[data-regime]');
-      if (regimeBtns && regimeBtns.forEach) {
-        regimeBtns.forEach(btn => {
-          if (btn.getAttribute('data-regime') === currentRegime) {
-            btn.classList.add('active');
-          } else {
-            btn.classList.remove('active');
-          }
+    const categories = this.store.getAllCategories();
+
+    body.innerHTML = `
+      <div class="management-toolbar">
+        <h4>23 Categorias Canônicas & Personalizadas</h4>
+        <button type="button" class="btn-silk-secondary" id="btn-restore-categories">Restaurar 23 Padrões</button>
+      </div>
+
+      <div class="categories-grouped-list">
+        ${MACRO_GROUPS.map(mg => {
+          const groupCats = categories.filter(c => (c.macro_group || c.macroGroup) === mg.name);
+          return `
+            <div class="macro-group-block">
+              <div class="mg-header" style="color: ${mg.color};">
+                ${getIconSvg(mg.icon, 18, mg.color)}
+                <strong>${escapeHtml(mg.name)}</strong>
+              </div>
+              <div class="mg-cats-list">
+                ${groupCats.map(c => `
+                  <div class="cat-item-row ${c.active === false ? 'archived' : ''}">
+                    <span class="cat-name">${escapeHtml(c.name)}</span>
+                    <div class="cat-actions">
+                      ${c.isCustom && c.active !== false ? `
+                        <button type="button" class="btn-icon-delete" data-delete-cat="${c.id}" title="Excluir Categoria">
+                          ${getIconSvg('trash', 14, '#EF5350')}
+                        </button>
+                      ` : c.active === false ? `
+                        <span class="badge-status-pill muted">Arquivada</span>
+                      ` : `
+                        <span class="badge-status-pill safe">Canônica</span>
+                      `}
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+
+      <form id="form-add-category" class="management-add-form" style="margin-top: 16px;">
+        <h5>+ Adicionar Nova Categoria</h5>
+        <div class="form-group">
+          <input type="text" name="name" class="form-input silk-input" placeholder="Nome da Categoria (ex: Fisioterapia Respiratória)" required />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <select name="macro_group" class="form-input silk-input">
+              ${MACRO_GROUPS.map(mg => `<option value="${escapeHtml(mg.name)}">${escapeHtml(mg.name)}</option>`).join('')}
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="number" name="monthly_budget_cap" class="form-input silk-input" step="0.01" min="0" placeholder="Teto Mensal (Opcional)" />
+          </div>
+        </div>
+        <button type="submit" class="btn-silk-primary" style="width: 100%;">Cadastrar Categoria</button>
+      </form>
+    `;
+
+    body.addEventListener('click', (e) => {
+      const delBtn = e.target.closest('[data-delete-cat]');
+      if (delBtn) {
+        const id = delBtn.getAttribute('data-delete-cat');
+        const res = this.store.deleteCustomCategory(id, { forceArchive: true });
+        if (res.deleted) {
+          this.showToast(res.archived ? 'Categoria arquivada com salvaguarda' : 'Categoria removida!');
+          this.openCategoriesModal();
+          this.render();
+        }
+        return;
+      }
+
+      if (e.target.closest('#btn-restore-categories')) {
+        this.store.restoreDefaultCategories();
+        this.showToast('As 23 categorias canônicas foram restauradas!');
+        this.openCategoriesModal();
+        this.render();
+      }
+    });
+
+    modal.classList.remove('hidden');
+  }
+
+  handleAddCategory(form) {
+    const name = form.name.value;
+    const macro_group = form.macro_group.value;
+    const monthly_budget_cap = parseFloat(form.monthly_budget_cap.value) || null;
+
+    const added = this.store.addCategory({
+      name,
+      macro_group,
+      monthly_budget_cap
+    });
+
+    if (added) {
+      this.showToast('Categoria adicionada com sucesso!');
+      this.openCategoriesModal();
+      this.render();
+    } else {
+      this.showToast('Já existe uma categoria com esse nome', 'error');
+    }
+  }
+
+  // =========================================================================
+  // MODAL DE PERFIL MÉDICO
+  // =========================================================================
+
+  openProfileModal() {
+    this.closeAllModals();
+    const modal = document.getElementById('modal-profile');
+    if (!modal) return;
+
+    const form = document.getElementById('form-profile');
+    if (!form) return;
+
+    const p = this.store.getProfile();
+
+    form.innerHTML = `
+      <div class="form-group">
+        <label for="prof-name">Nome da Médica</label>
+        <input type="text" id="prof-name" name="doctorName" class="form-input silk-input" value="${escapeHtml(p.doctorName)}" required />
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="prof-role">Especialidade / Ano</label>
+          <input type="text" id="prof-role" name="doctorRole" class="form-input silk-input" value="${escapeHtml(p.doctorRole)}" />
+        </div>
+        <div class="form-group">
+          <label for="prof-crm">CRM</label>
+          <input type="text" id="prof-crm" name="doctorCrm" class="form-input silk-input" value="${escapeHtml(p.doctorCrm)}" placeholder="Ex: 12345/RN" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="prof-salary">Bolsa Residência Fixa (R$ / mês)</label>
+        <input type="number" id="prof-salary" name="salaryValue" class="form-input silk-input" step="0.01" min="0" value="${p.residencySalary?.value || 0}" />
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-label" style="display: flex; align-items: center; gap: 8px; font-size: 15px; cursor: pointer;">
+          <input type="checkbox" name="salaryActive" ${p.residencySalary?.active ? 'checked' : ''} />
+          <span>Ativar recebimento mensal da Bolsa no dia 5</span>
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label for="prof-photo-file">Foto de Perfil (Compactada no Aparelho)</label>
+        <input type="file" id="prof-photo-file" accept="image/*" class="form-input silk-input" />
+      </div>
+
+      <div class="modal-actions-row">
+        <button type="button" class="btn-silk-secondary" data-close-modal="#modal-profile">Cancelar</button>
+        <button type="submit" class="btn-silk-primary">Salvar Perfil</button>
+      </div>
+    `;
+
+    // Listener para foto com compressão Canvas < 25KB
+    const photoInput = form.querySelector('#prof-photo-file');
+    if (photoInput) {
+      photoInput.addEventListener('change', (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const size = 150;
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, size, size);
+            const compressed = canvas.toDataURL('image/jpeg', 0.7);
+            this.tempPhoto = compressed;
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    modal.classList.remove('hidden');
+  }
+
+  handleSaveProfile(form) {
+    const doctorName = form.doctorName.value;
+    const doctorRole = form.doctorRole.value;
+    const doctorCrm = form.doctorCrm.value;
+    const salaryVal = parseFloat(form.salaryValue.value) || 0;
+    const salaryActive = form.salaryActive.checked;
+
+    const changes = {
+      doctorName,
+      doctorRole,
+      doctorCrm,
+      residencySalary: {
+        value: salaryVal,
+        active: salaryActive
+      }
+    };
+
+    if (this.tempPhoto) {
+      changes.doctorPhoto = this.tempPhoto;
+      this.tempPhoto = null;
+    }
+
+    this.store.updateProfile(changes);
+    this.showToast('Perfil atualizado com sucesso!');
+    this.closeModal('#modal-profile');
+    this.render();
+  }
+
+  // =========================================================================
+  // HUB DE FINANÇAS VISUAL (GRÁFICOS AMPLIADOS)
+  // =========================================================================
+
+  openHubModal() {
+    this.closeAllModals();
+    const modal = document.getElementById('modal-hub');
+    if (!modal) return;
+
+    const body = document.getElementById('hub-modal-body');
+    if (!body) return;
+
+    const activeMonth = this.store.data.preferences.activeMonth || getLocalDateString().slice(0, 7);
+    const summary = this.store.getMonthSummary(activeMonth);
+    const forecast = this.store.getForecast6Months(activeMonth);
+
+    body.innerHTML = `
+      <div class="card-section">
+        <h3>Previsão Semestral</h3>
+        ${this.renderForecastChart(forecast)}
+      </div>
+
+      <div class="card-section" style="margin-top: 14px;">
+        <h3>Composição de Gastos por Categoria</h3>
+        ${this.renderDonutChart(summary.categoryBreakdown, summary.totalExpenses)}
+      </div>
+
+      <div class="card-section" style="margin-top: 14px;">
+        <h3>Detalhamento por Macro-Grupo</h3>
+        <div class="macro-bars-list">
+          ${summary.macroGroupBreakdown.map(mg => `
+            <div class="macro-bar-item">
+              <div class="macro-bar-label">
+                <span>${escapeHtml(mg.name)}</span>
+                <strong>${formatCurrency(mg.amount)} (${mg.percentage}%)</strong>
+              </div>
+              <div class="macro-bar-track">
+                <div class="macro-bar-fill" style="width: ${Math.min(100, mg.percentage)}%; background: ${mg.color};"></div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+  }
+
+  // =========================================================================
+  // MODAL DE CONFIRMAÇÃO DE RESET COM BACKUP PRÉVIO
+  // =========================================================================
+
+  openResetConfirmModal() {
+    this.closeAllModals();
+    const modal = document.getElementById('modal-reset-confirm');
+    if (!modal) return;
+
+    const body = document.getElementById('reset-confirm-body');
+    if (body) {
+      body.innerHTML = `
+        <div class="warning-box" style="padding: 16px; background: rgba(239, 83, 80, 0.1); border-radius: 16px; margin-bottom: 16px;">
+          <p style="color: #D32F2F; font-size: 15px; margin: 0 0 8px 0; font-weight: 700;">
+            Atenção: Ação Irreversível
+          </p>
+          <p style="font-size: 14px; color: var(--text-muted); margin: 0;">
+            Isso limpará todos os plantões e despesas registrados neste aparelho. Um backup automático será baixado imediatamente para sua segurança.
+          </p>
+        </div>
+        <div class="modal-actions-row">
+          <button type="button" class="btn-silk-secondary" data-close-modal="#modal-reset-confirm">Cancelar</button>
+          <button type="button" class="btn-silk-text-danger" id="btn-do-reset" style="background: #EF5350; color: #fff;">
+            Confirmar e Zerar Dados
+          </button>
+        </div>
+      `;
+
+      const doResetBtn = body.querySelector('#btn-do-reset');
+      if (doResetBtn) {
+        doResetBtn.addEventListener('click', () => {
+          this.exportBackup();
+          this.store.resetAllData({ createBackup: true });
+          this.showToast('Dados limpos com backup preventivo salvo.');
+          this.closeModal('#modal-reset-confirm');
+          this.render();
         });
       }
     }
 
-    if (data.doctorPhoto && this.avatarImg) {
-      this.avatarImg.src = data.doctorPhoto;
-      this.avatarImg.classList.remove('hidden');
-      if (this.avatarFallback) this.avatarFallback.classList.add('hidden');
-    } else if (this.avatarFallback) {
-      this.avatarFallback.classList.remove('hidden');
-      if (this.avatarImg) this.avatarImg.classList.add('hidden');
-    }
+    modal.classList.remove('hidden');
+  }
 
-    if (this.currentTab === 'home') {
-      this.renderHomeView();
-    } else if (this.currentTab === 'income') {
-      this.renderIncomeView();
-    } else if (this.currentTab === 'expenses') {
-      this.renderExpensesView();
+  // =========================================================================
+  // CONTROLE DE GAVETA HAMBÚRGUER & TEMA
+  // =========================================================================
+
+  openDrawer() {
+    const drawer = document.getElementById('drawer-menu');
+    if (drawer) drawer.classList.remove('hidden');
+  }
+
+  closeDrawer() {
+    const drawer = document.getElementById('drawer-menu');
+    if (drawer) drawer.classList.add('hidden');
+  }
+
+  toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const nextTheme = currentTheme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    this.store.data.preferences.theme = nextTheme;
+    this.store.save();
+
+    const label = document.getElementById('theme-toggle-label');
+    if (label) label.textContent = nextTheme === 'dark' ? 'Modo Claro' : 'Modo UTI Neonatal';
+
+    this.showToast(nextTheme === 'dark' ? 'Modo UTI Neonatal ativado 🌙' : 'Modo Claro ativado ☀️');
+  }
+
+  // =========================================================================
+  // TOASTS COM DESFAZER (UNDO)
+  // =========================================================================
+
+  showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = `toast-silk ${type}`;
+    toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
+
+    container.appendChild(toast);
+    setTimeout(() => {
+      toast.classList.add('fade-out');
+      setTimeout(() => toast.remove(), 300);
+    }, 3500);
+  }
+
+  showToastWithUndo(message, onUndo, duration = 5000) {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast-silk toast-undo';
+    toast.innerHTML = `
+      <div class="toast-content">
+        <span>${escapeHtml(message)}</span>
+        <button type="button" class="btn-toast-undo">Desfazer</button>
+      </div>
+      <div class="toast-progress-bar" style="animation-duration: ${duration}ms;"></div>
+    `;
+
+    const undoBtn = toast.querySelector('.btn-toast-undo');
+    let timer = null;
+
+    const dismiss = () => {
+      if (timer) clearTimeout(timer);
+      toast.classList.add('fade-out');
+      setTimeout(() => toast.remove(), 250);
+    };
+
+    undoBtn.addEventListener('click', () => {
+      dismiss();
+      if (typeof onUndo === 'function') onUndo();
+    }, { once: true });
+
+    timer = setTimeout(dismiss, duration);
+    container.appendChild(toast);
+  }
+
+  // =========================================================================
+  // BACKUP EXPORT & MODAL UTILITIES
+  // =========================================================================
+
+  async exportBackup() {
+    const res = await this.storage.exportBackup(this.store.data);
+    if (res.success) {
+      this.showToast(`Backup salvo com sucesso (${res.method === 'share' ? 'iCloud/Arquivos' : 'Download'})!`);
+    } else {
+      this.showToast(`Falha ao exportar: ${res.error}`, 'error');
     }
   }
 
-  renderHomeView() {
-    if (!this.viewHome) return;
+  openModal(selector) {
+    const el = document.querySelector(selector);
+    if (el) el.classList.remove('hidden');
+  }
 
-    const currentMonth = this.store.data.preferences.activeMonth || getLocalDateString().slice(0, 7);
-    const currentRegime = this.store.data.preferences.regime || 'caixa';
-    const summary = this.store.getMonthSummary(currentMonth, currentRegime);
+  closeModal(selector) {
+    const el = document.querySelector(selector);
+    if (el) el.classList.add('hidden');
+  }
 
-    const upcomingHtml = summary.upcomingDisbursements && summary.upcomingDisbursements.length > 0
-      ? summary.upcomingDisbursements.map(d => `
-          <div class="disbursement-card">
-            <div class="disbursement-info">
-              <span class="disbursement-hospital">${escapeHtml(d.hospital)}</span>
-              <span class="disbursement-rule">${escapeHtml(d.label)}</span>
-              <small class="disbursement-date">Previsão: ${formatDateBR(d.expectedDate)}</small>
-            </div>
-            <div class="disbursement-action">
-              <span class="disbursement-val">${formatCurrency(d.value)}</span>
-              <button 
-                class="btn-toggle-received ${d.status === 'received' ? 'received' : ''}" 
-                data-shift-id="${escapeHtml(d.shiftId)}" 
-                data-toggle-installment="${escapeHtml(d.installmentNum)}"
-                title="${d.status === 'received' ? 'Marcar como Pendente' : 'Marcar como Recebido'}"
-              >
-                ${d.status === 'received' ? 'Recebido' : 'Receber'}
-              </button>
-            </div>
+  closeAllModals() {
+    document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.add('hidden'));
+  }
+
+  // =========================================================================
+  // GRÁFICOS SVG NATIVOS (100% OFFLINE, ZERO LIBS)
+  // =========================================================================
+
+  renderForecastChart(forecast) {
+    if (!forecast || forecast.length === 0) return '<p>Sem dados para projeção</p>';
+
+    const maxVal = Math.max(...forecast.map(f => Math.max(f.income, f.expenses)), 1000);
+    const height = 120;
+
+    const bars = forecast.map(f => {
+      const incH = Math.max(4, Math.round((f.income / maxVal) * height));
+      const expH = Math.max(4, Math.round((f.expenses / maxVal) * height));
+
+      return `
+        <div class="forecast-col">
+          <div class="forecast-bars-wrap">
+            <div class="f-bar income" style="height: ${incH}px;" title="Entradas: ${formatCurrency(f.income)}"></div>
+            <div class="f-bar expense" style="height: ${expH}px;" title="Saídas: ${formatCurrency(f.expenses)}"></div>
           </div>
-        `).join('')
-      : '<p class="empty-state-text">Nenhum repasse de plantão agendado para este mês.</p>';
-
-    this.viewHome.innerHTML = `
-      <section class="hero-balance-card" aria-label="Balanço do Mês">
-        <span class="hero-badge">Resumo Mensal • ${currentRegime === 'caixa' ? 'Regime de Caixa' : 'Regime de Competência'}</span>
-        <h2 class="hero-balance-val ${summary.balance < 0 ? 'text-danger' : ''}">${formatCurrency(summary.balance)}</h2>
-        <p class="hero-balance-label">Saldo Líquido Estimado</p>
-
-        <div class="hero-metrics-row">
-          <div class="hero-metric-item">
-            <span class="metric-dot green"></span>
-            <div>
-              <small>Entradas</small>
-              <strong>${formatCurrency(summary.totalIncome)}</strong>
-            </div>
-          </div>
-          <div class="hero-metric-divider"></div>
-          <div class="hero-metric-item">
-            <span class="metric-dot coral"></span>
-            <div>
-              <small>Saídas</small>
-              <strong>${formatCurrency(summary.totalExpenses)}</strong>
-            </div>
-          </div>
+          <span class="forecast-col-label">${escapeHtml(f.label)}</span>
         </div>
-      </section>
+      `;
+    }).join('');
 
-      <section class="section-card" aria-label="Repasses de Plantão Previstos">
-        <div class="section-header">
-          <h3>Repasses de Plantões no Mês</h3>
-          <span class="section-tag">${summary.upcomingDisbursements?.length || 0} repasses</span>
+    return `
+      <div class="forecast-chart-container">
+        <div class="forecast-chart-grid">${bars}</div>
+        <div class="forecast-legend">
+          <span class="f-legend-item"><span class="dot mint"></span> Entradas</span>
+          <span class="f-legend-item"><span class="dot coral"></span> Despesas</span>
         </div>
-        <div class="disbursements-list">
-          ${upcomingHtml}
-        </div>
-      </section>
-
-      <section class="quick-add-cards-row">
-        <button class="quick-add-card income" data-open-shift-modal type="button" onclick="window.v4App?.ui?.openModal('#modal-shift')">
-          <div class="card-icon-halo pink">${getIconSvg('stethoscope', { size: 24, color: '#EC407A' })}</div>
-          <div>
-            <strong>Novo Plantão</strong>
-            <small>75% D+60 / 25% D+90</small>
-          </div>
-        </button>
-        <button class="quick-add-card expense" data-open-expense-modal type="button" onclick="window.v4App?.ui?.openModal('#modal-expense')">
-          <div class="card-icon-halo coral">${getIconSvg('cart', { size: 24, color: '#FF7043' })}</div>
-          <div>
-            <strong>Nova Despesa</strong>
-            <small>6 Macro-Grupos</small>
-          </div>
-        </button>
-      </section>
+      </div>
     `;
   }
 
-  renderIncomeView() {
-    if (!this.viewIncome) return;
-
-    const currentMonth = this.store.data.preferences.activeMonth || getLocalDateString().slice(0, 7);
-    const shiftsInMonth = this.store.data.shifts.filter(s => s.date && s.date.startsWith(currentMonth));
-    const totalWorked = shiftsInMonth.reduce((acc, s) => acc + (s.netValue || 0), 0);
-
-    const shiftCardsHtml = shiftsInMonth.length > 0
-      ? shiftsInMonth.map(s => `
-          <div class="shift-item-card">
-            <div class="shift-card-header">
-              <div>
-                <h4 class="shift-hospital-title">${escapeHtml(s.hospital)}</h4>
-                <small class="shift-meta-text">${formatDateBR(s.date)} • ${escapeHtml(s.shiftType)}</small>
-              </div>
-              <strong class="shift-net-val">${formatCurrency(s.netValue)}</strong>
-            </div>
-
-            <div class="shift-installments-row">
-              <div class="shift-inst-badge ${s.installment1?.status === 'received' ? 'paid' : 'pending'}">
-                <span>75% (D+60): ${formatCurrency(s.installment1?.value || 0)}</span>
-                <small>${formatDateBR(s.installment1?.date || s.installment1_date)}</small>
-              </div>
-              <div class="shift-inst-badge ${s.installment2?.status === 'received' ? 'paid' : 'pending'}">
-                <span>25% (D+90): ${formatCurrency(s.installment2?.value || 0)}</span>
-                <small>${formatDateBR(s.installment2?.date || s.installment2_date)}</small>
-              </div>
-            </div>
-
-            <div class="shift-card-actions">
-              <button class="btn-delete-item" data-delete-shift="${escapeHtml(s.id)}" title="Excluir Plantão">
-                ${getIconSvg('delete', { size: 16 })}
-                <span>Excluir</span>
-              </button>
-            </div>
-          </div>
-        `).join('')
-      : '<p class="empty-state-text">Nenhum plantão registrado em ' + formatMonthYear(currentMonth) + '.</p>';
-
-    this.viewIncome.innerHTML = `
-      <section class="section-card">
-        <div class="section-header">
-          <div>
-            <h3>Plantões Trabalhados</h3>
-            <small>Produção Médica: ${formatCurrency(totalWorked)}</small>
-          </div>
-          <button class="btn-silk-primary btn-sm" onclick="window.v4App?.ui?.openModal('#modal-shift')">
-            + Plantão
-          </button>
+  renderDonutChart(categories, total) {
+    if (!categories || categories.length === 0 || total <= 0) {
+      return `
+        <div class="donut-empty-wrap" style="text-align: center; padding: 20px; color: var(--text-muted);">
+          <p>Nenhuma despesa para exibir no gráfico neste mês.</p>
         </div>
-        <div class="shifts-list-container">
-          ${shiftCardsHtml}
-        </div>
-      </section>
-    `;
-  }
-
-  renderExpensesView() {
-    if (!this.viewExpenses) return;
-
-    const currentMonth = this.store.data.preferences.activeMonth || getLocalDateString().slice(0, 7);
-    let expensesInMonth = this.store.data.expenses.filter(e => e.date && e.date.startsWith(currentMonth));
-
-    if (this.activeExpenseFilter !== 'all') {
-      expensesInMonth = expensesInMonth.filter(e => {
-        const mg = getMacroGroupForCategory(e.category, this.store.data.customCategories);
-        return mg.id === this.activeExpenseFilter;
-      });
+      `;
     }
 
-    const totalFiltered = expensesInMonth.reduce((acc, e) => acc + (e.amount || 0), 0);
+    const size = 160;
+    const strokeWidth = 24;
+    const radius = (size - strokeWidth) / 2;
+    const circumference = 2 * Math.PI * radius;
 
-    const macroChipsHtml = `
-      <button class="macro-chip ${this.activeExpenseFilter === 'all' ? 'active' : ''}" data-macro-filter="all">Todos</button>
-      ${MACRO_GROUPS.map(mg => `
-        <button class="macro-chip ${this.activeExpenseFilter === mg.id ? 'active' : ''}" data-macro-filter="${escapeHtml(mg.id)}">${escapeHtml(mg.name)}</button>
-      `).join('')}
-    `;
+    let accumulatedPercentage = 0;
+    const segments = categories.slice(0, 6).map(c => {
+      const p = c.amount / total;
+      const strokeDashoffset = circumference * (1 - p);
+      const rotation = accumulatedPercentage * 360;
+      accumulatedPercentage += p;
 
-    const expenseCardsHtml = expensesInMonth.length > 0
-      ? expensesInMonth.map(e => {
-          const mg = getMacroGroupForCategory(e.category, this.store.data.customCategories);
-          return `
-            <div class="expense-item-card">
-              <div class="expense-card-left">
-                <span class="expense-desc">${escapeHtml(e.description)}</span>
-                <div class="expense-tags-row">
-                  <span class="cat-pill" style="border-color: ${escapeHtml(mg.color)}40; color: ${escapeHtml(mg.color)}; background: ${escapeHtml(mg.bgColor)};">${escapeHtml(e.category)}</span>
-                  ${e.installmentNumber ? `<span class="inst-pill">Parcela ${escapeHtml(e.installmentNumber)}/${escapeHtml(e.totalInstallments)}</span>` : ''}
-                  <small class="expense-date">${formatDateBR(e.date)}</small>
-                </div>
-              </div>
-              <div class="expense-card-right">
-                <strong class="expense-amount-val">${formatCurrency(e.amount)}</strong>
-                <button class="btn-delete-item icon-only" data-delete-expense="${escapeHtml(e.id)}" title="Excluir Despesa">
-                  ${getIconSvg('delete', { size: 16 })}
-                </button>
-              </div>
-            </div>
-          `;
-        }).join('')
-      : '<p class="empty-state-text">Nenhuma despesa encontrada para este filtro.</p>';
+      return `
+        <circle 
+          cx="${size / 2}" 
+          cy="${size / 2}" 
+          r="${radius}" 
+          fill="none" 
+          stroke="${sanitizeColor(c.color)}" 
+          stroke-width="${strokeWidth}" 
+          stroke-dasharray="${circumference}" 
+          stroke-dashoffset="${strokeDashoffset}" 
+          transform="rotate(${rotation - 90} ${size / 2} ${size / 2})"
+        />
+      `;
+    }).join('');
 
-    this.viewExpenses.innerHTML = `
-      <section class="section-card">
-        <div class="section-header">
-          <div>
-            <h3>Despesas do Mês</h3>
-            <small>Total: ${formatCurrency(totalFiltered)}</small>
+    const legend = categories.slice(0, 5).map(c => `
+      <div class="donut-legend-row">
+        <span class="donut-dot" style="background: ${sanitizeColor(c.color)};"></span>
+        <span class="donut-cat-name">${escapeHtml(c.name)}</span>
+        <strong class="donut-cat-pct">${c.percentage}%</strong>
+      </div>
+    `).join('');
+
+    return `
+      <div class="donut-chart-flex">
+        <div class="donut-svg-wrap">
+          <svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+            <circle cx="${size / 2}" cy="${size / 2}" r="${radius}" fill="none" stroke="rgba(200,200,200,0.15)" stroke-width="${strokeWidth}" />
+            ${segments}
+          </svg>
+          <div class="donut-center-text">
+            <span>Total</span>
+            <strong>${formatCurrency(total)}</strong>
           </div>
-          <button class="btn-silk-primary btn-sm" onclick="window.v4App?.ui?.openModal('#modal-expense')">
-            + Despesa
-          </button>
         </div>
-
-        <div class="macro-chips-scroll">
-          ${macroChipsHtml}
+        <div class="donut-legend-wrap">
+          ${legend}
         </div>
-
-        <div class="expenses-list-container">
-          ${expenseCardsHtml}
-        </div>
-      </section>
+      </div>
     `;
-  }
-
-  // ==========================================================================
-  // 10. AÇÕES DE ITENS INDIVIDUAIS (TOGGLE / DELETE)
-  // ==========================================================================
-
-  handleToggleShiftInstallment(shiftId, installmentNum) {
-    this.store.toggleShiftInstallment(shiftId, installmentNum);
-    this.showToast('Status da parcela atualizado com sucesso! ✨', 'info');
-    this.render();
-  }
-
-  handleDeleteShift(shiftId) {
-    if (confirm('Deseja realmente excluir este plantão?')) {
-      this.store.deleteShift(shiftId);
-      this.showToast('Plantão removido.', 'info');
-      this.render();
-    }
-  }
-
-  handleDeleteExpense(expenseId) {
-    if (confirm('Deseja realmente excluir esta despesa?')) {
-      this.store.deleteExpense(expenseId);
-      this.showToast('Despesa removida.', 'info');
-      this.render();
-    }
-  }
-
-  setExpenseFilter(macroId) {
-    this.activeExpenseFilter = macroId;
-    this.renderExpensesView();
   }
 }

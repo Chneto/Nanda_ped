@@ -1,78 +1,87 @@
-/**
- * Finanças Pediatria v5.0 - Service Worker Silk & Rose Gold
- * Cache Estratégico com Atualização Imediata (Zero Cache-Lock)
- * Autor Imutável: FChNeto (APP_CREATOR = 'FChNeto')
- */
+// Finanças Pediatria v8 Service Worker - Offline Resilience - Criado por FChNeto
+const CACHE_NAME = 'financas-pediatria-v8-static-v1';
 
-const CACHE_NAME = 'financas-ped-v5-silk-2.0';
-const ASSETS_TO_CACHE = [
+const STATIC_ASSETS = [
   './',
   './index.html',
-  './css/styles.css',
-  './css/styles.css?v=5.0.0',
-  './js/bundle.js',
-  './js/bundle.js?v=5.0.0',
   './manifest.json',
-  './assets/icons/favicon.png',
-  './assets/icons/apple-touch-icon.png',
+  './css/styles.css',
+  './js/app.js',
+  './js/icons.js',
+  './js/storage.js',
+  './js/store.js',
+  './js/ui.js',
   './assets/icons/icon-192.png',
-  './assets/icons/icon-512.png'
+  './assets/icons/icon-512.png',
+  './assets/icons/apple-touch-icon.png',
+  './assets/icons/favicon.png'
 ];
 
-// Instalação do Service Worker com ativação forçada
+// Install: Cache core application shell safely
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS_TO_CACHE).catch((err) => {
-        console.warn('Falha parcial ao pré-armazenar assets no cache:', err);
-      });
+    caches.open(CACHE_NAME).then(async (cache) => {
+      for (const asset of STATIC_ASSETS) {
+        try {
+          await cache.add(asset);
+        } catch (err) {
+          console.warn(`[v8 SW] Cache skip for asset (${asset}):`, err);
+        }
+      }
     }).then(() => self.skipWaiting())
   );
 });
 
-// Ativação e limpeza imediata de todos os caches antigos
+// Activate: Purge older cache versions (including legacy v5 root cache) and claim clients
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((cacheNames) => {
+    caches.keys().then((keys) => {
       return Promise.all(
-        cacheNames.map((name) => {
-          if (name !== CACHE_NAME) {
-            console.log('Removendo cache antigo:', name);
-            return caches.delete(name);
-          }
-        })
+        keys.filter((key) => key !== CACHE_NAME && (
+          key.startsWith('nanda-') || 
+          key.startsWith('financas-ped-') ||
+          key.startsWith('financas-pediatria-')
+        )).map((key) => caches.delete(key))
       );
     }).then(() => self.clients.claim())
   );
 });
 
-// Interceptação de requisições: Network First com fallback para cache
+// Fetch: 100% offline network resilience with local cache fallback
 self.addEventListener('fetch', (event) => {
-  // Ignora requisições não-GET ou esquemas não-HTTP
-  if (event.request.method !== 'GET' || !event.request.url.startsWith('http')) {
+  if (event.request.method !== 'GET') return;
+
+  const url = new URL(event.request.url);
+
+  // Strictly ignore cross-origin requests
+  if (url.origin !== self.location.origin) {
     return;
   }
 
   event.respondWith(
-    fetch(event.request)
-      .then((networkResponse) => {
-        if (networkResponse && networkResponse.status === 200) {
+    (async () => {
+      const cachedResponse = await caches.match(event.request);
+
+      try {
+        const networkResponse = await fetch(event.request);
+        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache)).catch(() => {});
         }
         return networkResponse;
-      })
-      .catch(() => {
-        return caches.match(event.request).then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-          if (event.request.mode === 'navigate') {
-            return caches.match('./index.html');
-          }
-        });
-      })
+      } catch (fetchError) {
+        // When network fails (offline hospital basement):
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+
+        // If navigation fails, fallback to index.html SPA entrypoint
+        if (event.request.mode === 'navigate' || event.request.headers.get('accept')?.includes('text/html')) {
+          const fallbackHtml = await caches.match('./index.html') || await caches.match('/index.html') || await caches.match('./');
+          if (fallbackHtml) return fallbackHtml;
+        }
+        throw fetchError;
+      }
+    })()
   );
 });

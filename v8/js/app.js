@@ -69,7 +69,20 @@ export class PediatricApp {
     // 6. Registro de Service Worker para PWA Offline (em conformidade com CSP estrita sem scripts inline)
     if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
       try {
-        navigator.serviceWorker.register('./sw.js').catch(err => {
+        if (typeof caches !== 'undefined' && caches.keys) {
+          caches.keys().then((keys) => {
+            keys.forEach((k) => {
+              if (k !== 'financas-pediatria-v8-static-v1' && k.startsWith('financas-ped-')) {
+                caches.delete(k).catch(() => {});
+              }
+            });
+          }).catch(() => {});
+        }
+        navigator.serviceWorker.register('./sw.js').then((reg) => {
+          if (reg && typeof reg.update === 'function') {
+            reg.update().catch(() => {});
+          }
+        }).catch(err => {
           console.debug('[ServiceWorker] Registro offline:', err?.message || err);
         });
       } catch (swErr) {
