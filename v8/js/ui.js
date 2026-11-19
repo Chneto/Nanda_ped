@@ -15,6 +15,7 @@ import { SourcesCategoriesMethods } from './ui/sources-categories.js';
 import { ProfileHubMethods } from './ui/profile-hub.js';
 import { FeedbackMethods } from './ui/feedback.js';
 import { ChartMethods } from './ui/charts.js';
+import { BudgetMethods } from './ui/budget.js';
 
 // Reexporta utilitários puros (API pública usada pelos testes)
 export { escapeHtml, FOCUSABLE_SELECTOR, nextFocusIndex };
@@ -38,7 +39,7 @@ export class PediatricUI {
 }
 
 // Instala os métodos dos módulos no prototype, preservando semântica de `this`
-for (const Mixin of [EventsMethods, ViewMethods, ShiftModalMethods, ExpenseModalMethods, SourcesCategoriesMethods, ProfileHubMethods, FeedbackMethods, ChartMethods]) {
+for (const Mixin of [EventsMethods, ViewMethods, ShiftModalMethods, ExpenseModalMethods, SourcesCategoriesMethods, ProfileHubMethods, FeedbackMethods, ChartMethods, BudgetMethods]) {
   for (const name of Object.getOwnPropertyNames(Mixin.prototype)) {
     if (name === 'constructor') continue;
     if (Object.prototype.hasOwnProperty.call(PediatricUI.prototype, name)) {

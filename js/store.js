@@ -1171,6 +1171,82 @@ export class PediatricStore {
     return (this.data.categories || []).filter(c => c.active !== false);
   }
 
+  // -----------------------------------------------------------------------
+  // TETOS MENSAIS POR CATEGORIA (monthly_budget_cap)
+  // -----------------------------------------------------------------------
+
+  /**
+   * Situação dos tetos no mês: gasto, restante e percentual de cada categoria com teto.
+   * status: 'ok' (< 80%), 'warn' (80% a 100%) ou 'over' (acima de 100%).
+   */
+  getBudgetStatus(targetMonth = getLocalDateString().slice(0, 7)) {
+    const monthStr = String(targetMonth).slice(0, 7);
+    const categories = this.getActiveCategories();
+    const byKey = new Map(categories.map(c => [getCategoryKey(c.name), c]));
+    const spent = new Map();
+    for (const e of this.data.expenses || []) {
+      if (!e.date || !e.date.startsWith(monthStr)) continue;
+      const cat = (e.category_id && categories.find(c => c.id === e.category_id)) || byKey.get(getCategoryKey(e.category_name_snapshot));
+      if (!cat) continue;
+      spent.set(cat.id, (spent.get(cat.id) || 0) + (parseFloat(e.amount) || 0));
+    }
+    const rank = { over: 0, warn: 1, ok: 2 };
+    return categories
+      .filter(c => Number(c.monthly_budget_cap) > 0)
+      .map(c => {
+        const cap = Math.round(Number(c.monthly_budget_cap) * 100) / 100;
+        const total = Math.round((spent.get(c.id) || 0) * 100) / 100;
+        const pct = Math.round((total / cap) * 1000) / 10;
+        const status = total > cap ? 'over' : pct >= 80 ? 'warn' : 'ok';
+        return {
+          id: c.id, name: c.name, icon: c.icon, color: c.color, macro_group: c.macro_group,
+          cap, spent: total, remaining: Math.round((cap - total) * 100) / 100, pct, status
+        };
+      })
+      .sort((a, b) => rank[a.status] - rank[b.status] || b.pct - a.pct || a.name.localeCompare(b.name, 'pt-BR'));
+  }
+
+  /**
+   * Efeito de um lançamento sobre o teto da categoria no mês (antes de salvar).
+   * `replaceAmount` desconta o valor antigo quando a despesa está sendo editada.
+   */
+  getBudgetImpact(categoryName, targetMonth, amount = 0, replaceAmount = 0) {
+    const status = this.getBudgetStatus(targetMonth).find(s => getCategoryKey(s.name) === getCategoryKey(categoryName));
+    if (!status) return { hasCap: false };
+    const add = Math.max(0, parseFloat(amount) || 0);
+    const before = Math.max(0, Math.round((status.spent - (parseFloat(replaceAmount) || 0)) * 100) / 100);
+    const after = Math.round((before + add) * 100) / 100;
+    const pctAfter = Math.round((after / status.cap) * 1000) / 10;
+    return {
+      hasCap: true,
+      name: status.name,
+      cap: status.cap,
+      spentBefore: before,
+      spentAfter: after,
+      pctBefore: Math.round((before / status.cap) * 1000) / 10,
+      pctAfter,
+      overBy: after > status.cap ? Math.round((after - status.cap) * 100) / 100 : 0,
+      remainingAfter: Math.round((status.cap - after) * 100) / 100,
+      status: after > status.cap ? 'over' : pctAfter >= 80 ? 'warn' : 'ok'
+    };
+  }
+
+  /** Define (ou remove, com null/vazio/0) o teto mensal de qualquer categoria, inclusive as padrão */
+  setCategoryBudgetCap(categoryId, value) {
+    const category = (this.data.categories || []).find(c => c.id === categoryId);
+    if (!category) return { updated: false, error: 'Categoria não encontrada' };
+    let cap = null;
+    if (value !== null && value !== undefined && String(value).trim() !== '') {
+      const n = Math.round(parseFloat(value) * 100) / 100;
+      if (!Number.isFinite(n) || n < 0) return { updated: false, error: 'Informe um valor válido para o teto' };
+      cap = n > 0 ? n : null;
+    }
+    const previous = category.monthly_budget_cap ?? null;
+    category.monthly_budget_cap = cap;
+    category.updatedAt = new Date().toISOString();
+    this.save();
+    return { updated: true, category, previous, cap };
+  }
   addCategory({ name, macro_group, default_payment_type = 'a_vista', default_amount = null, monthly_budget_cap = null, icon = 'tag', color = '#7E57C2' }) {
     const trimmed = normalizeCategoryName(name);
     if (!trimmed) return null;
@@ -1279,10 +1355,12 @@ export class PediatricStore {
   }
 
   restoreDefaultCategories({ preserveCustom = true } = {}) {
+    // Os tetos que a usuária definiu (ou removeu) nas categorias padrão são preservados ao restaurar
+    const previousCaps = new Map((this.data.categories || []).map(c => [getCategoryKey(c.name), c.monthly_budget_cap ?? null]));
     const defaults = DEFAULT_CATEGORIES.map(c => ({
       ...c,
       default_payment_type: c.default_payment_type || 'a_vista',
-      monthly_budget_cap: c.monthly_budget_cap || null,
+      monthly_budget_cap: previousCaps.has(getCategoryKey(c.name)) ? previousCaps.get(getCategoryKey(c.name)) : (c.monthly_budget_cap || null),
       default_amount: c.default_amount || null,
       active: true,
       createdAt: new Date().toISOString(),

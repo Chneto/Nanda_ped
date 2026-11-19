@@ -1953,3 +1953,56 @@ textarea.form-input {
     scroll-behavior: auto !important;
   }
 }
+/* ---------- Tetos mensais por categoria ---------- */
+.budget-hint {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 0 0 14px;
+  padding: 9px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.budget-hint.hidden { display: none; }
+.budget-hint > span:first-child { display: inline-flex; flex: none; margin-top: 1px; }
+.budget-hint.ok { background: var(--mint-income-light); color: var(--mint-text); }
+.budget-hint.warn { background: rgba(255, 167, 38, 0.16); color: var(--amber-text); }
+.budget-hint.over { background: rgba(239, 83, 80, 0.13); color: var(--danger-text); }
+
+.budget-empty { margin: 4px 0 12px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+.budget-empty-btn { width: 100%; }
+.budget-summary { display: flex; align-items: center; gap: 6px; margin: 2px 0 12px; font-size: 0.875rem; font-weight: 700; }
+.budget-summary.ok { color: var(--mint-text); }
+.budget-summary.warn { color: var(--amber-text); }
+.budget-summary.over { color: var(--danger-text); }
+.budget-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.budget-row { display: flex; align-items: flex-start; gap: 10px; }
+.budget-main { flex: 1; min-width: 0; }
+.budget-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.budget-name { font-size: 0.95rem; font-weight: 700; overflow-wrap: anywhere; }
+.budget-badge { display: inline-flex; align-items: center; gap: 4px; flex: none; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 0.75rem; font-weight: 700; }
+.budget-badge.ok { background: var(--mint-income-light); color: var(--mint-text); }
+.budget-badge.warn { background: rgba(255, 167, 38, 0.18); color: var(--amber-text); }
+.budget-badge.over { background: rgba(239, 83, 80, 0.14); color: var(--danger-text); }
+.budget-bar { height: 10px; border-radius: var(--radius-pill); background: var(--bg-input); border: 1px solid var(--silk-border); overflow: hidden; }
+.budget-bar-fill { display: block; height: 100%; border-radius: var(--radius-pill); }
+.budget-bar-fill.ok { background: var(--mint-text); }
+.budget-bar-fill.warn { background: var(--amber-text); }
+.budget-bar-fill.over { background: var(--danger-text); }
+.budget-foot { display: flex; justify-content: space-between; gap: 8px; margin-top: 5px; color: var(--text-muted); font-size: 0.8125rem; }
+.budget-pct { font-weight: 800; color: var(--text-main); }
+
+.budget-alert { display: flex; align-items: center; gap: 10px; margin: 0 16px 14px 16px; padding: 10px 12px; border-radius: var(--radius-md); border: 1px solid transparent; }
+.budget-alert.warn { background: rgba(255, 167, 38, 0.16); border-color: rgba(255, 167, 38, 0.5); color: var(--amber-text); }
+.budget-alert.over { background: rgba(239, 83, 80, 0.13); border-color: rgba(239, 83, 80, 0.45); color: var(--danger-text); }
+.budget-alert-icon { display: inline-flex; flex: none; }
+.budget-alert-text { flex: 1; min-width: 0; display: flex; flex-direction: column; font-size: 0.8125rem; line-height: 1.35; }
+.budget-alert-text strong { font-size: 0.9rem; }
+.budget-alert-btn { flex: none; min-height: 44px; padding: 0 12px; border-radius: var(--radius-pill); border: 1.5px solid currentColor; background: transparent; color: inherit; font-weight: 700; font-size: 0.8125rem; }
+#home-budget-alert:empty { display: none; }
+
+.cat-cap-text { display: block; margin-top: 1px; color: var(--text-muted); font-size: 0.75rem; font-weight: 600; }
+.btn-cap-edit { display: inline-flex; align-items: center; gap: 4px; flex: none; min-height: 44px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--silk-border); background: var(--bg-card); color: var(--text-muted); font-size: 0.8125rem; font-weight: 700; }
+.cap-help { display: block; margin-top: 6px; color: var(--text-muted); font-size: 0.8125rem; line-height: 1.4; }

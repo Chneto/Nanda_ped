@@ -113,6 +113,10 @@ export class ViewMethods {
 
     // 4. Renderiza Chips de Topo
     this.renderTopMaternityChips();
+
+    // 5. Tetos mensais por categoria (aviso na Início e cartão em Despesas)
+    this.renderBudgetAlert();
+    this.renderBudgetCard();
   }
 
 

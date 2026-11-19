@@ -105,6 +105,25 @@ export class EventsMethods {
         return;
       }
 
+      // 7d. Atalho para outra aba (ex.: aviso de tetos na Início)
+      const gotoTabBtn = e.target.closest('[data-goto-tab]');
+      if (gotoTabBtn) {
+        this.switchTab(gotoTabBtn.getAttribute('data-goto-tab'));
+        return;
+      }
+
+      // 7c. Abrir a gestão de categorias (tetos) e editar o teto de uma categoria
+      const openCategoriesBtn = e.target.closest('[data-action="open-categories"]');
+      if (openCategoriesBtn) {
+        this.openCategoriesModal();
+        return;
+      }
+      const editCapBtn = e.target.closest('[data-edit-cap]');
+      if (editCapBtn) {
+        this.openCategoryCapModal(editCapBtn.getAttribute('data-edit-cap'));
+        return;
+      }
+
       // 8a. Editar parcela (data prevista, valor, situação e data real do recebimento)
       const editInstallmentBtn = e.target.closest('[data-edit-installment]');
       if (editInstallmentBtn) {
@@ -243,6 +262,12 @@ export class EventsMethods {
       if (e.target.id === 'form-new-shift') {
         e.preventDefault();
         this.handleSaveShift(e.target);
+        return;
+      }
+
+      if (e.target.id === 'form-category-cap') {
+        e.preventDefault();
+        this.handleSaveCategoryCap(e.target);
         return;
       }
 

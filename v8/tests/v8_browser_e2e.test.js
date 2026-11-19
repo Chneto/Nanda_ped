@@ -797,6 +797,8 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
       ['modal plantão', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openShiftModal(); }); }],
       ['modal parcela', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openInstallmentModal(window.v8App.store.data.shifts[0].id, 1); }); }],
       ['modal categorias', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openCategoriesModal(); }); }],
+      ['tetos (início/despesas)', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); const s = window.v8App.store; const id = s.data.categories.find(c => c.name === 'Mercantil').id; s.setCategoryBudgetCap(id, 100); s.setCategoryBudgetCap(s.data.categories.find(c => c.name === 'Uber').id, 200); s.addExpense({ description: 'Teto A', category: 'Mercantil', amount: 150, date: new Date().toISOString().slice(0, 7) + '-07' }); s.addExpense({ description: 'Teto B', category: 'Uber', amount: 170, date: new Date().toISOString().slice(0, 7) + '-07' }); window.v8App.ui.render(); }); await page.click('[data-tab="home"]'); await page.click('[data-tab="expenses"]'); }],
+      ['modal teto', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openCategoryCapModal(window.v8App.store.data.categories.find(c => c.name === 'Mercantil').id); }); }],
       ['modal fontes', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openIncomeSourcesModal(); }); }],
       ['modal perfil', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openProfileModal(); }); }]
     ];
@@ -824,6 +826,13 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     }
     await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.closeDrawer(); document.documentElement.setAttribute('data-theme', 'light'); window.v8App.ui.render(); });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
+    // Limpa os tetos criados só para a varredura (não vazar para os próximos cenários)
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      s.data.expenses = s.data.expenses.filter(e => e.description !== 'Teto A' && e.description !== 'Teto B');
+      for (const n of ['Mercantil', 'Uber']) s.setCategoryBudgetCap(s.data.categories.find(c => c.name === n).id, null);
+      window.v8App.ui.render();
+    });
     assert.deepEqual([...new Set(contrastFails)].slice(0, 12), [], 'Textos abaixo de AA (4,5:1; 3:1 para texto grande)');
     assert.deepEqual([...new Set(smallTargets)].slice(0, 12), [], 'Alvos de toque menores que 44 px');
 
@@ -850,6 +859,95 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     }));
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     assert.ok(durations.every((d) => d <= 0.001), `Transições devem ser desligadas com movimento reduzido: ${durations}`);
+  });
+  // =========================================================================
+  // CENÁRIO 8g: TETOS MENSAIS POR CATEGORIA (aviso ao lançar, cartão, Início e edição do teto)
+  // =========================================================================
+  it('Cenário 8g: Tetos mensais — aviso ao lançar, cartão em Despesas, aviso na Início e edição com Desfazer', async () => {
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      document.querySelectorAll('.toast-silk').forEach(el => el.remove());
+      s.data.expenses = [];
+      const ym = new Date().toISOString().slice(0, 7);
+      s.data.preferences.activeMonth = ym;
+      const id = (n) => s.data.categories.find(c => c.name === n).id;
+      // Isola o cenário: remove os tetos criados por cenários anteriores (ex.: "Livros Médicos" tem teto de 500)
+      for (const c of s.data.categories) s.setCategoryBudgetCap(c.id, null);
+      s.setCategoryBudgetCap(id('Mercantil'), 300);
+      s.setCategoryBudgetCap(id('Energia'), 200);
+      s.addExpense({ description: 'Feira 8g', category: 'Mercantil', amount: 230, date: `${ym}-05` });
+      s.addExpense({ description: 'Luz 8g', category: 'Energia', amount: 170, date: `${ym}-06` });
+      window.v8App.ui.render();
+    });
+
+    // --- Início: aviso aparece (Energia a 85% = perto do teto)
+    await page.click('[data-tab="home"]');
+    let alertText = (await page.locator('#home-budget-alert').innerText()).replace(/\s+/g, ' ');
+    assert.ok(alertText.includes('1 categoria perto do teto') && alertText.includes('Energia (85%)'), alertText);
+    await page.click('#home-budget-alert [data-goto-tab="expenses"]');
+    assert.equal(await page.locator('#view-expenses').evaluate(el => !el.classList.contains('hidden')), true, '"Ver tetos" leva para Despesas');
+
+    // --- Despesas: cartão com barras acessíveis e estado em texto
+    const card = (await page.locator('#budget-caps-container').innerText()).replace(/\s+/g, ' ');
+    assert.ok(card.includes('Tetos do mês') && card.includes('Perto do teto') && card.includes('Dentro do teto'), card);
+    assert.equal(await page.locator('#budget-caps-container [role="progressbar"]').count(), 2);
+    assert.equal(await page.locator('#budget-caps-container [aria-label="Teto de Energia"]').getAttribute('aria-valuenow'), '85');
+
+    // --- Lançar despesa: aviso muda conforme valor, categoria e parcelamento
+    await page.evaluate(() => window.v8App.ui.openExpenseModal());
+    await page.locator('#exp-category-trigger').click();
+    await page.locator('[data-cat-pick="Mercantil"]').click();
+    const hint = async () => (await page.locator('#exp-budget-hint').innerText()).replace(/\u00a0/g, ' ').replace(/\s+/g, ' ');
+    await page.fill('#exp-amount-input', '50');
+    assert.ok((await hint()).includes('R$ 280,00 (93%)'), await hint());
+    assert.ok(await page.locator('#exp-budget-hint').evaluate(el => el.classList.contains('warn')));
+    await page.fill('#exp-amount-input', '100');
+    assert.ok((await hint()).includes('R$ 30,00 acima do teto'), await hint());
+    assert.ok(await page.locator('#exp-budget-hint').evaluate(el => el.classList.contains('over')));
+    await page.selectOption('#exp-installments-input', '5');
+    assert.ok((await hint()).includes('R$ 250,00 (83%)') && (await hint()).includes('1ª parcela'), 'Parcelado considera só a 1ª parcela: ' + await hint());
+    await page.locator('#exp-category-trigger').click();
+    await page.click('#exp-category-panel [data-macro="macro_saude"] .cat-macro-head'); // abre o grupo Saúde (sanfona)
+    await page.locator('[data-cat-pick="Remédios"]').click();
+    assert.equal(await page.locator('#exp-budget-hint').evaluate(el => el.classList.contains('hidden')), true, 'Categoria sem teto não mostra aviso');
+    await page.evaluate(() => window.v8App.ui.closeAllModals());
+
+    // --- Gestão de categorias: editar o teto de uma categoria padrão, com Desfazer
+    await page.evaluate(() => window.v8App.ui.openCategoriesModal());
+    const capBtn = page.locator('[data-edit-cap]:visible').first();
+    assert.ok((await page.locator('#categories-modal-body').innerText()).replace(/\u00a0/g, ' ').includes('Teto R$ 300,00/mês'), 'Teto atual aparece na linha da categoria');
+    await capBtn.click();
+    assert.equal(await page.locator('#modal-category-cap').evaluate(el => el.classList.contains('hidden')), false);
+    await page.fill('#cap-value-input', '-5');
+    await page.click('#form-category-cap button[type="submit"]');
+    await page.waitForSelector('.toast-silk.error');
+    await page.fill('#cap-value-input', '500');
+    await page.click('#form-category-cap button[type="submit"]');
+    await page.waitForSelector('.toast-undo');
+    const capOf = (n) => page.evaluate((name) => window.v8App.store.data.categories.find(c => c.name === name).monthly_budget_cap, n);
+    assert.equal(await capOf('Mercantil'), 500);
+    assert.equal(await page.locator('#modal-categories').evaluate(el => el.classList.contains('hidden')), false, 'Volta para a lista de categorias');
+    await page.click('.toast-undo .btn-toast-undo');
+    assert.equal(await capOf('Mercantil'), 300, 'Desfazer restaura o teto anterior');
+
+    // Remover o teto (campo vazio) tira a categoria do cartão
+    await page.locator('[data-edit-cap]:visible').first().click();
+    await page.fill('#cap-value-input', '');
+    await page.click('#form-category-cap button[type="submit"]');
+    await page.waitForSelector('.toast-undo');
+    assert.equal(await capOf('Mercantil'), null);
+    await page.evaluate(() => window.v8App.ui.closeAllModals());
+    await page.click('[data-tab="expenses"]');
+    assert.equal(await page.locator('#budget-caps-container [aria-label="Teto de Mercantil"]').count(), 0);
+
+    // Estado limpo para os próximos cenários
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      s.setCategoryBudgetCap(s.data.categories.find(c => c.name === 'Energia').id, null);
+      document.querySelectorAll('.toast-silk').forEach(el => el.remove());
+      window.v8App.ui.render();
+    });
   });
   // =========================================================================
   // CENÁRIO 9: ZERO ERROS NO CONSOLE E ZERO REQUISIÇÕES BLOQUEADAS

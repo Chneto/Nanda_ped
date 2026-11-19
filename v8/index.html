@@ -147,6 +147,8 @@
 
         <!-- Aba 1: Início (Dashboard / Balanço / Resumo Pediátrico) -->
         <section id="view-home" class="app-view active" aria-label="Aba Início">
+          <!-- Aviso de tetos (aparece só quando há categoria perto/acima do teto) -->
+          <div id="home-budget-alert"></div>
           <!-- Hero Card de Saldo -->
           <div class="hero-balance-card">
             <div class="balance-title">
@@ -274,6 +276,9 @@
             <div class="expenses-total-amount" id="expenses-total-value" style="font-size: 1.8rem; font-weight: 900; color: var(--coral-expense-dark); margin: 6px 0;">R$ 0,00</div>
             <span class="expenses-sub-hint" style="font-size: 0.75rem; color: var(--text-muted);">Todas as despesas do mês e compras parceladas vigentes</span>
           </div>
+
+          <!-- Tetos mensais por categoria -->
+          <div class="card-section" id="budget-caps-container" aria-live="polite"></div>
 
           <!-- Barra de Filtros por Macro-Grupo -->
           <div class="card-section" style="padding-bottom: 8px;">
@@ -505,6 +510,23 @@
           </button>
         </header>
         <form id="form-installment" class="modal-form" novalidate></form>
+      </div>
+    </div>
+    <!-- Modal 10: Teto mensal da categoria -->
+    <div id="modal-category-cap" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-category-cap-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Teto mensal</span>
+            <h3 id="modal-category-cap-title">Teto da categoria</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-category-cap" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <form id="form-category-cap" class="modal-form" novalidate></form>
       </div>
     </div>
     <!-- Drawer Lateral do Menu Hambúrguer -->
