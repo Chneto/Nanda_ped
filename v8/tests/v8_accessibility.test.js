@@ -36,10 +36,11 @@ describe('v8 - Acessibilidade', () => {
     }
   });
 
-  it('ui.js gerencia foco (abrir/fechar), trap de Tab e roles dos toasts', () => {
-    const ui = fs.readFileSync(path.join(V8_DIR, 'js', 'ui.js'), 'utf-8');
+  it('ui/feedback.js gerencia foco (abrir/fechar), trap de Tab e roles dos toasts', () => {
+    const ui = fs.readFileSync(path.join(V8_DIR, 'js', 'ui', 'feedback.js'), 'utf-8');
     assert.ok(ui.includes('_restoreFocus'));
-    assert.ok(ui.includes("e.key === 'Tab'"));
+    const events = fs.readFileSync(path.join(V8_DIR, 'js', 'ui', 'events.js'), 'utf-8');
+    assert.ok(events.includes("e.key === 'Tab'"), 'trap de Tab ligado em events.js');
     assert.ok(ui.includes("type === 'error' ? 'alert' : 'status'"));
   });
 });

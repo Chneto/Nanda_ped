@@ -1,6 +1,6 @@
 // Finanças Pediatria v8 Service Worker - Offline Resilience - Criado por FChNeto
 // Incrementar a cada release para invalidar o cache antigo no iPhone
-const CACHE_NAME = 'financas-pediatria-v8-static-v2';
+const CACHE_NAME = 'financas-pediatria-v8-static-v3';
 
 const STATIC_ASSETS = [
   './',
@@ -12,6 +12,15 @@ const STATIC_ASSETS = [
   './js/storage.js',
   './js/store.js',
   './js/ui.js',
+  './js/ui/helpers.js',
+  './js/ui/events.js',
+  './js/ui/views.js',
+  './js/ui/shift-modal.js',
+  './js/ui/expense-modal.js',
+  './js/ui/sources-categories.js',
+  './js/ui/profile-hub.js',
+  './js/ui/feedback.js',
+  './js/ui/charts.js',
   './assets/icons/icon-192.png',
   './assets/icons/icon-512.png',
   './assets/icons/apple-touch-icon.png',

@@ -43,6 +43,16 @@ function buildRootBundle() {
       }
     });
 
+    // Módulos temáticos da UI (js/ui/*.js)
+    const uiSrcDir = path.join(v8Dir, 'js', 'ui');
+    if (fs.existsSync(uiSrcDir)) {
+      const uiDstDir = path.join(rootDir, 'js', 'ui');
+      fs.mkdirSync(uiDstDir, { recursive: true });
+      fs.readdirSync(uiSrcDir).filter(f => f.endsWith('.js')).forEach(f => {
+        fs.copyFileSync(path.join(uiSrcDir, f), path.join(uiDstDir, f));
+      });
+    }
+
     console.log('Raiz sincronizada com Finanças Pediatria v8.0.0 Standalone.');
   }
 }

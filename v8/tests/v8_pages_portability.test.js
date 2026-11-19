@@ -14,7 +14,8 @@ const read = (f) => fs.readFileSync(path.join(V8_DIR, f), 'utf-8');
 
 describe('v8 - Portabilidade GitHub Pages (/Nanda_ped/v8/) e ícones iOS', () => {
   it('index.html, CSS e JS não referenciam arquivos fora da pasta v8 (../)', () => {
-    const files = ['index.html', 'css/styles.css', ...fs.readdirSync(path.join(V8_DIR, 'js')).map(f => `js/${f}`)];
+    const listJs = (dir) => fs.readdirSync(path.join(V8_DIR, dir), { withFileTypes: true }).flatMap(d => d.isDirectory() ? listJs(path.join(dir, d.name)) : [path.join(dir, d.name)]);
+    const files = ['index.html', 'css/styles.css', ...listJs('js')];
     for (const f of files) {
       const hits = read(f).match(/(?:href|src|url\()\s*=?\s*["']?\.\.\//g) || [];
       assert.equal(hits.length, 0, `${f} referencia caminho fora da v8`);
