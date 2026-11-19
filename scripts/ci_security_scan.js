@@ -62,6 +62,29 @@ function main() {
     }
   }
 
+  // 3. v8 (publicada no GitHub Pages): CSP via <meta>, sem scripts remotos e sem caminhos fora da pasta
+  const v8Html = path.join(rootDir, 'v8', 'index.html');
+  if (!fs.existsSync(v8Html)) {
+    console.error('FAIL: v8/index.html does not exist');
+    process.exit(1);
+  }
+  const html = fs.readFileSync(v8Html, 'utf-8');
+  const v8Csp = (html.match(/http-equiv="Content-Security-Policy"[^>]*content="([^"]+)"/i) || [])[1] || '';
+  if (!/script-src 'self'(;|$)/.test(v8Csp) || /script-src[^;]*unsafe-inline/.test(v8Csp)) {
+    console.error("FAIL: v8 CSP must use script-src 'self' without unsafe-inline");
+    process.exit(1);
+  }
+  for (const needle of ["object-src 'none'", "base-uri 'self'"]) {
+    if (!v8Csp.includes(needle)) {
+      console.error(`FAIL: v8 CSP missing ${needle}`);
+      process.exit(1);
+    }
+  }
+  if (/href="\.\.\/|src="\.\.\//.test(html)) {
+    console.error('FAIL: v8/index.html references files outside v8/');
+    process.exit(1);
+  }
+
   console.log('SUCCESS: All CI security, CSP, and author checks passed cleanly.');
 }
 

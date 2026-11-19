@@ -5,7 +5,7 @@
  */
 
 import { APP_CREATOR, APP_VERSION, PediatricStore } from './store.js';
-import { PediatricStorage } from './storage.js';
+import { PediatricStorage, isBackupStale } from './storage.js';
 import { PediatricUI } from './ui.js';
 
 export { APP_CREATOR, APP_VERSION };
@@ -52,37 +52,40 @@ export class PediatricApp {
     try {
       this.storage.requestPersistence();
 
-      // Se o localStorage estava vazio (ex: Safari limpou cache após 7 dias), recupera do IndexedDB
-      if (!cachedState) {
-        const idbState = await this.storage.loadAsync();
-        if (idbState && (idbState.shifts?.length > 0 || idbState.expenses?.length > 0)) {
-          this.store.init(idbState);
-          this.store.save();
-          this.ui.render();
-          console.log('[PediatricApp] Estado recuperado com sucesso do IndexedDB durável.');
-        }
+      // Recupera do IndexedDB se o localStorage estava vazio (Safari purgou) OU se o IndexedDB
+      // tem dados mais recentes que o localStorage (purga parcial / gravação interrompida)
+      const idbState = await this.storage.loadAsync();
+      const idbTime = Date.parse(idbState?.lastUpdated || '') || 0;
+      const lsTime = Date.parse(cachedState?.lastUpdated || '') || 0;
+      const idbHasData = idbState && (idbState.shifts?.length > 0 || idbState.expenses?.length > 0);
+      if (idbHasData && (!cachedState || idbTime > lsTime)) {
+        this.store.init(idbState);
+        this.store.save();
+        this.ui.render();
+        console.log('[PediatricApp] Estado recuperado com sucesso do IndexedDB durável.');
       }
     } catch (err) {
       console.warn('[PediatricApp] Erro na reconciliação assíncrona:', err);
     }
 
+    // 5b. Lembrete discreto de backup (Safari pode purgar dados locais)
+    try {
+      if (isBackupStale(this.store.data)) {
+        this.ui.showToast('Faz tempo sem backup. Menu → Salvar no iPhone protege seus dados.');
+      }
+    } catch (e) { /* lembrete é opcional */ }
+
     // 6. Registro de Service Worker para PWA Offline (em conformidade com CSP estrita sem scripts inline)
     if (typeof navigator !== 'undefined' && 'serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
       try {
-        if (typeof caches !== 'undefined' && caches.keys) {
-          caches.keys().then((keys) => {
-            keys.forEach((k) => {
-              if (k !== 'financas-pediatria-v8-static-v1' && k.startsWith('financas-ped-')) {
-                caches.delete(k).catch(() => {});
-              }
-            });
-          }).catch(() => {});
-        }
-        navigator.serviceWorker.register('./sw.js').then((reg) => {
-          if (reg && typeof reg.update === 'function') {
-            reg.update().catch(() => {});
+        // Aviso de nova versão: só quando já havia um SW controlando (não na 1ª instalação)
+        const hadController = Boolean(navigator.serviceWorker.controller);
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (hadController) {
+            this.ui.showToast('Nova versão instalada. Feche e reabra o app para atualizar.');
           }
-        }).catch(err => {
+        });
+        navigator.serviceWorker.register('./sw.js').catch(err => {
           console.debug('[ServiceWorker] Registro offline:', err?.message || err);
         });
       } catch (swErr) {

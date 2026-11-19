@@ -1,5 +1,6 @@
 // Finanças Pediatria v8 Service Worker - Offline Resilience - Criado por FChNeto
-const CACHE_NAME = 'financas-pediatria-v8-static-v1';
+// Incrementar a cada release para invalidar o cache antigo no iPhone
+const CACHE_NAME = 'financas-pediatria-v8-static-v2';
 
 const STATIC_ASSETS = [
   './',
@@ -32,14 +33,13 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Activate: Purge older cache versions (including legacy v5 root cache) and claim clients
+// Activate: Purge older cache versions and claim clients
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) => {
       return Promise.all(
         keys.filter((key) => key !== CACHE_NAME && (
           key.startsWith('nanda-') || 
-          key.startsWith('financas-ped-') ||
           key.startsWith('financas-pediatria-')
         )).map((key) => caches.delete(key))
       );
@@ -58,15 +58,18 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Cache sem query string (ex.: ?action=new-shift usa o mesmo index.html em cache)
+  const cacheKey = new Request(url.origin + url.pathname);
+
   event.respondWith(
     (async () => {
-      const cachedResponse = await caches.match(event.request);
+      const cachedResponse = await caches.match(cacheKey, { ignoreSearch: true });
 
       try {
         const networkResponse = await fetch(event.request);
         if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache)).catch(() => {});
+          caches.open(CACHE_NAME).then((cache) => cache.put(cacheKey, responseToCache)).catch(() => {});
         }
         return networkResponse;
       } catch (fetchError) {

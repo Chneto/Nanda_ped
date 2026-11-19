@@ -18,6 +18,21 @@ export const DB_NAME = 'v8_pediatric_db';
 export const DB_STORE = 'app_state';
 export const BACKUP_MAX_BYTES = 10 * 1024 * 1024; // 10 Megabytes
 
+export const BACKUP_REMINDER_DAYS = 14;
+
+/**
+ * Indica se o usuário tem dados e está há muito tempo sem exportar backup
+ * (Safari/iOS pode purgar dados locais; o lembrete incentiva "Salvar no iPhone").
+ */
+export function isBackupStale(data, now = Date.now(), days = BACKUP_REMINDER_DAYS) {
+  if (!data || typeof data !== 'object') return false;
+  const hasData = (data.shifts?.length || 0) + (data.expenses?.length || 0) > 0;
+  if (!hasData) return false;
+  const last = Date.parse(data.preferences?.lastBackupAt || '');
+  if (!last) return true;
+  return now - last > days * 24 * 60 * 60 * 1000;
+}
+
 /**
  * Driver IndexedDB com conexão singleton reutilizável
  */

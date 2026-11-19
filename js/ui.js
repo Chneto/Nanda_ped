@@ -1615,6 +1615,8 @@ export class PediatricUI {
   async exportBackup() {
     const res = await this.storage.exportBackup(this.store.data);
     if (res.success) {
+      this.store.data.preferences.lastBackupAt = new Date().toISOString();
+      this.store.save();
       this.showToast(`Backup salvo com sucesso (${res.method === 'share' ? 'iCloud/Arquivos' : 'Download'})!`);
     } else {
       this.showToast(`Falha ao exportar: ${res.error}`, 'error');
