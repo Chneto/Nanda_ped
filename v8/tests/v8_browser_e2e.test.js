@@ -604,6 +604,21 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     const created = await page.evaluate(() => window.v8App.store.data.categories.find(c => c.name === 'Livros 8c')?.macro_group);
     assert.equal(created, 'Formação & Carreira');
 
+    // Títulos mostram a contagem real (não mais "23" fixo)
+    await page.evaluate(() => window.v8App.ui.openCategoriesModal());
+    const counts = await page.evaluate(() => {
+      const cats = window.v8App.store.data.categories;
+      return {
+        active: cats.filter(c => c.active !== false).length,
+        custom: cats.filter(c => c.isCustom && c.active !== false).length,
+        title: document.getElementById('modal-categories-title').textContent,
+        summary: document.querySelector('#categories-modal-body .management-toolbar h4').textContent
+      };
+    });
+    assert.ok(counts.custom >= 1);
+    assert.equal(counts.title, `${counts.active} Categorias de Gastos`);
+    assert.ok(counts.summary.startsWith(`${counts.active} categorias`), counts.summary);
+    assert.ok(counts.summary.includes(`${counts.custom} criada`), counts.summary);
     // Reabrir o modal várias vezes não duplica ações (um único listener)
     await page.evaluate(() => { window.v8App.ui.openCategoriesModal(); window.v8App.ui.openCategoriesModal(); });
     await page.click('#btn-restore-categories');

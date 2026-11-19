@@ -162,10 +162,20 @@ export class SourcesCategoriesMethods {
     if (!body) return;
 
     const categories = this.store.getAllCategories();
+    const activeCount = categories.filter(c => c.active !== false).length;
+    const customCount = categories.filter(c => c.isCustom && c.active !== false).length;
+    const archivedCount = categories.filter(c => c.active === false).length;
+    const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+    const summary = [plural(activeCount, 'categoria', 'categorias')];
+    if (customCount) summary.push(customCount === 1 ? '1 criada por você' : `${customCount} criadas por você`);
+    if (archivedCount) summary.push(plural(archivedCount, 'arquivada', 'arquivadas'));
+
+    const titleEl = document.getElementById('modal-categories-title');
+    if (titleEl) titleEl.textContent = `${plural(activeCount, 'Categoria', 'Categorias')} de Gastos`;
 
     body.innerHTML = `
       <div class="management-toolbar">
-        <h4>23 Categorias Canônicas & Personalizadas</h4>
+        <h4>${escapeHtml(summary.join(' · '))}</h4>
         <button type="button" class="btn-silk-secondary" id="btn-restore-categories">Restaurar 23 Padrões</button>
       </div>
 
