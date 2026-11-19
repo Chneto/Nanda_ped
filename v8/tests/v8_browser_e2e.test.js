@@ -509,6 +509,52 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
   });
 
   // =========================================================================
+  // CENÁRIO 8b: SELETOR DE CATEGORIA EM GRUPOS (MACRO) E SUBGRUPOS (MICRO)
+  // =========================================================================
+  it('Cenário 8b: Seletor de categoria agrupado (macro > micro) com busca, sanfona e salvamento', async () => {
+    await page.evaluate(() => window.v8App.ui.openExpenseModal());
+    await page.click('#exp-category-trigger');
+    assert.equal(await page.locator('#exp-category-trigger').getAttribute('aria-expanded'), 'true');
+
+    // 6 grupos (macro) e apenas um aberto (sanfona)
+    assert.equal(await page.locator('.cat-macro').count(), 6, 'Deve exibir os 6 grupos');
+    assert.equal(await page.locator('.cat-macro.open').count(), 1, 'Somente o grupo da categoria atual abre');
+    assert.ok(await page.locator('.cat-sub-title:visible').count() >= 2, 'Subgrupos (micro) visíveis dentro do grupo aberto');
+
+    // Abrir outro grupo recolhe o anterior; escolher categoria fecha a lista e atualiza o botão
+    await page.click('[data-macro="macro_moradia"] .cat-macro-head');
+    assert.equal(await page.locator('.cat-macro.open').count(), 1);
+    await page.click('[data-cat-pick="Energia"]');
+    const picked = await page.evaluate(() => ({
+      value: document.getElementById('exp-category-input').value,
+      trigger: document.getElementById('exp-category-trigger').innerText.replace(/\s+/g, ' ').trim(),
+      panelHidden: document.getElementById('exp-category-panel').classList.contains('hidden')
+    }));
+    assert.equal(picked.value, 'Energia');
+    assert.ok(picked.trigger.includes('Energia') && picked.trigger.includes('Moradia & Contas'));
+    assert.equal(picked.panelHidden, true);
+
+    // Busca sem acento encontra a categoria e mostra apenas o grupo correspondente
+    await page.click('#exp-category-trigger');
+    await page.fill('#exp-cat-search', 'agua');
+    assert.equal(await page.locator('.cat-tile').count(), 1);
+    await page.fill('#exp-cat-search', 'zzzz');
+    assert.equal(await page.locator('#exp-cat-empty').isVisible(), true, 'Mensagem amigável quando nada é encontrado');
+    await page.fill('#exp-cat-search', '');
+
+    // Salva a despesa com a categoria escolhida e classifica no macro-grupo correto
+    await page.click('#exp-category-trigger');
+    await page.fill('#exp-desc-input', 'Conta de luz E2E');
+    await page.fill('#exp-amount-input', '98.76');
+    await page.click('#form-new-expense button[type="submit"]');
+    const saved = await page.evaluate(() => {
+      const e = window.v8App.store.data.expenses.find(x => x.description === 'Conta de luz E2E');
+      return { cat: e?.category_name_snapshot, macro: e?.macro_group_snapshot, amount: e?.amount };
+    });
+    assert.deepEqual(saved, { cat: 'Energia', macro: 'Moradia & Contas', amount: 98.76 });
+  });
+
+  // =========================================================================
   // CENÁRIO 9: ZERO ERROS NO CONSOLE E ZERO REQUISIÇÕES BLOQUEADAS
   // =========================================================================
   it('Cenário 9: Ausência total de erros no console do navegador e zero requisições externas bloqueadas', async () => {

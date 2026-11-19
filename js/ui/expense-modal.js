@@ -5,7 +5,9 @@
  */
 
 import { getLocalDateString } from '../store.js';
+import { getIconSvg } from '../icons.js';
 import { escapeHtml } from './helpers.js';
+import { buildCategoryTree, filterCategoryTree, getQuickCategories, renderTreeHtml, renderQuickHtml, renderTriggerHtml } from './category-picker.js';
 
 export class ExpenseModalMethods {
   // =========================================================================
@@ -46,18 +48,11 @@ export class ExpenseModalMethods {
     }
 
     const categories = this.store.getActiveCategories();
-    const quickChipsHtml = categories.slice(0, 8).map(c => `
-      <button 
-        type="button" 
-        class="modal-hosp-pill ${c.name === defaultCat ? 'selected' : ''}" 
-        data-cat-chip="${escapeHtml(c.name)}" 
-        data-default-amount="${c.default_amount || ''}"
-        data-default-payment="${c.default_payment_type || 'a_vista'}"
-      >
-        ${escapeHtml(c.name)}
-      </button>
-    `).join('');
-
+    // Seletor em grupos (macro) e subgrupos (micro); o <select> nativo continua como fonte do valor do formulário
+    const tree = buildCategoryTree(categories);
+    const selectedCat = categories.find(c => c.name === defaultCat) || null;
+    const selectedMacro = tree.find(t => t.subgroups.some(s => s.categories.some(c => c.name === defaultCat)));
+    const quickChipsHtml = renderQuickHtml(getQuickCategories(this.store.data.expenses, categories), defaultCat);
     form.innerHTML = `
       <div class="form-group">
         <label for="exp-desc-input">Descrição do Gasto</label>
@@ -72,20 +67,26 @@ export class ExpenseModalMethods {
         />
       </div>
 
-      <div class="form-group">
-        <label for="exp-category-input">Categoria de Despesa</label>
-        <select id="exp-category-input" name="category" class="form-input silk-input">
+      <div class="form-group cat-picker" id="exp-cat-picker">
+        <label id="exp-category-label" for="exp-category-trigger">Categoria de Despesa</label>
+        <select id="exp-category-input" name="category" class="cat-native-select" tabindex="-1" aria-hidden="true">
           ${categories.map(c => `
-            <option value="${escapeHtml(c.name)}" ${c.name === defaultCat ? 'selected' : ''}>
-              ${escapeHtml(c.name)} (${escapeHtml(c.macro_group)})
-            </option>
+            <option value="${escapeHtml(c.name)}" ${c.name === defaultCat ? 'selected' : ''}>${escapeHtml(c.name)}</option>
           `).join('')}
         </select>
-        <div class="modal-hospital-pills" id="exp-cat-chips-container" style="margin-top: 8px;">
+        <button type="button" id="exp-category-trigger" class="cat-trigger" aria-expanded="false" aria-controls="exp-category-panel">
+          <span class="cat-trigger-main">${renderTriggerHtml(selectedCat, selectedMacro?.name)}</span>
+          <span class="cat-chevron" aria-hidden="true">${getIconSvg('chevron_down', { size: 18 })}</span>
+        </button>
+        <div class="cat-quick-row" id="exp-cat-chips-container" aria-label="Categorias mais usadas">
           ${quickChipsHtml}
         </div>
+        <div id="exp-category-panel" class="cat-panel hidden" role="group" aria-label="Escolher categoria de despesa">
+          <input type="search" id="exp-cat-search" class="form-input silk-input cat-search" placeholder="Buscar categoria…" autocomplete="off" aria-label="Buscar categoria" />
+          <div id="exp-cat-tree" class="cat-tree">${renderTreeHtml(tree, defaultCat)}</div>
+          <p id="exp-cat-empty" class="cat-empty hidden">Nenhuma categoria encontrada. Tente outra palavra.</p>
+        </div>
       </div>
-
       <div class="form-row">
         <div class="form-group">
           <label for="exp-amount-input">Valor (R$)</label>
@@ -136,26 +137,91 @@ export class ExpenseModalMethods {
       </div>
     `;
 
-    // Chip de categoria preenche em 1 toque
-    const chipsContainer = form.querySelector('#exp-cat-chips-container');
-    if (chipsContainer) {
-      chipsContainer.addEventListener('click', (e) => {
-        const chip = e.target.closest('[data-cat-chip]');
-        if (!chip) return;
-        chipsContainer.querySelectorAll('.modal-hosp-pill').forEach(c => c.classList.remove('selected'));
-        chip.classList.add('selected');
+    // ---- Seletor de categoria (grupos > subgrupos) ----
+    const catSelect = form.querySelector('#exp-category-input');
+    const trigger = form.querySelector('#exp-category-trigger');
+    const panel = form.querySelector('#exp-category-panel');
+    const treeEl = form.querySelector('#exp-cat-tree');
+    const searchEl = form.querySelector('#exp-cat-search');
+    const emptyEl = form.querySelector('#exp-cat-empty');
+    const quickEl = form.querySelector('#exp-cat-chips-container');
 
-        const catSelect = form.querySelector('#exp-category-input');
-        if (catSelect) catSelect.value = chip.getAttribute('data-cat-chip');
+    const setPanelOpen = (open) => {
+      panel.classList.toggle('hidden', !open);
+      trigger.setAttribute('aria-expanded', open ? 'true' : 'false');
+      trigger.classList.toggle('open', open);
+      if (open) {
+        // Painel se expande no fluxo do modal (sem posição absoluta) e o item escolhido fica visível
+        const sel = treeEl.querySelector('.cat-tile.selected');
+        if (sel && typeof sel.scrollIntoView === 'function') sel.scrollIntoView({ block: 'nearest' });
+      }
+    };
 
-        const defAmt = parseFloat(chip.getAttribute('data-default-amount'));
-        const amtInput = form.querySelector('#exp-amount-input');
-        if (amtInput && defAmt > 0 && !amtInput.value) {
-          amtInput.value = defAmt.toFixed(2);
-        }
-      });
-    }
+    const renderTree = () => {
+      const q = searchEl.value;
+      const filtered = filterCategoryTree(tree, q);
+      treeEl.innerHTML = renderTreeHtml(filtered, catSelect.value, { expandAll: Boolean(q.trim()) });
+      emptyEl.classList.toggle('hidden', filtered.length > 0);
+    };
 
+    const chooseCategory = (name, src) => {
+      const cat = categories.find(c => c.name === name);
+      if (!cat) return;
+      catSelect.value = cat.name;
+      const macro = tree.find(t => t.subgroups.some(s => s.categories.some(c => c.name === cat.name)));
+      trigger.querySelector('.cat-trigger-main').innerHTML = renderTriggerHtml(cat, macro?.name);
+      quickEl.querySelectorAll('.cat-quick').forEach(b => b.classList.toggle('selected', b.getAttribute('data-cat-chip') === cat.name));
+      renderTree();
+
+      const defAmt = parseFloat(src.getAttribute('data-default-amount'));
+      const amtInput = form.querySelector('#exp-amount-input');
+      if (amtInput && defAmt > 0 && !amtInput.value) {
+        amtInput.value = defAmt.toFixed(2);
+      }
+    };
+
+    trigger.addEventListener('click', () => setPanelOpen(panel.classList.contains('hidden')));
+
+    panel.addEventListener('click', (e) => {
+      const toggle = e.target.closest('[data-cat-macro-toggle]');
+      if (toggle) {
+        const section = toggle.closest('.cat-macro');
+        const open = !section.classList.contains('open');
+        // Sanfona: abrir um grupo recolhe os demais (lista curta e fácil de percorrer)
+        panel.querySelectorAll('.cat-macro').forEach(s => {
+          const shouldOpen = s === section ? open : false;
+          s.classList.toggle('open', shouldOpen);
+          s.querySelector('[data-cat-macro-toggle]').setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+          const body = s.querySelector('.cat-macro-body');
+          if (shouldOpen) body.removeAttribute('hidden'); else body.setAttribute('hidden', '');
+        });
+        if (open && typeof section.scrollIntoView === 'function') section.scrollIntoView({ block: 'nearest' });
+        return;
+      }
+      const tile = e.target.closest('[data-cat-pick]');
+      if (tile) {
+        chooseCategory(tile.getAttribute('data-cat-pick'), tile);
+        setPanelOpen(false);
+        trigger.focus();
+      }
+    });
+
+    searchEl.addEventListener('input', renderTree);
+
+    // Esc fecha só a lista (não o modal inteiro)
+    panel.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        setPanelOpen(false);
+        trigger.focus();
+      }
+    });
+
+    // Atalhos "mais usadas": 1 toque preenche categoria e valor padrão
+    quickEl.addEventListener('click', (e) => {
+      const chip = e.target.closest('[data-cat-chip]');
+      if (chip) chooseCategory(chip.getAttribute('data-cat-chip'), chip);
+    });
     modal.classList.remove('hidden');
   }
 
