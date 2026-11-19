@@ -2058,3 +2058,27 @@ textarea.form-input {
   #report-print-root .report-table tr { break-inside: avoid; }
   #report-print-root .report-kpi.neg dd, #report-print-root .report-status { color: #000 !important; }
 }
+/* ---------- Gráfico Caixa × Competência ---------- */
+.cac-figure { margin: 0; }
+.cac-lead { margin: 0 0 10px; color: var(--text-main); font-size: 0.9rem; font-weight: 600; line-height: 1.45; }
+.cac-svg { display: block; width: 100%; height: auto; }
+.cac-grid { stroke: var(--silk-border-strong); stroke-width: 1; stroke-dasharray: 3 4; }
+.cac-axis, .cac-label { fill: var(--text-muted); font-size: 12px; font-family: var(--font-family); }
+.cac-label.active { fill: var(--text-main); font-weight: 800; }
+.cac-active-bg { fill: var(--primary-pink-light); opacity: 0.7; }
+.cac-bar.cash { fill: var(--mint-text); }
+.cac-bar.accrual { fill: url(#cac-hatch); stroke: var(--pink-text); stroke-width: 1.5; }
+.cac-hatch-bg { fill: var(--bg-card); }
+.cac-hatch-line { stroke: var(--pink-text); }
+.cac-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 16px; margin: 8px 0 12px; color: var(--text-muted); font-size: 0.8125rem; }
+.cac-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+.cac-swatch { display: inline-block; width: 14px; height: 14px; border-radius: 3px; }
+.cac-swatch.cash { background: var(--mint-text); }
+.cac-swatch.accrual { border: 1.5px solid var(--pink-text); background: repeating-linear-gradient(45deg, var(--pink-text) 0 2px, transparent 2px 5px); }
+.cac-table th[scope="row"] { font-weight: 700; white-space: nowrap; }
+.cac-table tr.active th, .cac-table tr.active td { background: var(--primary-pink-light); }
+.cac-now { display: inline-block; margin-left: 4px; padding: 0 6px; border-radius: var(--radius-pill); background: var(--bg-card); border: 1px solid var(--silk-border-strong); color: var(--pink-text); font-size: 0.75rem; font-weight: 700; }
+.cac-table .gap.pos { color: var(--amber-text); font-weight: 700; }
+.cac-table .gap.neg { color: var(--mint-text); font-weight: 700; }
+.cac-pipeline { margin: 10px 0 0; padding: 9px 12px; border-radius: var(--radius-sm); background: var(--bg-card-subtle); border: 1px solid var(--silk-border); color: var(--text-main); font-size: 0.8125rem; line-height: 1.45; }
+.cac-pipeline.overdue { border-color: rgba(239, 83, 80, 0.5); background: rgba(239, 83, 80, 0.1); color: var(--danger-text); font-weight: 600; }

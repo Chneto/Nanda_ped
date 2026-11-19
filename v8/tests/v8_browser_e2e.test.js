@@ -1040,6 +1040,70 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     await page.evaluate(() => { document.querySelectorAll('.toast-silk').forEach(el => el.remove()); });
   });
   // =========================================================================
+  // CENÁRIO 8i: GRÁFICO CAIXA × COMPETÊNCIA NA INÍCIO
+  // =========================================================================
+  it('Cenário 8i: Cartão Caixa × Competência — gráfico acessível, tabela, frases e acompanha o mês', async () => {
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      document.querySelectorAll('.toast-silk').forEach(el => el.remove());
+      s.data.shifts = []; s.data.expenses = [];
+      s.data.residencySalary = { value: 4000, dayOfMonth: 5, active: true, description: 'Bolsa' };
+      s.data.preferences.activeMonth = '2026-11';
+      s.data.preferences.regime = 'caixa';
+      s.addShift({ hospital: 'Hospital 8i-A', net_value: 2000, date: '2026-06-10' }); // parcelas em ago/set: uma fica atrasada
+      s.addShift({ hospital: 'Hospital 8i-B', net_value: 3000, date: '2026-11-03' }); // produção de novembro, caixa só em jan/fev
+      window.v8App.ui.render();
+    });
+    await page.click('[data-tab="home"]');
+
+    const card = page.locator('#cash-accrual-card');
+    assert.equal(await card.isVisible(), true);
+    assert.equal((await card.locator('h2').innerText()).trim(), 'Caixa × Competência');
+
+    // Gráfico: imagem com título/descrição, 6 meses, 12 barras, mês atual destacado
+    const svg = card.locator('svg.cac-svg');
+    assert.equal(await svg.getAttribute('role'), 'img');
+    assert.equal(await svg.locator('g.cac-group').count(), 6);
+    assert.equal(await svg.locator('rect.cac-bar').count(), 12);
+    assert.equal(await svg.locator('g.cac-group.active text').textContent(), 'Nov');
+    const desc = (await svg.locator('desc').textContent()).replace(/\u00a0/g, ' ');
+    assert.ok(desc.includes('Novembro de 2026: caixa R$ 4.000,00, competência R$ 7.000,00'), desc);
+
+    // As barras refletem os números: competência de novembro (7.000) é maior que o caixa (4.000)
+    const heights = await svg.locator('g.cac-group.active rect.cac-bar').evaluateAll(els => els.map(e => parseFloat(e.getAttribute('height'))));
+    assert.ok(heights[1] > heights[0], `competência deve ser mais alta que caixa: ${heights}`);
+
+    // Frase-resumo e dinheiro a caminho
+    const lead = (await card.locator('.cac-lead').innerText()).replace(/\u00a0/g, ' ');
+    assert.ok(lead.includes('produziu R$ 7.000,00, mas só R$ 4.000,00 cai na conta: R$ 3.000,00 ainda estão a caminho'), lead);
+    const pipeline = (await card.locator('.cac-pipeline').innerText()).replace(/\u00a0/g, ' ');
+    assert.ok(pipeline.includes('Total a receber de plantões:'), pipeline);
+
+    // Tabela de valores (alternativa textual) com 6 meses
+    assert.equal(await card.locator('table.cac-table tbody tr').count(), 6);
+    assert.equal(await card.locator('tr[aria-current="date"] th').innerText().then(t => t.replace(/\s+/g, ' ').trim()), 'Nov atual');
+
+    // Trocar o mês recentra o gráfico e a frase
+    await page.click('#btn-next-month');
+    assert.equal(await card.locator('g.cac-group.active text').textContent(), 'Dez');
+    assert.ok((await card.locator('.cac-lead').innerText()).includes('Dezembro de 2026'));
+    await page.click('#btn-prev-month');
+    assert.equal(await card.locator('g.cac-group.active text').textContent(), 'Nov');
+
+    // Regime de competência selecionado não muda o cartão (ele sempre compara os dois)
+    await page.click('button[data-regime="competencia"]');
+    assert.ok((await card.locator('.cac-lead').innerText()).includes('ainda estão a caminho'));
+    await page.click('button[data-regime="caixa"]');
+
+    // Só renderiza na Início (não pesa nas outras abas)
+    await page.click('[data-tab="income"]');
+    await page.evaluate(() => { document.getElementById('home-cashaccrual-container').innerHTML = ''; window.v8App.ui.render(); });
+    assert.equal(await page.locator('#home-cashaccrual-container').innerHTML(), '', 'fora da Início o cartão não é recalculado');
+    await page.click('[data-tab="home"]');
+    assert.ok((await page.locator('#home-cashaccrual-container').innerHTML()).includes('cac-figure'));
+  });
+  // =========================================================================
   // CENÁRIO 9: ZERO ERROS NO CONSOLE E ZERO REQUISIÇÕES BLOQUEADAS
   // =========================================================================
   it('Cenário 9: Ausência total de erros no console do navegador e zero requisições externas bloqueadas', async () => {

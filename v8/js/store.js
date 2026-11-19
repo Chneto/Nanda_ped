@@ -1172,6 +1172,51 @@ export class PediatricStore {
   }
 
   // -----------------------------------------------------------------------
+  // CAIXA × COMPETÊNCIA: série mensal e dinheiro "a caminho"
+  // -----------------------------------------------------------------------
+
+  /**
+   * Série de meses (centrada no mês ativo) com as entradas por regime de caixa (dinheiro que cai)
+   * e por regime de competência (produção do mês). `gap` > 0: produziu mais do que recebeu (dinheiro a caminho).
+   */
+  getCashVsAccrualSeries(centerMonth = getLocalDateString().slice(0, 7), before = 2, after = 3) {
+    const [cy, cm] = String(centerMonth).slice(0, 7).split('-').map(Number);
+    const series = [];
+    for (let i = -before; i <= after; i++) {
+      const idx = (cy * 12 + (cm - 1)) + i;
+      const y = Math.floor(idx / 12);
+      const m = (idx % 12) + 1;
+      const month = `${y}-${String(m).padStart(2, '0')}`;
+      const cash = this.getMonthSummary(month, 'caixa').totalIncome;
+      const accrual = this.getMonthSummary(month, 'competencia').totalIncome;
+      series.push({
+        month,
+        label: formatMonthYear(month).split(' de ')[0],
+        cash,
+        accrual,
+        gap: Math.round((accrual - cash) * 100) / 100,
+        isActive: i === 0
+      });
+    }
+    return series;
+  }
+
+  /** Parcelas de plantão ainda não recebidas: total a caminho, quantidade, próxima data e atrasadas */
+  getReceivablesPipeline(today = getLocalDateString()) {
+    let total = 0, count = 0, overdueTotal = 0, overdueCount = 0, next = null;
+    for (const shift of this.data.shifts || []) {
+      for (const inst of shift.installments || []) {
+        if (inst.status === 'received') continue;
+        const v = parseFloat(inst.value) || 0;
+        total += v; count++;
+        if (inst.date && inst.date < today) { overdueTotal += v; overdueCount++; }
+        if (inst.date && (!next || inst.date < next)) next = inst.date;
+      }
+    }
+    const r2 = (n) => Math.round(n * 100) / 100;
+    return { total: r2(total), count, overdueTotal: r2(overdueTotal), overdueCount, nextDate: next };
+  }
+  // -----------------------------------------------------------------------
   // TETOS MENSAIS POR CATEGORIA (monthly_budget_cap)
   // -----------------------------------------------------------------------
 
