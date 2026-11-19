@@ -148,7 +148,7 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     await page.evaluate(() => {
       const form = document.getElementById('form-add-category');
       form.querySelector('input[name="name"]').value = 'Livros Médicos';
-      form.querySelector('select[name="macro_group"]').value = 'Formação & Carreira';
+      form.querySelector('input[name="macro_group"][value="Formação & Carreira"]').checked = true; // escolha visual do grupo (radios)
       form.querySelector('input[name="monthly_budget_cap"]').value = '500';
       form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
     });
@@ -554,6 +554,63 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     assert.deepEqual(saved, { cat: 'Energia', macro: 'Moradia & Contas', amount: 98.76 });
   });
 
+  // =========================================================================
+  // CENÁRIO 8c: FILTRO POR GRUPO/SUBGRUPO E GESTÃO DE CATEGORIAS AGRUPADA
+  // =========================================================================
+  it('Cenário 8c: Filtro por grupo e subgrupo na aba Despesas e gestão agrupada de categorias', async () => {
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      const d = new Date().toISOString().slice(0, 10);
+      window.v8App.ui.closeAllModals();
+      s.data.preferences.activeMonth = d.slice(0, 7);
+      for (const [desc, cat, amt] of [['Feira 8c', 'Mercantil', 100], ['Almoço 8c', 'Refeição', 40], ['Pizza 8c', 'Delivery', 60], ['Gasolina 8c', 'Combustível', 200]]) {
+        s.addExpense({ description: desc, category: cat, amount: amt, date: d });
+      }
+      window.v8App.ui.render();
+    });
+    await page.click('[data-tab="expenses"]');
+
+    const visible = async () => (await page.locator('#expenses-list-container').innerText()).replace(/\s+/g, ' ');
+    assert.equal(await page.locator('#micro-filter-bar').isVisible(), false, 'Subgrupos só aparecem com um grupo escolhido');
+
+    await page.click('[data-macro-filter="Alimentação"]');
+    assert.equal(await page.locator('#micro-filter-bar').isVisible(), true);
+    let text = await visible();
+    assert.ok(text.includes('Feira 8c') && text.includes('Pizza 8c') && !text.includes('Gasolina 8c'), 'Grupo Alimentação filtra as despesas');
+
+    await page.click('[data-micro-filter="alim_prontas"]');
+    text = await visible();
+    assert.ok(text.includes('Almoço 8c') && text.includes('Pizza 8c') && !text.includes('Feira 8c'), 'Subgrupo "Refeições prontas" filtra Refeição e Delivery');
+
+    // Trocar de grupo zera o subgrupo; "Todas" limpa tudo
+    await page.click('[data-macro-filter="Transporte & Mobilidade"]');
+    text = await visible();
+    assert.ok(text.includes('Gasolina 8c') && !text.includes('Pizza 8c'));
+    await page.click('[data-macro-filter="all"]');
+    assert.equal(await page.locator('#micro-filter-bar').isVisible(), false);
+
+    // Gestão de categorias: grupos em sanfona, ícones e escolha visual do grupo
+    await page.evaluate(() => window.v8App.ui.openCategoriesModal());
+    assert.equal(await page.locator('#categories-modal-body .cat-macro').count(), 6);
+    assert.equal(await page.locator('#categories-modal-body .cat-macro.open').count(), 1);
+    await page.click('#categories-modal-body [data-macro="macro_saude"] .cat-macro-head');
+    assert.equal(await page.locator('#categories-modal-body .cat-macro.open').count(), 1, 'Sanfona: um grupo aberto por vez');
+    assert.equal(await page.locator('#categories-modal-body [data-macro="macro_saude"] .cat-manage-row').count(), 5);
+    assert.equal(await page.locator('.macro-radio').count(), 6);
+
+    await page.fill('#form-add-category [name="name"]', 'Livros 8c');
+    await page.locator('.macro-radio', { hasText: 'Formação' }).click();
+    await page.click('#form-add-category button[type="submit"]');
+    const created = await page.evaluate(() => window.v8App.store.data.categories.find(c => c.name === 'Livros 8c')?.macro_group);
+    assert.equal(created, 'Formação & Carreira');
+
+    // Reabrir o modal várias vezes não duplica ações (um único listener)
+    await page.evaluate(() => { window.v8App.ui.openCategoriesModal(); window.v8App.ui.openCategoriesModal(); });
+    await page.click('#btn-restore-categories');
+    const restoredToasts = await page.locator('.toast-silk', { hasText: 'restauradas' }).count();
+    assert.equal(restoredToasts, 1, 'Restaurar deve disparar uma única vez');
+    await page.evaluate(() => window.v8App.ui.closeAllModals());
+  });
   // =========================================================================
   // CENÁRIO 9: ZERO ERROS NO CONSOLE E ZERO REQUISIÇÕES BLOQUEADAS
   // =========================================================================

@@ -91,6 +91,15 @@ export class EventsMethods {
       const macroFilterBtn = e.target.closest('[data-macro-filter]');
       if (macroFilterBtn) {
         this.selectedMacroFilter = macroFilterBtn.getAttribute('data-macro-filter');
+        this.selectedMicroFilter = 'all';
+        this.renderExpensesView();
+        return;
+      }
+
+      // 7b. Filtro por Subgrupo (micro) dentro do grupo escolhido
+      const microFilterBtn = e.target.closest('[data-micro-filter]');
+      if (microFilterBtn) {
+        this.selectedMicroFilter = microFilterBtn.getAttribute('data-micro-filter');
         this.renderExpensesView();
         return;
       }

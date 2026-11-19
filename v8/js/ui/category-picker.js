@@ -195,3 +195,84 @@ export function renderQuickHtml(quickCats, selectedName) {
       ${iconBubble(c.icon, c.color, 14)}<span>${escapeHtml(c.name)}</span>
     </button>`).join('');
 }
+
+// ===========================================================================
+// Filtros (aba Despesas), gestão de categorias e escolha de grupo
+// ===========================================================================
+
+/** Chips de grupo (macro) para filtrar as despesas: "Todas" + os 6 grupos com ícone colorido */
+export function renderMacroChipsHtml(selectedMacro, macroGroups = MACRO_GROUPS) {
+  const all = `
+    <button class="macro-chip ${selectedMacro === 'all' ? 'active' : ''}" data-macro-filter="all" type="button" aria-pressed="${selectedMacro === 'all'}">
+      <span class="macro-chip-icon" aria-hidden="true">${getIconSvg('layers', { size: 14 })}</span>Todas
+    </button>`;
+  return all + macroGroups.map(mg => `
+    <button class="macro-chip ${selectedMacro === mg.name ? 'active' : ''}" data-macro-filter="${escapeHtml(mg.name)}" type="button"
+      aria-pressed="${selectedMacro === mg.name}" style="--macro-color: ${safeColor(mg.color)};">
+      <span class="macro-chip-icon" aria-hidden="true">${getIconSvg(mg.icon || 'tag', { size: 14 })}</span>${escapeHtml(mg.name)}
+    </button>`).join('');
+}
+
+/** Chips de subgrupo (micro) do grupo escolhido; retorna '' quando não há grupo selecionado */
+export function renderMicroChipsHtml(tree, selectedMacro, selectedMicro) {
+  const node = tree.find(t => t.name === selectedMacro);
+  if (!node) return '';
+  const chip = (id, label, icon, count) => `
+    <button class="micro-chip ${selectedMicro === id ? 'active' : ''}" data-micro-filter="${escapeHtml(id)}" type="button" aria-pressed="${selectedMicro === id}">
+      <span aria-hidden="true">${getIconSvg(icon || 'tag', { size: 13 })}</span>${escapeHtml(label)}<small>${count}</small>
+    </button>`;
+  return chip('all', `Tudo em ${node.name}`, node.icon, node.count)
+    + node.subgroups.map(s => chip(s.id, s.name, s.icon, s.categories.length)).join('');
+}
+
+/** Nomes de categoria de um subgrupo (null = sem filtro de subgrupo) */
+export function getMicroCategoryNames(tree, selectedMacro, selectedMicro) {
+  if (!selectedMicro || selectedMicro === 'all') return null;
+  const node = tree.find(t => t.name === selectedMacro);
+  const sub = node?.subgroups.find(s => s.id === selectedMicro);
+  return sub ? sub.categories.map(c => c.name) : null;
+}
+
+/** Lista de gestão de categorias (modal "Categorias de Despesas"): grupos > subgrupos > linhas com ícone */
+export function renderManageTreeHtml(tree) {
+  return tree.map((t, i) => `
+    <section class="cat-macro${i === 0 ? ' open' : ''}" data-macro="${escapeHtml(t.id)}" style="--macro-color: ${safeColor(t.color)};">
+      <button type="button" class="cat-macro-head" data-cat-macro-toggle aria-expanded="${i === 0 ? 'true' : 'false'}">
+        <span class="cat-icon cat-icon-lg">${getIconSvg(t.icon || 'tag', { size: 20 })}</span>
+        <span class="cat-macro-name">${escapeHtml(t.name)}</span>
+        <span class="cat-macro-count">${t.count}</span>
+        <span class="cat-chevron" aria-hidden="true">${getIconSvg('chevron_down', { size: 18 })}</span>
+      </button>
+      <div class="cat-macro-body"${i === 0 ? '' : ' hidden'}>
+        ${t.subgroups.map(s => `
+          <div class="cat-sub">
+            <p class="cat-sub-title"><span aria-hidden="true">${getIconSvg(s.icon || 'tag', { size: 14 })}</span>${escapeHtml(s.name)}</p>
+            <div class="cat-manage-list">
+              ${s.categories.map(c => `
+                <div class="cat-manage-row${c.active === false ? ' archived' : ''}">
+                  ${iconBubble(c.icon, c.color, 18)}
+                  <span class="cat-manage-name">${escapeHtml(c.name)}</span>
+                  ${c.isCustom && c.active !== false
+                    ? `<button type="button" class="btn-icon-delete" data-delete-cat="${escapeHtml(c.id)}" aria-label="Excluir categoria ${escapeHtml(c.name)}" title="Excluir categoria">${getIconSvg('trash', { size: 16, color: '#EF5350' })}</button>`
+                    : c.active === false
+                      ? '<span class="badge-status-pill muted">Arquivada</span>'
+                      : '<span class="badge-status-pill safe">Canônica</span>'}
+                </div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+    </section>`).join('');
+}
+
+/** Escolha visual do grupo (macro) ao criar categoria: radios estilizados como cartões com ícone */
+export function renderMacroRadiosHtml(selectedName, macroGroups = MACRO_GROUPS, fieldName = 'macro_group') {
+  const selected = macroGroups.some(m => m.name === selectedName) ? selectedName : macroGroups[0].name;
+  return macroGroups.map(mg => `
+    <label class="macro-radio" style="--macro-color: ${safeColor(mg.color)};">
+      <input type="radio" name="${escapeHtml(fieldName)}" value="${escapeHtml(mg.name)}"${mg.name === selected ? ' checked' : ''} />
+      <span class="macro-radio-card">
+        <span class="cat-icon">${getIconSvg(mg.icon || 'tag', { size: 18 })}</span>
+        <span class="macro-radio-name">${escapeHtml(mg.name)}</span>
+      </span>
+    </label>`).join('');
+}

@@ -1710,7 +1710,7 @@ textarea.form-input {
   border: 1.5px solid var(--silk-border);
   border-radius: var(--radius-sm);
   color: var(--text-main);
-  font-size: 0.86rem;
+  font-size: 0.86rem !important;
   font-weight: 600;
   line-height: 1.2;
 }
@@ -1736,3 +1736,107 @@ textarea.form-input {
 @media (max-width: 360px) {
   .cat-grid { grid-template-columns: 1fr; }
 }
+/* ---------- Filtro de despesas: grupos (macro) e subgrupos (micro) ---------- */
+.macro-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 4px 12px 4px 8px;
+}
+.macro-chip-icon { display: inline-flex; color: var(--macro-color, var(--text-muted)); }
+.macro-chip.active .macro-chip-icon { color: #fff; }
+.micro-filter-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px 0 6px;
+}
+.micro-filter-bar::-webkit-scrollbar { display: none; }
+.micro-filter-bar.hidden { display: none; }
+.micro-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex: none;
+  min-height: 32px;
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  border: 1px dashed var(--silk-border-strong);
+  color: var(--text-muted);
+  font-size: 0.74rem !important;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.micro-chip small { font-size: 0.68rem; opacity: 0.75; font-weight: 700; }
+.micro-chip.active {
+  background: var(--coral-expense-light);
+  border: 1px solid var(--coral-expense);
+  color: var(--coral-expense-dark);
+  font-weight: 700;
+}
+
+/* ---------- Gestão de categorias (modal) ---------- */
+.categories-grouped-list.cat-tree { margin-top: 10px; max-height: none; overflow: visible; }
+.cat-tree > .cat-macro { flex: none; }
+.cat-manage-list { display: flex; flex-direction: column; gap: 6px; }
+.cat-manage-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 6px 10px 6px 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--silk-border);
+  border-radius: var(--radius-sm);
+}
+.cat-manage-row.archived { opacity: 0.6; }
+.cat-manage-name { flex: 1; min-width: 0; font-size: 0.9rem; font-weight: 600; overflow-wrap: anywhere; }
+.cat-manage-row .btn-icon-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: transparent;
+  border: 0;
+}
+
+/* ---------- Escolha visual do grupo ao criar categoria ---------- */
+.macro-radio-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.macro-radio { position: relative; display: block; cursor: pointer; }
+.macro-radio input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+.macro-radio-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 6px 10px 6px 8px;
+  background: var(--bg-card-subtle);
+  border: 1.5px solid var(--silk-border);
+  border-radius: var(--radius-sm);
+  color: var(--text-main);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.macro-radio .cat-icon { --cat-color: var(--macro-color); }
+.macro-radio input:checked + .macro-radio-card {
+  border-color: var(--macro-color, var(--primary-pink));
+  background: var(--bg-card);
+  box-shadow: 0 0 0 2px var(--rose-gold-glow);
+  font-weight: 700;
+}
+.macro-radio input:focus-visible + .macro-radio-card { outline: 2px solid var(--primary-pink); outline-offset: 2px; }
+@media (max-width: 360px) { .macro-radio-grid { grid-template-columns: 1fr; } }

@@ -9,7 +9,8 @@ import { DEFAULT_CATEGORIES, MACRO_GROUPS } from '../js/store.js';
 import { SVG_ICONS } from '../js/icons.js';
 import {
   MICRO_GROUPS, buildCategoryTree, filterCategoryTree, getQuickCategories,
-  normalizeSearch, renderTreeHtml, renderQuickHtml, renderTriggerHtml, CUSTOM_SUBGROUP_NAME
+  normalizeSearch, renderTreeHtml, renderQuickHtml, renderTriggerHtml, CUSTOM_SUBGROUP_NAME,
+  renderMacroChipsHtml, renderMicroChipsHtml, getMicroCategoryNames, renderManageTreeHtml, renderMacroRadiosHtml
 } from '../js/ui/category-picker.js';
 
 const defaults = () => DEFAULT_CATEGORIES.map(c => ({ ...c }));
@@ -112,5 +113,51 @@ describe('v8 - Seletor de categorias (macro > micro)', () => {
     const quick = renderQuickHtml([cat], 'Energia');
     assert.match(quick, /data-cat-chip="Energia"/);
     assert.match(quick, /cat-quick selected/);
+  });
+});
+
+describe('v8 - Filtros, gestão e escolha de grupo (macro > micro)', () => {
+  it('chips de grupo: "Todas" + 6 grupos com ícone; só o selecionado fica ativo', () => {
+    const html = renderMacroChipsHtml('Alimentação');
+    assert.equal((html.match(/data-macro-filter=/g) || []).length, 7);
+    assert.equal((html.match(/macro-chip active/g) || []).length, 1);
+    assert.match(html, /macro-chip active" data-macro-filter="Alimentação"/);
+    assert.equal((html.match(/macro-chip-icon/g) || []).length, 7);
+    assert.match(renderMacroChipsHtml('all'), /macro-chip active" data-macro-filter="all"/);
+  });
+
+  it('chips de subgrupo: só existem com um grupo escolhido e filtram as categorias certas', () => {
+    const tree = buildCategoryTree(defaults());
+    assert.equal(renderMicroChipsHtml(tree, 'all', 'all'), '');
+    const html = renderMicroChipsHtml(tree, 'Moradia & Contas', 'morad_contas');
+    assert.equal((html.match(/data-micro-filter=/g) || []).length, 3, '"Tudo em" + 2 subgrupos');
+    assert.match(html, /micro-chip active" data-micro-filter="morad_contas"/);
+    assert.ok(html.includes('Tudo em Moradia &amp; Contas'));
+    assert.deepEqual(getMicroCategoryNames(tree, 'Moradia & Contas', 'morad_contas').sort(), ['Energia', 'Internet', 'Água'].sort());
+    assert.equal(getMicroCategoryNames(tree, 'Moradia & Contas', 'all'), null);
+    assert.equal(getMicroCategoryNames(tree, 'Moradia & Contas', 'inexistente'), null);
+  });
+
+  it('gestão: 6 grupos, 23 linhas, exclusão só para personalizadas e tudo escapado', () => {
+    const cats = defaults();
+    cats.push({ id: 'cat_custom_1', name: 'Livros <b>', icon: 'study', color: '#42A5F5', macro_group: 'Formação & Carreira', isCustom: true, active: true });
+    cats.push({ id: 'cat_old', name: 'Antiga', icon: 'tag', color: '#999999', macro_group: 'Alimentação', isCustom: true, active: false });
+    const html = renderManageTreeHtml(buildCategoryTree(cats));
+    assert.equal((html.match(/class="cat-macro(?: open)?"/g) || []).length, 6);
+    assert.equal((html.match(/class="cat-manage-row/g) || []).length, 25);
+    assert.equal((html.match(/data-delete-cat="/g) || []).length, 1, 'só a personalizada ativa tem excluir');
+    assert.match(html, /data-delete-cat="cat_custom_1"/);
+    assert.ok(html.includes('Arquivada') && html.includes('Canônica'));
+    assert.ok(!html.includes('Livros <b>'), 'nome deve ser escapado');
+    assert.equal((html.match(/class="cat-macro open"/g) || []).length, 1, 'primeiro grupo aberto');
+  });
+
+  it('escolha de grupo: 6 radios com ícone, um marcado e valor igual ao nome do grupo', () => {
+    const html = renderMacroRadiosHtml();
+    assert.equal((html.match(/type="radio" name="macro_group"/g) || []).length, 6);
+    assert.equal((html.match(/ checked/g) || []).length, 1);
+    for (const m of MACRO_GROUPS) assert.ok(html.includes(`value="${m.name.replace('&', '&amp;')}"`), m.name);
+    assert.match(renderMacroRadiosHtml('Saúde & Autocuidado'), /value="Saúde &amp; Autocuidado" checked/);
+    assert.match(renderMacroRadiosHtml('inexistente'), /value="Alimentação" checked/);
   });
 });

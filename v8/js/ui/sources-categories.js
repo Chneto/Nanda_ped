@@ -4,9 +4,10 @@
  * Criado por: FChNeto (APP_CREATOR = 'FChNeto')
  */
 
-import { formatCurrency, MACRO_GROUPS } from '../store.js';
+import { formatCurrency } from '../store.js';
 import { getIconSvg } from '../icons.js';
 import { escapeHtml } from './helpers.js';
+import { buildCategoryTree, renderManageTreeHtml, renderMacroRadiosHtml } from './category-picker.js';
 
 export class SourcesCategoriesMethods {
   // =========================================================================
@@ -168,58 +169,43 @@ export class SourcesCategoriesMethods {
         <button type="button" class="btn-silk-secondary" id="btn-restore-categories">Restaurar 23 Padrões</button>
       </div>
 
-      <div class="categories-grouped-list">
-        ${MACRO_GROUPS.map(mg => {
-          const groupCats = categories.filter(c => (c.macro_group || c.macroGroup) === mg.name);
-          return `
-            <div class="macro-group-block">
-              <div class="mg-header" style="color: ${mg.color};">
-                ${getIconSvg(mg.icon, 18, mg.color)}
-                <strong>${escapeHtml(mg.name)}</strong>
-              </div>
-              <div class="mg-cats-list">
-                ${groupCats.map(c => `
-                  <div class="cat-item-row ${c.active === false ? 'archived' : ''}">
-                    <span class="cat-name">${escapeHtml(c.name)}</span>
-                    <div class="cat-actions">
-                      ${c.isCustom && c.active !== false ? `
-                        <button type="button" class="btn-icon-delete" data-delete-cat="${c.id}" title="Excluir Categoria">
-                          ${getIconSvg('trash', 14, '#EF5350')}
-                        </button>
-                      ` : c.active === false ? `
-                        <span class="badge-status-pill muted">Arquivada</span>
-                      ` : `
-                        <span class="badge-status-pill safe">Canônica</span>
-                      `}
-                    </div>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          `;
-        }).join('')}
+      <div class="categories-grouped-list cat-tree">
+        ${renderManageTreeHtml(buildCategoryTree(categories))}
       </div>
-
       <form id="form-add-category" class="management-add-form" style="margin-top: 16px;">
         <h5>+ Adicionar Nova Categoria</h5>
         <div class="form-group">
           <input type="text" name="name" class="form-input silk-input" placeholder="Nome da Categoria (ex: Fisioterapia Respiratória)" required />
         </div>
-        <div class="form-row">
-          <div class="form-group">
-            <select name="macro_group" class="form-input silk-input">
-              ${MACRO_GROUPS.map(mg => `<option value="${escapeHtml(mg.name)}">${escapeHtml(mg.name)}</option>`).join('')}
-            </select>
+        <div class="form-group">
+          <label id="newcat-group-label">Em qual grupo ela fica?</label>
+          <div class="macro-radio-grid" role="radiogroup" aria-labelledby="newcat-group-label">
+            ${renderMacroRadiosHtml()}
           </div>
-          <div class="form-group">
-            <input type="number" name="monthly_budget_cap" class="form-input silk-input" step="0.01" min="0" placeholder="Teto Mensal (Opcional)" />
-          </div>
+        </div>
+        <div class="form-group">
+          <input type="number" name="monthly_budget_cap" class="form-input silk-input" step="0.01" min="0" placeholder="Teto Mensal (Opcional)" />
         </div>
         <button type="submit" class="btn-silk-primary" style="width: 100%;">Cadastrar Categoria</button>
       </form>
     `;
 
-    body.addEventListener('click', (e) => {
+    if (this._catBodyHandler) body.removeEventListener('click', this._catBodyHandler);
+    this._catBodyHandler = (e) => {
+      const toggle = e.target.closest('[data-cat-macro-toggle]');
+      if (toggle) {
+        const section = toggle.closest('.cat-macro');
+        const open = !section.classList.contains('open');
+        body.querySelectorAll('.cat-macro').forEach(s => {
+          const shouldOpen = s === section ? open : false;
+          s.classList.toggle('open', shouldOpen);
+          s.querySelector('[data-cat-macro-toggle]').setAttribute('aria-expanded', shouldOpen ? 'true' : 'false');
+          const mb = s.querySelector('.cat-macro-body');
+          if (shouldOpen) mb.removeAttribute('hidden'); else mb.setAttribute('hidden', '');
+        });
+        return;
+      }
+
       const delBtn = e.target.closest('[data-delete-cat]');
       if (delBtn) {
         const id = delBtn.getAttribute('data-delete-cat');
@@ -238,7 +224,8 @@ export class SourcesCategoriesMethods {
         this.openCategoriesModal();
         this.render();
       }
-    });
+    };
+    body.addEventListener('click', this._catBodyHandler);
 
     modal.classList.remove('hidden');
   }

@@ -25,6 +25,7 @@ export class PediatricUI {
     this.storage = storage;
     this.activeTab = 'home';
     this.selectedMacroFilter = 'all';
+    this.selectedMicroFilter = 'all';
     this.editingShiftId = null;
     this.editingExpenseId = null;
     this.undoToastTimer = null;

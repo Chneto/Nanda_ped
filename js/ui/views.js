@@ -7,6 +7,7 @@
 import { formatCurrency, formatDateBR, formatMonthYear, getLocalDateString, getCategoryKey, MACRO_GROUPS } from '../store.js';
 import { getIconSvg, sanitizeColor } from '../icons.js';
 import { escapeHtml } from './helpers.js';
+import { buildCategoryTree, renderMacroChipsHtml, renderMicroChipsHtml, getMicroCategoryNames } from './category-picker.js';
 
 export class ViewMethods {
   // =========================================================================
@@ -288,19 +289,22 @@ export class ViewMethods {
     // Barra de Filtros de Macro-Grupos
     const filterBar = document.getElementById('macro-filter-bar');
     const clearBtn = document.getElementById('btn-clear-macro-filter');
+    // Árvore com todas as categorias (inclui arquivadas, usadas em lançamentos antigos)
+    const catTree = buildCategoryTree(this.store.getAllCategories());
     if (filterBar) {
-      filterBar.innerHTML = `
-        <button class="macro-chip ${this.selectedMacroFilter === 'all' ? 'active' : ''}" data-macro-filter="all" type="button">
-          Todas
-        </button>
-        ${MACRO_GROUPS.map(mg => `
-          <button class="macro-chip ${this.selectedMacroFilter === mg.name ? 'active' : ''}" data-macro-filter="${escapeHtml(mg.name)}" type="button">
-            ${escapeHtml(mg.name)}
-          </button>
-        `).join('')}
-      `;
-    }
-    if (clearBtn) {
+      filterBar.innerHTML = renderMacroChipsHtml(this.selectedMacroFilter);
+      // Subgrupos (micro) do grupo escolhido, em uma segunda linha
+      let microBar = document.getElementById('micro-filter-bar');
+      if (!microBar) {
+        microBar = document.createElement('div');
+        microBar.id = 'micro-filter-bar';
+        microBar.className = 'micro-filter-bar';
+        microBar.setAttribute('aria-label', 'Subgrupos');
+        filterBar.insertAdjacentElement('afterend', microBar);
+      }
+      microBar.innerHTML = renderMicroChipsHtml(catTree, this.selectedMacroFilter, this.selectedMicroFilter);
+      microBar.classList.toggle('hidden', this.selectedMacroFilter === 'all');
+    }    if (clearBtn) {
       clearBtn.classList.toggle('hidden', this.selectedMacroFilter === 'all');
     }
 
@@ -311,6 +315,10 @@ export class ViewMethods {
     let expenses = this.store.data.expenses.filter(e => e.date && e.date.startsWith(activeMonth));
     if (this.selectedMacroFilter !== 'all') {
       expenses = expenses.filter(e => (e.macro_group_snapshot || e.macro_group) === this.selectedMacroFilter);
+      const microNames = getMicroCategoryNames(catTree, this.selectedMacroFilter, this.selectedMicroFilter);
+      if (microNames) {
+        expenses = expenses.filter(e => microNames.includes(e.category_name_snapshot));
+      }
     }
 
     if (expenses.length === 0) {
