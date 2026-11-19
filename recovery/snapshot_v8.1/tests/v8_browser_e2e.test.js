@@ -8,6 +8,7 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { createTestServer } from './test_server.js';
+import { probeContrast, probeSmallTargets } from './a11y_probe.js';
 
 let chromium = null;
 let devices = null;
@@ -277,8 +278,8 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     // 2. Navega para a Aba Ganhos
     await page.locator('#tab-nav-income').click();
 
-    // 3. Toca no card do plantão salvo
-    await page.locator('[data-shift-card-id]').first().click();
+    // 3. Toca no card do plantão salvo (no título do hospital, longe dos botões das parcelas)
+    await page.locator('[data-shift-card-id] .shift-hospital-title').first().click();
 
     // 4. Verifica se o modal abriu em modo de edição
     const editModal = await page.evaluate(() => {
@@ -625,6 +626,482 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     const restoredToasts = await page.locator('.toast-silk', { hasText: 'restauradas' }).count();
     assert.equal(restoredToasts, 1, 'Restaurar deve disparar uma única vez');
     await page.evaluate(() => window.v8App.ui.closeAllModals());
+  });
+  // =========================================================================
+  // CENÁRIO 8d: GANHOS DO MÊS, CARTÃO CAIXA × PRODUÇÃO E RESTAURAÇÃO SEGURA DE BACKUP
+  // =========================================================================
+  it('Cenário 8d: Plantão do mês aparece em Ganhos, cartão compara os dois regimes e restaurar backup pede confirmação e permite desfazer', async () => {
+    // --- 1) Plantão do mês aparece no Regime de Caixa mesmo recebendo só em meses futuros
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      s.data.shifts = [];
+      s.data.expenses = [];
+      const ym = new Date().toISOString().slice(0, 7);
+      s.data.preferences.activeMonth = ym;
+      s.data.preferences.regime = 'caixa';
+      s.addShift({ hospital: 'Hospital 8d', net_value: 1000, date: `${ym}-03` });
+      window.v8App.ui.render();
+    });
+    await page.click('[data-tab="income"]');
+    const incomeText = (await page.locator('#shifts-list-container').innerText()).replace(/\s+/g, ' ');
+    assert.ok(incomeText.includes('Hospital 8d'), 'Plantão trabalhado no mês deve aparecer em Ganhos (caixa)');
+    assert.ok(incomeText.includes('Recebe a partir de'), 'Deve avisar quando o recebimento é em meses futuros');
+    assert.ok(!incomeText.includes('Nenhum plantão registrado'));
+
+    // --- 2) Cartão da Início calcula caixa E produção, independentemente do regime escolhido
+    await page.click('[data-tab="home"]');
+    const comp = async () => (await page.locator('#home-comparison-container').innerText()).replace(/\s+/g, ' ');
+    let c = await comp();
+    assert.ok(/Produção do mês[^R]*R\$\s*1\.000,00/.test(c), `Produção deve mostrar R$ 1.000,00 em regime de caixa: ${c}`);
+    await page.evaluate(() => { window.v8App.store.data.preferences.regime = 'competencia'; window.v8App.ui.render(); });
+    c = await comp();
+    assert.ok(/Produção do mês[^R]*R\$\s*1\.000,00/.test(c), `Produção também em competência: ${c}`);
+    await page.evaluate(() => { window.v8App.store.data.preferences.regime = 'caixa'; window.v8App.ui.render(); });
+
+    // --- 3) Restaurar backup: confirmação, cancelar mantém dados, confirmar substitui, Desfazer devolve
+    const backup = JSON.stringify({
+      version: '7.0.0',
+      exportedAt: '2026-10-01T12:00:00.000Z',
+      shifts: [{ id: 'bk1', hospital: 'Hospital Backup', net_value: 3000, date: '2026-09-10' }],
+      expenses: [{ id: 'bke1', description: 'Item do backup', category: 'Mercantil', amount: 50, date: '2026-09-11' }]
+    });
+    const file = { name: 'backup.json', mimeType: 'application/json', buffer: Buffer.from(backup) };
+    const ids = () => page.evaluate(() => window.v8App.store.data.shifts.map(s => s.name || s.source_name_snapshot));
+
+    await page.setInputFiles('#backup-file-input', file);
+    await page.waitForSelector('#modal-confirm:not(.hidden)');
+    const dialogText = (await page.locator('#modal-confirm').innerText()).replace(/\s+/g, ' ');
+    assert.ok(dialogText.includes('1 plantão') && dialogText.includes('1 despesa'), 'Mostra o que o arquivo contém');
+    assert.ok(dialogText.includes('serão substituídos'), 'Avisa que os dados atuais serão substituídos');
+    assert.deepEqual(await ids(), ['Hospital 8d'], 'Nada muda antes de confirmar');
+
+    await page.click('#modal-confirm [data-confirm="cancel"]');
+    assert.equal(await page.locator('#modal-confirm').evaluate(el => el.classList.contains('hidden')), true);
+    assert.deepEqual(await ids(), ['Hospital 8d'], 'Cancelar mantém os dados atuais');
+
+    await page.setInputFiles('#backup-file-input', file);
+    await page.waitForSelector('#modal-confirm:not(.hidden)');
+    await page.click('#modal-confirm [data-confirm="ok"]');
+    await page.waitForSelector('.toast-undo');
+    assert.deepEqual(await ids(), ['Hospital Backup'], 'Confirmar substitui os dados');
+    // Rede de segurança: cópia do estado anterior guardada no IndexedDB antes de restaurar
+    const safety = await page.evaluate(() => new Promise((resolve, reject) => {
+      const open = indexedDB.open('v8_pediatric_db', 1);
+      open.onerror = () => reject(open.error);
+      open.onsuccess = () => {
+        const req = open.result.transaction('app_state', 'readonly').objectStore('app_state').get('pre_import_snapshot');
+        req.onsuccess = () => resolve(req.result ? { names: (req.result.state.shifts || []).map(s => s.source_name_snapshot), savedAt: Boolean(req.result.savedAt) } : null);
+        req.onerror = () => reject(req.error);
+      };
+    }));
+    assert.deepEqual(safety?.names, ['Hospital 8d'], 'Cópia de segurança pré-restauração deve existir no IndexedDB');
+    assert.equal(safety.savedAt, true);
+
+    await page.click('.toast-undo .btn-toast-undo');
+    assert.deepEqual(await ids(), ['Hospital 8d'], 'Desfazer devolve os dados anteriores');
+
+    // Esc cancela o diálogo
+    await page.setInputFiles('#backup-file-input', file);
+    await page.waitForSelector('#modal-confirm:not(.hidden)');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#modal-confirm').evaluate(el => el.classList.contains('hidden')), true);
+    assert.deepEqual(await ids(), ['Hospital 8d'], 'Esc cancela sem alterar dados');
+
+    // Arquivo inválido: erro amigável e nenhum diálogo
+    await page.setInputFiles('#backup-file-input', { name: 'ruim.json', mimeType: 'application/json', buffer: Buffer.from('{ quebrado') });
+    await page.waitForSelector('.toast-silk.error');
+    assert.equal(await page.locator('#modal-confirm').evaluate(el => el.classList.contains('hidden')), true);
+    assert.deepEqual(await ids(), ['Hospital 8d']);
+  });
+  // =========================================================================
+  // CENÁRIO 8e: EDIÇÃO DE PARCELA (DATA, VALOR, RECEBIMENTO REAL) COM DESFAZER
+  // =========================================================================
+  it('Cenário 8e: Editar parcela de plantão (data, valor, recebimento) atualiza a tela e permite desfazer', async () => {
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      s.data.shifts = [];
+      const ym = new Date().toISOString().slice(0, 7);
+      s.data.preferences.activeMonth = ym;
+      s.data.preferences.regime = 'caixa';
+      s.addShift({ hospital: 'Hospital 8e', net_value: 2000, date: `${ym}-03` });
+      window.v8App.ui.render();
+    });
+    const parcelas = () => page.evaluate(() => window.v8App.store.data.shifts[0].installments.map(i => [i.value, i.date, i.status, i.paidDate]));
+    const original = await parcelas();
+
+    await page.click('[data-tab="income"]');
+    await page.locator('[data-edit-installment="1"]').first().click();
+    assert.equal(await page.locator('#modal-installment').evaluate(el => el.classList.contains('hidden')), false, 'Abre o modal da parcela');
+    assert.equal(await page.locator('#inst-paid-group').isVisible(), false, 'Data real só aparece quando Recebido');
+
+    // Valor inválido: erro amigável, nada muda, modal continua aberto
+    await page.fill('#inst-value-input', '0');
+    await page.click('#form-installment button[type="submit"]');
+    await page.waitForSelector('.toast-silk.error');
+    assert.deepEqual(await parcelas(), original, 'Valor inválido não altera dados');
+    assert.equal(await page.locator('#modal-installment').evaluate(el => el.classList.contains('hidden')), false);
+
+    // Edita valor (com ajuste da outra), data prevista e marca como recebido com data real
+    await page.fill('#inst-value-input', '1200');
+    await page.fill('#inst-date-input', '2027-02-05');
+    await page.locator('.inst-status-option', { hasText: 'Recebido' }).click();
+    assert.equal(await page.locator('#inst-paid-group').isVisible(), true);
+    await page.fill('#inst-paid-input', '2027-02-06');
+    await page.click('#form-installment button[type="submit"]');
+    await page.waitForSelector('.toast-undo');
+
+    const edited = await parcelas();
+    assert.deepEqual(edited[0], [1200, '2027-02-05', 'received', '2027-02-06']);
+    assert.equal(edited[1][0], 800, 'A outra parcela fecha o total');
+    const cardText = (await page.locator('#shifts-list-container').innerText()).replace(/\s+/g, ' ');
+    assert.ok(cardText.includes('1.200,00') && cardText.includes('Caiu em 06/02/2027'), 'Tela mostra valor e data real do recebimento');
+
+    // Desfazer devolve tudo
+    await page.click('.toast-undo .btn-toast-undo');
+    assert.deepEqual(await parcelas(), original, 'Desfazer restaura as parcelas originais');
+
+    // Esc fecha o modal sem salvar
+    await page.locator('[data-edit-installment="2"]').first().click();
+    await page.fill('#inst-value-input', '1');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#modal-installment').evaluate(el => el.classList.contains('hidden')), true);
+    assert.deepEqual(await parcelas(), original);
+  });
+  // =========================================================================
+  // CENÁRIO 8f: ACESSIBILIDADE REAL — contraste AA, alvos de 44 px, ARIA e movimento reduzido
+  // =========================================================================
+  it('Cenário 8f: Contraste AA em todas as telas (claro/escuro), alvos de toque >= 44 px, ARIA e movimento reduzido', async () => {
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      const ym = new Date().toISOString().slice(0, 7);
+      s.data.preferences.activeMonth = ym;
+      s.data.preferences.regime = 'caixa';
+      s.data.residencySalary = { value: 4000, dayOfMonth: 5, active: true, description: 'Bolsa' };
+      s.data.shifts = [];
+      s.addShift({ hospital: 'Hospital 8f', net_value: 2000, date: `${ym}-03` });
+      s.data.shifts[0].installments[1].status = 'received';
+      s.data.shifts[0].installments[1].paidDate = `${ym}-12`;
+      s.addExpense({ description: 'Feira 8f', category: 'Mercantil', amount: 230, date: `${ym}-05` });
+      window.v8App.ui.render();
+    });
+
+    const screens = [
+      ['início', async () => { await page.evaluate(() => window.v8App.ui.closeAllModals()); await page.click('[data-tab="home"]'); }],
+      ['ganhos', async () => { await page.click('[data-tab="income"]'); }],
+      ['despesas', async () => { await page.click('[data-tab="expenses"]'); await page.click('[data-macro-filter="Alimentação"]'); }],
+      ['menu', async () => { await page.evaluate(() => window.v8App.ui.openDrawer()); }],
+      ['modal despesa', async () => { await page.evaluate(() => { window.v8App.ui.closeDrawer(); window.v8App.ui.openExpenseModal(); }); await page.click('#exp-category-trigger'); }],
+      ['modal plantão', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openShiftModal(); }); }],
+      ['modal parcela', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openInstallmentModal(window.v8App.store.data.shifts[0].id, 1); }); }],
+      ['modal categorias', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openCategoriesModal(); }); }],
+      ['tetos (início/despesas)', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); const s = window.v8App.store; const id = s.data.categories.find(c => c.name === 'Mercantil').id; s.setCategoryBudgetCap(id, 100); s.setCategoryBudgetCap(s.data.categories.find(c => c.name === 'Uber').id, 200); s.addExpense({ description: 'Teto A', category: 'Mercantil', amount: 150, date: new Date().toISOString().slice(0, 7) + '-07' }); s.addExpense({ description: 'Teto B', category: 'Uber', amount: 170, date: new Date().toISOString().slice(0, 7) + '-07' }); window.v8App.ui.render(); }); await page.click('[data-tab="home"]'); await page.click('[data-tab="expenses"]'); }],
+      ['modal teto', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openCategoryCapModal(window.v8App.store.data.categories.find(c => c.name === 'Mercantil').id); }); }],
+      ['modal relatório', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openReportModal(); }); }],
+      ['modal fontes', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openIncomeSourcesModal(); }); }],
+      ['modal perfil', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openProfileModal(); }); }]
+    ];
+
+    const contrastFails = [];
+    const smallTargets = [];
+    // Movimento reduzido durante a medição: sem transições em andamento, as cores lidas são as finais
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    for (const theme of ['light', 'dark']) {
+      await page.evaluate((th) => {
+        document.querySelectorAll('.toast-silk').forEach(el => el.remove()); // avisos de cenários anteriores
+        document.documentElement.setAttribute('data-theme', th);
+        window.v8App.ui.render();
+      }, theme);
+      await page.waitForTimeout(50);
+      for (const [name, go] of screens) {
+        await go();
+        for (const x of await page.evaluate(probeContrast)) {
+          if (x.ratio < x.need) contrastFails.push(`${theme}/${name}: "${x.text}" (.${x.cls}) ${x.ratio} < ${x.need}`);
+        }
+        if (theme === 'light') {
+          for (const x of await page.evaluate(probeSmallTargets)) smallTargets.push(`${name}: ${x.cls} "${x.text}" ${x.w}x${x.h}`);
+        }
+      }
+    }
+    await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.closeDrawer(); document.documentElement.setAttribute('data-theme', 'light'); window.v8App.ui.render(); });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    // Limpa os tetos criados só para a varredura (não vazar para os próximos cenários)
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      s.data.expenses = s.data.expenses.filter(e => e.description !== 'Teto A' && e.description !== 'Teto B');
+      for (const n of ['Mercantil', 'Uber']) s.setCategoryBudgetCap(s.data.categories.find(c => c.name === n).id, null);
+      window.v8App.ui.render();
+    });
+    assert.deepEqual([...new Set(contrastFails)].slice(0, 12), [], 'Textos abaixo de AA (4,5:1; 3:1 para texto grande)');
+    assert.deepEqual([...new Set(smallTargets)].slice(0, 12), [], 'Alvos de toque menores que 44 px');
+
+    // ARIA de navegação e regime
+    await page.click('[data-tab="income"]');
+    assert.equal(await page.locator('#tab-nav-income').getAttribute('aria-current'), 'page');
+    assert.equal(await page.locator('#tab-nav-home').getAttribute('aria-current'), null);
+    await page.click('button[data-regime="competencia"]');
+    assert.equal(await page.locator('button[data-regime="competencia"]').getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.locator('button[data-regime="caixa"]').getAttribute('aria-pressed'), 'false');
+    await page.click('button[data-regime="caixa"]');
+    assert.equal(await page.locator('#current-month-title').getAttribute('aria-live'), 'polite');
+
+    // Campos de dinheiro abrem o teclado decimal
+    await page.evaluate(() => window.v8App.ui.openExpenseModal());
+    assert.equal(await page.locator('#exp-amount-input').getAttribute('inputmode'), 'decimal');
+    await page.evaluate(() => window.v8App.ui.closeAllModals());
+
+    // Movimento reduzido: transições/animações praticamente instantâneas
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const durations = await page.evaluate(() => ['.nav-tab', '.macro-chip', '.btn-silk-primary'].map((sel) => {
+      const el = document.querySelector(sel);
+      return el ? parseFloat(getComputedStyle(el).transitionDuration) : 0;
+    }));
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    assert.ok(durations.every((d) => d <= 0.001), `Transições devem ser desligadas com movimento reduzido: ${durations}`);
+  });
+  // =========================================================================
+  // CENÁRIO 8g: TETOS MENSAIS POR CATEGORIA (aviso ao lançar, cartão, Início e edição do teto)
+  // =========================================================================
+  it('Cenário 8g: Tetos mensais — aviso ao lançar, cartão em Despesas, aviso na Início e edição com Desfazer', async () => {
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      document.querySelectorAll('.toast-silk').forEach(el => el.remove());
+      s.data.expenses = [];
+      const ym = new Date().toISOString().slice(0, 7);
+      s.data.preferences.activeMonth = ym;
+      const id = (n) => s.data.categories.find(c => c.name === n).id;
+      // Isola o cenário: remove os tetos criados por cenários anteriores (ex.: "Livros Médicos" tem teto de 500)
+      for (const c of s.data.categories) s.setCategoryBudgetCap(c.id, null);
+      s.setCategoryBudgetCap(id('Mercantil'), 300);
+      s.setCategoryBudgetCap(id('Energia'), 200);
+      s.addExpense({ description: 'Feira 8g', category: 'Mercantil', amount: 230, date: `${ym}-05` });
+      s.addExpense({ description: 'Luz 8g', category: 'Energia', amount: 170, date: `${ym}-06` });
+      window.v8App.ui.render();
+    });
+
+    // --- Início: aviso aparece (Energia a 85% = perto do teto)
+    await page.click('[data-tab="home"]');
+    let alertText = (await page.locator('#home-budget-alert').innerText()).replace(/\s+/g, ' ');
+    assert.ok(alertText.includes('1 categoria perto do teto') && alertText.includes('Energia (85%)'), alertText);
+    await page.click('#home-budget-alert [data-goto-tab="expenses"]');
+    assert.equal(await page.locator('#view-expenses').evaluate(el => !el.classList.contains('hidden')), true, '"Ver tetos" leva para Despesas');
+
+    // --- Despesas: cartão com barras acessíveis e estado em texto
+    const card = (await page.locator('#budget-caps-container').innerText()).replace(/\s+/g, ' ');
+    assert.ok(card.includes('Tetos do mês') && card.includes('Perto do teto') && card.includes('Dentro do teto'), card);
+    assert.equal(await page.locator('#budget-caps-container [role="progressbar"]').count(), 2);
+    assert.equal(await page.locator('#budget-caps-container [aria-label="Teto de Energia"]').getAttribute('aria-valuenow'), '85');
+
+    // --- Lançar despesa: aviso muda conforme valor, categoria e parcelamento
+    await page.evaluate(() => window.v8App.ui.openExpenseModal());
+    await page.locator('#exp-category-trigger').click();
+    await page.locator('[data-cat-pick="Mercantil"]').click();
+    const hint = async () => (await page.locator('#exp-budget-hint').innerText()).replace(/\u00a0/g, ' ').replace(/\s+/g, ' ');
+    await page.fill('#exp-amount-input', '50');
+    assert.ok((await hint()).includes('R$ 280,00 (93%)'), await hint());
+    assert.ok(await page.locator('#exp-budget-hint').evaluate(el => el.classList.contains('warn')));
+    await page.fill('#exp-amount-input', '100');
+    assert.ok((await hint()).includes('R$ 30,00 acima do teto'), await hint());
+    assert.ok(await page.locator('#exp-budget-hint').evaluate(el => el.classList.contains('over')));
+    await page.selectOption('#exp-installments-input', '5');
+    assert.ok((await hint()).includes('R$ 250,00 (83%)') && (await hint()).includes('1ª parcela'), 'Parcelado considera só a 1ª parcela: ' + await hint());
+    await page.locator('#exp-category-trigger').click();
+    await page.click('#exp-category-panel [data-macro="macro_saude"] .cat-macro-head'); // abre o grupo Saúde (sanfona)
+    await page.locator('[data-cat-pick="Remédios"]').click();
+    assert.equal(await page.locator('#exp-budget-hint').evaluate(el => el.classList.contains('hidden')), true, 'Categoria sem teto não mostra aviso');
+    await page.evaluate(() => window.v8App.ui.closeAllModals());
+
+    // --- Gestão de categorias: editar o teto de uma categoria padrão, com Desfazer
+    await page.evaluate(() => window.v8App.ui.openCategoriesModal());
+    const capBtn = page.locator('[data-edit-cap]:visible').first();
+    assert.ok((await page.locator('#categories-modal-body').innerText()).replace(/\u00a0/g, ' ').includes('Teto R$ 300,00/mês'), 'Teto atual aparece na linha da categoria');
+    await capBtn.click();
+    assert.equal(await page.locator('#modal-category-cap').evaluate(el => el.classList.contains('hidden')), false);
+    await page.fill('#cap-value-input', '-5');
+    await page.click('#form-category-cap button[type="submit"]');
+    await page.waitForSelector('.toast-silk.error');
+    await page.fill('#cap-value-input', '500');
+    await page.click('#form-category-cap button[type="submit"]');
+    await page.waitForSelector('.toast-undo');
+    const capOf = (n) => page.evaluate((name) => window.v8App.store.data.categories.find(c => c.name === name).monthly_budget_cap, n);
+    assert.equal(await capOf('Mercantil'), 500);
+    assert.equal(await page.locator('#modal-categories').evaluate(el => el.classList.contains('hidden')), false, 'Volta para a lista de categorias');
+    await page.click('.toast-undo .btn-toast-undo');
+    assert.equal(await capOf('Mercantil'), 300, 'Desfazer restaura o teto anterior');
+
+    // Remover o teto (campo vazio) tira a categoria do cartão
+    await page.locator('[data-edit-cap]:visible').first().click();
+    await page.fill('#cap-value-input', '');
+    await page.click('#form-category-cap button[type="submit"]');
+    await page.waitForSelector('.toast-undo');
+    assert.equal(await capOf('Mercantil'), null);
+    await page.evaluate(() => window.v8App.ui.closeAllModals());
+    await page.click('[data-tab="expenses"]');
+    assert.equal(await page.locator('#budget-caps-container [aria-label="Teto de Mercantil"]').count(), 0);
+
+    // Estado limpo para os próximos cenários
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      s.setCategoryBudgetCap(s.data.categories.find(c => c.name === 'Energia').id, null);
+      document.querySelectorAll('.toast-silk').forEach(el => el.remove());
+      window.v8App.ui.render();
+    });
+  });
+  // =========================================================================
+  // CENÁRIO 8h: RELATÓRIO MENSAL (menu, pré-visualização, planilha CSV, impressão/PDF e compartilhamento)
+  // =========================================================================
+  it('Cenário 8h: Relatório mensal — pré-visualização, CSV (download e compartilhamento nativo) e impressão', async () => {
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      document.querySelectorAll('.toast-silk').forEach(el => el.remove());
+      const ym = new Date().toISOString().slice(0, 7);
+      s.data.preferences.activeMonth = ym;
+      s.data.preferences.regime = 'caixa';
+      s.data.doctorName = 'Dra. Relatório';
+      s.data.residencySalary = { value: 4000, dayOfMonth: 5, active: true, description: 'Bolsa' };
+      s.data.shifts = []; s.data.expenses = [];
+      for (const c of s.data.categories) s.setCategoryBudgetCap(c.id, null);
+      s.addShift({ hospital: 'Hospital 8h', net_value: 2000, date: `${ym}-03` });
+      s.addExpense({ description: 'Feira 8h', category: 'Mercantil', amount: 230, date: `${ym}-05` });
+      s.addExpense({ description: '=1+1', category: 'Uber', amount: 45, date: `${ym}-06` });
+      window.v8App.ui.render();
+    });
+
+    // Menu -> Relatório do Mês
+    await page.evaluate(() => window.v8App.ui.openDrawer());
+    await page.click('#drawer-item-report');
+    assert.equal(await page.locator('#modal-report').evaluate(el => el.classList.contains('hidden')), false);
+    const monthLabel = await page.evaluate(() => window.v8App.ui._report.monthLabel);
+    assert.equal((await page.locator('#modal-report-title').innerText()).trim(), `Relatório de ${monthLabel}`);
+    const preview = (await page.locator('#report-body').innerText()).replace(/\u00a0/g, ' ').replace(/\s+/g, ' ');
+    for (const piece of ['Resumo', 'Hospital 8h', 'Feira 8h', 'Total de despesas', 'R$ 275,00', 'Dra. Relatório']) assert.ok(preview.includes(piece), `pré-visualização sem "${piece}"`);
+    assert.equal(await page.locator('#report-body table caption').count() >= 3, true, 'tabelas com legenda');
+
+    // Planilha CSV: download real (Web Share indisponível)
+    await page.evaluate(() => { navigator.canShare = () => false; });
+    const [download] = await Promise.all([page.waitForEvent('download'), page.click('[data-action="report-csv"]')]);
+    assert.match(download.suggestedFilename(), /^relatorio_financas_pediatria_\d{4}-\d{2}\.csv$/);
+    const chunks = [];
+    for await (const c of await download.createReadStream()) chunks.push(c);
+    const raw = Buffer.concat(chunks);
+    assert.deepEqual([...raw.subarray(0, 3)], [0xEF, 0xBB, 0xBF], 'BOM UTF-8 para o Excel reconhecer acentos');
+    const csv = raw.toString('utf8').replace(/^\uFEFF/, '');
+    assert.ok(csv.includes('Despesas do mês;275'), 'total de despesas na planilha');
+    assert.ok(csv.includes("'=1+1"), 'fórmula digitada pela usuária é neutralizada');
+    assert.ok(!/(^|;)=/m.test(csv), 'nenhuma célula começa com "="');
+    await page.waitForSelector('.toast-silk:has-text("Planilha salva")');
+
+    // Compartilhamento nativo (iPhone): usa navigator.share com um File CSV
+    const shared = await page.evaluate(async () => {
+      let received = null;
+      navigator.canShare = (d) => Boolean(d && d.files && d.files.length);
+      navigator.share = async (d) => { const f = d.files[0]; received = { name: f.name, type: f.type, text: await f.text() }; };
+      await window.v8App.ui.exportReportCsv();
+      return received;
+    });
+    assert.match(shared.name, /\.csv$/);
+    assert.equal(shared.type, 'text/csv');
+    assert.ok(shared.text.includes('RESUMO'));
+
+    // Cancelar o compartilhamento não mostra erro
+    const cancelToast = await page.evaluate(async () => {
+      document.querySelectorAll('.toast-silk').forEach(el => el.remove());
+      navigator.share = async () => { const e = new Error('cancelado'); e.name = 'AbortError'; throw e; };
+      await window.v8App.ui.exportReportCsv();
+      return document.querySelectorAll('.toast-silk.error').length;
+    });
+    assert.equal(cancelToast, 0, 'cancelar não deve gerar erro');
+
+    // Impressão/PDF: monta a área de impressão, chama window.print e limpa ao terminar
+    const printed = await page.evaluate(() => new Promise((resolve) => {
+      window.print = () => {
+        const root = document.getElementById('report-print-root');
+        resolve({ filled: root.innerHTML.includes('Hospital 8h') });
+        window.dispatchEvent(new Event('afterprint'));
+      };
+      window.v8App.ui.printReport();
+    }));
+    assert.equal(printed.filled, true, 'área de impressão preenchida no momento de imprimir');
+    assert.equal(await page.evaluate(() => document.getElementById('report-print-root').innerHTML), '', 'área de impressão limpa depois');
+    await page.emulateMedia({ media: 'print' });
+    await page.evaluate(() => { window.print = () => {}; window.v8App.ui.printReport(); });
+    const printVisible = await page.evaluate(() => [...document.body.children].filter(el => getComputedStyle(el).display !== 'none').map(el => el.id));
+    await page.emulateMedia({ media: 'screen' });
+    assert.deepEqual(printVisible, ['report-print-root'], 'na impressão só o relatório aparece');
+
+    // Esc fecha o modal
+    await page.evaluate(() => { document.getElementById('report-print-root').innerHTML = ''; });
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#modal-report').evaluate(el => el.classList.contains('hidden')), true);
+    await page.evaluate(() => { document.querySelectorAll('.toast-silk').forEach(el => el.remove()); });
+  });
+  // =========================================================================
+  // CENÁRIO 8i: GRÁFICO CAIXA × COMPETÊNCIA NA INÍCIO
+  // =========================================================================
+  it('Cenário 8i: Cartão Caixa × Competência — gráfico acessível, tabela, frases e acompanha o mês', async () => {
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      document.querySelectorAll('.toast-silk').forEach(el => el.remove());
+      s.data.shifts = []; s.data.expenses = [];
+      s.data.residencySalary = { value: 4000, dayOfMonth: 5, active: true, description: 'Bolsa' };
+      s.data.preferences.activeMonth = '2026-11';
+      s.data.preferences.regime = 'caixa';
+      s.addShift({ hospital: 'Hospital 8i-A', net_value: 2000, date: '2026-06-10' }); // parcelas em ago/set: uma fica atrasada
+      s.addShift({ hospital: 'Hospital 8i-B', net_value: 3000, date: '2026-11-03' }); // produção de novembro, caixa só em jan/fev
+      window.v8App.ui.render();
+    });
+    await page.click('[data-tab="home"]');
+
+    const card = page.locator('#cash-accrual-card');
+    assert.equal(await card.isVisible(), true);
+    assert.equal((await card.locator('h2').innerText()).trim(), 'Caixa × Competência');
+
+    // Gráfico: imagem com título/descrição, 6 meses, 12 barras, mês atual destacado
+    const svg = card.locator('svg.cac-svg');
+    assert.equal(await svg.getAttribute('role'), 'img');
+    assert.equal(await svg.locator('g.cac-group').count(), 6);
+    assert.equal(await svg.locator('rect.cac-bar').count(), 12);
+    assert.equal(await svg.locator('g.cac-group.active text').textContent(), 'Nov');
+    const desc = (await svg.locator('desc').textContent()).replace(/\u00a0/g, ' ');
+    assert.ok(desc.includes('Novembro de 2026: caixa R$ 4.000,00, competência R$ 7.000,00'), desc);
+
+    // As barras refletem os números: competência de novembro (7.000) é maior que o caixa (4.000)
+    const heights = await svg.locator('g.cac-group.active rect.cac-bar').evaluateAll(els => els.map(e => parseFloat(e.getAttribute('height'))));
+    assert.ok(heights[1] > heights[0], `competência deve ser mais alta que caixa: ${heights}`);
+
+    // Frase-resumo e dinheiro a caminho
+    const lead = (await card.locator('.cac-lead').innerText()).replace(/\u00a0/g, ' ');
+    assert.ok(lead.includes('produziu R$ 7.000,00, mas só R$ 4.000,00 cai na conta: R$ 3.000,00 ainda estão a caminho'), lead);
+    const pipeline = (await card.locator('.cac-pipeline').innerText()).replace(/\u00a0/g, ' ');
+    assert.ok(pipeline.includes('Total a receber de plantões:'), pipeline);
+
+    // Tabela de valores (alternativa textual) com 6 meses
+    assert.equal(await card.locator('table.cac-table tbody tr').count(), 6);
+    assert.equal(await card.locator('tr[aria-current="date"] th').innerText().then(t => t.replace(/\s+/g, ' ').trim()), 'Nov atual');
+
+    // Trocar o mês recentra o gráfico e a frase
+    await page.click('#btn-next-month');
+    assert.equal(await card.locator('g.cac-group.active text').textContent(), 'Dez');
+    assert.ok((await card.locator('.cac-lead').innerText()).includes('Dezembro de 2026'));
+    await page.click('#btn-prev-month');
+    assert.equal(await card.locator('g.cac-group.active text').textContent(), 'Nov');
+
+    // Regime de competência selecionado não muda o cartão (ele sempre compara os dois)
+    await page.click('button[data-regime="competencia"]');
+    assert.ok((await card.locator('.cac-lead').innerText()).includes('ainda estão a caminho'));
+    await page.click('button[data-regime="caixa"]');
+
+    // Só renderiza na Início (não pesa nas outras abas)
+    await page.click('[data-tab="income"]');
+    await page.evaluate(() => { document.getElementById('home-cashaccrual-container').innerHTML = ''; window.v8App.ui.render(); });
+    assert.equal(await page.locator('#home-cashaccrual-container').innerHTML(), '', 'fora da Início o cartão não é recalculado');
+    await page.click('[data-tab="home"]');
+    assert.ok((await page.locator('#home-cashaccrual-container').innerHTML()).includes('cac-figure'));
   });
   // =========================================================================
   // CENÁRIO 9: ZERO ERROS NO CONSOLE E ZERO REQUISIÇÕES BLOQUEADAS

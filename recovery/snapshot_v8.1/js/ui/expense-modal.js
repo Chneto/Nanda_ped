@@ -87,11 +87,13 @@ export class ExpenseModalMethods {
           <p id="exp-cat-empty" class="cat-empty hidden">Nenhuma categoria encontrada. Tente outra palavra.</p>
         </div>
       </div>
+      <p id="exp-budget-hint" class="budget-hint hidden" aria-live="polite"></p>
+
       <div class="form-row">
         <div class="form-group">
           <label for="exp-amount-input">Valor (R$)</label>
           <input 
-            type="number" 
+            type="number" inputmode="decimal" 
             id="exp-amount-input" 
             name="amount" 
             class="form-input silk-input" 
@@ -174,6 +176,7 @@ export class ExpenseModalMethods {
       renderTree();
 
       const defAmt = parseFloat(src.getAttribute('data-default-amount'));
+      this.updateExpenseBudgetHint(form);
       const amtInput = form.querySelector('#exp-amount-input');
       if (amtInput && defAmt > 0 && !amtInput.value) {
         amtInput.value = defAmt.toFixed(2);
@@ -222,6 +225,13 @@ export class ExpenseModalMethods {
       const chip = e.target.closest('[data-cat-chip]');
       if (chip) chooseCategory(chip.getAttribute('data-cat-chip'), chip);
     });
+    // Aviso de teto da categoria (mostra quanto do teto mensal este lançamento consome)
+    const refreshBudget = () => this.updateExpenseBudgetHint(form);
+    form.querySelector('#exp-amount-input')?.addEventListener('input', refreshBudget);
+    form.querySelector('#exp-date-input')?.addEventListener('change', refreshBudget);
+    form.querySelector('#exp-installments-input')?.addEventListener('change', refreshBudget);
+    refreshBudget();
+
     modal.classList.remove('hidden');
   }
 

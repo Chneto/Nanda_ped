@@ -4,6 +4,7 @@
  * Criado por: FChNeto (APP_CREATOR = 'FChNeto')
  */
 
+import { formatDateBR } from '../store.js';
 import { escapeHtml } from './helpers.js';
 
 export class EventsMethods {
@@ -104,6 +105,36 @@ export class EventsMethods {
         return;
       }
 
+      // 7d. Atalho para outra aba (ex.: aviso de tetos na Início)
+      const gotoTabBtn = e.target.closest('[data-goto-tab]');
+      if (gotoTabBtn) {
+        this.switchTab(gotoTabBtn.getAttribute('data-goto-tab'));
+        return;
+      }
+
+      // 7c. Abrir a gestão de categorias (tetos) e editar o teto de uma categoria
+      const openCategoriesBtn = e.target.closest('[data-action="open-categories"]');
+      if (openCategoriesBtn) {
+        this.openCategoriesModal();
+        return;
+      }
+      const editCapBtn = e.target.closest('[data-edit-cap]');
+      if (editCapBtn) {
+        this.openCategoryCapModal(editCapBtn.getAttribute('data-edit-cap'));
+        return;
+      }
+
+      // 8a. Editar parcela (data prevista, valor, situação e data real do recebimento)
+      const editInstallmentBtn = e.target.closest('[data-edit-installment]');
+      if (editInstallmentBtn) {
+        e.stopPropagation();
+        this.openInstallmentModal(
+          editInstallmentBtn.getAttribute('data-shift-id'),
+          parseInt(editInstallmentBtn.getAttribute('data-edit-installment'), 10)
+        );
+        return;
+      }
+
       // 8. Toque em Item de Plantão (Single-Tap Edit ou Toggle de Parcela)
       const toggleInstallmentBtn = e.target.closest('[data-toggle-installment]');
       if (toggleInstallmentBtn) {
@@ -196,6 +227,19 @@ export class EventsMethods {
         return;
       }
 
+      if (e.target.closest('#drawer-item-report')) {
+        this.closeDrawer();
+        this.openReportModal();
+        return;
+      }
+
+      const reportAction = e.target.closest('[data-action^="report-"]');
+      if (reportAction) {
+        if (reportAction.getAttribute('data-action') === 'report-csv') this.exportReportCsv();
+        else this.printReport();
+        return;
+      }
+
       if (e.target.closest('#drawer-item-theme') || e.target.closest('#btn-header-theme')) {
         this.toggleTheme();
         return;
@@ -234,6 +278,18 @@ export class EventsMethods {
         return;
       }
 
+      if (e.target.id === 'form-category-cap') {
+        e.preventDefault();
+        this.handleSaveCategoryCap(e.target);
+        return;
+      }
+
+      if (e.target.id === 'form-installment') {
+        e.preventDefault();
+        this.handleSaveInstallment(e.target);
+        return;
+      }
+
       if (e.target.id === 'form-new-expense') {
         e.preventDefault();
         this.handleSaveExpense(e.target);
@@ -268,16 +324,49 @@ export class EventsMethods {
 
         try {
           const text = await file.text();
+
+          // 1) Pré-visualiza sem tocar nos dados atuais
+          const preview = this.storage.previewBackup(text);
+          if (!preview.success) {
+            this.showToast(`Erro na restauração: ${preview.error}`, 'error');
+            return;
+          }
+
+          // 2) Pede confirmação mostrando o que será substituído
+          const cur = this.store.data;
+          const nf = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+          const when = preview.exportedAt ? ` (gerado em ${formatDateBR(preview.exportedAt.slice(0, 10))})` : '';
+          const ok = await this.confirmDialog({
+            badge: 'Restaurar backup',
+            title: 'Substituir os dados atuais?',
+            message: `O arquivo${when} tem ${nf(preview.countShifts, 'plantão', 'plantões')} e ${nf(preview.countExpenses, 'despesa', 'despesas')}.\n\nSeus dados atuais (${nf((cur.shifts || []).length, 'plantão', 'plantões')} e ${nf((cur.expenses || []).length, 'despesa', 'despesas')}) serão substituídos. Logo após restaurar, você poderá desfazer.`,
+            confirmLabel: 'Restaurar',
+            cancelLabel: 'Cancelar',
+            danger: true
+          });
+          if (!ok) return;
+
+          // 3) Cópia de segurança do estado atual (IndexedDB) e importação
+          await this.storage.saveSafetySnapshot(JSON.parse(JSON.stringify(cur)));
           const result = this.storage.importBackup(text, this.store);
           if (result.success) {
-            this.showToast(`Backup restaurado! ${result.countShifts} plantões e ${result.countExpenses} despesas recuperadas.`);
+            const previous = result.previousState;
             this.render();
+            this.showToastWithUndo(
+              `Backup restaurado! ${nf(result.countShifts, 'plantão', 'plantões')} e ${nf(result.countExpenses, 'despesa', 'despesas')}.`,
+              () => {
+                this.store.init(previous);
+                this.store.save();
+                this.render();
+                this.showToast('Restauração desfeita: seus dados anteriores voltaram.');
+              },
+              12000
+            );
           } else {
             this.showToast(`Erro na restauração: ${result.error}`, 'error');
           }
         } catch (err) {
-          this.showToast(`Falha ao ler arquivo: ${err.message}`, 'error');
-        } finally {
+          this.showToast(`Falha ao ler arquivo: ${err.message}`, 'error');        } finally {
           fileInput.value = '';
         }
       });

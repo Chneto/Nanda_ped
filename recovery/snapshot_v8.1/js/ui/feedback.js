@@ -96,6 +96,7 @@ export class FeedbackMethods {
   closeModal(selector) {
     const el = document.querySelector(selector);
     if (el) el.classList.add('hidden');
+    this._settleConfirm(false);
     this._restoreFocus();
   }
 
@@ -103,7 +104,46 @@ export class FeedbackMethods {
   closeAllModals() {
     const open = document.querySelectorAll('.modal-backdrop:not(.hidden)').length;
     document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.add('hidden'));
+    this._settleConfirm(false);
     if (open) this._restoreFocus();
+  }
+
+  /**
+   * Diálogo de confirmação acessível (Promise<boolean>). Esc, X e toque fora cancelam.
+   * O foco inicial fica em "Cancelar" (ação segura).
+   */
+  confirmDialog({ badge = 'Confirmação', title, message, confirmLabel = 'Confirmar', cancelLabel = 'Cancelar', danger = false }) {
+    const modal = document.getElementById('modal-confirm');
+    if (!modal) return Promise.resolve(window.confirm(`${title}\n\n${message}`));
+    this._settleConfirm(false);
+
+    modal.querySelector('#modal-confirm-badge').textContent = badge;
+    modal.querySelector('#modal-confirm-title').textContent = title;
+    const body = modal.querySelector('#modal-confirm-body');
+    body.innerHTML = `
+      <p class="confirm-message">${escapeHtml(message).replace(/\n/g, '<br>')}</p>
+      <div class="modal-actions-row">
+        <button type="button" class="btn-silk-secondary" data-confirm="cancel">${escapeHtml(cancelLabel)}</button>
+        <button type="button" class="btn-silk-primary${danger ? ' btn-danger' : ''}" data-confirm="ok">${escapeHtml(confirmLabel)}</button>
+      </div>`;
+
+    return new Promise((resolve) => {
+      this._confirmResolve = resolve;
+      body.onclick = (e) => {
+        const btn = e.target.closest('[data-confirm]');
+        if (!btn) return;
+        const ok = btn.getAttribute('data-confirm') === 'ok';
+        this._settleConfirm(ok);
+        this.closeAllModals();
+      };
+      this.openModal('#modal-confirm');
+    });
+  }
+
+  _settleConfirm(result) {
+    const resolve = this._confirmResolve;
+    this._confirmResolve = null;
+    if (typeof resolve === 'function') resolve(result);
   }
 
 

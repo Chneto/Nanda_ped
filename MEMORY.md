@@ -1,4 +1,4 @@
-# 🧠 MEMORY — Finanças Pediatria (Guia Canônico de Contexto & Memória do Sistema)
+﻿# 🧠 MEMORY — Finanças Pediatria (Guia Canônico de Contexto & Memória do Sistema)
 
 > **Documento Canônico de Memória para Agentes Autônomos, IAs e Desenvolvedores.**  
 > Este arquivo sintetiza regras de negócio, decisões arquiteturais, design system, convenções de testes e fluxos operacionais das variantes do **Finanças Pediatria**.  
@@ -35,7 +35,7 @@
   - Lixeira de exclusões recentes com restauração em 1 toque.
 - **Identidade Silk & Rose Gold e Ergonomia iPhone:** Tipografia `Bricolage Grotesque` e `Manrope`, Modo Noturno UTI Neonatal (`[data-theme="dark"]`), viewport iPhone 16 Plus (430px), safe areas, inputs anti-zoom (`>= 16px`), seletores in-flow anti-crop e 37 ícones SVG inline puros.
 - **Autor Canônico Imutável:** `APP_CREATOR = 'FChNeto'` presente em metadados, rodapés, manifests e suíte de testes (99 testes automatizados dedicados em `v8/tests/*.test.js` com 100% de aprovação, incluindo 10.000 ensaios de fuzzing financeiro e suíte E2E Playwright iPhone 16 Plus).
-- **Snapshot Imutável de Recuperação:** Congelado em `recovery/snapshot_v8.0/`.
+- **Snapshot Imutável de Recuperação:** Atual em `recovery/snapshot_v8.1/`; histórico anterior nas tags `archive/recovery-before-cleanup` e `archive/cloud-before-removal`.
 
 ### Registro técnico da versão Cloud v7.0.0, v6.0.0 & V4_Cloud 4.1.1
 - Configuração Vercel: variáveis `SUPABASE_URL` e `SUPABASE_ANON_KEY` (ou `SUPABASE_PUBLISHABLE_KEY`); nenhuma chave de serviço no navegador; timeout de runtime estendido para 4,5s contra cold starts.
@@ -172,3 +172,4 @@ A interface segue a estética acolhedora, sofisticada e limpa desenvolvida para 
 ---
 
 *Finanças Pediatria — Desenvolvido com segurança, carinho e excelência por FChNeto.* 🩺✨🌸
+

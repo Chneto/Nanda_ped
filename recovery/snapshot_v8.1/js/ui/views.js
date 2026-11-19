@@ -9,6 +9,8 @@ import { getIconSvg, sanitizeColor } from '../icons.js';
 import { escapeHtml } from './helpers.js';
 import { buildCategoryTree, renderMacroChipsHtml, renderMicroChipsHtml, getMicroCategoryNames } from './category-picker.js';
 
+const MESES_CURTOS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+
 export class ViewMethods {
   // =========================================================================
   // NAVEGAÇÃO DE ABAS & MESES
@@ -22,6 +24,7 @@ export class ViewMethods {
     document.querySelectorAll('.bottom-nav-bar .nav-tab').forEach(btn => {
       const isMatch = btn.getAttribute('data-tab') === tabName;
       btn.classList.toggle('active', isMatch);
+      if (isMatch) btn.setAttribute('aria-current', 'page'); else btn.removeAttribute('aria-current');
     });
 
     // Atualiza views
@@ -74,7 +77,9 @@ export class ViewMethods {
 
     // Toggle de botões de regime
     document.querySelectorAll('.regime-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-regime') === regime);
+      const isActive = btn.getAttribute('data-regime') === regime;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 
     // 2. Perfil da Médica no Cabeçalho
@@ -108,6 +113,13 @@ export class ViewMethods {
 
     // 4. Renderiza Chips de Topo
     this.renderTopMaternityChips();
+
+    // 4b. Caixa × Competência (Início)
+    if (this.activeTab === 'home') this.renderCashAccrualCard();
+
+    // 5. Tetos mensais por categoria (aviso na Início e cartão em Despesas)
+    this.renderBudgetAlert();
+    this.renderBudgetCard();
   }
 
 
@@ -147,24 +159,27 @@ export class ViewMethods {
     // Representação Visual 3: Comparativo Caixa vs Competência
     const compContainer = document.getElementById('home-comparison-container');
     if (compContainer) {
+      // Os dois regimes são sempre calculados: caixa (recebido/a receber no mês) e competência (produção do mês)
+      const month = summary.targetMonth || this.store.data.preferences.activeMonth || getLocalDateString().slice(0, 7);
+      const caixa = this.store.getMonthSummary(month, 'caixa');
+      const competencia = this.store.getMonthSummary(month, 'competencia');
       compContainer.innerHTML = `
         <div class="comp-box">
           <div class="comp-row">
-            <span>Caixa Real Efetivado (Recebido):</span>
-            <strong style="color: #26A69A;">${formatCurrency(summary.shiftInflowRealized)}</strong>
+            <span>Recebido neste mês (caixa):</span>
+            <strong style="color: var(--mint-text);">${formatCurrency(caixa.shiftInflowRealized)}</strong>
           </div>
           <div class="comp-row">
-            <span>A Receber em Aberto (D+60/D+90):</span>
-            <strong style="color: #FFA726;">${formatCurrency(summary.shiftInflowPending)}</strong>
+            <span>A receber neste mês (D+60/D+90):</span>
+            <strong style="color: var(--amber-text);">${formatCurrency(caixa.shiftInflowPending)}</strong>
           </div>
           <div class="comp-row">
-            <span>Produção Realizada no Mês:</span>
-            <strong style="color: #EC407A;">${formatCurrency(summary.shiftProductionTotal)}</strong>
+            <span>Produção do mês (plantões trabalhados):</span>
+            <strong style="color: var(--pink-text);">${formatCurrency(competencia.shiftProductionTotal)}</strong>
           </div>
         </div>
       `;
-    }
-  }
+    }  }
 
 
   // =========================================================================
@@ -193,11 +208,13 @@ export class ViewMethods {
     const isCaixa = this.store.data.preferences.regime === 'caixa';
 
     // Filtra plantões aplicáveis ao mês
+    // Caixa: plantões trabalhados no mês (recebem depois) + plantões com parcela vencendo no mês
     const shifts = this.store.data.shifts.filter(s => {
+      const workedThisMonth = Boolean(s.date && s.date.startsWith(activeMonth));
       if (isCaixa) {
-        return (s.installments || []).some(i => i.date && i.date.startsWith(activeMonth));
+        return workedThisMonth || (s.installments || []).some(i => i.date && i.date.startsWith(activeMonth));
       }
-      return s.date && s.date.startsWith(activeMonth);
+      return workedThisMonth;
     });
 
     if (shifts.length === 0) {
@@ -215,6 +232,12 @@ export class ViewMethods {
     }
 
     container.innerHTML = shifts.map(shift => {
+      // Aviso quando o plantão é do mês, mas só será pago em meses seguintes (regime de caixa)
+      const paidThisMonth = (shift.installments || []).some(i => i.date && i.date.startsWith(activeMonth));
+      const firstDue = (shift.installments || []).map(i => i.date).filter(Boolean).sort()[0];
+      const payHint = (isCaixa && !paidThisMonth && firstDue)
+        ? `<span class="shift-pay-hint">Recebe a partir de ${MESES_CURTOS[parseInt(firstDue.slice(5, 7), 10) - 1] || ''}/${firstDue.slice(2, 4)}</span>`
+        : '';
       const installmentsHtml = (shift.installments || []).map((inst, idx) => {
         const isReceived = inst.status === 'received';
         const num = idx + 1;
@@ -224,7 +247,7 @@ export class ViewMethods {
           <div class="installment-pill ${isReceived ? 'paid' : 'pending'} ${inThisMonth ? 'current-month-highlight' : ''}">
             <div class="inst-info">
               <span class="inst-label">${num}ª Parcela (${inst.percentage}%)</span>
-              <span class="inst-date">${formatDateBR(inst.date)}</span>
+              <span class="inst-date">${formatDateBR(inst.date)}</span>${isReceived && inst.paidDate ? `<span class="inst-paid">Caiu em ${formatDateBR(inst.paidDate)}</span>` : ''}
             </div>
             <div class="inst-action">
               <strong class="inst-val">${formatCurrency(inst.value)}</strong>
@@ -237,6 +260,9 @@ export class ViewMethods {
               >
                 ${isReceived ? getIconSvg('check_circle', 18, '#26A69A') : getIconSvg('payments', 18, '#FFA726')}
                 <span>${isReceived ? 'Recebido' : 'Pendente'}</span>
+              </button>
+              <button type="button" class="btn-inst-edit" data-edit-installment="${num}" data-shift-id="${shift.id}" aria-label="Editar ${num}ª parcela" title="Editar data, valor e recebimento">
+                ${getIconSvg('edit', { size: 16 })}
               </button>
             </div>
           </div>
@@ -253,6 +279,7 @@ export class ViewMethods {
               <div>
                 <h3 class="shift-hospital-title">${escapeHtml(shift.source_name_snapshot)}</h3>
                 <span class="shift-date-sub">${formatDateBR(shift.date)} • ${escapeHtml(shift.shiftType || 'Sala de Parto')}</span>
+                ${payHint}
               </div>
             </div>
             <div class="shift-card-actions">
@@ -349,7 +376,7 @@ export class ViewMethods {
           <div class="expense-info-wrap">
             <h4 class="expense-desc-title">${escapeHtml(exp.description)}</h4>
             <div class="expense-meta-tags">
-              <span class="category-pill" style="border-color: ${color}40; color: ${color};">
+              <span class="category-pill" style="border-color: ${color}66;">
                 ${escapeHtml(exp.category_name_snapshot)}
               </span>
               ${isInst ? `<span class="inst-counter-pill">${exp.current_installment}/${exp.total_installments}</span>` : ''}

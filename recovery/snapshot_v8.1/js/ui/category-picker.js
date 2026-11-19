@@ -4,7 +4,7 @@
  * Criado por: FChNeto (APP_CREATOR = 'FChNeto')
  */
 
-import { MACRO_GROUPS } from '../store.js';
+import { MACRO_GROUPS, formatCurrency } from '../store.js';
 import { getIconSvg, sanitizeColor } from '../icons.js';
 import { escapeHtml } from './helpers.js';
 
@@ -251,7 +251,8 @@ export function renderManageTreeHtml(tree) {
               ${s.categories.map(c => `
                 <div class="cat-manage-row${c.active === false ? ' archived' : ''}">
                   ${iconBubble(c.icon, c.color, 18)}
-                  <span class="cat-manage-name">${escapeHtml(c.name)}</span>
+                  <span class="cat-manage-name">${escapeHtml(c.name)}${c.monthly_budget_cap > 0 ? `<small class="cat-cap-text">Teto ${escapeHtml(formatCurrency(c.monthly_budget_cap))}/mês</small>` : ''}</span>
+                  ${c.active !== false ? `<button type="button" class="btn-cap-edit" data-edit-cap="${escapeHtml(c.id)}" aria-label="${c.monthly_budget_cap > 0 ? 'Alterar' : 'Definir'} teto mensal de ${escapeHtml(c.name)}" title="Teto mensal">${getIconSvg('wallet', { size: 16 })}<span>Teto</span></button>` : ''}
                   ${c.isCustom && c.active !== false
                     ? `<button type="button" class="btn-icon-delete" data-delete-cat="${escapeHtml(c.id)}" aria-label="Excluir categoria ${escapeHtml(c.name)}" title="Excluir categoria">${getIconSvg('trash', { size: 16, color: '#EF5350' })}</button>`
                     : c.active === false

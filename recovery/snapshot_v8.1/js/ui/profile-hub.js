@@ -41,7 +41,7 @@ export class ProfileHubMethods {
 
       <div class="form-group">
         <label for="prof-salary">Bolsa Residência Fixa (R$ / mês)</label>
-        <input type="number" id="prof-salary" name="salaryValue" class="form-input silk-input" step="0.01" min="0" value="${p.residencySalary?.value || 0}" />
+        <input type="number" inputmode="decimal" id="prof-salary" name="salaryValue" class="form-input silk-input" step="0.01" min="0" value="${p.residencySalary?.value || 0}" />
       </div>
 
       <div class="form-group">

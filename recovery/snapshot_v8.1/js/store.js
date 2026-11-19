@@ -903,6 +903,82 @@ export class PediatricStore {
     return shift;
   }
 
+  /**
+   * Edita uma parcela de plantão: data prevista, valor, situação (recebido/pendente) e data real do recebimento.
+   * Com `balance: true` e exatamente 2 parcelas, a outra parcela é ajustada para o total continuar igual.
+   * Retorna { updated, shift, previous } — `previous` é a cópia das parcelas para o Desfazer.
+   */
+  updateShiftInstallment(shiftId, installmentNum, changes = {}) {
+    const shift = this.data.shifts.find(s => s.id === shiftId);
+    if (!shift || !Array.isArray(shift.installments)) return { updated: false, error: 'Plantão não encontrado' };
+    const inst = shift.installments[installmentNum - 1];
+    if (!inst) return { updated: false, error: 'Parcela não encontrada' };
+
+    const isValidDate = (s) => {
+      if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+      const [y, m, d] = s.split('-').map(Number);
+      const dt = new Date(Date.UTC(y, m - 1, d));
+      return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+    };
+    const round2 = (n) => Math.round(n * 100) / 100;
+
+    // --- validação (nada é alterado se algo estiver inválido)
+    let nextValue = inst.value;
+    if (changes.value !== undefined) {
+      nextValue = round2(parseFloat(changes.value));
+      if (!Number.isFinite(nextValue) || nextValue <= 0) return { updated: false, error: 'Informe um valor válido para a parcela' };
+    }
+    let nextDate = inst.date;
+    if (changes.date !== undefined) {
+      if (!isValidDate(changes.date)) return { updated: false, error: 'Informe uma data válida para a parcela' };
+      nextDate = changes.date;
+    }
+    const nextStatus = changes.status !== undefined ? (changes.status === 'received' ? 'received' : 'pending') : inst.status;
+    let nextPaid = null;
+    if (nextStatus === 'received') {
+      nextPaid = changes.paidDate !== undefined ? changes.paidDate : (inst.paidDate || getLocalDateString());
+      if (!isValidDate(nextPaid)) return { updated: false, error: 'Informe uma data válida para o recebimento' };
+    }
+
+    const previous = JSON.parse(JSON.stringify(shift.installments));
+    const total = round2(shift.installments.reduce((sum, i) => sum + (parseFloat(i.value) || 0), 0));
+
+    // --- ajuste automático da outra parcela (apenas com 2 parcelas)
+    let other = null;
+    let otherValue = null;
+    if (changes.balance === true && shift.installments.length === 2 && nextValue !== inst.value) {
+      other = shift.installments[installmentNum === 1 ? 1 : 0];
+      otherValue = round2(total - nextValue);
+      if (otherValue <= 0) return { updated: false, error: `O valor excede o total do plantão (${formatCurrency(total)})` };
+    }
+
+    const net = parseFloat(shift.net_value) || 0;
+    const pct = (v, fallback) => (net > 0 ? Math.round((v / net) * 1000) / 10 : fallback);
+
+    inst.value = nextValue;
+    inst.date = nextDate;
+    inst.status = nextStatus;
+    inst.paidDate = nextPaid;
+    inst.percentage = pct(nextValue, inst.percentage);
+    inst.edited = true;
+    if (other) {
+      other.value = otherValue;
+      other.percentage = pct(otherValue, other.percentage);
+      other.edited = true;
+    }
+
+    this.save();
+    return { updated: true, shift, previous };
+  }
+
+  /** Desfaz uma edição de parcela restaurando a cópia devolvida por updateShiftInstallment */
+  restoreShiftInstallments(shiftId, installments) {
+    const shift = this.data.shifts.find(s => s.id === shiftId);
+    if (!shift || !Array.isArray(installments)) return false;
+    shift.installments = JSON.parse(JSON.stringify(installments));
+    this.save();
+    return true;
+  }
   // -----------------------------------------------------------------------
   // DESPESAS E COMPRAS PARCELADAS (CRUD)
   // -----------------------------------------------------------------------
@@ -1095,6 +1171,127 @@ export class PediatricStore {
     return (this.data.categories || []).filter(c => c.active !== false);
   }
 
+  // -----------------------------------------------------------------------
+  // CAIXA × COMPETÊNCIA: série mensal e dinheiro "a caminho"
+  // -----------------------------------------------------------------------
+
+  /**
+   * Série de meses (centrada no mês ativo) com as entradas por regime de caixa (dinheiro que cai)
+   * e por regime de competência (produção do mês). `gap` > 0: produziu mais do que recebeu (dinheiro a caminho).
+   */
+  getCashVsAccrualSeries(centerMonth = getLocalDateString().slice(0, 7), before = 2, after = 3) {
+    const [cy, cm] = String(centerMonth).slice(0, 7).split('-').map(Number);
+    const series = [];
+    for (let i = -before; i <= after; i++) {
+      const idx = (cy * 12 + (cm - 1)) + i;
+      const y = Math.floor(idx / 12);
+      const m = (idx % 12) + 1;
+      const month = `${y}-${String(m).padStart(2, '0')}`;
+      const cash = this.getMonthSummary(month, 'caixa').totalIncome;
+      const accrual = this.getMonthSummary(month, 'competencia').totalIncome;
+      series.push({
+        month,
+        label: formatMonthYear(month).split(' de ')[0],
+        cash,
+        accrual,
+        gap: Math.round((accrual - cash) * 100) / 100,
+        isActive: i === 0
+      });
+    }
+    return series;
+  }
+
+  /** Parcelas de plantão ainda não recebidas: total a caminho, quantidade, próxima data e atrasadas */
+  getReceivablesPipeline(today = getLocalDateString()) {
+    let total = 0, count = 0, overdueTotal = 0, overdueCount = 0, next = null;
+    for (const shift of this.data.shifts || []) {
+      for (const inst of shift.installments || []) {
+        if (inst.status === 'received') continue;
+        const v = parseFloat(inst.value) || 0;
+        total += v; count++;
+        if (inst.date && inst.date < today) { overdueTotal += v; overdueCount++; }
+        if (inst.date && (!next || inst.date < next)) next = inst.date;
+      }
+    }
+    const r2 = (n) => Math.round(n * 100) / 100;
+    return { total: r2(total), count, overdueTotal: r2(overdueTotal), overdueCount, nextDate: next };
+  }
+  // -----------------------------------------------------------------------
+  // TETOS MENSAIS POR CATEGORIA (monthly_budget_cap)
+  // -----------------------------------------------------------------------
+
+  /**
+   * Situação dos tetos no mês: gasto, restante e percentual de cada categoria com teto.
+   * status: 'ok' (< 80%), 'warn' (80% a 100%) ou 'over' (acima de 100%).
+   */
+  getBudgetStatus(targetMonth = getLocalDateString().slice(0, 7)) {
+    const monthStr = String(targetMonth).slice(0, 7);
+    const categories = this.getActiveCategories();
+    const byKey = new Map(categories.map(c => [getCategoryKey(c.name), c]));
+    const spent = new Map();
+    for (const e of this.data.expenses || []) {
+      if (!e.date || !e.date.startsWith(monthStr)) continue;
+      const cat = (e.category_id && categories.find(c => c.id === e.category_id)) || byKey.get(getCategoryKey(e.category_name_snapshot));
+      if (!cat) continue;
+      spent.set(cat.id, (spent.get(cat.id) || 0) + (parseFloat(e.amount) || 0));
+    }
+    const rank = { over: 0, warn: 1, ok: 2 };
+    return categories
+      .filter(c => Number(c.monthly_budget_cap) > 0)
+      .map(c => {
+        const cap = Math.round(Number(c.monthly_budget_cap) * 100) / 100;
+        const total = Math.round((spent.get(c.id) || 0) * 100) / 100;
+        const pct = Math.round((total / cap) * 1000) / 10;
+        const status = total > cap ? 'over' : pct >= 80 ? 'warn' : 'ok';
+        return {
+          id: c.id, name: c.name, icon: c.icon, color: c.color, macro_group: c.macro_group,
+          cap, spent: total, remaining: Math.round((cap - total) * 100) / 100, pct, status
+        };
+      })
+      .sort((a, b) => rank[a.status] - rank[b.status] || b.pct - a.pct || a.name.localeCompare(b.name, 'pt-BR'));
+  }
+
+  /**
+   * Efeito de um lançamento sobre o teto da categoria no mês (antes de salvar).
+   * `replaceAmount` desconta o valor antigo quando a despesa está sendo editada.
+   */
+  getBudgetImpact(categoryName, targetMonth, amount = 0, replaceAmount = 0) {
+    const status = this.getBudgetStatus(targetMonth).find(s => getCategoryKey(s.name) === getCategoryKey(categoryName));
+    if (!status) return { hasCap: false };
+    const add = Math.max(0, parseFloat(amount) || 0);
+    const before = Math.max(0, Math.round((status.spent - (parseFloat(replaceAmount) || 0)) * 100) / 100);
+    const after = Math.round((before + add) * 100) / 100;
+    const pctAfter = Math.round((after / status.cap) * 1000) / 10;
+    return {
+      hasCap: true,
+      name: status.name,
+      cap: status.cap,
+      spentBefore: before,
+      spentAfter: after,
+      pctBefore: Math.round((before / status.cap) * 1000) / 10,
+      pctAfter,
+      overBy: after > status.cap ? Math.round((after - status.cap) * 100) / 100 : 0,
+      remainingAfter: Math.round((status.cap - after) * 100) / 100,
+      status: after > status.cap ? 'over' : pctAfter >= 80 ? 'warn' : 'ok'
+    };
+  }
+
+  /** Define (ou remove, com null/vazio/0) o teto mensal de qualquer categoria, inclusive as padrão */
+  setCategoryBudgetCap(categoryId, value) {
+    const category = (this.data.categories || []).find(c => c.id === categoryId);
+    if (!category) return { updated: false, error: 'Categoria não encontrada' };
+    let cap = null;
+    if (value !== null && value !== undefined && String(value).trim() !== '') {
+      const n = Math.round(parseFloat(value) * 100) / 100;
+      if (!Number.isFinite(n) || n < 0) return { updated: false, error: 'Informe um valor válido para o teto' };
+      cap = n > 0 ? n : null;
+    }
+    const previous = category.monthly_budget_cap ?? null;
+    category.monthly_budget_cap = cap;
+    category.updatedAt = new Date().toISOString();
+    this.save();
+    return { updated: true, category, previous, cap };
+  }
   addCategory({ name, macro_group, default_payment_type = 'a_vista', default_amount = null, monthly_budget_cap = null, icon = 'tag', color = '#7E57C2' }) {
     const trimmed = normalizeCategoryName(name);
     if (!trimmed) return null;
@@ -1203,10 +1400,12 @@ export class PediatricStore {
   }
 
   restoreDefaultCategories({ preserveCustom = true } = {}) {
+    // Os tetos que a usuária definiu (ou removeu) nas categorias padrão são preservados ao restaurar
+    const previousCaps = new Map((this.data.categories || []).map(c => [getCategoryKey(c.name), c.monthly_budget_cap ?? null]));
     const defaults = DEFAULT_CATEGORIES.map(c => ({
       ...c,
       default_payment_type: c.default_payment_type || 'a_vista',
-      monthly_budget_cap: c.monthly_budget_cap || null,
+      monthly_budget_cap: previousCaps.has(getCategoryKey(c.name)) ? previousCaps.get(getCategoryKey(c.name)) : (c.monthly_budget_cap || null),
       default_amount: c.default_amount || null,
       active: true,
       createdAt: new Date().toISOString(),

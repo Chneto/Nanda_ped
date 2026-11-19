@@ -93,7 +93,7 @@
         </button>
 
         <div class="current-month-display">
-          <h2 id="current-month-title">Maio de 2026</h2>
+          <h2 id="current-month-title" aria-live="polite" aria-atomic="true">Maio de 2026</h2>
           <span id="current-regime-pill" class="regime-pill">Regime de Caixa</span>
         </div>
 
@@ -106,10 +106,10 @@
 
       <!-- Seletor de Regime: Caixa vs Competência -->
       <div class="regime-toggle-pill">
-        <button class="regime-btn active" data-regime="caixa" type="button">
+        <button class="regime-btn active" data-regime="caixa" type="button" aria-pressed="true">
           Regime de Caixa (Depósitos D+60/D+90)
         </button>
-        <button class="regime-btn" data-regime="competencia" type="button">
+        <button class="regime-btn" data-regime="competencia" type="button" aria-pressed="false">
           Regime de Competência (Produção)
         </button>
       </div>
@@ -147,6 +147,8 @@
 
         <!-- Aba 1: Início (Dashboard / Balanço / Resumo Pediátrico) -->
         <section id="view-home" class="app-view active" aria-label="Aba Início">
+          <!-- Aviso de tetos (aparece só quando há categoria perto/acima do teto) -->
+          <div id="home-budget-alert"></div>
           <!-- Hero Card de Saldo -->
           <div class="hero-balance-card">
             <div class="balance-title">
@@ -219,10 +221,22 @@
             </div>
             <div id="home-comparison-container"></div>
           </div>
+
+          <!-- Caixa × Competência: dinheiro que cai na conta x produção do mês -->
+          <div class="card-section" id="cash-accrual-card">
+            <div class="section-header">
+              <h2>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5C6BC0" stroke-width="2" aria-hidden="true">
+                  <path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/>
+                </svg>
+                Caixa × Competência
+              </h2>
+            </div>
+            <div id="home-cashaccrual-container"></div>
+          </div>
         </section>
 
-        <!-- Aba 2: Ganhos & Plantões (75% D+60 e 25% D+90) -->
-        <section id="view-income" class="app-view hidden" aria-label="Aba Ganhos">
+        <!-- Aba 2: Ganhos & Plantões (75% D+60 e 25% D+90) -->        <section id="view-income" class="app-view hidden" aria-label="Aba Ganhos">
           <!-- Card da Bolsa Residência Fixa -->
           <div class="card-section" id="salary-card">
             <div class="section-header">
@@ -275,6 +289,9 @@
             <span class="expenses-sub-hint" style="font-size: 0.75rem; color: var(--text-muted);">Todas as despesas do mês e compras parceladas vigentes</span>
           </div>
 
+          <!-- Tetos mensais por categoria -->
+          <div class="card-section" id="budget-caps-container" aria-live="polite"></div>
+
           <!-- Barra de Filtros por Macro-Grupo -->
           <div class="card-section" style="padding-bottom: 8px;">
             <div class="section-header" style="margin-bottom: 8px;">
@@ -309,7 +326,7 @@
 
       <!-- Barra Flutuante de Navegação Inferior (iPhone 16 Plus Ergonomics) -->
       <nav class="bottom-nav-bar" aria-label="Navegação Inferior">
-        <button class="nav-tab active" data-tab="home" id="tab-nav-home" type="button">
+        <button class="nav-tab active" data-tab="home" id="tab-nav-home" type="button" aria-current="page">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
             <polyline points="9 22 9 12 15 12 15 22"/>
@@ -460,7 +477,7 @@
       <div class="modal-sheet">
         <header class="modal-header">
           <div class="modal-title-wrap">
-            <span class="silk-pill-badge" style="background: rgba(239, 83, 80, 0.15); color: #EF5350;">Aviso de Segurança</span>
+            <span class="silk-pill-badge" style="background: rgba(239, 83, 80, 0.15); color: var(--danger-text);">Aviso de Segurança</span>
             <h3 id="modal-reset-title">Zerar Dados da Aplicação</h3>
           </div>
           <button class="modal-close-btn" data-close-modal="#modal-reset-confirm" aria-label="Fechar" type="button">
@@ -473,6 +490,78 @@
       </div>
     </div>
 
+    <!-- Modal 8: Confirmação genérica (ex.: restaurar backup) -->
+    <div id="modal-confirm" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-confirm-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span id="modal-confirm-badge" class="silk-pill-badge">Confirmação</span>
+            <h3 id="modal-confirm-title">Confirmar</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-confirm" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <div id="modal-confirm-body"></div>
+      </div>
+    </div>
+    <!-- Modal 9: Edição de parcela de plantão (data prevista, valor e recebimento) -->
+    <div id="modal-installment" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-installment-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Recebimento</span>
+            <h3 id="modal-installment-title">Editar parcela</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-installment" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <form id="form-installment" class="modal-form" novalidate></form>
+      </div>
+    </div>
+    <!-- Modal 10: Teto mensal da categoria -->
+    <div id="modal-category-cap" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-category-cap-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Teto mensal</span>
+            <h3 id="modal-category-cap-title">Teto da categoria</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-category-cap" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <form id="form-category-cap" class="modal-form" novalidate></form>
+      </div>
+    </div>
+    <!-- Modal 11: Relatório mensal (pré-visualização, planilha CSV e impressão/PDF) -->
+    <div id="modal-report" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-report-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Relatório</span>
+            <h3 id="modal-report-title">Relatório do mês</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-report" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <div class="modal-actions-row report-actions">
+          <button type="button" class="btn-silk-secondary" data-action="report-csv">Salvar planilha (CSV)</button>
+          <button type="button" class="btn-silk-primary" data-action="report-print">Imprimir / PDF</button>
+        </div>
+        <div id="report-body" class="report-preview"></div>
+      </div>
+    </div>
     <!-- Drawer Lateral do Menu Hambúrguer -->
     <aside id="drawer-menu" class="drawer-overlay hidden" aria-label="Menu de Navegação Lateral">
       <div class="drawer-panel">
@@ -529,6 +618,15 @@
             </div>
           </button>
 
+          <button class="drawer-item" id="drawer-item-report" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5C6BC0" stroke-width="2" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>
+            </svg>
+            <div class="drawer-item-text">
+              <span>Relatório do Mês</span>
+              <small>Resumo, planilha CSV e PDF para imprimir</small>
+            </div>
+          </button>
           <button class="drawer-item" id="drawer-item-theme" type="button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFA726" stroke-width="2">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
@@ -575,10 +673,10 @@
 
   <!-- Fallback Acessível para JavaScript Desativado -->
   <noscript>
-    <div style="padding: 24px; text-align: center; color: #D81B60; font-family: sans-serif; background: #FFF0ED; border-radius: 16px; margin: 20px;">
+    <div style="padding: 24px; text-align: center; color: #B0124F; font-family: sans-serif; background: #FFF0ED; border-radius: 16px; margin: 20px;">
       <h2>JavaScript Necessário</h2>
       <p>Para desfrutar do santuário financeiro Finanças Pediatria offline, por favor ative o JavaScript no seu navegador Safari / Chrome.</p>
-      <p style="margin-top: 12px; font-size: 0.85rem; color: #7E7485;">Criado por FChNeto</p>
+      <p style="margin-top: 12px; font-size: 0.85rem; color: #655C6E;">Criado por FChNeto</p>
     </div>
   </noscript>
 
