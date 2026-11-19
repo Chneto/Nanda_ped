@@ -9,6 +9,8 @@ import { getIconSvg, sanitizeColor } from '../icons.js';
 import { escapeHtml } from './helpers.js';
 import { buildCategoryTree, renderMacroChipsHtml, renderMicroChipsHtml, getMicroCategoryNames } from './category-picker.js';
 
+const MESES_CURTOS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+
 export class ViewMethods {
   // =========================================================================
   // NAVEGAÇÃO DE ABAS & MESES
@@ -147,24 +149,27 @@ export class ViewMethods {
     // Representação Visual 3: Comparativo Caixa vs Competência
     const compContainer = document.getElementById('home-comparison-container');
     if (compContainer) {
+      // Os dois regimes são sempre calculados: caixa (recebido/a receber no mês) e competência (produção do mês)
+      const month = summary.targetMonth || this.store.data.preferences.activeMonth || getLocalDateString().slice(0, 7);
+      const caixa = this.store.getMonthSummary(month, 'caixa');
+      const competencia = this.store.getMonthSummary(month, 'competencia');
       compContainer.innerHTML = `
         <div class="comp-box">
           <div class="comp-row">
-            <span>Caixa Real Efetivado (Recebido):</span>
-            <strong style="color: #26A69A;">${formatCurrency(summary.shiftInflowRealized)}</strong>
+            <span>Recebido neste mês (caixa):</span>
+            <strong style="color: #26A69A;">${formatCurrency(caixa.shiftInflowRealized)}</strong>
           </div>
           <div class="comp-row">
-            <span>A Receber em Aberto (D+60/D+90):</span>
-            <strong style="color: #FFA726;">${formatCurrency(summary.shiftInflowPending)}</strong>
+            <span>A receber neste mês (D+60/D+90):</span>
+            <strong style="color: #FFA726;">${formatCurrency(caixa.shiftInflowPending)}</strong>
           </div>
           <div class="comp-row">
-            <span>Produção Realizada no Mês:</span>
-            <strong style="color: #EC407A;">${formatCurrency(summary.shiftProductionTotal)}</strong>
+            <span>Produção do mês (plantões trabalhados):</span>
+            <strong style="color: #EC407A;">${formatCurrency(competencia.shiftProductionTotal)}</strong>
           </div>
         </div>
       `;
-    }
-  }
+    }  }
 
 
   // =========================================================================
@@ -193,11 +198,13 @@ export class ViewMethods {
     const isCaixa = this.store.data.preferences.regime === 'caixa';
 
     // Filtra plantões aplicáveis ao mês
+    // Caixa: plantões trabalhados no mês (recebem depois) + plantões com parcela vencendo no mês
     const shifts = this.store.data.shifts.filter(s => {
+      const workedThisMonth = Boolean(s.date && s.date.startsWith(activeMonth));
       if (isCaixa) {
-        return (s.installments || []).some(i => i.date && i.date.startsWith(activeMonth));
+        return workedThisMonth || (s.installments || []).some(i => i.date && i.date.startsWith(activeMonth));
       }
-      return s.date && s.date.startsWith(activeMonth);
+      return workedThisMonth;
     });
 
     if (shifts.length === 0) {
@@ -215,6 +222,12 @@ export class ViewMethods {
     }
 
     container.innerHTML = shifts.map(shift => {
+      // Aviso quando o plantão é do mês, mas só será pago em meses seguintes (regime de caixa)
+      const paidThisMonth = (shift.installments || []).some(i => i.date && i.date.startsWith(activeMonth));
+      const firstDue = (shift.installments || []).map(i => i.date).filter(Boolean).sort()[0];
+      const payHint = (isCaixa && !paidThisMonth && firstDue)
+        ? `<span class="shift-pay-hint">Recebe a partir de ${MESES_CURTOS[parseInt(firstDue.slice(5, 7), 10) - 1] || ''}/${firstDue.slice(2, 4)}</span>`
+        : '';
       const installmentsHtml = (shift.installments || []).map((inst, idx) => {
         const isReceived = inst.status === 'received';
         const num = idx + 1;
@@ -253,6 +266,7 @@ export class ViewMethods {
               <div>
                 <h3 class="shift-hospital-title">${escapeHtml(shift.source_name_snapshot)}</h3>
                 <span class="shift-date-sub">${formatDateBR(shift.date)} • ${escapeHtml(shift.shiftType || 'Sala de Parto')}</span>
+                ${payHint}
               </div>
             </div>
             <div class="shift-card-actions">

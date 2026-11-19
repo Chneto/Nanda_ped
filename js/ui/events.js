@@ -4,6 +4,7 @@
  * Criado por: FChNeto (APP_CREATOR = 'FChNeto')
  */
 
+import { formatDateBR } from '../store.js';
 import { escapeHtml } from './helpers.js';
 
 export class EventsMethods {
@@ -268,16 +269,49 @@ export class EventsMethods {
 
         try {
           const text = await file.text();
+
+          // 1) Pré-visualiza sem tocar nos dados atuais
+          const preview = this.storage.previewBackup(text);
+          if (!preview.success) {
+            this.showToast(`Erro na restauração: ${preview.error}`, 'error');
+            return;
+          }
+
+          // 2) Pede confirmação mostrando o que será substituído
+          const cur = this.store.data;
+          const nf = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+          const when = preview.exportedAt ? ` (gerado em ${formatDateBR(preview.exportedAt.slice(0, 10))})` : '';
+          const ok = await this.confirmDialog({
+            badge: 'Restaurar backup',
+            title: 'Substituir os dados atuais?',
+            message: `O arquivo${when} tem ${nf(preview.countShifts, 'plantão', 'plantões')} e ${nf(preview.countExpenses, 'despesa', 'despesas')}.\n\nSeus dados atuais (${nf((cur.shifts || []).length, 'plantão', 'plantões')} e ${nf((cur.expenses || []).length, 'despesa', 'despesas')}) serão substituídos. Logo após restaurar, você poderá desfazer.`,
+            confirmLabel: 'Restaurar',
+            cancelLabel: 'Cancelar',
+            danger: true
+          });
+          if (!ok) return;
+
+          // 3) Cópia de segurança do estado atual (IndexedDB) e importação
+          await this.storage.saveSafetySnapshot(JSON.parse(JSON.stringify(cur)));
           const result = this.storage.importBackup(text, this.store);
           if (result.success) {
-            this.showToast(`Backup restaurado! ${result.countShifts} plantões e ${result.countExpenses} despesas recuperadas.`);
+            const previous = result.previousState;
             this.render();
+            this.showToastWithUndo(
+              `Backup restaurado! ${nf(result.countShifts, 'plantão', 'plantões')} e ${nf(result.countExpenses, 'despesa', 'despesas')}.`,
+              () => {
+                this.store.init(previous);
+                this.store.save();
+                this.render();
+                this.showToast('Restauração desfeita: seus dados anteriores voltaram.');
+              },
+              12000
+            );
           } else {
             this.showToast(`Erro na restauração: ${result.error}`, 'error');
           }
         } catch (err) {
-          this.showToast(`Falha ao ler arquivo: ${err.message}`, 'error');
-        } finally {
+          this.showToast(`Falha ao ler arquivo: ${err.message}`, 'error');        } finally {
           fileInput.value = '';
         }
       });

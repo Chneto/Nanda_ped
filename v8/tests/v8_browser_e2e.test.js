@@ -627,6 +627,93 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     await page.evaluate(() => window.v8App.ui.closeAllModals());
   });
   // =========================================================================
+  // CENÁRIO 8d: GANHOS DO MÊS, CARTÃO CAIXA × PRODUÇÃO E RESTAURAÇÃO SEGURA DE BACKUP
+  // =========================================================================
+  it('Cenário 8d: Plantão do mês aparece em Ganhos, cartão compara os dois regimes e restaurar backup pede confirmação e permite desfazer', async () => {
+    // --- 1) Plantão do mês aparece no Regime de Caixa mesmo recebendo só em meses futuros
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      s.data.shifts = [];
+      s.data.expenses = [];
+      const ym = new Date().toISOString().slice(0, 7);
+      s.data.preferences.activeMonth = ym;
+      s.data.preferences.regime = 'caixa';
+      s.addShift({ hospital: 'Hospital 8d', net_value: 1000, date: `${ym}-03` });
+      window.v8App.ui.render();
+    });
+    await page.click('[data-tab="income"]');
+    const incomeText = (await page.locator('#shifts-list-container').innerText()).replace(/\s+/g, ' ');
+    assert.ok(incomeText.includes('Hospital 8d'), 'Plantão trabalhado no mês deve aparecer em Ganhos (caixa)');
+    assert.ok(incomeText.includes('Recebe a partir de'), 'Deve avisar quando o recebimento é em meses futuros');
+    assert.ok(!incomeText.includes('Nenhum plantão registrado'));
+
+    // --- 2) Cartão da Início calcula caixa E produção, independentemente do regime escolhido
+    await page.click('[data-tab="home"]');
+    const comp = async () => (await page.locator('#home-comparison-container').innerText()).replace(/\s+/g, ' ');
+    let c = await comp();
+    assert.ok(/Produção do mês[^R]*R\$\s*1\.000,00/.test(c), `Produção deve mostrar R$ 1.000,00 em regime de caixa: ${c}`);
+    await page.evaluate(() => { window.v8App.store.data.preferences.regime = 'competencia'; window.v8App.ui.render(); });
+    c = await comp();
+    assert.ok(/Produção do mês[^R]*R\$\s*1\.000,00/.test(c), `Produção também em competência: ${c}`);
+    await page.evaluate(() => { window.v8App.store.data.preferences.regime = 'caixa'; window.v8App.ui.render(); });
+
+    // --- 3) Restaurar backup: confirmação, cancelar mantém dados, confirmar substitui, Desfazer devolve
+    const backup = JSON.stringify({
+      version: '7.0.0',
+      exportedAt: '2026-10-01T12:00:00.000Z',
+      shifts: [{ id: 'bk1', hospital: 'Hospital Backup', net_value: 3000, date: '2026-09-10' }],
+      expenses: [{ id: 'bke1', description: 'Item do backup', category: 'Mercantil', amount: 50, date: '2026-09-11' }]
+    });
+    const file = { name: 'backup.json', mimeType: 'application/json', buffer: Buffer.from(backup) };
+    const ids = () => page.evaluate(() => window.v8App.store.data.shifts.map(s => s.name || s.source_name_snapshot));
+
+    await page.setInputFiles('#backup-file-input', file);
+    await page.waitForSelector('#modal-confirm:not(.hidden)');
+    const dialogText = (await page.locator('#modal-confirm').innerText()).replace(/\s+/g, ' ');
+    assert.ok(dialogText.includes('1 plantão') && dialogText.includes('1 despesa'), 'Mostra o que o arquivo contém');
+    assert.ok(dialogText.includes('serão substituídos'), 'Avisa que os dados atuais serão substituídos');
+    assert.deepEqual(await ids(), ['Hospital 8d'], 'Nada muda antes de confirmar');
+
+    await page.click('#modal-confirm [data-confirm="cancel"]');
+    assert.equal(await page.locator('#modal-confirm').evaluate(el => el.classList.contains('hidden')), true);
+    assert.deepEqual(await ids(), ['Hospital 8d'], 'Cancelar mantém os dados atuais');
+
+    await page.setInputFiles('#backup-file-input', file);
+    await page.waitForSelector('#modal-confirm:not(.hidden)');
+    await page.click('#modal-confirm [data-confirm="ok"]');
+    await page.waitForSelector('.toast-undo');
+    assert.deepEqual(await ids(), ['Hospital Backup'], 'Confirmar substitui os dados');
+    // Rede de segurança: cópia do estado anterior guardada no IndexedDB antes de restaurar
+    const safety = await page.evaluate(() => new Promise((resolve, reject) => {
+      const open = indexedDB.open('v8_pediatric_db', 1);
+      open.onerror = () => reject(open.error);
+      open.onsuccess = () => {
+        const req = open.result.transaction('app_state', 'readonly').objectStore('app_state').get('pre_import_snapshot');
+        req.onsuccess = () => resolve(req.result ? { names: (req.result.state.shifts || []).map(s => s.source_name_snapshot), savedAt: Boolean(req.result.savedAt) } : null);
+        req.onerror = () => reject(req.error);
+      };
+    }));
+    assert.deepEqual(safety?.names, ['Hospital 8d'], 'Cópia de segurança pré-restauração deve existir no IndexedDB');
+    assert.equal(safety.savedAt, true);
+
+    await page.click('.toast-undo .btn-toast-undo');
+    assert.deepEqual(await ids(), ['Hospital 8d'], 'Desfazer devolve os dados anteriores');
+
+    // Esc cancela o diálogo
+    await page.setInputFiles('#backup-file-input', file);
+    await page.waitForSelector('#modal-confirm:not(.hidden)');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#modal-confirm').evaluate(el => el.classList.contains('hidden')), true);
+    assert.deepEqual(await ids(), ['Hospital 8d'], 'Esc cancela sem alterar dados');
+
+    // Arquivo inválido: erro amigável e nenhum diálogo
+    await page.setInputFiles('#backup-file-input', { name: 'ruim.json', mimeType: 'application/json', buffer: Buffer.from('{ quebrado') });
+    await page.waitForSelector('.toast-silk.error');
+    assert.equal(await page.locator('#modal-confirm').evaluate(el => el.classList.contains('hidden')), true);
+    assert.deepEqual(await ids(), ['Hospital 8d']);
+  });
+  // =========================================================================
   // CENÁRIO 9: ZERO ERROS NO CONSOLE E ZERO REQUISIÇÕES BLOQUEADAS
   // =========================================================================
   it('Cenário 9: Ausência total de erros no console do navegador e zero requisições externas bloqueadas', async () => {

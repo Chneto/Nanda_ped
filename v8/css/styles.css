@@ -1840,3 +1840,16 @@ textarea.form-input {
 }
 .macro-radio input:focus-visible + .macro-radio-card { outline: 2px solid var(--primary-pink); outline-offset: 2px; }
 @media (max-width: 360px) { .macro-radio-grid { grid-template-columns: 1fr; } }
+/* ---------- Plantões: aviso de recebimento futuro e diálogo de confirmação ---------- */
+.shift-pay-hint {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--primary-pink-light);
+  color: var(--primary-pink-dark);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.confirm-message { margin: 8px 0 4px; color: var(--text-main); font-size: 0.98rem; line-height: 1.5; }
+.btn-silk-primary.btn-danger { background: linear-gradient(135deg, #EF5350 0%, #D32F2F 100%); }

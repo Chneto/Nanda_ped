@@ -108,7 +108,7 @@ describe('Finanças Pediatria /v8/ - Invariantes Arquiteturais Standalone & Zero
 
       const sw = fs.readFileSync(path.join(V8_DIR, 'sw.js'), 'utf-8');
       assert.ok(sw.includes('FChNeto'));
-      assert.ok(sw.includes('financas-pediatria-v8-static-v5'));
+      assert.ok(sw.includes('financas-pediatria-v8-static-v6'));
     });
 
     it('Autor canônico FChNeto exportado em v8/js/store.js, icons.js e app.js', async () => {
