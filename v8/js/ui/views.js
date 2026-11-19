@@ -24,6 +24,7 @@ export class ViewMethods {
     document.querySelectorAll('.bottom-nav-bar .nav-tab').forEach(btn => {
       const isMatch = btn.getAttribute('data-tab') === tabName;
       btn.classList.toggle('active', isMatch);
+      if (isMatch) btn.setAttribute('aria-current', 'page'); else btn.removeAttribute('aria-current');
     });
 
     // Atualiza views
@@ -76,7 +77,9 @@ export class ViewMethods {
 
     // Toggle de botões de regime
     document.querySelectorAll('.regime-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.getAttribute('data-regime') === regime);
+      const isActive = btn.getAttribute('data-regime') === regime;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 
     // 2. Perfil da Médica no Cabeçalho
@@ -157,15 +160,15 @@ export class ViewMethods {
         <div class="comp-box">
           <div class="comp-row">
             <span>Recebido neste mês (caixa):</span>
-            <strong style="color: #26A69A;">${formatCurrency(caixa.shiftInflowRealized)}</strong>
+            <strong style="color: var(--mint-text);">${formatCurrency(caixa.shiftInflowRealized)}</strong>
           </div>
           <div class="comp-row">
             <span>A receber neste mês (D+60/D+90):</span>
-            <strong style="color: #FFA726;">${formatCurrency(caixa.shiftInflowPending)}</strong>
+            <strong style="color: var(--amber-text);">${formatCurrency(caixa.shiftInflowPending)}</strong>
           </div>
           <div class="comp-row">
             <span>Produção do mês (plantões trabalhados):</span>
-            <strong style="color: #EC407A;">${formatCurrency(competencia.shiftProductionTotal)}</strong>
+            <strong style="color: var(--pink-text);">${formatCurrency(competencia.shiftProductionTotal)}</strong>
           </div>
         </div>
       `;
@@ -366,7 +369,7 @@ export class ViewMethods {
           <div class="expense-info-wrap">
             <h4 class="expense-desc-title">${escapeHtml(exp.description)}</h4>
             <div class="expense-meta-tags">
-              <span class="category-pill" style="border-color: ${color}40; color: ${color};">
+              <span class="category-pill" style="border-color: ${color}66;">
                 ${escapeHtml(exp.category_name_snapshot)}
               </span>
               ${isInst ? `<span class="inst-counter-pill">${exp.current_installment}/${exp.total_installments}</span>` : ''}

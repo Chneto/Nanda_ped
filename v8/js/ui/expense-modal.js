@@ -91,7 +91,7 @@ export class ExpenseModalMethods {
         <div class="form-group">
           <label for="exp-amount-input">Valor (R$)</label>
           <input 
-            type="number" 
+            type="number" inputmode="decimal" 
             id="exp-amount-input" 
             name="amount" 
             class="form-input silk-input" 

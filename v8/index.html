@@ -93,7 +93,7 @@
         </button>
 
         <div class="current-month-display">
-          <h2 id="current-month-title">Maio de 2026</h2>
+          <h2 id="current-month-title" aria-live="polite" aria-atomic="true">Maio de 2026</h2>
           <span id="current-regime-pill" class="regime-pill">Regime de Caixa</span>
         </div>
 
@@ -106,10 +106,10 @@
 
       <!-- Seletor de Regime: Caixa vs Competência -->
       <div class="regime-toggle-pill">
-        <button class="regime-btn active" data-regime="caixa" type="button">
+        <button class="regime-btn active" data-regime="caixa" type="button" aria-pressed="true">
           Regime de Caixa (Depósitos D+60/D+90)
         </button>
-        <button class="regime-btn" data-regime="competencia" type="button">
+        <button class="regime-btn" data-regime="competencia" type="button" aria-pressed="false">
           Regime de Competência (Produção)
         </button>
       </div>
@@ -309,7 +309,7 @@
 
       <!-- Barra Flutuante de Navegação Inferior (iPhone 16 Plus Ergonomics) -->
       <nav class="bottom-nav-bar" aria-label="Navegação Inferior">
-        <button class="nav-tab active" data-tab="home" id="tab-nav-home" type="button">
+        <button class="nav-tab active" data-tab="home" id="tab-nav-home" type="button" aria-current="page">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
             <polyline points="9 22 9 12 15 12 15 22"/>
@@ -460,7 +460,7 @@
       <div class="modal-sheet">
         <header class="modal-header">
           <div class="modal-title-wrap">
-            <span class="silk-pill-badge" style="background: rgba(239, 83, 80, 0.15); color: #EF5350;">Aviso de Segurança</span>
+            <span class="silk-pill-badge" style="background: rgba(239, 83, 80, 0.15); color: var(--danger-text);">Aviso de Segurança</span>
             <h3 id="modal-reset-title">Zerar Dados da Aplicação</h3>
           </div>
           <button class="modal-close-btn" data-close-modal="#modal-reset-confirm" aria-label="Fechar" type="button">
@@ -609,10 +609,10 @@
 
   <!-- Fallback Acessível para JavaScript Desativado -->
   <noscript>
-    <div style="padding: 24px; text-align: center; color: #D81B60; font-family: sans-serif; background: #FFF0ED; border-radius: 16px; margin: 20px;">
+    <div style="padding: 24px; text-align: center; color: #B0124F; font-family: sans-serif; background: #FFF0ED; border-radius: 16px; margin: 20px;">
       <h2>JavaScript Necessário</h2>
       <p>Para desfrutar do santuário financeiro Finanças Pediatria offline, por favor ative o JavaScript no seu navegador Safari / Chrome.</p>
-      <p style="margin-top: 12px; font-size: 0.85rem; color: #7E7485;">Criado por FChNeto</p>
+      <p style="margin-top: 12px; font-size: 0.85rem; color: #655C6E;">Criado por FChNeto</p>
     </div>
   </noscript>
 

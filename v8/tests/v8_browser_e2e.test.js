@@ -8,6 +8,7 @@
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
 import { createTestServer } from './test_server.js';
+import { probeContrast, probeSmallTargets } from './a11y_probe.js';
 
 let chromium = null;
 let devices = null;
@@ -767,6 +768,88 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     await page.keyboard.press('Escape');
     assert.equal(await page.locator('#modal-installment').evaluate(el => el.classList.contains('hidden')), true);
     assert.deepEqual(await parcelas(), original);
+  });
+  // =========================================================================
+  // CENÁRIO 8f: ACESSIBILIDADE REAL — contraste AA, alvos de 44 px, ARIA e movimento reduzido
+  // =========================================================================
+  it('Cenário 8f: Contraste AA em todas as telas (claro/escuro), alvos de toque >= 44 px, ARIA e movimento reduzido', async () => {
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      const ym = new Date().toISOString().slice(0, 7);
+      s.data.preferences.activeMonth = ym;
+      s.data.preferences.regime = 'caixa';
+      s.data.residencySalary = { value: 4000, dayOfMonth: 5, active: true, description: 'Bolsa' };
+      s.data.shifts = [];
+      s.addShift({ hospital: 'Hospital 8f', net_value: 2000, date: `${ym}-03` });
+      s.data.shifts[0].installments[1].status = 'received';
+      s.data.shifts[0].installments[1].paidDate = `${ym}-12`;
+      s.addExpense({ description: 'Feira 8f', category: 'Mercantil', amount: 230, date: `${ym}-05` });
+      window.v8App.ui.render();
+    });
+
+    const screens = [
+      ['início', async () => { await page.evaluate(() => window.v8App.ui.closeAllModals()); await page.click('[data-tab="home"]'); }],
+      ['ganhos', async () => { await page.click('[data-tab="income"]'); }],
+      ['despesas', async () => { await page.click('[data-tab="expenses"]'); await page.click('[data-macro-filter="Alimentação"]'); }],
+      ['menu', async () => { await page.evaluate(() => window.v8App.ui.openDrawer()); }],
+      ['modal despesa', async () => { await page.evaluate(() => { window.v8App.ui.closeDrawer(); window.v8App.ui.openExpenseModal(); }); await page.click('#exp-category-trigger'); }],
+      ['modal plantão', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openShiftModal(); }); }],
+      ['modal parcela', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openInstallmentModal(window.v8App.store.data.shifts[0].id, 1); }); }],
+      ['modal categorias', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openCategoriesModal(); }); }],
+      ['modal fontes', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openIncomeSourcesModal(); }); }],
+      ['modal perfil', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openProfileModal(); }); }]
+    ];
+
+    const contrastFails = [];
+    const smallTargets = [];
+    // Movimento reduzido durante a medição: sem transições em andamento, as cores lidas são as finais
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    for (const theme of ['light', 'dark']) {
+      await page.evaluate((th) => {
+        document.querySelectorAll('.toast-silk').forEach(el => el.remove()); // avisos de cenários anteriores
+        document.documentElement.setAttribute('data-theme', th);
+        window.v8App.ui.render();
+      }, theme);
+      await page.waitForTimeout(50);
+      for (const [name, go] of screens) {
+        await go();
+        for (const x of await page.evaluate(probeContrast)) {
+          if (x.ratio < x.need) contrastFails.push(`${theme}/${name}: "${x.text}" (.${x.cls}) ${x.ratio} < ${x.need}`);
+        }
+        if (theme === 'light') {
+          for (const x of await page.evaluate(probeSmallTargets)) smallTargets.push(`${name}: ${x.cls} "${x.text}" ${x.w}x${x.h}`);
+        }
+      }
+    }
+    await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.closeDrawer(); document.documentElement.setAttribute('data-theme', 'light'); window.v8App.ui.render(); });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    assert.deepEqual([...new Set(contrastFails)].slice(0, 12), [], 'Textos abaixo de AA (4,5:1; 3:1 para texto grande)');
+    assert.deepEqual([...new Set(smallTargets)].slice(0, 12), [], 'Alvos de toque menores que 44 px');
+
+    // ARIA de navegação e regime
+    await page.click('[data-tab="income"]');
+    assert.equal(await page.locator('#tab-nav-income').getAttribute('aria-current'), 'page');
+    assert.equal(await page.locator('#tab-nav-home').getAttribute('aria-current'), null);
+    await page.click('button[data-regime="competencia"]');
+    assert.equal(await page.locator('button[data-regime="competencia"]').getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.locator('button[data-regime="caixa"]').getAttribute('aria-pressed'), 'false');
+    await page.click('button[data-regime="caixa"]');
+    assert.equal(await page.locator('#current-month-title').getAttribute('aria-live'), 'polite');
+
+    // Campos de dinheiro abrem o teclado decimal
+    await page.evaluate(() => window.v8App.ui.openExpenseModal());
+    assert.equal(await page.locator('#exp-amount-input').getAttribute('inputmode'), 'decimal');
+    await page.evaluate(() => window.v8App.ui.closeAllModals());
+
+    // Movimento reduzido: transições/animações praticamente instantâneas
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    const durations = await page.evaluate(() => ['.nav-tab', '.macro-chip', '.btn-silk-primary'].map((sel) => {
+      const el = document.querySelector(sel);
+      return el ? parseFloat(getComputedStyle(el).transitionDuration) : 0;
+    }));
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    assert.ok(durations.every((d) => d <= 0.001), `Transições devem ser desligadas com movimento reduzido: ${durations}`);
   });
   // =========================================================================
   // CENÁRIO 9: ZERO ERROS NO CONSOLE E ZERO REQUISIÇÕES BLOQUEADAS

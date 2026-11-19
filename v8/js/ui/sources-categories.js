@@ -66,7 +66,7 @@ export class SourcesCategoriesMethods {
             </select>
           </div>
           <div class="form-group">
-            <input type="number" name="defaultAmount" class="form-input silk-input" step="0.01" min="0" placeholder="Valor padrão (R$)" />
+            <input type="number" inputmode="decimal" name="defaultAmount" class="form-input silk-input" step="0.01" min="0" placeholder="Valor padrão (R$)" />
           </div>
         </div>
         <div class="form-group">
@@ -194,7 +194,7 @@ export class SourcesCategoriesMethods {
           </div>
         </div>
         <div class="form-group">
-          <input type="number" name="monthly_budget_cap" class="form-input silk-input" step="0.01" min="0" placeholder="Teto Mensal (Opcional)" />
+          <input type="number" inputmode="decimal" name="monthly_budget_cap" class="form-input silk-input" step="0.01" min="0" placeholder="Teto Mensal (Opcional)" />
         </div>
         <button type="submit" class="btn-silk-primary" style="width: 100%;">Cadastrar Categoria</button>
       </form>

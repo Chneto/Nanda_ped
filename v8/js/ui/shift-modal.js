@@ -112,7 +112,7 @@ export class ShiftModalMethods {
         <div class="form-group">
           <label for="shift-net-input">Valor Líquido (R$)</label>
           <input 
-            type="number" 
+            type="number" inputmode="decimal" 
             id="shift-net-input" 
             name="netValue" 
             class="form-input silk-input" 
@@ -126,7 +126,7 @@ export class ShiftModalMethods {
         <div class="form-group">
           <label for="shift-gross-input">Valor Bruto (Opcional)</label>
           <input 
-            type="number" 
+            type="number" inputmode="decimal" 
             id="shift-gross-input" 
             name="grossValue" 
             class="form-input silk-input" 
