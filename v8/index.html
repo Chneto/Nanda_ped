@@ -529,6 +529,27 @@
         <form id="form-category-cap" class="modal-form" novalidate></form>
       </div>
     </div>
+    <!-- Modal 11: Relatório mensal (pré-visualização, planilha CSV e impressão/PDF) -->
+    <div id="modal-report" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-report-title">
+      <div class="modal-sheet">
+        <header class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="silk-pill-badge">Relatório</span>
+            <h3 id="modal-report-title">Relatório do mês</h3>
+          </div>
+          <button class="modal-close-btn" data-close-modal="#modal-report" aria-label="Fechar" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </header>
+        <div class="modal-actions-row report-actions">
+          <button type="button" class="btn-silk-secondary" data-action="report-csv">Salvar planilha (CSV)</button>
+          <button type="button" class="btn-silk-primary" data-action="report-print">Imprimir / PDF</button>
+        </div>
+        <div id="report-body" class="report-preview"></div>
+      </div>
+    </div>
     <!-- Drawer Lateral do Menu Hambúrguer -->
     <aside id="drawer-menu" class="drawer-overlay hidden" aria-label="Menu de Navegação Lateral">
       <div class="drawer-panel">
@@ -585,6 +606,15 @@
             </div>
           </button>
 
+          <button class="drawer-item" id="drawer-item-report" type="button">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5C6BC0" stroke-width="2" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/>
+            </svg>
+            <div class="drawer-item-text">
+              <span>Relatório do Mês</span>
+              <small>Resumo, planilha CSV e PDF para imprimir</small>
+            </div>
+          </button>
           <button class="drawer-item" id="drawer-item-theme" type="button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFA726" stroke-width="2">
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>

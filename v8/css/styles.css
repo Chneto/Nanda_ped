@@ -2006,3 +2006,55 @@ textarea.form-input {
 .cat-cap-text { display: block; margin-top: 1px; color: var(--text-muted); font-size: 0.75rem; font-weight: 600; }
 .btn-cap-edit { display: inline-flex; align-items: center; gap: 4px; flex: none; min-height: 44px; padding: 0 10px; border-radius: 12px; border: 1px solid var(--silk-border); background: var(--bg-card); color: var(--text-muted); font-size: 0.8125rem; font-weight: 700; }
 .cap-help { display: block; margin-top: 6px; color: var(--text-muted); font-size: 0.8125rem; line-height: 1.4; }
+/* ---------- Relatório mensal (pré-visualização e impressão/PDF) ---------- */
+.report-actions { margin-top: 0; margin-bottom: 14px; flex-wrap: wrap; }
+.report-actions button { flex: 1 1 150px; }
+.report-preview { color: var(--text-main); }
+.report-doc { font-size: 0.875rem; line-height: 1.45; }
+.report-title { margin: 0; font-size: 1.15rem; font-weight: 800; }
+.report-sub { margin: 2px 0 0; font-weight: 700; }
+.report-meta { margin: 2px 0 12px; color: var(--text-muted); font-size: 0.8125rem; }
+.report-section { margin: 0 0 18px; }
+.report-section h3 { margin: 0 0 8px; font-size: 0.95rem; font-weight: 800; }
+.report-kpis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0; }
+.report-kpi { padding: 8px 10px; border-radius: var(--radius-sm); background: var(--bg-card-subtle); border: 1px solid var(--silk-border); }
+.report-kpi dt { margin: 0; color: var(--text-muted); font-size: 0.8125rem; }
+.report-kpi dd { margin: 2px 0 0; font-size: 1.02rem; font-weight: 800; }
+.report-kpi.neg dd { color: var(--danger-text); }
+.report-kpi.pos dd { color: var(--mint-text); }
+.report-table-wrap { overflow-x: auto; margin: 0 0 12px; border: 1px solid var(--silk-border); border-radius: var(--radius-sm); }
+.report-table-wrap:focus-visible { outline: 2px solid var(--pink-text); outline-offset: 2px; }
+.report-table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+.report-table caption { padding: 6px 8px; text-align: left; font-weight: 800; color: var(--text-muted); }
+.report-table th, .report-table td { padding: 6px 8px; text-align: left; border-top: 1px solid var(--silk-border); vertical-align: top; }
+.report-table thead th { background: var(--bg-card-subtle); font-weight: 700; white-space: nowrap; }
+.report-table .num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.report-table tr.due td { background: var(--primary-pink-light); }
+.report-table tr.total th, .report-table tr.total td { font-weight: 800; border-top: 2px solid var(--silk-border-strong); }
+.report-tag { display: inline-block; padding: 0 6px; border-radius: var(--radius-pill); background: var(--bg-card-subtle); border: 1px solid var(--silk-border); color: var(--text-muted); font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+.report-status { font-weight: 700; }
+.report-status.ok { color: var(--mint-text); }
+.report-status.warn { color: var(--amber-text); }
+.report-status.over { color: var(--danger-text); }
+.report-empty { margin: 0; color: var(--text-muted); }
+.report-footer { margin-top: 10px; color: var(--text-muted); font-size: 0.75rem; text-align: center; }
+#report-print-root { display: none; }
+
+@media print {
+  @page { margin: 14mm; }
+  html, body { background: #fff !important; color: #000 !important; }
+  body > *:not(#report-print-root) { display: none !important; }
+  #report-print-root { display: block !important; }
+  #report-print-root .report-doc { font-size: 11pt; color: #000; }
+  #report-print-root .report-kpi,
+  #report-print-root .report-table-wrap,
+  #report-print-root .report-table th,
+  #report-print-root .report-table td,
+  #report-print-root .report-tag { background: #fff !important; border-color: #999 !important; color: #000 !important; }
+  #report-print-root .report-table thead th { background: #eee !important; }
+  #report-print-root .report-table tr.due td { background: #f3f3f3 !important; }
+  #report-print-root .report-table-wrap { overflow: visible; }
+  #report-print-root .report-section { break-inside: avoid-page; }
+  #report-print-root .report-table tr { break-inside: avoid; }
+  #report-print-root .report-kpi.neg dd, #report-print-root .report-status { color: #000 !important; }
+}

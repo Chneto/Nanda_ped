@@ -227,6 +227,19 @@ export class EventsMethods {
         return;
       }
 
+      if (e.target.closest('#drawer-item-report')) {
+        this.closeDrawer();
+        this.openReportModal();
+        return;
+      }
+
+      const reportAction = e.target.closest('[data-action^="report-"]');
+      if (reportAction) {
+        if (reportAction.getAttribute('data-action') === 'report-csv') this.exportReportCsv();
+        else this.printReport();
+        return;
+      }
+
       if (e.target.closest('#drawer-item-theme') || e.target.closest('#btn-header-theme')) {
         this.toggleTheme();
         return;

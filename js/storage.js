@@ -247,6 +247,41 @@ export class PediatricStorage {
   }
 
   /**
+   * Salva um arquivo de texto (ex.: planilha CSV): Web Share API nativa no iPhone (Arquivos/iCloud)
+   * com fallback para download tradicional.
+   */
+  async saveTextFile(fileName, content, mimeType = 'text/plain', title = 'Arquivo') {
+    if (typeof navigator !== 'undefined' && typeof navigator.canShare === 'function' && typeof File !== 'undefined') {
+      try {
+        const file = new File([content], fileName, { type: mimeType.split(';')[0] });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({ title, files: [file] });
+          return { success: true, method: 'share', fileName };
+        }
+      } catch (err) {
+        if (err && err.name === 'AbortError') return { success: false, cancelled: true, error: 'cancelado' };
+        // outros erros: segue para o download tradicional
+      }
+    }
+    if (typeof document !== 'undefined') {
+      try {
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        return { success: true, method: 'download', fileName };
+      } catch (err) {
+        return { success: false, error: err.message };
+      }
+    }
+    return { success: false, error: 'Ambiente não suporta exportação de arquivo' };
+  }
+  /**
    * Pré-visualiza um backup SEM alterar nenhum dado (usado na confirmação antes de restaurar)
    */
   previewBackup(jsonString) {

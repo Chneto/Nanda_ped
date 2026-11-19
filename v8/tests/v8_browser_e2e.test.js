@@ -799,6 +799,7 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
       ['modal categorias', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openCategoriesModal(); }); }],
       ['tetos (início/despesas)', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); const s = window.v8App.store; const id = s.data.categories.find(c => c.name === 'Mercantil').id; s.setCategoryBudgetCap(id, 100); s.setCategoryBudgetCap(s.data.categories.find(c => c.name === 'Uber').id, 200); s.addExpense({ description: 'Teto A', category: 'Mercantil', amount: 150, date: new Date().toISOString().slice(0, 7) + '-07' }); s.addExpense({ description: 'Teto B', category: 'Uber', amount: 170, date: new Date().toISOString().slice(0, 7) + '-07' }); window.v8App.ui.render(); }); await page.click('[data-tab="home"]'); await page.click('[data-tab="expenses"]'); }],
       ['modal teto', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openCategoryCapModal(window.v8App.store.data.categories.find(c => c.name === 'Mercantil').id); }); }],
+      ['modal relatório', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openReportModal(); }); }],
       ['modal fontes', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openIncomeSourcesModal(); }); }],
       ['modal perfil', async () => { await page.evaluate(() => { window.v8App.ui.closeAllModals(); window.v8App.ui.openProfileModal(); }); }]
     ];
@@ -948,6 +949,95 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
       document.querySelectorAll('.toast-silk').forEach(el => el.remove());
       window.v8App.ui.render();
     });
+  });
+  // =========================================================================
+  // CENÁRIO 8h: RELATÓRIO MENSAL (menu, pré-visualização, planilha CSV, impressão/PDF e compartilhamento)
+  // =========================================================================
+  it('Cenário 8h: Relatório mensal — pré-visualização, CSV (download e compartilhamento nativo) e impressão', async () => {
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      document.querySelectorAll('.toast-silk').forEach(el => el.remove());
+      const ym = new Date().toISOString().slice(0, 7);
+      s.data.preferences.activeMonth = ym;
+      s.data.preferences.regime = 'caixa';
+      s.data.doctorName = 'Dra. Relatório';
+      s.data.residencySalary = { value: 4000, dayOfMonth: 5, active: true, description: 'Bolsa' };
+      s.data.shifts = []; s.data.expenses = [];
+      for (const c of s.data.categories) s.setCategoryBudgetCap(c.id, null);
+      s.addShift({ hospital: 'Hospital 8h', net_value: 2000, date: `${ym}-03` });
+      s.addExpense({ description: 'Feira 8h', category: 'Mercantil', amount: 230, date: `${ym}-05` });
+      s.addExpense({ description: '=1+1', category: 'Uber', amount: 45, date: `${ym}-06` });
+      window.v8App.ui.render();
+    });
+
+    // Menu -> Relatório do Mês
+    await page.evaluate(() => window.v8App.ui.openDrawer());
+    await page.click('#drawer-item-report');
+    assert.equal(await page.locator('#modal-report').evaluate(el => el.classList.contains('hidden')), false);
+    const monthLabel = await page.evaluate(() => window.v8App.ui._report.monthLabel);
+    assert.equal((await page.locator('#modal-report-title').innerText()).trim(), `Relatório de ${monthLabel}`);
+    const preview = (await page.locator('#report-body').innerText()).replace(/\u00a0/g, ' ').replace(/\s+/g, ' ');
+    for (const piece of ['Resumo', 'Hospital 8h', 'Feira 8h', 'Total de despesas', 'R$ 275,00', 'Dra. Relatório']) assert.ok(preview.includes(piece), `pré-visualização sem "${piece}"`);
+    assert.equal(await page.locator('#report-body table caption').count() >= 3, true, 'tabelas com legenda');
+
+    // Planilha CSV: download real (Web Share indisponível)
+    await page.evaluate(() => { navigator.canShare = () => false; });
+    const [download] = await Promise.all([page.waitForEvent('download'), page.click('[data-action="report-csv"]')]);
+    assert.match(download.suggestedFilename(), /^relatorio_financas_pediatria_\d{4}-\d{2}\.csv$/);
+    const chunks = [];
+    for await (const c of await download.createReadStream()) chunks.push(c);
+    const raw = Buffer.concat(chunks);
+    assert.deepEqual([...raw.subarray(0, 3)], [0xEF, 0xBB, 0xBF], 'BOM UTF-8 para o Excel reconhecer acentos');
+    const csv = raw.toString('utf8').replace(/^\uFEFF/, '');
+    assert.ok(csv.includes('Despesas do mês;275'), 'total de despesas na planilha');
+    assert.ok(csv.includes("'=1+1"), 'fórmula digitada pela usuária é neutralizada');
+    assert.ok(!/(^|;)=/m.test(csv), 'nenhuma célula começa com "="');
+    await page.waitForSelector('.toast-silk:has-text("Planilha salva")');
+
+    // Compartilhamento nativo (iPhone): usa navigator.share com um File CSV
+    const shared = await page.evaluate(async () => {
+      let received = null;
+      navigator.canShare = (d) => Boolean(d && d.files && d.files.length);
+      navigator.share = async (d) => { const f = d.files[0]; received = { name: f.name, type: f.type, text: await f.text() }; };
+      await window.v8App.ui.exportReportCsv();
+      return received;
+    });
+    assert.match(shared.name, /\.csv$/);
+    assert.equal(shared.type, 'text/csv');
+    assert.ok(shared.text.includes('RESUMO'));
+
+    // Cancelar o compartilhamento não mostra erro
+    const cancelToast = await page.evaluate(async () => {
+      document.querySelectorAll('.toast-silk').forEach(el => el.remove());
+      navigator.share = async () => { const e = new Error('cancelado'); e.name = 'AbortError'; throw e; };
+      await window.v8App.ui.exportReportCsv();
+      return document.querySelectorAll('.toast-silk.error').length;
+    });
+    assert.equal(cancelToast, 0, 'cancelar não deve gerar erro');
+
+    // Impressão/PDF: monta a área de impressão, chama window.print e limpa ao terminar
+    const printed = await page.evaluate(() => new Promise((resolve) => {
+      window.print = () => {
+        const root = document.getElementById('report-print-root');
+        resolve({ filled: root.innerHTML.includes('Hospital 8h') });
+        window.dispatchEvent(new Event('afterprint'));
+      };
+      window.v8App.ui.printReport();
+    }));
+    assert.equal(printed.filled, true, 'área de impressão preenchida no momento de imprimir');
+    assert.equal(await page.evaluate(() => document.getElementById('report-print-root').innerHTML), '', 'área de impressão limpa depois');
+    await page.emulateMedia({ media: 'print' });
+    await page.evaluate(() => { window.print = () => {}; window.v8App.ui.printReport(); });
+    const printVisible = await page.evaluate(() => [...document.body.children].filter(el => getComputedStyle(el).display !== 'none').map(el => el.id));
+    await page.emulateMedia({ media: 'screen' });
+    assert.deepEqual(printVisible, ['report-print-root'], 'na impressão só o relatório aparece');
+
+    // Esc fecha o modal
+    await page.evaluate(() => { document.getElementById('report-print-root').innerHTML = ''; });
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#modal-report').evaluate(el => el.classList.contains('hidden')), true);
+    await page.evaluate(() => { document.querySelectorAll('.toast-silk').forEach(el => el.remove()); });
   });
   // =========================================================================
   // CENÁRIO 9: ZERO ERROS NO CONSOLE E ZERO REQUISIÇÕES BLOQUEADAS
