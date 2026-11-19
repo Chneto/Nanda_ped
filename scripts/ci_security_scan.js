@@ -14,40 +14,12 @@ const rootDir = path.resolve(__dirname, '..');
 function main() {
   console.log('--- Starting CI Security & CSP Scan ---');
 
-  // 1. Check v6 vercel.json CSP
-  const vercelPath = path.join(rootDir, 'v6', 'vercel.json');
-  if (!fs.existsSync(vercelPath)) {
-    console.error('FAIL: v6/vercel.json does not exist');
-    process.exit(1);
-  }
-
-  const vercelConfig = JSON.parse(fs.readFileSync(vercelPath, 'utf-8'));
-  const globalHeader = vercelConfig.headers?.find(h => h.source === '/(.*)');
-  if (!globalHeader) {
-    console.error('FAIL: v6/vercel.json lacks global header rule /(.*)');
-    process.exit(1);
-  }
-
-  const csp = globalHeader.headers?.find(h => h.key === 'Content-Security-Policy')?.value || '';
-  if (csp.includes("script-src 'unsafe-inline'")) {
-    console.error("FAIL: v6 CSP contains 'unsafe-inline' in script-src");
-    process.exit(1);
-  }
-  if (!csp.includes("object-src 'none'")) {
-    console.error("FAIL: v6 CSP missing object-src 'none'");
-    process.exit(1);
-  }
-  if (!csp.includes("base-uri 'self'")) {
-    console.error("FAIL: v6 CSP missing base-uri 'self'");
-    process.exit(1);
-  }
-
-  // 2. Check canonical author in key files
+  // 1. Check canonical author in key files
   const authorFiles = [
-    'v6/js/config.js',
-    'v6/js/store.js',
-    'v6/js/ui.js',
-    'v6/index.html',
+    'v8/js/app.js',
+    'v8/js/store.js',
+    'v8/js/ui.js',
+    'v8/index.html',
     'v2.0/js/app.js'
   ];
 
@@ -62,7 +34,7 @@ function main() {
     }
   }
 
-  // 3. v8 (publicada no GitHub Pages): CSP via <meta>, sem scripts remotos e sem caminhos fora da pasta
+  // 2. v8 (publicada no GitHub Pages): CSP via <meta>, sem scripts remotos e sem caminhos fora da pasta
   const v8Html = path.join(rootDir, 'v8', 'index.html');
   if (!fs.existsSync(v8Html)) {
     console.error('FAIL: v8/index.html does not exist');

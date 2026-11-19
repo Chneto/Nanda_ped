@@ -29,29 +29,11 @@ jobs:
       - name: 1. Execute Root Test Suite (v2, v3, v4, v5, sanctuary)
         run: node --test tests/*.test.js
 
-      - name: 2. Execute V4_Cloud Test Suite
-        run: |
-          cd V4_Cloud
-          node --test tests/*.test.js
-          cd ..
-
-      - name: 3. Execute Finanças Pediatria v6 Test Suite
-        run: |
-          cd v6
-          node --test tests/*.test.js
-          cd ..
-
-      - name: 4. Execute Finanças Pediatria v7 Test Suite
-        run: |
-          cd v7
-          node --test tests/*.test.js
-          cd ..
-
-      - name: 5. Execute Finanças Pediatria v8 Test Suite
+      - name: 2. Execute Finanças Pediatria v8 Test Suite
         run: node --test v8/tests/*.test.js
 
-      - name: 6. Validate Production Bundles Synchronization
+      - name: 3. Validate Production Bundles Synchronization
         run: node scripts/build_bundle.js
 
-      - name: 7. Security & CSP Validation Scan
+      - name: 4. Security & CSP Validation Scan
         run: node scripts/ci_security_scan.js
