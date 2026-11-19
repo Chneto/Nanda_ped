@@ -12,12 +12,11 @@
 O **Finanças Pediatria** organiza rendimentos fixos configuráveis, receitas variáveis com recebimento postergado e fracionado (regra padrão de **75% em D+60** e **25% em D+90**), despesas e parâmetros tributários informados pela pessoa usuária.
 
 O projeto equilibra experiências complementares:
-1. **Versão Principal v8.0.0 (Standalone & Pediatric Sanctuary em `/` e `/v8/`):** Versão 100% standalone e local-first para iPhone/iOS sem Vercel/Supabase e com abertura instantânea sem login, persistência tripla no Safari (`localStorage` + `IndexedDB` `v8_pediatric_db` + `Web Share API` com importação retrocompatível `v2` a `v7`), gestão 100% dinâmica de fontes de renda e categorias de despesas no menu hambúrguer com *Soft-Archive*, e microinterações UX Delight (edição em 1 toque, Toasts com *Desfazer/Undo*, chips rápidos).
-2. **Versões v7.0.0 (`/v7/`) e v6.0.0 (`/v6/`) — Cloud & Sanctuary:** Versões em nuvem com autenticação Supabase, CSP estrita sem `unsafe-inline`, 23 categorias canônicas mapeadas nos 6 macro-grupos, normalização linguística `unaccent`, diagnósticos de runtime e resolução de conflitos de revisão.
+1. **Versão Principal v8.1.0 (Standalone & Pediatric Sanctuary em `/` e `/v8/`):** Versão 100% standalone e local-first para iPhone/iOS sem Vercel/Supabase e com abertura instantânea sem login, persistência tripla no Safari (`localStorage` + `IndexedDB` `v8_pediatric_db` + `Web Share API` com importação retrocompatível `v2` a `v7`), gestão 100% dinâmica de fontes de renda e categorias de despesas no menu hambúrguer com *Soft-Archive*, e microinterações UX Delight (edição em 1 toque, Toasts com *Desfazer/Undo*, chips rápidos).
+2. **Versões Cloud (v7.0.0, v6.0.0 e V4_Cloud 4.1.1) — removidas:** dependiam de Vercel/Supabase, descontinuados em nov/2026; restauráveis pela tag Git `archive/cloud-before-removal`.
 3. **Versão v2.0 (Sanctuary Minimalist em `/v2.0/`):** Interface pura, higienizada, sem ruído visual, focada em receitas, despesas, categorias, parcelamentos e persistência local.
 4. **Versão v5.0.1 (`/v5/`):** Aplicação standalone com painel financeiro, categorias editáveis e experiência mobile-first.
-5. **Versão v4.1.1 (`/V4_Cloud/`):** Aplicação Cloud com autenticação Supabase, sincronização por conta e edição de categorias e despesas.
-6. **Versões v3.x (histórico):** Consultório, DRE, Fator R, SBAR, conciliação bancária, simulador FIRE e entrada por voz.
+5. **Versões v3.x (histórico):** Consultório, DRE, Fator R, SBAR, conciliação bancária, simulador FIRE e entrada por voz.
 
 ---
 
@@ -38,6 +37,7 @@ timeline
     v6.0.0 (Outubro 2026) : CSP Estrita (sem unsafe-inline) : 23 Categorias nos 6 Macro-Grupos : Conflito Otimista & Backups
     v7.0.0 (Novembro 2026) : Normalização Unaccent SQL : Diagnósticos em Tempo Real : Sincronização Relacional
     v8.0.0 (Novembro 2026) : Standalone Local-First Raiz & /v8/ : Zero Nuvem/Login : Fontes & Categorias 100% Dinâmicas : UX Delight
+    v8.1.0 (Novembro 2026) : Categorias em Grupos e Subgrupos : Acessibilidade de Diálogos : UI Modular : Só GitHub Pages
 ```
 
 ### Detalhamento dos Marcos Entregues:
@@ -76,11 +76,11 @@ timeline
 
 ## 🔎 Plano de Revisão e Gestão Operacional
 
-1. **Autenticação e implantação:** conferir Vercel Root Directory, variáveis públicas, provedor Google, URL de callback do Supabase e allowlist de retorno; exercitar cadastro com confirmação de e-mail e login em sessão nova.
-2. **Dados e isolamento:** aplicar as migrações em ordem, conferir RLS para cada usuário e testar leitura, criação, atualização, conflito entre dispositivos e restauração de backup.
+1. **Implantação (GitHub Pages):** conferir que `gh-pages` serve a raiz, reinstalar o app na tela de início após trocar ícones e validar o Service Worker (cache `vN`).
+2. **Dados e backup:** testar exportação/importação de backup (v2–v7), recuperação pelo IndexedDB e o lembrete de backup de 14 dias.
 3. **Financeiro:** revisar arredondamentos, fechamento de mês D+60/D+90, parcelamentos, edição de lançamentos e classificação em grupos macro.
 4. **Interface móvel:** validar iPhone/Safari, teclado, áreas seguras, estados sem internet, acessibilidade, formulários e menus dentro de modais.
-5. **Regressão e liberação:** executar as suítes da raiz, v2, v4 e V4_Cloud; depois publicar primeiro em preview e validar com conta de teste antes de trocar o domínio de produção.
+5. **Regressão e liberação:** `npm test` (raiz + v8, com E2E Playwright) e `node scripts/ci_security_scan.js`; depois commit e push em `NandapedV2`, `main` e `gh-pages`.
 
 **Acompanhamento pendente:** o código não consegue habilitar credenciais Google, redirects ou variáveis nos painéis externos. Esses itens estão descritos em `V4_Cloud/README.md`.
 
@@ -147,3 +147,8 @@ Para garantir a higienização e o propósito essencial do app, qualquer nova fu
 
 *Finanças Pediatria — O santuário financeiro e tecnológico da médica pediatra.* 🌸🩺  
 *Criado por FChNeto.*
+
+## ✅ Plano de Melhorias v8 (nov/2026) — Situação
+
+- **Concluído:** correções de ícones/manifest/PWA, Service Worker versionado, recuperação do IndexedDB, lembrete de backup, acessibilidade de diálogos, E2E Playwright obrigatório no CI, remoção de Vercel e das versões Cloud, limpeza da raiz, ui.js modular, categorias em grupos e subgrupos (Nova Despesa, filtro, gestão).
+- **Próximos candidatos:** testar no WebKit/iPhone real, migração versionada do IndexedDB, relatório mensal em PDF/CSV, gráfico caixa × competência, dividir indGlobalEvents (~230 linhas), limpeza do ecovery/ (33 MB).

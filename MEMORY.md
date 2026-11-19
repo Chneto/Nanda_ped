@@ -9,11 +9,17 @@
 ## 📌 1. Identidade do Produto & Metadados
 
 - **Nome da Aplicação:** Finanças Pediatria
-- **Versão Vigente:** `8.0.0` (Standalone & Pediatric Sanctuary Edition em `/` e `/v8/`), `7.0.0` (Cloud & Sanctuary Edition em `/v7/`), `6.0.0` (Cloud & Sanctuary Edition em `/v6/`), `5.0.1` (Silk & Rose Gold Standalone em `/v5/`), `4.1.1` (Vercel & Supabase Cloud Native em `/V4_Cloud/`), `4.0.0` (Silk & Rose Gold em `/v4/` e `/v4.0/`), `3.1.1` (Master Executive histórico) e `2.0.0` (Sanctuary Minimalist em `/v2.0/`).
+- **Versão Vigente:** `8.1.0` (Standalone & Pediatric Sanctuary Edition em `/` e `/v8/`), `5.0.1` (Silk & Rose Gold Standalone em `/v5/`), `4.0.0` (`/v4/` e `/v4.0/`), `3.1.1` (histórico) e `2.0.0` (`/v2.0/`). As versões Cloud (V4_Cloud, v6, v7) foram removidas — tag Git `archive/cloud-before-removal`. Publicação: somente GitHub + GitHub Pages.
 - **Autor / Criador:** **FChNeto** (Constante imutável no código: `APP_CREATOR = 'FChNeto'`; exibida no rodapé, cabeçalho e modais).
 - **Público-Alvo:** profissionais da saúde que desejam acompanhar rendimentos e despesas com alta segurança e resiliência hospitalar.
 - **Proposta de Valor:** Controle financeiro acolhedor, rápido e seguro. A versão **v8 (v8.0.0)** — promovida como entrypoint principal tanto na raiz `/` (`https://chneto.github.io/Nanda_ped/`) quanto em `/v8/` — implementa arquitetura 100% standalone e local-first sem nuvem (zero Vercel/Supabase, zero login), persistência tripla no Safari/iOS (localStorage, IndexedDB e Web Share API), gestão 100% dinâmica de fontes e categorias no menu hambúrguer, microinterações UX delight (edição em 1 toque, Toasts com Desfazer/Undo, chips rápidos) e retrocompatibilidade com backups de todas as versões anteriores (`v2` a `v7`).
 
+### Registro técnico da v8.1.0 (novidades sobre a v8.0.0)
+- **UI modular:** `v8/js/ui.js` compõe `PediatricUI` com mixins em `v8/js/ui/` (`events`, `views`, `shift-modal`, `expense-modal`, `sources-categories`, `profile-hub`, `feedback`, `charts`) + `helpers.js` e `category-picker.js` (funções puras testáveis em Node). A raiz `/` é espelho de `v8/` (`css/`, `js/`, `sw.js`, `manifest.json`, `index.html`); `scripts/build_bundle.js` sincroniza (cuidado: ele também regera bundles legados e o `index.html` da raiz).
+- **Categorias em grupos (macro) e subgrupos (micro):** `MICRO_GROUPS` em `category-picker.js` liga as 23 categorias a subgrupos por assunto; categorias da usuária caem em "Minhas categorias". O `<select name="category">` nativo fica oculto como fonte do valor do formulário.
+- **Acessibilidade:** foco gerenciado em `openModal/closeModal`, `nextFocusIndex` (Tab circular) e `role` nos toasts.
+- **Service Worker:** cache `financas-pediatria-v8-static-vN` (incrementar a cada release) e lista de pré-cache inclui `js/ui/*.js`.
+- **Testes:** `node --test tests/*.test.js` (raiz, 120) e `node --test v8/tests/*.test.js` (125, com 11 E2E Playwright; exigem `npm install`; no CI `REQUIRE_E2E=1` impede ignorar o E2E).
 ### Registro técnico da versão Standalone v8.0.0 (`/` e `/v8/`)
 - **100% Standalone & Local-First (Raiz `/` e `/v8/`):** Totalmente desacoplada de nuvem, Vercel e Supabase; abertura direta e instantânea (`< 50ms`) no painel "Início" sem nenhuma barreira ou tela de login. Sincronizada na raiz do repositório via `node scripts/build_bundle.js` com expurgo automático de caches legados (`financas-ped-v5*`) do Service Worker.
 - **Persistência Tripla no iOS / Safari WebKit:**

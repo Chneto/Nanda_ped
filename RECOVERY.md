@@ -1,6 +1,7 @@
 # 🔄 RECOVERY — Finanças Pediatria (Guia de Restauração v8.0.0, v7.0.0, v6.0.0, v5.0.1, V4_Cloud 4.1.1, v4.0.0, v3.1.1, v3.1.0 & v2.0)
 
 > **Pontos de Restauração Oficiais Disponíveis:**  
+> - **v8.1.0 (Categorias em Grupos/Subgrupos, Acessibilidade de Diálogos, UI Modular e PWA iOS Refinado)**: 245 testes aprovados (raiz 120 + v8 125) — snapshot imutável em ecovery/snapshot_v8.1/; Cloud (V4_Cloud/v6/v7) restaurável pela tag Git rchive/cloud-before-removal.  
 > - **v8.0.0 (Standalone & Pediatric Sanctuary Edition — 100% Local-First iPhone/iOS, Zero Nuvem, Persistência Tripla, Fontes/Categorias 100% Dinâmicas & UX Delight)**: 99 testes aprovados (`/` e `v8/` — snapshot imutável em `recovery/snapshot_v8.0/`).  
 > - **v7.0.0 (Cloud & Sanctuary Edition — Normalização Unaccent SQL, Diagnósticos Visuais, Modelo Canônico & Sync Relacional)**: 64 testes aprovados (`v7/`).  
 > - **v6.0.0 (Cloud & Sanctuary Edition — CSP Estrita, 23 Categorias, Conflito Otimista & Backups)**: 77 testes aprovados (`v6/`).  

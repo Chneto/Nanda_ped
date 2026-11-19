@@ -45,6 +45,12 @@
 
 **Pendente:** Etapa 2 (E2E real exige instalar Playwright/WebKit), 5, 6, 7. Nada foi commitado nem publicado.
 
+## 2.2 Progresso final (2026-11-18)
+
+**Concluídas:** Etapas 1, 2 (E2E em Chrome, obrigatório no CI), 3 (parte: IndexedDB × localStorage e lembrete de backup), 4, 5 (`ui.js` modular + a11y de diálogos), 6 (somente GitHub Pages; Vercel removido) e 7 (versões Cloud, `Nandaped_VF1`, resíduos da raiz e documentos). Extra: categorias em grupos e subgrupos; versão 8.1.0 com snapshot `recovery/snapshot_v8.1/`.
+
+**Em aberto:** testes em WebKit/iPhone real; migração versionada do IndexedDB; limpeza do `recovery/` (33 MB, exigido pelo AGENTS.md); Etapa 8 (relatórios, gráfico caixa × competência).
+
 ## 3. Plano em etapas
 
 Cada etapa termina com **as 5 suítes verdes** (regra do AGENTS.md) e é revisável isoladamente.

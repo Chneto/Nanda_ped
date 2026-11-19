@@ -549,7 +549,7 @@ describe('Finanças Pediatria /v8/ - Suíte de Estresse Adversarial', () => {
 
     it('autoria imutável APP_CREATOR = "FChNeto" é onipresente em /v8/', () => {
       assert.equal(APP_CREATOR, 'FChNeto');
-      assert.equal(APP_VERSION, '8.0.0');
+      assert.equal(APP_VERSION, '8.1.0');
 
       const indexPath = path.join(V8_DIR, 'index.html');
       const indexContent = fs.readFileSync(indexPath, 'utf-8');

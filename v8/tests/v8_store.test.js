@@ -34,9 +34,9 @@ import {
 describe('Finanças Pediatria /v8/ - Motor Canônico de Domínio', () => {
 
   describe('1. Identidade Canônica & Catálogos Iniciais', () => {
-    it('Preserva a autoria imutável APP_CREATOR = "FChNeto" e versão 8.0.0', () => {
+    it('Preserva a autoria imutável APP_CREATOR = "FChNeto" e versão 8.1.0', () => {
       assert.equal(APP_CREATOR, 'FChNeto');
-      assert.equal(APP_VERSION, '8.0.0');
+      assert.equal(APP_VERSION, '8.1.0');
     });
 
     it('Contém exatamente as 23 categorias canônicas listadas', () => {

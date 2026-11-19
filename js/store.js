@@ -12,7 +12,7 @@
  */
 
 export const APP_CREATOR = 'FChNeto';
-export const APP_VERSION = '8.0.0';
+export const APP_VERSION = '8.1.0';
 
 // =========================================================================
 // 1. CONSTANTES DE TAXONOMIA E CATÁLOGOS PADRÃO DE FÁBRICA

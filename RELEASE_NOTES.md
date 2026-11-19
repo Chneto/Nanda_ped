@@ -1,5 +1,14 @@
 # Notas de Versão — Finanças Pediatria
 
+## Versão v8.1.0 — Categorias em Grupos e Subgrupos, Acessibilidade e Código Modular (Principal em `/` e `/v8/`)
+
+- **Seletor de categoria em grupos (macro) e subgrupos (micro):** A "Nova Despesa" troca a lista crua por um botão com ícone colorido e painel em sanfona (6 grupos > subgrupos por assunto > categorias), busca sem acento, atalhos "mais usadas" e "Minhas categorias" para as criadas pela usuária. O mesmo visual vale para o filtro da aba Despesas (grupo + subgrupo), a lista de gestão de categorias e a escolha do grupo ao criar categoria. Títulos mostram a contagem real de categorias.
+- **Acessibilidade de diálogos:** foco entra no diálogo ao abrir e volta ao botão de origem ao fechar, Tab circular dentro do diálogo e avisos com `role="alert"`/`role="status"`.
+- **Persistência mais segura:** o IndexedDB passa a ser adotado quando é mais recente que o `localStorage` (purga parcial do Safari) e o app lembra do backup após 14 dias.
+- **PWA no iPhone:** ícones próprios da v8 (mesma arte da raiz, sem margem cinza, 512/192/180/64 px), manifest sem `maskable`, Service Worker com cache versionado (`v5`), aviso de "nova versão" e CSP sem fontes externas.
+- **Código modular:** `ui.js` (1.796 linhas) dividido em módulos temáticos em `js/ui/` com corpos de método idênticos aos originais; correção do listener duplicado do modal de categorias.
+- **Publicação simplificada:** somente GitHub + GitHub Pages; Vercel descontinuada e versões Cloud (V4_Cloud, v6, v7) removidas (restauráveis pela tag `archive/cloud-before-removal`).
+- **Cobertura automatizada:** 125 testes na v8 (11 E2E Playwright obrigatórios no CI via `REQUIRE_E2E=1`) e 120 na raiz — total 245.
 ## Versão v8.0.0 — Standalone & Pediatric Sanctuary Edition (Principal em `/` e `/v8/`)
 
 - **100% Standalone Local-First para iPhone (Zero Vercel / Zero Supabase):** Eliminação completa de chamadas de rede, SDKs de nuvem e telas de login (`Silk Gate`), garantindo abertura instantânea (`< 50ms`) diretamente no painel **Início** (`#view-home`). Promovida tanto na raiz `/` do GitHub Pages (`https://chneto.github.io/Nanda_ped/`) quanto em `/v8/`.
