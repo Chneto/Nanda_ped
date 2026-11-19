@@ -8,7 +8,9 @@ Aplicativo web responsivo 100% standalone e local-first de alta precisão para o
 - **`/v7/`:** Versão Cloud & Sanctuary 7.0.0 (normalização linguística `unaccent`, diagnósticos em tempo real, modelo canônico `category_id` e sincronização relacional).
 - **`/v6/`:** Versão Cloud & Sanctuary 6.0.0 (Supabase Auth/RLS, CSP estrita sem `unsafe-inline`, 23 categorias canônicas mapeadas nos 6 macro-grupos, resolução de conflitos de revisão com backups automáticos).
 - **`/v5/`:** Versão standalone 5.0.1 com painel executivo Silk & Rose Gold e persistência local.
-- **`/V4_Cloud/`:** Versão Cloud 4.1.1 (Vercel/Supabase, RLS, snapshot por conta).
+- **`/V4_Cloud/`:** Versão Cloud 4.1.1 (Supabase, RLS, snapshot por conta) — mantida apenas como referência.
+
+> **Publicação:** somente commit no GitHub e **GitHub Pages** (`https://chneto.github.io/Nanda_ped/`). A hospedagem na Vercel foi descontinuada; os `vercel.json` que restam em `V4_Cloud/`, `v6/`, `v7/` e `Nandaped_VF1/` pertencem às versões Cloud arquivadas e não são usados na publicação.
 - **`/v4/` e `/v4.0/`:** Versão standalone 4.0.0.
 - **`/v2.0/`:** Versão minimalista Sanctuary 2.0.0 (3 abas essenciais, 23 categorias canônicas).
 

@@ -35,7 +35,8 @@ O módulo SBAR deve evitar a inclusão de dados identificáveis de pacientes em 
 
 - **`/` e `/v8/` (Versão Principal v8.0.0 Standalone & Pediatric Sanctuary):** 100% local-first e offline para iPhone/iOS, sem qualquer dependência de Vercel ou Supabase e sem telas de login, operando com CSP estrita (`script-src 'self'`), Service Worker offline (`sw.js`) e persistência tripla no Safari (`localStorage` + `IndexedDB` `v8_pediatric_db` + `Web Share API` com importação retrocompatível `v2`–`v7`). Sincronizada para a raiz `/` do GitHub Pages via `node scripts/build_bundle.js`.
 - As versões históricas locais (`v2.0`, `v4`, `v5`) usam JavaScript padrão, armazenamento local e bundles gerados por `node scripts/build_bundle.js`.
-- As variantes em nuvem (`v7`, `v6` e `V4_Cloud`) utilizam Vercel para servir o frontend com CSP estrita (sem `unsafe-inline`) e Supabase Auth/Postgres para autenticação e sincronização por conta com Row Level Security (RLS).
+- **Publicação atual:** somente GitHub + GitHub Pages; a Vercel foi descontinuada (nov/2026).
+- As variantes em nuvem (`v7`, `v6` e `V4_Cloud`, mantidas só como referência) foram projetadas para Vercel para servir o frontend com CSP estrita (sem `unsafe-inline`) e Supabase Auth/Postgres para autenticação e sincronização por conta com Row Level Security (RLS).
 - Chaves secretas ou administrativas (`service_role`) nunca podem ser incluídas no frontend ou retornadas por `/api/config`. As tabelas expostas exigem RLS e isolamento estrito por `auth.uid() = user_id`.
 - Conflitos de sincronização entre múltiplos dispositivos são detectados com bloqueio otimista (`revision` incremental) e resolvidos pelo usuário com backups de segurança gerados automaticamente.
 - As variáveis do provedor OAuth e as URLs de retorno precisam ser configuradas nos painéis externos correspondentes.

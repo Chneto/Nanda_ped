@@ -274,19 +274,9 @@ describe('Finanças Pediatria v5.0 - Silk & Rose Gold Engine Tests', () => {
     assert.ok(css.includes('position: relative !important'));
   });
 
-  test('v5 Verificação de Cache Invalidation e Headers Vercel', () => {
-    const vercelConfig = JSON.parse(fs.readFileSync(path.join(rootDir, 'vercel.json'), 'utf8'));
-    const cssHeader = vercelConfig.headers.find(h => h.source === '/css/(.*)');
-    const jsHeader = vercelConfig.headers.find(h => h.source === '/js/(.*)');
-
-    assert.ok(cssHeader, 'Header de /css/(.*) deve existir');
-    assert.ok(jsHeader, 'Header de /js/(.*) deve existir');
-
-    const cssCacheVal = cssHeader.headers.find(h => h.key === 'Cache-Control')?.value;
-    const jsCacheVal = jsHeader.headers.find(h => h.key === 'Cache-Control')?.value;
-
-    assert.ok(cssCacheVal.includes('must-revalidate'), 'CSS não deve ficar travado com immutable sem revalidação');
-    assert.ok(jsCacheVal.includes('must-revalidate'), 'JS não deve ficar travado com immutable sem revalidação');
+  test('v5 Verificação de Cache Invalidation (publicação em GitHub Pages, sem vercel.json)', () => {
+    // O vercel.json da raiz foi removido (publicação somente via GitHub Pages).
+    assert.ok(!fs.existsSync(path.join(rootDir, 'vercel.json')), 'vercel.json da raiz não deve mais existir');
 
     // Verifica cache-busting nos HTMLs
     const rootHtml = fs.readFileSync(path.join(rootDir, 'index.html'), 'utf8');
