@@ -1853,3 +1853,49 @@ textarea.form-input {
 }
 .confirm-message { margin: 8px 0 4px; color: var(--text-main); font-size: 0.98rem; line-height: 1.5; }
 .btn-silk-primary.btn-danger { background: linear-gradient(135deg, #EF5350 0%, #D32F2F 100%); }
+/* ---------- Edição de parcela de plantão ---------- */
+.btn-inst-edit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--silk-border);
+  color: var(--text-muted);
+}
+.btn-inst-edit:active { transform: scale(0.96); }
+.inst-modal-context { margin: 4px 0 14px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+.inst-modal-context strong { color: var(--text-main); }
+.inst-status-group { display: flex; gap: 8px; margin: 0 0 14px; padding: 0; border: 0; }
+.inst-status-group legend { margin-bottom: 6px; padding: 0; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; }
+.inst-status-option { position: relative; flex: 1; display: block; cursor: pointer; }
+.inst-status-option input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.inst-status-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card-subtle);
+  border: 1.5px solid var(--silk-border);
+  color: var(--text-muted);
+  font-weight: 700;
+}
+.inst-status-option input:checked + .inst-status-card.pending { background: #FFF3E0; border-color: #FB8C00; color: #8A4B00; }
+.inst-status-option input:checked + .inst-status-card.received { background: var(--mint-income-light); border-color: var(--mint-income); color: var(--mint-income-dark); }
+.inst-status-option input:focus-visible + .inst-status-card { outline: 2px solid var(--primary-pink); outline-offset: 2px; }
+.inst-balance-option { display: flex; align-items: flex-start; gap: 10px; margin: 4px 0 10px; font-size: 0.9rem; line-height: 1.4; color: var(--text-main); }
+.inst-balance-option input { flex: none; width: 22px; height: 22px; margin-top: 1px; accent-color: var(--primary-pink); }
+.inst-sum-hint { min-height: 0; margin: 0 0 6px; font-size: 0.85rem; color: var(--text-muted); }
+.inst-sum-hint.warn { color: #B26A00; font-weight: 600; }
+[data-theme="dark"] .inst-status-option input:checked + .inst-status-card.pending { background: rgba(251, 140, 0, 0.18); color: #FFB74D; }#inst-paid-group[hidden] { display: none; }
+
+/* Parcela: layout que não espreme em telas estreitas */
+.installment-pill { flex-wrap: wrap; gap: 6px 8px; }
+.inst-info { flex: 1 1 120px; min-width: 0; }
+.inst-label { white-space: nowrap; }
+.inst-action { flex: 0 1 auto; flex-wrap: wrap; justify-content: flex-end; }
+.inst-paid { font-size: 0.7rem; font-weight: 700; color: var(--mint-income-dark); }

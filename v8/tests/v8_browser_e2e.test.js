@@ -277,8 +277,8 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     // 2. Navega para a Aba Ganhos
     await page.locator('#tab-nav-income').click();
 
-    // 3. Toca no card do plantão salvo
-    await page.locator('[data-shift-card-id]').first().click();
+    // 3. Toca no card do plantão salvo (no título do hospital, longe dos botões das parcelas)
+    await page.locator('[data-shift-card-id] .shift-hospital-title').first().click();
 
     // 4. Verifica se o modal abriu em modo de edição
     const editModal = await page.evaluate(() => {
@@ -712,6 +712,61 @@ describe('Finanças Pediatria /v8/ — Validação E2E no Navegador (iPhone 16 P
     await page.waitForSelector('.toast-silk.error');
     assert.equal(await page.locator('#modal-confirm').evaluate(el => el.classList.contains('hidden')), true);
     assert.deepEqual(await ids(), ['Hospital 8d']);
+  });
+  // =========================================================================
+  // CENÁRIO 8e: EDIÇÃO DE PARCELA (DATA, VALOR, RECEBIMENTO REAL) COM DESFAZER
+  // =========================================================================
+  it('Cenário 8e: Editar parcela de plantão (data, valor, recebimento) atualiza a tela e permite desfazer', async () => {
+    await page.evaluate(() => {
+      const s = window.v8App.store;
+      window.v8App.ui.closeAllModals();
+      s.data.shifts = [];
+      const ym = new Date().toISOString().slice(0, 7);
+      s.data.preferences.activeMonth = ym;
+      s.data.preferences.regime = 'caixa';
+      s.addShift({ hospital: 'Hospital 8e', net_value: 2000, date: `${ym}-03` });
+      window.v8App.ui.render();
+    });
+    const parcelas = () => page.evaluate(() => window.v8App.store.data.shifts[0].installments.map(i => [i.value, i.date, i.status, i.paidDate]));
+    const original = await parcelas();
+
+    await page.click('[data-tab="income"]');
+    await page.locator('[data-edit-installment="1"]').first().click();
+    assert.equal(await page.locator('#modal-installment').evaluate(el => el.classList.contains('hidden')), false, 'Abre o modal da parcela');
+    assert.equal(await page.locator('#inst-paid-group').isVisible(), false, 'Data real só aparece quando Recebido');
+
+    // Valor inválido: erro amigável, nada muda, modal continua aberto
+    await page.fill('#inst-value-input', '0');
+    await page.click('#form-installment button[type="submit"]');
+    await page.waitForSelector('.toast-silk.error');
+    assert.deepEqual(await parcelas(), original, 'Valor inválido não altera dados');
+    assert.equal(await page.locator('#modal-installment').evaluate(el => el.classList.contains('hidden')), false);
+
+    // Edita valor (com ajuste da outra), data prevista e marca como recebido com data real
+    await page.fill('#inst-value-input', '1200');
+    await page.fill('#inst-date-input', '2027-02-05');
+    await page.locator('.inst-status-option', { hasText: 'Recebido' }).click();
+    assert.equal(await page.locator('#inst-paid-group').isVisible(), true);
+    await page.fill('#inst-paid-input', '2027-02-06');
+    await page.click('#form-installment button[type="submit"]');
+    await page.waitForSelector('.toast-undo');
+
+    const edited = await parcelas();
+    assert.deepEqual(edited[0], [1200, '2027-02-05', 'received', '2027-02-06']);
+    assert.equal(edited[1][0], 800, 'A outra parcela fecha o total');
+    const cardText = (await page.locator('#shifts-list-container').innerText()).replace(/\s+/g, ' ');
+    assert.ok(cardText.includes('1.200,00') && cardText.includes('Caiu em 06/02/2027'), 'Tela mostra valor e data real do recebimento');
+
+    // Desfazer devolve tudo
+    await page.click('.toast-undo .btn-toast-undo');
+    assert.deepEqual(await parcelas(), original, 'Desfazer restaura as parcelas originais');
+
+    // Esc fecha o modal sem salvar
+    await page.locator('[data-edit-installment="2"]').first().click();
+    await page.fill('#inst-value-input', '1');
+    await page.keyboard.press('Escape');
+    assert.equal(await page.locator('#modal-installment').evaluate(el => el.classList.contains('hidden')), true);
+    assert.deepEqual(await parcelas(), original);
   });
   // =========================================================================
   // CENÁRIO 9: ZERO ERROS NO CONSOLE E ZERO REQUISIÇÕES BLOQUEADAS

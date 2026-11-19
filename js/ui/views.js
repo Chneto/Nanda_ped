@@ -237,7 +237,7 @@ export class ViewMethods {
           <div class="installment-pill ${isReceived ? 'paid' : 'pending'} ${inThisMonth ? 'current-month-highlight' : ''}">
             <div class="inst-info">
               <span class="inst-label">${num}ª Parcela (${inst.percentage}%)</span>
-              <span class="inst-date">${formatDateBR(inst.date)}</span>
+              <span class="inst-date">${formatDateBR(inst.date)}</span>${isReceived && inst.paidDate ? `<span class="inst-paid">Caiu em ${formatDateBR(inst.paidDate)}</span>` : ''}
             </div>
             <div class="inst-action">
               <strong class="inst-val">${formatCurrency(inst.value)}</strong>
@@ -250,6 +250,9 @@ export class ViewMethods {
               >
                 ${isReceived ? getIconSvg('check_circle', 18, '#26A69A') : getIconSvg('payments', 18, '#FFA726')}
                 <span>${isReceived ? 'Recebido' : 'Pendente'}</span>
+              </button>
+              <button type="button" class="btn-inst-edit" data-edit-installment="${num}" data-shift-id="${shift.id}" aria-label="Editar ${num}ª parcela" title="Editar data, valor e recebimento">
+                ${getIconSvg('edit', { size: 16 })}
               </button>
             </div>
           </div>

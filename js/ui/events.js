@@ -105,6 +105,17 @@ export class EventsMethods {
         return;
       }
 
+      // 8a. Editar parcela (data prevista, valor, situação e data real do recebimento)
+      const editInstallmentBtn = e.target.closest('[data-edit-installment]');
+      if (editInstallmentBtn) {
+        e.stopPropagation();
+        this.openInstallmentModal(
+          editInstallmentBtn.getAttribute('data-shift-id'),
+          parseInt(editInstallmentBtn.getAttribute('data-edit-installment'), 10)
+        );
+        return;
+      }
+
       // 8. Toque em Item de Plantão (Single-Tap Edit ou Toggle de Parcela)
       const toggleInstallmentBtn = e.target.closest('[data-toggle-installment]');
       if (toggleInstallmentBtn) {
@@ -232,6 +243,12 @@ export class EventsMethods {
       if (e.target.id === 'form-new-shift') {
         e.preventDefault();
         this.handleSaveShift(e.target);
+        return;
+      }
+
+      if (e.target.id === 'form-installment') {
+        e.preventDefault();
+        this.handleSaveInstallment(e.target);
         return;
       }
 

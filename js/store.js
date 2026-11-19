@@ -903,6 +903,82 @@ export class PediatricStore {
     return shift;
   }
 
+  /**
+   * Edita uma parcela de plantão: data prevista, valor, situação (recebido/pendente) e data real do recebimento.
+   * Com `balance: true` e exatamente 2 parcelas, a outra parcela é ajustada para o total continuar igual.
+   * Retorna { updated, shift, previous } — `previous` é a cópia das parcelas para o Desfazer.
+   */
+  updateShiftInstallment(shiftId, installmentNum, changes = {}) {
+    const shift = this.data.shifts.find(s => s.id === shiftId);
+    if (!shift || !Array.isArray(shift.installments)) return { updated: false, error: 'Plantão não encontrado' };
+    const inst = shift.installments[installmentNum - 1];
+    if (!inst) return { updated: false, error: 'Parcela não encontrada' };
+
+    const isValidDate = (s) => {
+      if (typeof s !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s)) return false;
+      const [y, m, d] = s.split('-').map(Number);
+      const dt = new Date(Date.UTC(y, m - 1, d));
+      return dt.getUTCFullYear() === y && dt.getUTCMonth() === m - 1 && dt.getUTCDate() === d;
+    };
+    const round2 = (n) => Math.round(n * 100) / 100;
+
+    // --- validação (nada é alterado se algo estiver inválido)
+    let nextValue = inst.value;
+    if (changes.value !== undefined) {
+      nextValue = round2(parseFloat(changes.value));
+      if (!Number.isFinite(nextValue) || nextValue <= 0) return { updated: false, error: 'Informe um valor válido para a parcela' };
+    }
+    let nextDate = inst.date;
+    if (changes.date !== undefined) {
+      if (!isValidDate(changes.date)) return { updated: false, error: 'Informe uma data válida para a parcela' };
+      nextDate = changes.date;
+    }
+    const nextStatus = changes.status !== undefined ? (changes.status === 'received' ? 'received' : 'pending') : inst.status;
+    let nextPaid = null;
+    if (nextStatus === 'received') {
+      nextPaid = changes.paidDate !== undefined ? changes.paidDate : (inst.paidDate || getLocalDateString());
+      if (!isValidDate(nextPaid)) return { updated: false, error: 'Informe uma data válida para o recebimento' };
+    }
+
+    const previous = JSON.parse(JSON.stringify(shift.installments));
+    const total = round2(shift.installments.reduce((sum, i) => sum + (parseFloat(i.value) || 0), 0));
+
+    // --- ajuste automático da outra parcela (apenas com 2 parcelas)
+    let other = null;
+    let otherValue = null;
+    if (changes.balance === true && shift.installments.length === 2 && nextValue !== inst.value) {
+      other = shift.installments[installmentNum === 1 ? 1 : 0];
+      otherValue = round2(total - nextValue);
+      if (otherValue <= 0) return { updated: false, error: `O valor excede o total do plantão (${formatCurrency(total)})` };
+    }
+
+    const net = parseFloat(shift.net_value) || 0;
+    const pct = (v, fallback) => (net > 0 ? Math.round((v / net) * 1000) / 10 : fallback);
+
+    inst.value = nextValue;
+    inst.date = nextDate;
+    inst.status = nextStatus;
+    inst.paidDate = nextPaid;
+    inst.percentage = pct(nextValue, inst.percentage);
+    inst.edited = true;
+    if (other) {
+      other.value = otherValue;
+      other.percentage = pct(otherValue, other.percentage);
+      other.edited = true;
+    }
+
+    this.save();
+    return { updated: true, shift, previous };
+  }
+
+  /** Desfaz uma edição de parcela restaurando a cópia devolvida por updateShiftInstallment */
+  restoreShiftInstallments(shiftId, installments) {
+    const shift = this.data.shifts.find(s => s.id === shiftId);
+    if (!shift || !Array.isArray(installments)) return false;
+    shift.installments = JSON.parse(JSON.stringify(installments));
+    this.save();
+    return true;
+  }
   // -----------------------------------------------------------------------
   // DESPESAS E COMPRAS PARCELADAS (CRUD)
   // -----------------------------------------------------------------------
