@@ -1,12 +1,13 @@
 {
   "name": "financas-pediatria",
-  "version": "5.0.1",
+  "version": "8.0.0",
   "description": "Controle financeiro PWA mobile-first para profissionais da saúde",
   "main": "index.html",
   "type": "module",
   "scripts": {
     "build": "node scripts/build_bundle.js",
-    "test": "node scripts/build_bundle.js && node --test tests/*.test.js",
+    "test": "node --test tests/*.test.js v8/tests/*.test.js",
+    "scan": "node scripts/ci_security_scan.js",
     "restore": "node scripts/restore_v3.1.1.js",
     "restore:v3.0.0": "node scripts/restore_v3.0.0.js"
   },
