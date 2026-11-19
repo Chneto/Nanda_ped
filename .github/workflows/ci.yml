@@ -29,8 +29,13 @@ jobs:
       - name: 1. Execute Root Test Suite (v2, v3, v4, v5, sanctuary)
         run: node --test tests/*.test.js
 
+      - name: Install dev dependencies (Playwright)
+        run: npm install --no-audit --no-fund
+
       - name: 2. Execute Finanças Pediatria v8 Test Suite
         run: node --test v8/tests/*.test.js
+        env:
+          REQUIRE_E2E: '1'
 
       - name: 3. Validate Production Bundles Synchronization
         run: node scripts/build_bundle.js

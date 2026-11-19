@@ -16,7 +16,10 @@ try {
   chromium = pw.chromium;
   devices = pw.devices;
 } catch (e) {
-  // Playwright opcional para ambientes sem devDependencies instaladas
+  // Playwright é opcional localmente, mas obrigatório no CI (REQUIRE_E2E=1): nunca "passar" ignorando o E2E
+  if (process.env.REQUIRE_E2E === '1') {
+    throw new Error(`REQUIRE_E2E=1 mas o Playwright não pôde ser carregado: ${e.message}`);
+  }
 }
 
 const TEST_PORT = 3389;

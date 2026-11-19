@@ -3,7 +3,7 @@
 > **Guia Obrigatório para Modelos de Linguagem, Subagentes de IA e Engenheiros de Software.**  
 > **Aplicação:** Finanças Pediatria  
 > **Autor Imutável:** **FChNeto** (`APP_CREATOR = 'FChNeto'`)  
-> **Status de Confiabilidade:** 120 testes da raiz e 101 testes v8 aprovados (0 falhas na validação de 2026-11-18). As versões Cloud (V4_Cloud, v6, v7) foram removidas; restauráveis pela tag `archive/cloud-before-removal`.  
+> **Status de Confiabilidade:** 120 testes da raiz e 110 testes v8 (incluindo 9 E2E Playwright) aprovados (0 falhas na validação de 2026-11-18). As versões Cloud (V4_Cloud, v6, v7) foram removidas; restauráveis pela tag `archive/cloud-before-removal`.  
 
 ---
 
@@ -133,7 +133,7 @@ node --test v8/tests/*.test.js
 ```
 
 ### Critérios de Aceite:
-- Todas as suítes existentes devem concluir com sucesso (120 na raiz e 101 em v8 - Total 221);
+- Todas as suítes existentes devem concluir com sucesso (120 na raiz e 110 em v8, incluindo 9 E2E Playwright que exigem `npm install` - Total 230);
 - Falhas: **0**
 - Cancelados: **0**
 - Não desativar, apagar ou afrouxar asserções para mascarar regressões.

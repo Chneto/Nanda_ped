@@ -15,10 +15,10 @@ Perfis novos começam com estado limpo, sem nomes, registros profissionais ou da
 
 ## Validação & Cobertura de Testes
 
-Validações executadas em 2026-11-18 (**221 testes aprovados / 0 falhas**):
+Validações executadas em 2026-11-18 (**230 testes aprovados / 0 falhas**):
 
 - **Suíte da raiz (`v2`–`v5`):** 120 testes aprovados.
-- **Suíte v8 (Standalone & Sanctuary — domínio, storage, fuzzing, portabilidade GitHub Pages, acessibilidade):** 101 testes aprovados (os 9 testes E2E Playwright são adicionais e só rodam com o Playwright instalado).
+- **Suíte v8 (Standalone & Sanctuary — domínio, storage, fuzzing, portabilidade GitHub Pages, acessibilidade):** 110 testes aprovados (101 de domínio/storage/UI + 9 E2E Playwright em Chrome emulando iPhone 16 Plus; exigem `npm install`, e no CI são obrigatórios via `REQUIRE_E2E=1`).
 
 ### Comandos de Teste:
 
