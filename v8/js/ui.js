@@ -20,6 +20,20 @@ export function escapeHtml(str) {
     .replace(/'/g, '&#39;');
 }
 
+export const FOCUSABLE_SELECTOR = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+/**
+ * Calcula o próximo índice de foco dentro de um diálogo (focus trap circular).
+ * Retorna null quando o navegador deve seguir o Tab natural.
+ */
+export function nextFocusIndex(count, current, backwards = false) {
+  if (!count) return null;
+  if (current < 0) return backwards ? count - 1 : 0; // foco fora do diálogo: traz para dentro
+  if (backwards && current === 0) return count - 1;
+  if (!backwards && current === count - 1) return 0;
+  return null;
+}
+
 export class PediatricUI {
   constructor(store, storage) {
     this.store = store;
@@ -308,6 +322,8 @@ export class PediatricUI {
       if (e.key === 'Escape') {
         this.closeAllModals();
         this.closeDrawer();
+      } else if (e.key === 'Tab') {
+        this._trapTab(e);
       }
     });
   }
@@ -1567,6 +1583,8 @@ export class PediatricUI {
 
     const toast = document.createElement('div');
     toast.className = `toast-silk ${type}`;
+    // Erros são anunciados imediatamente por leitores de tela; demais avisos de forma educada
+    toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
     toast.innerHTML = `<span>${escapeHtml(message)}</span>`;
 
     container.appendChild(toast);
@@ -1625,16 +1643,56 @@ export class PediatricUI {
 
   openModal(selector) {
     const el = document.querySelector(selector);
-    if (el) el.classList.remove('hidden');
+    if (!el) return;
+    if (el.classList.contains('hidden')) {
+      this._modalOpener = document.activeElement;
+    }
+    el.classList.remove('hidden');
+    // Acessibilidade: leva o foco para dentro do diálogo (teclado/VoiceOver)
+    const first = this._getFocusable(el)[0];
+    if (first && typeof first.focus === 'function') {
+      try { first.focus({ preventScroll: true }); } catch (e) { /* ignora */ }
+    }
   }
 
   closeModal(selector) {
     const el = document.querySelector(selector);
     if (el) el.classList.add('hidden');
+    this._restoreFocus();
   }
 
   closeAllModals() {
+    const open = document.querySelectorAll('.modal-backdrop:not(.hidden)').length;
     document.querySelectorAll('.modal-backdrop').forEach(m => m.classList.add('hidden'));
+    if (open) this._restoreFocus();
+  }
+
+  _getFocusable(container) {
+    if (!container) return [];
+    return Array.from(container.querySelectorAll(FOCUSABLE_SELECTOR))
+      .filter(n => !n.hasAttribute('disabled') && n.offsetParent !== null);
+  }
+
+  _restoreFocus() {
+    const opener = this._modalOpener;
+    this._modalOpener = null;
+    if (opener && typeof opener.focus === 'function' && document.contains(opener)) {
+      try { opener.focus({ preventScroll: true }); } catch (e) { /* ignora */ }
+    }
+  }
+
+  /** Mantém o Tab dentro do diálogo aberto (focus trap) */
+  _trapTab(e) {
+    const modal = document.querySelector('.modal-backdrop:not(.hidden)');
+    if (!modal) return;
+    const items = this._getFocusable(modal);
+    if (items.length === 0) return;
+    const idx = items.indexOf(document.activeElement);
+    const next = nextFocusIndex(items.length, idx, e.shiftKey);
+    if (next !== null) {
+      e.preventDefault();
+      items[next].focus();
+    }
   }
 
   // =========================================================================
